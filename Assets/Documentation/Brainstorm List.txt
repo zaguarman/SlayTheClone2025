@@ -1578,6 +1578,8 @@ sections below stay as the two halves of it: the culture itself, and the interne
 			Miracle Mineral Solution (bleach sold as a cure)
 			Cupping (Michael Phelps' purple circles, 2016 Olympics)
 		Statecraft
+			Politburo (the user, 2026-10-17: the party's inner council. A creature that acts for the whole back row, or a Policy that
+				decides every vote: Statecraft; Order & Paperwork's hold-the-line deck)
 			Absolute Power Corrupts Absolutely
 			Affidavit
 			Alea Iacta Est

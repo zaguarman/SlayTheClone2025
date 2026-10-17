@@ -1,2449 +1,2533 @@
 {
-    "writtenUtc": "2026-10-17 20:24:43Z",
+    "writtenUtc": "2026-10-17 20:34:44Z",
     "gamesPlayed": 2500,
     "cards": [
         {
-            "card": "Mass Layoffs",
+            "card": "Kakistocracy",
             "tier": "D",
-            "score": 0.25,
+            "score": 0.11290322244167328,
             "creature": false,
-            "games": 60
-        },
-        {
-            "card": "He Didn't Kill Himself",
-            "tier": "D",
-            "score": 0.25757575035095217,
-            "creature": false,
-            "games": 66
-        },
-        {
-            "card": "Martial Law",
-            "tier": "D",
-            "score": 0.2954545319080353,
-            "creature": false,
-            "games": 132
-        },
-        {
-            "card": "Heimlich Maneuver",
-            "tier": "D",
-            "score": 0.3030303120613098,
-            "creature": false,
-            "games": 66
-        },
-        {
-            "card": "Russian Roulette",
-            "tier": "D",
-            "score": 0.3095238208770752,
-            "creature": false,
-            "games": 84
-        },
-        {
-            "card": "God's Grace",
-            "tier": "D",
-            "score": 0.350649356842041,
-            "creature": false,
-            "games": 77
-        },
-        {
-            "card": "Witness Protection Program",
-            "tier": "D",
-            "score": 0.3580246865749359,
-            "creature": false,
-            "games": 81
-        },
-        {
-            "card": "Reflect",
-            "tier": "D",
-            "score": 0.3670886158943176,
-            "creature": false,
-            "games": 79
-        },
-        {
-            "card": "Social Panopticon",
-            "tier": "D",
-            "score": 0.3741496503353119,
-            "creature": false,
-            "games": 294
-        },
-        {
-            "card": "Extraction",
-            "tier": "D",
-            "score": 0.37974682450294497,
-            "creature": false,
-            "games": 79
-        },
-        {
-            "card": "Memento Mori",
-            "tier": "D",
-            "score": 0.37974682450294497,
-            "creature": false,
-            "games": 79
-        },
-        {
-            "card": "Rage Bait",
-            "tier": "D",
-            "score": 0.3802816867828369,
-            "creature": false,
-            "games": 71
-        },
-        {
-            "card": "Monkey See, Monkey Do",
-            "tier": "D",
-            "score": 0.38235294818878176,
-            "creature": false,
-            "games": 68
-        },
-        {
-            "card": "Phoenix Feather",
-            "tier": "D",
-            "score": 0.38297873735427859,
-            "creature": false,
-            "games": 141
-        },
-        {
-            "card": "Peer Review",
-            "tier": "D",
-            "score": 0.3913043439388275,
-            "creature": false,
-            "games": 69
+            "games": 62
         },
         {
             "card": "Strike",
             "tier": "D",
-            "score": 0.4025973975658417,
-            "creature": false,
-            "games": 77
-        },
-        {
-            "card": "Margin Call",
-            "tier": "D",
-            "score": 0.40441176295280459,
-            "creature": false,
-            "games": 136
-        },
-        {
-            "card": "Counter-Intelligence",
-            "tier": "D",
-            "score": 0.40963855385780337,
-            "creature": false,
-            "games": 83
-        },
-        {
-            "card": "Licence to Kill",
-            "tier": "D",
-            "score": 0.41401273012161257,
-            "creature": false,
-            "games": 157
-        },
-        {
-            "card": "Kakistocracy",
-            "tier": "D",
-            "score": 0.42307692766189577,
-            "creature": false,
-            "games": 78
-        },
-        {
-            "card": "Border Crossing",
-            "tier": "D",
-            "score": 0.4285714328289032,
-            "creature": false,
-            "games": 84
-        },
-        {
-            "card": "Devil's Breath",
-            "tier": "D",
-            "score": 0.4285714328289032,
-            "creature": false,
-            "games": 77
-        },
-        {
-            "card": "Blood Transfusion",
-            "tier": "D",
-            "score": 0.42957746982574465,
-            "creature": false,
-            "games": 142
-        },
-        {
-            "card": "NDA",
-            "tier": "D",
-            "score": 0.4303797483444214,
-            "creature": false,
-            "games": 79
-        },
-        {
-            "card": "The Wicker Man",
-            "tier": "D",
-            "score": 0.43209877610206606,
-            "creature": false,
-            "games": 81
-        },
-        {
-            "card": "Ghost Army",
-            "tier": "D",
-            "score": 0.43589743971824648,
-            "creature": false,
-            "games": 78
-        },
-        {
-            "card": "Escape Goat",
-            "tier": "D",
-            "score": 0.4390243887901306,
-            "creature": false,
-            "games": 82
-        },
-        {
-            "card": "We Are Not The Same",
-            "tier": "D",
-            "score": 0.4399999976158142,
-            "creature": false,
-            "games": 75
-        },
-        {
-            "card": "Supply Depot",
-            "tier": "D",
-            "score": 0.4406779706478119,
-            "creature": false,
-            "games": 118
-        },
-        {
-            "card": "End-to-End Encryption",
-            "tier": "D",
-            "score": 0.44117647409439089,
-            "creature": false,
-            "games": 68
-        },
-        {
-            "card": "Burn Notice",
-            "tier": "D",
-            "score": 0.4444444477558136,
-            "creature": false,
-            "games": 81
-        },
-        {
-            "card": "Dead Drop",
-            "tier": "D",
-            "score": 0.4444444477558136,
-            "creature": false,
-            "games": 81
-        },
-        {
-            "card": "Multipass",
-            "tier": "D",
-            "score": 0.4444444477558136,
+            "score": 0.2361111044883728,
             "creature": false,
             "games": 72
         },
         {
-            "card": "Hold That Thought",
+            "card": "Social Panopticon",
             "tier": "D",
-            "score": 0.4507042169570923,
+            "score": 0.296875,
+            "creature": false,
+            "games": 128
+        },
+        {
+            "card": "Climate Change",
+            "tier": "D",
+            "score": 0.30645161867141726,
+            "creature": false,
+            "games": 62
+        },
+        {
+            "card": "Doomsday Clock",
+            "tier": "D",
+            "score": 0.32394367456436159,
             "creature": false,
             "games": 71
         },
         {
-            "card": "Asset Recruitment",
+            "card": "He Didn't Kill Himself",
+            "tier": "D",
+            "score": 0.3333333432674408,
+            "creature": false,
+            "games": 69
+        },
+        {
+            "card": "Peer Review",
+            "tier": "D",
+            "score": 0.3333333432674408,
+            "creature": false,
+            "games": 63
+        },
+        {
+            "card": "Hostage Situation",
+            "tier": "D",
+            "score": 0.34246575832366946,
+            "creature": false,
+            "games": 73
+        },
+        {
+            "card": "God's Grace",
+            "tier": "D",
+            "score": 0.3478260934352875,
+            "creature": false,
+            "games": 69
+        },
+        {
+            "card": "Geomagnetic Reversal",
+            "tier": "D",
+            "score": 0.3513513505458832,
+            "creature": false,
+            "games": 74
+        },
+        {
+            "card": "Ctrl + Z",
+            "tier": "D",
+            "score": 0.35748791694641116,
+            "creature": false,
+            "games": 207
+        },
+        {
+            "card": "Phoenix Feather",
+            "tier": "D",
+            "score": 0.3650793731212616,
+            "creature": false,
+            "games": 63
+        },
+        {
+            "card": "GoldenEye",
+            "tier": "D",
+            "score": 0.36764705181121828,
+            "creature": false,
+            "games": 68
+        },
+        {
+            "card": "Witness Protection Program",
+            "tier": "D",
+            "score": 0.3815789520740509,
+            "creature": false,
+            "games": 76
+        },
+        {
+            "card": "Filibuster",
+            "tier": "D",
+            "score": 0.3857142925262451,
+            "creature": false,
+            "games": 70
+        },
+        {
+            "card": "Humanitarian Trafficking Action",
+            "tier": "D",
+            "score": 0.38749998807907107,
+            "creature": false,
+            "games": 80
+        },
+        {
+            "card": "Extraction",
+            "tier": "D",
+            "score": 0.4029850661754608,
+            "creature": false,
+            "games": 67
+        },
+        {
+            "card": "Supply Depot",
+            "tier": "D",
+            "score": 0.4032258093357086,
+            "creature": false,
+            "games": 62
+        },
+        {
+            "card": "Involuntary Free Polonium Giveaway",
+            "tier": "D",
+            "score": 0.4170212745666504,
+            "creature": false,
+            "games": 235
+        },
+        {
+            "card": "Antivirus",
+            "tier": "D",
+            "score": 0.4193548262119293,
+            "creature": false,
+            "games": 217
+        },
+        {
+            "card": "Never Let Them Know Your Next Move",
+            "tier": "D",
+            "score": 0.4193548262119293,
+            "creature": false,
+            "games": 62
+        },
+        {
+            "card": "Thoughts and Prayers",
+            "tier": "D",
+            "score": 0.4202898442745209,
+            "creature": false,
+            "games": 69
+        },
+        {
+            "card": "Polonium Umbrella",
+            "tier": "D",
+            "score": 0.4203539788722992,
+            "creature": false,
+            "games": 226
+        },
+        {
+            "card": "HAARP",
+            "tier": "D",
+            "score": 0.42222222685813906,
+            "creature": false,
+            "games": 135
+        },
+        {
+            "card": "Domino Effect",
+            "tier": "D",
+            "score": 0.42424243688583376,
+            "creature": false,
+            "games": 66
+        },
+        {
+            "card": "Its A Trap",
+            "tier": "D",
+            "score": 0.42696627974510195,
+            "creature": false,
+            "games": 178
+        },
+        {
+            "card": "Doomscrolling",
+            "tier": "D",
+            "score": 0.4305555522441864,
+            "creature": false,
+            "games": 144
+        },
+        {
+            "card": "Genesis",
+            "tier": "D",
+            "score": 0.4307692348957062,
+            "creature": false,
+            "games": 65
+        },
+        {
+            "card": "Exorcism",
+            "tier": "D",
+            "score": 0.43150684237480166,
+            "creature": false,
+            "games": 146
+        },
+        {
+            "card": "Valet",
+            "tier": "D",
+            "score": 0.44029849767684939,
+            "creature": false,
+            "games": 134
+        },
+        {
+            "card": "Hyperbole",
+            "tier": "D",
+            "score": 0.4413793087005615,
+            "creature": false,
+            "games": 145
+        },
+        {
+            "card": "Just in Time",
+            "tier": "D",
+            "score": 0.44285714626312258,
+            "creature": false,
+            "games": 70
+        },
+        {
+            "card": "Momentum",
+            "tier": "D",
+            "score": 0.4429530203342438,
+            "creature": false,
+            "games": 149
+        },
+        {
+            "card": "Business Operating Expenses",
+            "tier": "D",
+            "score": 0.4492753744125366,
+            "creature": false,
+            "games": 69
+        },
+        {
+            "card": "False Flag Operation",
+            "tier": "D",
+            "score": 0.4495798349380493,
+            "creature": false,
+            "games": 238
+        },
+        {
+            "card": "Buffering",
+            "tier": "D",
+            "score": 0.45038166642189028,
+            "creature": false,
+            "games": 131
+        },
+        {
+            "card": "Code Review",
+            "tier": "D",
+            "score": 0.45045045018196108,
+            "creature": false,
+            "games": 222
+        },
+        {
+            "card": "NDA",
+            "tier": "C",
+            "score": 0.45205479860305788,
+            "creature": false,
+            "games": 73
+        },
+        {
+            "card": "Console Memory Card",
+            "tier": "C",
+            "score": 0.45299145579338076,
+            "creature": false,
+            "games": 117
+        },
+        {
+            "card": "Plausible Deniability",
+            "tier": "C",
+            "score": 0.453125,
+            "creature": false,
+            "games": 64
+        },
+        {
+            "card": "Controlled Chaos",
             "tier": "C",
             "score": 0.4533333480358124,
             "creature": false,
             "games": 75
         },
         {
-            "card": "Overtime",
+            "card": "Overpopulation",
             "tier": "C",
             "score": 0.4545454680919647,
             "creature": false,
-            "games": 77
+            "games": 66
         },
         {
-            "card": "Biohacking",
+            "card": "Mimetic Theory",
             "tier": "C",
-            "score": 0.4563758373260498,
+            "score": 0.45588234066963198,
             "creature": false,
-            "games": 149
+            "games": 68
         },
         {
-            "card": "Ctrl + Z",
+            "card": "The Wicker Man",
             "tier": "C",
-            "score": 0.4571428596973419,
+            "score": 0.45679011940956118,
             "creature": false,
-            "games": 70
+            "games": 81
         },
         {
-            "card": "Zeitgeist",
+            "card": "Tabula Rasa",
             "tier": "C",
-            "score": 0.4583333432674408,
+            "score": 0.458149790763855,
             "creature": false,
-            "games": 72
+            "games": 227
         },
         {
-            "card": "Die by the Sword",
+            "card": "Liminal Space",
             "tier": "C",
-            "score": 0.4588235318660736,
+            "score": 0.4609929025173187,
             "creature": false,
-            "games": 85
+            "games": 141
         },
         {
-            "card": "The Lost Ark",
+            "card": "Tithe",
             "tier": "C",
-            "score": 0.46052631735801699,
+            "score": 0.4625000059604645,
             "creature": false,
-            "games": 76
+            "games": 80
         },
         {
             "card": "Pair Programming",
             "tier": "C",
-            "score": 0.46060606837272646,
+            "score": 0.46268656849861147,
             "creature": false,
-            "games": 165
+            "games": 134
         },
         {
-            "card": "Solidarity Towards The Small Businessman",
+            "card": "Groundhog Day",
             "tier": "C",
-            "score": 0.4675324559211731,
+            "score": 0.46315789222717287,
             "creature": false,
-            "games": 77
+            "games": 95
         },
         {
-            "card": "Hyperbole",
+            "card": "Monkey See, Monkey Do",
             "tier": "C",
-            "score": 0.4714285731315613,
+            "score": 0.4637681245803833,
             "creature": false,
-            "games": 70
+            "games": 69
         },
         {
-            "card": "Frame Job",
+            "card": "Mass Emigration",
             "tier": "C",
-            "score": 0.47297295928001406,
+            "score": 0.46399998664855959,
             "creature": false,
-            "games": 74
+            "games": 125
         },
         {
-            "card": "HAARP",
+            "card": "Hold That Thought",
             "tier": "C",
-            "score": 0.4754098355770111,
+            "score": 0.4661654233932495,
             "creature": false,
-            "games": 61
+            "games": 133
         },
         {
-            "card": "Bilderberg Membership",
+            "card": "Survivorship Bias",
             "tier": "C",
-            "score": 0.4761904776096344,
+            "score": 0.46875,
             "creature": false,
-            "games": 84
-        },
-        {
-            "card": "Mutation",
-            "tier": "C",
-            "score": 0.4761904776096344,
-            "creature": false,
-            "games": 126
-        },
-        {
-            "card": "Perfectly Timed Camera Malfunction",
-            "tier": "C",
-            "score": 0.47647058963775637,
-            "creature": false,
-            "games": 170
-        },
-        {
-            "card": "Shaken, Not Stirred",
-            "tier": "C",
-            "score": 0.4769230782985687,
-            "creature": false,
-            "games": 65
+            "games": 64
         },
         {
             "card": "Lance Of Longinus",
             "tier": "C",
-            "score": 0.47777777910232546,
+            "score": 0.4691357910633087,
             "creature": false,
-            "games": 90
+            "games": 81
         },
         {
-            "card": "Tapped Communications",
+            "card": "Memento Mori",
+            "tier": "C",
+            "score": 0.469696968793869,
+            "creature": false,
+            "games": 66
+        },
+        {
+            "card": "Mutation",
+            "tier": "C",
+            "score": 0.469696968793869,
+            "creature": false,
+            "games": 66
+        },
+        {
+            "card": "Parabiosis",
+            "tier": "C",
+            "score": 0.469696968793869,
+            "creature": false,
+            "games": 66
+        },
+        {
+            "card": "The Holy Grail",
+            "tier": "C",
+            "score": 0.47058823704719546,
+            "creature": false,
+            "games": 221
+        },
+        {
+            "card": "The Last Shall Be First",
+            "tier": "C",
+            "score": 0.4736842215061188,
+            "creature": false,
+            "games": 247
+        },
+        {
+            "card": "Heimlich Maneuver",
+            "tier": "C",
+            "score": 0.4776119291782379,
+            "creature": false,
+            "games": 67
+        },
+        {
+            "card": "Placebo",
             "tier": "C",
             "score": 0.47826087474823,
             "creature": false,
             "games": 69
         },
         {
-            "card": "Placebo",
+            "card": "Curfew",
             "tier": "C",
-            "score": 0.47887325286865237,
+            "score": 0.4789915978908539,
             "creature": false,
-            "games": 71
+            "games": 119
         },
         {
-            "card": "Imposter Syndrome",
+            "card": "Necronomicon",
             "tier": "C",
-            "score": 0.4790419042110443,
+            "score": 0.4791666567325592,
             "creature": false,
-            "games": 167
+            "games": 144
         },
         {
-            "card": "Job Rotation",
+            "card": "Margin Call",
+            "tier": "C",
+            "score": 0.47999998927116396,
+            "creature": false,
+            "games": 75
+        },
+        {
+            "card": "Rage Bait",
+            "tier": "C",
+            "score": 0.47999998927116396,
+            "creature": false,
+            "games": 125
+        },
+        {
+            "card": "Due Process",
+            "tier": "C",
+            "score": 0.4803493320941925,
+            "creature": false,
+            "games": 229
+        },
+        {
+            "card": "Death By \"Natural Causes\"",
             "tier": "C",
             "score": 0.48051947355270388,
             "creature": false,
             "games": 77
         },
         {
-            "card": "Humanitarian Trafficking Action",
+            "card": "Reflect",
             "tier": "C",
-            "score": 0.48148149251937868,
+            "score": 0.4833333194255829,
             "creature": false,
-            "games": 81
+            "games": 60
         },
         {
-            "card": "Death By \"Natural Causes\"",
+            "card": "Border Crossing",
             "tier": "C",
-            "score": 0.484375,
+            "score": 0.4838709533214569,
             "creature": false,
-            "games": 64
+            "games": 62
         },
         {
-            "card": "Momentum",
+            "card": "Frame Job",
             "tier": "C",
-            "score": 0.4848484992980957,
+            "score": 0.4852941036224365,
             "creature": false,
-            "games": 66
-        },
-        {
-            "card": "Doomsday Clock",
-            "tier": "C",
-            "score": 0.4868420958518982,
-            "creature": false,
-            "games": 76
-        },
-        {
-            "card": "Laissez-Faire",
-            "tier": "C",
-            "score": 0.4868420958518982,
-            "creature": false,
-            "games": 76
-        },
-        {
-            "card": "Web Scraping",
-            "tier": "C",
-            "score": 0.4871794879436493,
-            "creature": false,
-            "games": 78
+            "games": 68
         },
         {
             "card": "Lucid Dreaming",
             "tier": "C",
-            "score": 0.49264705181121828,
+            "score": 0.4866666793823242,
             "creature": false,
-            "games": 136
+            "games": 150
         },
         {
-            "card": "Tithe",
+            "card": "Casino",
+            "tier": "C",
+            "score": 0.4895104765892029,
+            "creature": false,
+            "games": 143
+        },
+        {
+            "card": "Headhunter",
+            "tier": "C",
+            "score": 0.4900662302970886,
+            "creature": false,
+            "games": 151
+        },
+        {
+            "card": "Web Scraping",
+            "tier": "C",
+            "score": 0.4900662302970886,
+            "creature": false,
+            "games": 151
+        },
+        {
+            "card": "Monkey Hand",
+            "tier": "C",
+            "score": 0.4920634925365448,
+            "creature": false,
+            "games": 189
+        },
+        {
+            "card": "Femtosecond Laser",
             "tier": "C",
             "score": 0.49275362491607668,
             "creature": false,
             "games": 69
         },
         {
-            "card": "Toxic Positivity",
+            "card": "Inheritance",
             "tier": "C",
-            "score": 0.49668875336647036,
+            "score": 0.4931506812572479,
             "creature": false,
-            "games": 151
+            "games": 73
         },
         {
-            "card": "Controlled Chaos",
+            "card": "Vaccine",
             "tier": "C",
+            "score": 0.4956521689891815,
+            "creature": false,
+            "games": 115
+        },
+        {
+            "card": "Social Engineering",
+            "tier": "C",
+            "score": 0.49568966031074526,
+            "creature": false,
+            "games": 232
+        },
+        {
+            "card": "Taxpayer Funds Venture Capital Profits",
+            "tier": "C",
+            "score": 0.49624061584472659,
+            "creature": false,
+            "games": 133
+        },
+        {
+            "card": "Inflation",
+            "tier": "C",
+            "score": 0.49635037779808047,
+            "creature": false,
+            "games": 137
+        },
+        {
+            "card": "Man-in-the-Middle",
+            "tier": "C",
+            "score": 0.4965035021305084,
+            "creature": false,
+            "games": 143
+        },
+        {
+            "card": "End-to-End Encryption",
+            "tier": "C",
+            "score": 0.49732619524002077,
+            "creature": false,
+            "games": 187
+        },
+        {
+            "card": "Gene Editing",
+            "tier": "B",
+            "score": 0.5,
+            "creature": false,
+            "games": 142
+        },
+        {
+            "card": "Gracias Jesús",
+            "tier": "B",
+            "score": 0.5,
+            "creature": false,
+            "games": 142
+        },
+        {
+            "card": "Tapped Communications",
+            "tier": "B",
             "score": 0.5,
             "creature": false,
             "games": 70
         },
         {
-            "card": "Dead Cat Bounce",
-            "tier": "C",
-            "score": 0.5,
-            "creature": false,
-            "games": 88
-        },
-        {
-            "card": "Red Tape",
-            "tier": "C",
-            "score": 0.5,
-            "creature": false,
-            "games": 72
-        },
-        {
-            "card": "Operation Paperclip",
-            "tier": "C",
+            "card": "Sacrificial Ritual",
+            "tier": "B",
             "score": 0.5060241222381592,
             "creature": false,
             "games": 83
         },
         {
-            "card": "False Flag Operation",
-            "tier": "C",
-            "score": 0.5072463750839233,
-            "creature": false,
-            "games": 69
-        },
-        {
-            "card": "Mimetic Theory",
-            "tier": "C",
-            "score": 0.5076923370361328,
-            "creature": false,
-            "games": 65
-        },
-        {
-            "card": "Prion Disease",
-            "tier": "C",
-            "score": 0.5128205418586731,
-            "creature": false,
-            "games": 78
-        },
-        {
-            "card": "Religious Instrumentalization",
-            "tier": "C",
-            "score": 0.5131579041481018,
-            "creature": false,
-            "games": 76
-        },
-        {
-            "card": "Survivorship Bias",
-            "tier": "C",
-            "score": 0.5142857432365418,
-            "creature": false,
-            "games": 70
-        },
-        {
-            "card": "Mithril",
-            "tier": "C",
-            "score": 0.5151515007019043,
-            "creature": false,
-            "games": 66
-        },
-        {
-            "card": "Curfew",
-            "tier": "C",
-            "score": 0.5161290168762207,
-            "creature": false,
-            "games": 62
-        },
-        {
-            "card": "Man-in-the-Middle",
-            "tier": "C",
-            "score": 0.5165562629699707,
-            "creature": false,
-            "games": 151
-        },
-        {
-            "card": "Business Operating Expenses",
-            "tier": "C",
-            "score": 0.5189873576164246,
-            "creature": false,
-            "games": 79
-        },
-        {
-            "card": "Inflation",
+            "card": "Shaken, Not Stirred",
             "tier": "B",
-            "score": 0.5199999809265137,
-            "creature": false,
-            "games": 125
-        },
-        {
-            "card": "Never Let Them Know Your Next Move",
-            "tier": "B",
-            "score": 0.5205479264259338,
-            "creature": false,
-            "games": 73
-        },
-        {
-            "card": "Evolution Theory",
-            "tier": "B",
-            "score": 0.5211267471313477,
-            "creature": false,
-            "games": 71
-        },
-        {
-            "card": "Hostage Situation",
-            "tier": "B",
-            "score": 0.5222222208976746,
-            "creature": false,
-            "games": 90
-        },
-        {
-            "card": "Monkey Hand",
-            "tier": "B",
-            "score": 0.5266666412353516,
-            "creature": false,
-            "games": 150
-        },
-        {
-            "card": "Headhunter",
-            "tier": "B",
-            "score": 0.529411792755127,
-            "creature": false,
-            "games": 85
-        },
-        {
-            "card": "Involuntary Free Polonium Giveaway",
-            "tier": "B",
-            "score": 0.5303030014038086,
-            "creature": false,
-            "games": 66
-        },
-        {
-            "card": "YOLO",
-            "tier": "B",
-            "score": 0.530434787273407,
-            "creature": false,
-            "games": 115
-        },
-        {
-            "card": "Human Intelligence",
-            "tier": "B",
-            "score": 0.5306122303009033,
-            "creature": false,
-            "games": 147
-        },
-        {
-            "card": "Holy Hand Grenade of Antioch",
-            "tier": "B",
-            "score": 0.5308641791343689,
+            "score": 0.5061728358268738,
             "creature": false,
             "games": 81
         },
         {
-            "card": "The Great Flood",
+            "card": "Licence to Kill",
             "tier": "B",
-            "score": 0.5316455960273743,
+            "score": 0.5064935088157654,
             "creature": false,
-            "games": 79
+            "games": 77
         },
         {
-            "card": "Code Review",
+            "card": "Job Rotation",
             "tier": "B",
-            "score": 0.534246563911438,
+            "score": 0.5066666603088379,
             "creature": false,
-            "games": 73
+            "games": 75
         },
         {
-            "card": "Blessing in Disguise",
+            "card": "Ghost Army",
             "tier": "B",
-            "score": 0.5365853905677795,
-            "creature": false,
-            "games": 82
-        },
-        {
-            "card": "Selfie Esteem",
-            "tier": "B",
-            "score": 0.5373134613037109,
-            "creature": false,
-            "games": 67
-        },
-        {
-            "card": "Valet",
-            "tier": "B",
-            "score": 0.5373134613037109,
-            "creature": false,
-            "games": 67
-        },
-        {
-            "card": "Peace the Frontier",
-            "tier": "B",
-            "score": 0.5375000238418579,
-            "creature": false,
-            "games": 80
-        },
-        {
-            "card": "Trolley Problem",
-            "tier": "B",
-            "score": 0.5394191145896912,
-            "creature": false,
-            "games": 241
-        },
-        {
-            "card": "Gene Editing",
-            "tier": "B",
-            "score": 0.5396825671195984,
-            "creature": false,
-            "games": 126
-        },
-        {
-            "card": "3rd Parallel Job",
-            "tier": "B",
-            "score": 0.5416666865348816,
-            "creature": false,
-            "games": 72
-        },
-        {
-            "card": "Antivirus",
-            "tier": "B",
-            "score": 0.5419355034828186,
-            "creature": false,
-            "games": 155
-        },
-        {
-            "card": "Domino Effect",
-            "tier": "B",
-            "score": 0.5428571701049805,
-            "creature": false,
-            "games": 70
-        },
-        {
-            "card": "Violence Monopoly",
-            "tier": "B",
-            "score": 0.5441176295280457,
-            "creature": false,
-            "games": 68
-        },
-        {
-            "card": "Buffering",
-            "tier": "B",
-            "score": 0.5443037748336792,
-            "creature": false,
-            "games": 79
-        },
-        {
-            "card": "Mox Nox",
-            "tier": "B",
-            "score": 0.5443037748336792,
-            "creature": false,
-            "games": 79
-        },
-        {
-            "card": "Necronomicon",
-            "tier": "B",
-            "score": 0.5465838313102722,
-            "creature": false,
-            "games": 161
-        },
-        {
-            "card": "Polonium Umbrella",
-            "tier": "B",
-            "score": 0.546875,
-            "creature": false,
-            "games": 64
-        },
-        {
-            "card": "Legerdemain",
-            "tier": "B",
-            "score": 0.5483871102333069,
-            "creature": false,
-            "games": 155
-        },
-        {
-            "card": "Supply Chain Attack",
-            "tier": "B",
-            "score": 0.5487805008888245,
-            "creature": false,
-            "games": 164
-        },
-        {
-            "card": "Femtosecond Laser",
-            "tier": "B",
-            "score": 0.5492957830429077,
+            "score": 0.5070422291755676,
             "creature": false,
             "games": 71
         },
         {
             "card": "Reality Check",
             "tier": "B",
+            "score": 0.5074626803398132,
+            "creature": false,
+            "games": 67
+        },
+        {
+            "card": "Splitting The Atom",
+            "tier": "B",
+            "score": 0.5074626803398132,
+            "creature": false,
+            "games": 67
+        },
+        {
+            "card": "Religious Instrumentalization",
+            "tier": "B",
+            "score": 0.5081967115402222,
+            "creature": false,
+            "games": 61
+        },
+        {
+            "card": "Violence Monopoly",
+            "tier": "B",
+            "score": 0.5116279125213623,
+            "creature": false,
+            "games": 129
+        },
+        {
+            "card": "Seasteading",
+            "tier": "B",
+            "score": 0.5147058963775635,
+            "creature": false,
+            "games": 68
+        },
+        {
+            "card": "Insurance Policy",
+            "tier": "B",
+            "score": 0.5161290168762207,
+            "creature": false,
+            "games": 62
+        },
+        {
+            "card": "Tracking Beacon",
+            "tier": "B",
+            "score": 0.518796980381012,
+            "creature": false,
+            "games": 133
+        },
+        {
+            "card": "Mental Health Day",
+            "tier": "B",
+            "score": 0.521276593208313,
+            "creature": false,
+            "games": 94
+        },
+        {
+            "card": "Tax-Exempt Corruption",
+            "tier": "B",
+            "score": 0.523809552192688,
+            "creature": false,
+            "games": 147
+        },
+        {
+            "card": "Human Intelligence",
+            "tier": "B",
+            "score": 0.5244755148887634,
+            "creature": false,
+            "games": 143
+        },
+        {
+            "card": "Fell Out of a Window",
+            "tier": "B",
+            "score": 0.5277777910232544,
+            "creature": false,
+            "games": 72
+        },
+        {
+            "card": "Omen Reading",
+            "tier": "B",
+            "score": 0.5283018946647644,
+            "creature": false,
+            "games": 106
+        },
+        {
+            "card": "Cyberpsychosis",
+            "tier": "B",
+            "score": 0.5291666388511658,
+            "creature": false,
+            "games": 240
+        },
+        {
+            "card": "Research Lab",
+            "tier": "B",
+            "score": 0.5298507213592529,
+            "creature": false,
+            "games": 134
+        },
+        {
+            "card": "Mithril",
+            "tier": "B",
+            "score": 0.5303030014038086,
+            "creature": false,
+            "games": 66
+        },
+        {
+            "card": "Yesn't",
+            "tier": "B",
+            "score": 0.5303030014038086,
+            "creature": false,
+            "games": 132
+        },
+        {
+            "card": "Escape Goat",
+            "tier": "B",
+            "score": 0.5324675440788269,
+            "creature": false,
+            "games": 77
+        },
+        {
+            "card": "Selfie Esteem",
+            "tier": "B",
+            "score": 0.5329949259757996,
+            "creature": false,
+            "games": 197
+        },
+        {
+            "card": "Blessing in Disguise",
+            "tier": "B",
+            "score": 0.5347222089767456,
+            "creature": false,
+            "games": 144
+        },
+        {
+            "card": "Die Another Day",
+            "tier": "B",
+            "score": 0.5352112650871277,
+            "creature": false,
+            "games": 71
+        },
+        {
+            "card": "Overtime",
+            "tier": "B",
+            "score": 0.5352112650871277,
+            "creature": false,
+            "games": 71
+        },
+        {
+            "card": "Raised Security Level",
+            "tier": "B",
+            "score": 0.5355191230773926,
+            "creature": false,
+            "games": 183
+        },
+        {
+            "card": "Slow Thinking",
+            "tier": "B",
+            "score": 0.5360000133514404,
+            "creature": false,
+            "games": 125
+        },
+        {
+            "card": "Legerdemain",
+            "tier": "B",
+            "score": 0.5373134613037109,
+            "creature": false,
+            "games": 67
+        },
+        {
+            "card": "Die by the Sword",
+            "tier": "B",
+            "score": 0.5384615659713745,
+            "creature": false,
+            "games": 143
+        },
+        {
+            "card": "Excess of Bread and Wine",
+            "tier": "B",
+            "score": 0.5384615659713745,
+            "creature": false,
+            "games": 65
+        },
+        {
+            "card": "Asset Recruitment",
+            "tier": "B",
+            "score": 0.540229856967926,
+            "creature": false,
+            "games": 87
+        },
+        {
+            "card": "Ambrosia",
+            "tier": "B",
+            "score": 0.5405405163764954,
+            "creature": false,
+            "games": 74
+        },
+        {
+            "card": "Exploding Pen",
+            "tier": "B",
+            "score": 0.5405405163764954,
+            "creature": false,
+            "games": 148
+        },
+        {
+            "card": "Presidential Pardon",
+            "tier": "B",
+            "score": 0.5408163070678711,
+            "creature": false,
+            "games": 196
+        },
+        {
+            "card": "Mutually Assured Destruction",
+            "tier": "B",
+            "score": 0.5409836173057556,
+            "creature": false,
+            "games": 61
+        },
+        {
+            "card": "Preemptive Strike",
+            "tier": "B",
+            "score": 0.5439560413360596,
+            "creature": false,
+            "games": 182
+        },
+        {
+            "card": "Accelerationism",
+            "tier": "B",
+            "score": 0.5471698045730591,
+            "creature": false,
+            "games": 106
+        },
+        {
+            "card": "The Great Flood",
+            "tier": "B",
+            "score": 0.5476190447807312,
+            "creature": false,
+            "games": 84
+        },
+        {
+            "card": "Holy War",
+            "tier": "B",
+            "score": 0.5477706789970398,
+            "creature": false,
+            "games": 157
+        },
+        {
+            "card": "Moral Bankruptcy",
+            "tier": "B",
             "score": 0.5507246255874634,
             "creature": false,
             "games": 69
         },
         {
-            "card": "Excess of Bread and Wine",
+            "card": "Stasis Field",
             "tier": "B",
-            "score": 0.5522388219833374,
+            "score": 0.551111102104187,
             "creature": false,
-            "games": 67
+            "games": 225
         },
         {
-            "card": "Cyberpsychosis",
-            "tier": "B",
-            "score": 0.5526315569877625,
-            "creature": false,
-            "games": 76
-        },
-        {
-            "card": "Rush Hour",
+            "card": "Evolution Theory",
             "tier": "B",
             "score": 0.5538461804389954,
             "creature": false,
             "games": 65
         },
         {
-            "card": "Tax-Exempt Corruption",
-            "tier": "B",
-            "score": 0.5569620132446289,
+            "card": "Calm Your Tits",
+            "tier": "A",
+            "score": 0.5544554591178894,
             "creature": false,
-            "games": 79
+            "games": 101
         },
         {
-            "card": "Glomar Response",
-            "tier": "B",
-            "score": 0.5584415793418884,
+            "card": "Mox Nox",
+            "tier": "A",
+            "score": 0.5555555820465088,
             "creature": false,
-            "games": 77
+            "games": 144
         },
         {
-            "card": "Seniority Priority",
-            "tier": "B",
-            "score": 0.5584415793418884,
+            "card": "Ol' Reliable",
+            "tier": "A",
+            "score": 0.5562499761581421,
             "creature": false,
-            "games": 77
+            "games": 160
         },
         {
-            "card": "Tabula Rasa",
-            "tier": "B",
-            "score": 0.5584415793418884,
+            "card": "Usury",
+            "tier": "A",
+            "score": 0.5571428537368774,
             "creature": false,
-            "games": 77
+            "games": 70
         },
         {
-            "card": "Coup d'État",
-            "tier": "B",
-            "score": 0.5600000023841858,
+            "card": "Prion Disease",
+            "tier": "A",
+            "score": 0.5597015023231506,
             "creature": false,
-            "games": 75
+            "games": 134
         },
         {
-            "card": "Taxpayer Funds Venture Capital Profits",
-            "tier": "B",
-            "score": 0.5600000023841858,
+            "card": "Publicly Funded Faith Schools",
+            "tier": "A",
+            "score": 0.5604395866394043,
             "creature": false,
-            "games": 125
+            "games": 91
         },
         {
-            "card": "Splitting The Atom",
-            "tier": "B",
+            "card": "Lost Landmine",
+            "tier": "A",
             "score": 0.560606062412262,
             "creature": false,
             "games": 66
         },
         {
-            "card": "Tracking Beacon",
-            "tier": "B",
-            "score": 0.5617977380752564,
+            "card": "Burn Notice",
+            "tier": "A",
+            "score": 0.5612903237342835,
             "creature": false,
-            "games": 89
+            "games": 155
         },
         {
-            "card": "Plausible Deniability",
-            "tier": "B",
-            "score": 0.5647059082984924,
+            "card": "Glomar Response",
+            "tier": "A",
+            "score": 0.5639097690582275,
             "creature": false,
-            "games": 85
+            "games": 133
         },
         {
-            "card": "Secret Anthrax Laboratory",
-            "tier": "B",
-            "score": 0.5661764740943909,
+            "card": "Peace the Frontier",
+            "tier": "A",
+            "score": 0.5652173757553101,
             "creature": false,
-            "games": 136
+            "games": 69
         },
         {
-            "card": "Yesn't",
+            "card": "Bilderberg Membership",
+            "tier": "A",
+            "score": 0.5671641826629639,
+            "creature": false,
+            "games": 67
+        },
+        {
+            "card": "Hostile Takeover",
+            "tier": "A",
+            "score": 0.5671641826629639,
+            "creature": false,
+            "games": 268
+        },
+        {
+            "card": "Seniority Priority",
+            "tier": "A",
+            "score": 0.5671641826629639,
+            "creature": false,
+            "games": 67
+        },
+        {
+            "card": "DDOS Attack",
             "tier": "A",
             "score": 0.5675675868988037,
             "creature": false,
-            "games": 74
+            "games": 222
         },
         {
-            "card": "Accelerationism",
+            "card": "Absolute Zero",
             "tier": "A",
             "score": 0.5692307949066162,
             "creature": false,
             "games": 65
         },
         {
-            "card": "Slow Thinking",
+            "card": "Trolley Problem",
             "tier": "A",
-            "score": 0.5694444179534912,
+            "score": 0.5734597444534302,
             "creature": false,
-            "games": 72
+            "games": 211
         },
         {
-            "card": "Dogpile",
+            "card": "Eavesdrop",
             "tier": "A",
-            "score": 0.5696202516555786,
+            "score": 0.5757575631141663,
             "creature": false,
-            "games": 316
+            "games": 66
         },
         {
-            "card": "Presidential Pardon",
+            "card": "Rush Hour",
             "tier": "A",
-            "score": 0.5714285969734192,
+            "score": 0.5764706134796143,
             "creature": false,
-            "games": 70
+            "games": 85
         },
         {
-            "card": "Usury",
+            "card": "Devil's Breath",
             "tier": "A",
-            "score": 0.5730336904525757,
+            "score": 0.5802469253540039,
             "creature": false,
-            "games": 89
+            "games": 81
         },
         {
-            "card": "The Last Shall Be First",
+            "card": "Weaponized Incompetence",
             "tier": "A",
-            "score": 0.5733333230018616,
-            "creature": false,
-            "games": 75
-        },
-        {
-            "card": "Gracias Jesús",
-            "tier": "A",
-            "score": 0.5753424763679504,
-            "creature": false,
-            "games": 73
-        },
-        {
-            "card": "Raised Security Level",
-            "tier": "A",
-            "score": 0.5755813717842102,
-            "creature": false,
-            "games": 172
-        },
-        {
-            "card": "Ol' Reliable",
-            "tier": "A",
-            "score": 0.577464759349823,
-            "creature": false,
-            "games": 142
-        },
-        {
-            "card": "Exorcism",
-            "tier": "A",
-            "score": 0.5789473652839661,
-            "creature": false,
-            "games": 76
-        },
-        {
-            "card": "Exploding Pen",
-            "tier": "A",
-            "score": 0.5789473652839661,
-            "creature": false,
-            "games": 76
-        },
-        {
-            "card": "Lost Landmine",
-            "tier": "A",
-            "score": 0.5810810923576355,
-            "creature": false,
-            "games": 74
-        },
-        {
-            "card": "Casino",
-            "tier": "A",
-            "score": 0.5822784900665283,
-            "creature": false,
-            "games": 79
-        },
-        {
-            "card": "Ctrl + Y",
-            "tier": "A",
-            "score": 0.5822784900665283,
-            "creature": false,
-            "games": 79
-        },
-        {
-            "card": "Moral Bankruptcy",
-            "tier": "A",
-            "score": 0.5833333134651184,
-            "creature": false,
-            "games": 84
-        },
-        {
-            "card": "Ceasefire",
-            "tier": "A",
-            "score": 0.5844155550003052,
-            "creature": false,
-            "games": 77
-        },
-        {
-            "card": "Liminal Space",
-            "tier": "A",
-            "score": 0.5882353186607361,
-            "creature": false,
-            "games": 68
-        },
-        {
-            "card": "Thoughts and Prayers",
-            "tier": "A",
-            "score": 0.5890411138534546,
-            "creature": false,
-            "games": 73
-        },
-        {
-            "card": "Holy War",
-            "tier": "A",
-            "score": 0.5919540524482727,
-            "creature": false,
-            "games": 174
-        },
-        {
-            "card": "Cancelled",
-            "tier": "A",
-            "score": 0.5922746658325195,
-            "creature": false,
-            "games": 233
-        },
-        {
-            "card": "This Is Fine",
-            "tier": "A",
-            "score": 0.5975610017776489,
-            "creature": false,
-            "games": 82
-        },
-        {
-            "card": "Just in Time",
-            "tier": "A",
-            "score": 0.6024096608161926,
-            "creature": false,
-            "games": 83
-        },
-        {
-            "card": "Venture Capital",
-            "tier": "A",
-            "score": 0.6052631735801697,
-            "creature": false,
-            "games": 76
-        },
-        {
-            "card": "Curse Of Hubris",
-            "tier": "A",
-            "score": 0.6067415475845337,
-            "creature": false,
-            "games": 89
-        },
-        {
-            "card": "Sacrificial Ritual",
-            "tier": "A",
-            "score": 0.617977499961853,
-            "creature": false,
-            "games": 89
-        },
-        {
-            "card": "Smoke And Mirrors",
-            "tier": "A",
-            "score": 0.6184210777282715,
-            "creature": false,
-            "games": 76
-        },
-        {
-            "card": "Ransomware Attack",
-            "tier": "A",
-            "score": 0.6230158805847168,
-            "creature": false,
-            "games": 252
-        },
-        {
-            "card": "Social Engineering",
-            "tier": "A",
-            "score": 0.625,
-            "creature": false,
-            "games": 80
-        },
-        {
-            "card": "Sabotage",
-            "tier": "A",
-            "score": 0.6280487775802612,
-            "creature": false,
-            "games": 164
-        },
-        {
-            "card": "Insurance Policy",
-            "tier": "A",
-            "score": 0.6301369667053223,
-            "creature": false,
-            "games": 73
-        },
-        {
-            "card": "DDOS Attack",
-            "tier": "A",
-            "score": 0.632478654384613,
-            "creature": false,
-            "games": 234
-        },
-        {
-            "card": "Team Building Exercise",
-            "tier": "A",
-            "score": 0.6363636255264282,
-            "creature": false,
-            "games": 231
-        },
-        {
-            "card": "Inheritance",
-            "tier": "A",
-            "score": 0.6428571343421936,
-            "creature": false,
-            "games": 70
-        },
-        {
-            "card": "Preemptive Strike",
-            "tier": "S",
-            "score": 0.6436781883239746,
-            "creature": false,
-            "games": 174
-        },
-        {
-            "card": "High-Frequency Trading Scam",
-            "tier": "S",
-            "score": 0.653333306312561,
-            "creature": false,
-            "games": 75
-        },
-        {
-            "card": "Ambrosia",
-            "tier": "S",
-            "score": 0.65625,
-            "creature": false,
-            "games": 64
-        },
-        {
-            "card": "Black Hole",
-            "tier": "S",
-            "score": 0.6578947305679321,
-            "creature": false,
-            "games": 76
-        },
-        {
-            "card": "Clickbait",
-            "tier": "S",
-            "score": 0.6607142686843872,
-            "creature": false,
-            "games": 168
-        },
-        {
-            "card": "Flash Crash",
-            "tier": "S",
-            "score": 0.6623376607894898,
-            "creature": false,
-            "games": 154
-        },
-        {
-            "card": "Counter-Surveillance",
-            "tier": "S",
-            "score": 0.6627907156944275,
+            "score": 0.5813953280448914,
             "creature": false,
             "games": 86
         },
         {
-            "card": "Exponential Growth",
-            "tier": "S",
-            "score": 0.6694214940071106,
+            "card": "Sabotage",
+            "tier": "A",
+            "score": 0.5826771855354309,
             "creature": false,
-            "games": 121
+            "games": 254
         },
         {
-            "card": "Seasteading",
+            "card": "Biohacking",
+            "tier": "A",
+            "score": 0.5859375,
+            "creature": false,
+            "games": 128
+        },
+        {
+            "card": "Dogpile",
+            "tier": "A",
+            "score": 0.5882353186607361,
+            "creature": false,
+            "games": 221
+        },
+        {
+            "card": "Cancelled",
+            "tier": "A",
+            "score": 0.5891891717910767,
+            "creature": false,
+            "games": 185
+        },
+        {
+            "card": "Deus Vult",
+            "tier": "A",
+            "score": 0.5895522236824036,
+            "creature": false,
+            "games": 134
+        },
+        {
+            "card": "Ctrl + Y",
+            "tier": "A",
+            "score": 0.5903083682060242,
+            "creature": false,
+            "games": 227
+        },
+        {
+            "card": "Counter-Surveillance",
+            "tier": "A",
+            "score": 0.5910652875900269,
+            "creature": false,
+            "games": 291
+        },
+        {
+            "card": "Blood Transfusion",
+            "tier": "A",
+            "score": 0.5942028760910034,
+            "creature": false,
+            "games": 138
+        },
+        {
+            "card": "Venture Capital",
+            "tier": "A",
+            "score": 0.594936728477478,
+            "creature": false,
+            "games": 237
+        },
+        {
+            "card": "Ceasefire",
+            "tier": "A",
+            "score": 0.595588207244873,
+            "creature": false,
+            "games": 136
+        },
+        {
+            "card": "Team Building Exercise",
+            "tier": "A",
+            "score": 0.5969387888908386,
+            "creature": false,
+            "games": 196
+        },
+        {
+            "card": "Imposter Syndrome",
+            "tier": "A",
+            "score": 0.6013985872268677,
+            "creature": false,
+            "games": 143
+        },
+        {
+            "card": "Ransomware Attack",
+            "tier": "A",
+            "score": 0.6025640964508057,
+            "creature": false,
+            "games": 234
+        },
+        {
+            "card": "Supply Chain Attack",
+            "tier": "A",
+            "score": 0.6035242080688477,
+            "creature": false,
+            "games": 227
+        },
+        {
+            "card": "Operation Paperclip",
+            "tier": "A",
+            "score": 0.6060606241226196,
+            "creature": false,
+            "games": 66
+        },
+        {
+            "card": "Curse Of Hubris",
+            "tier": "A",
+            "score": 0.607758641242981,
+            "creature": false,
+            "games": 232
+        },
+        {
+            "card": "Perfectly Timed Camera Malfunction",
+            "tier": "A",
+            "score": 0.6111111044883728,
+            "creature": false,
+            "games": 126
+        },
+        {
+            "card": "Counter-Intelligence",
             "tier": "S",
-            "score": 0.6857143044471741,
+            "score": 0.611940324306488,
+            "creature": false,
+            "games": 67
+        },
+        {
+            "card": "Dead Cat Bounce",
+            "tier": "S",
+            "score": 0.6142857074737549,
+            "creature": false,
+            "games": 70
+        },
+        {
+            "card": "Clickbait",
+            "tier": "S",
+            "score": 0.6206896305084229,
+            "creature": false,
+            "games": 319
+        },
+        {
+            "card": "Exponential Growth",
+            "tier": "S",
+            "score": 0.621052622795105,
+            "creature": false,
+            "games": 190
+        },
+        {
+            "card": "The Golden Gun",
+            "tier": "S",
+            "score": 0.625,
+            "creature": false,
+            "games": 104
+        },
+        {
+            "card": "Holy Hand Grenade of Antioch",
+            "tier": "S",
+            "score": 0.625806450843811,
+            "creature": false,
+            "games": 155
+        },
+        {
+            "card": "Coup d'État",
+            "tier": "S",
+            "score": 0.6290322542190552,
+            "creature": false,
+            "games": 62
+        },
+        {
+            "card": "Flash Crash",
+            "tier": "S",
+            "score": 0.6308724880218506,
+            "creature": false,
+            "games": 149
+        },
+        {
+            "card": "High-Frequency Trading Scam",
+            "tier": "S",
+            "score": 0.6363636255264282,
+            "creature": false,
+            "games": 242
+        },
+        {
+            "card": "Hollowed-Out Volcano Lair",
+            "tier": "S",
+            "score": 0.641791045665741,
+            "creature": false,
+            "games": 67
+        },
+        {
+            "card": "The Friends We Made Along the Way",
+            "tier": "S",
+            "score": 0.6477987170219421,
+            "creature": false,
+            "games": 159
+        },
+        {
+            "card": "Corporate Bailouts",
+            "tier": "S",
+            "score": 0.6488549709320068,
+            "creature": false,
+            "games": 262
+        },
+        {
+            "card": "Dead Drop",
+            "tier": "S",
+            "score": 0.6571428775787354,
             "creature": false,
             "games": 70
         },
         {
             "card": "Maslow's Pyramid",
             "tier": "S",
-            "score": 0.692307710647583,
+            "score": 0.6861313581466675,
             "creature": false,
-            "games": 65
+            "games": 137
         },
         {
-            "card": "Omen Reading",
+            "card": "Black Hole",
             "tier": "S",
-            "score": 0.6962025165557861,
+            "score": 0.6887966990470886,
             "creature": false,
-            "games": 79
+            "games": 241
         },
         {
-            "card": "Due Process",
+            "card": "Secret Anthrax Laboratory",
             "tier": "S",
-            "score": 0.7101449370384216,
+            "score": 0.7028753757476807,
             "creature": false,
-            "games": 69
-        },
-        {
-            "card": "Panem Et Circenses",
-            "tier": "S",
-            "score": 0.7226890921592712,
-            "creature": false,
-            "games": 119
-        },
-        {
-            "card": "Hostile Takeover",
-            "tier": "S",
-            "score": 0.7236024737358093,
-            "creature": false,
-            "games": 322
+            "games": 313
         },
         {
             "card": "DMCA",
             "tier": "S",
-            "score": 0.738095223903656,
+            "score": 0.7053824067115784,
             "creature": false,
-            "games": 84
+            "games": 353
         },
         {
-            "card": "Deus Vult",
+            "card": "Panem Et Circenses",
             "tier": "S",
-            "score": 0.7402597665786743,
+            "score": 0.764102578163147,
             "creature": false,
-            "games": 77
-        },
-        {
-            "card": "Stasis Field",
-            "tier": "S",
-            "score": 0.8701298832893372,
-            "creature": false,
-            "games": 77
+            "games": 195
         },
         {
             "card": "Golden Dome",
             "tier": "D",
             "score": 0.0,
             "creature": true,
-            "games": 108
-        },
-        {
-            "card": "Philosophy PhD",
-            "tier": "D",
-            "score": 0.0,
-            "creature": true,
-            "games": 27
+            "games": 76
         },
         {
             "card": "Suspicious USB Stick in the Parking Lot",
             "tier": "D",
             "score": 0.0,
             "creature": true,
-            "games": 195
-        },
-        {
-            "card": "The Invisible Hand",
-            "tier": "D",
-            "score": 0.0024015370290726425,
-            "creature": true,
-            "games": 189
-        },
-        {
-            "card": "The Omen",
-            "tier": "D",
-            "score": 0.019410977140069009,
-            "creature": true,
-            "games": 179
-        },
-        {
-            "card": "Counterfeit",
-            "tier": "D",
-            "score": 0.02322661690413952,
-            "creature": true,
-            "games": 184
-        },
-        {
-            "card": "Inhuman Resources",
-            "tier": "D",
-            "score": 0.02477477490901947,
-            "creature": true,
-            "games": 200
-        },
-        {
-            "card": "Satoshi Nakamoto",
-            "tier": "D",
-            "score": 0.027149321511387826,
-            "creature": true,
-            "games": 192
-        },
-        {
-            "card": "Unicorn",
-            "tier": "D",
-            "score": 0.027337558567523958,
-            "creature": true,
-            "games": 200
-        },
-        {
-            "card": "Work Shift Rotation",
-            "tier": "D",
-            "score": 0.03293010592460632,
-            "creature": true,
-            "games": 197
-        },
-        {
-            "card": "Mathematician",
-            "tier": "D",
-            "score": 0.03954802080988884,
-            "creature": true,
-            "games": 54
-        },
-        {
-            "card": "Embassy",
-            "tier": "D",
-            "score": 0.0442708320915699,
-            "creature": true,
-            "games": 200
-        },
-        {
-            "card": "Private Equity",
-            "tier": "D",
-            "score": 0.04506877437233925,
-            "creature": true,
-            "games": 198
-        },
-        {
-            "card": "Unpaid Intern",
-            "tier": "D",
-            "score": 0.04675716534256935,
-            "creature": true,
-            "games": 190
+            "games": 597
         },
         {
             "card": "Pioneer",
             "tier": "D",
-            "score": 0.04716981202363968,
+            "score": 0.00909090880304575,
             "creature": true,
             "games": 88
         },
         {
-            "card": "Taqiyya",
+            "card": "Philosophy PhD",
             "tier": "D",
-            "score": 0.06633081287145615,
+            "score": 0.02415459044277668,
             "creature": true,
-            "games": 172
+            "games": 112
         },
         {
-            "card": "Bodybuilder",
+            "card": "The Invisible Hand",
             "tier": "D",
-            "score": 0.0728267952799797,
+            "score": 0.03611111268401146,
             "creature": true,
-            "games": 400
+            "games": 92
         },
         {
-            "card": "Chain Smoker",
+            "card": "Embassy",
             "tier": "D",
-            "score": 0.10816125571727753,
-            "creature": true,
-            "games": 200
-        },
-        {
-            "card": "Pluriemployed Hustler",
-            "tier": "D",
-            "score": 0.13162492215633393,
-            "creature": true,
-            "games": 387
-        },
-        {
-            "card": "Fidget Spinner",
-            "tier": "D",
-            "score": 0.1440516859292984,
-            "creature": true,
-            "games": 200
-        },
-        {
-            "card": "Bomber Drone",
-            "tier": "D",
-            "score": 0.15134099125862122,
-            "creature": true,
-            "games": 118
-        },
-        {
-            "card": "Charles Ponzi",
-            "tier": "D",
-            "score": 0.1774541586637497,
-            "creature": true,
-            "games": 539
-        },
-        {
-            "card": "Martyr",
-            "tier": "D",
-            "score": 0.17914654314517976,
-            "creature": true,
-            "games": 200
-        },
-        {
-            "card": "Cultist",
-            "tier": "D",
-            "score": 0.18316446244716645,
-            "creature": true,
-            "games": 284
-        },
-        {
-            "card": "Diplomat",
-            "tier": "D",
-            "score": 0.20044805109500886,
-            "creature": true,
-            "games": 396
-        },
-        {
-            "card": "The Lobster Professor",
-            "tier": "D",
-            "score": 0.222062349319458,
-            "creature": true,
-            "games": 200
-        },
-        {
-            "card": "Sleeper Agent",
-            "tier": "D",
-            "score": 0.24248366057872773,
+            "score": 0.1074138954281807,
             "creature": true,
             "games": 199
         },
         {
-            "card": "Killer Rabbit of Caerbannog",
-            "tier": "D",
-            "score": 0.26229506731033327,
-            "creature": true,
-            "games": 189
-        },
-        {
-            "card": "Quantum Physicist",
-            "tier": "D",
-            "score": 0.26356589794158938,
-            "creature": true,
-            "games": 98
-        },
-        {
-            "card": "Pope",
-            "tier": "D",
-            "score": 0.2830856442451477,
-            "creature": true,
-            "games": 200
-        },
-        {
-            "card": "Red Herring",
-            "tier": "D",
-            "score": 0.2883242666721344,
-            "creature": true,
-            "games": 577
-        },
-        {
-            "card": "Boomer",
-            "tier": "D",
-            "score": 0.2964606285095215,
-            "creature": true,
-            "games": 200
-        },
-        {
             "card": "Pyramids",
             "tier": "D",
-            "score": 0.2987147569656372,
-            "creature": true,
-            "games": 388
-        },
-        {
-            "card": "Multimillionaire Philanthropist",
-            "tier": "D",
-            "score": 0.3046746551990509,
+            "score": 0.13100282847881318,
             "creature": true,
             "games": 200
         },
         {
-            "card": "Karen",
+            "card": "Taqiyya",
             "tier": "D",
-            "score": 0.33598560094833376,
+            "score": 0.14222222566604615,
             "creature": true,
-            "games": 384
+            "games": 157
         },
         {
-            "card": "Mercenaries",
+            "card": "The Omen",
             "tier": "D",
-            "score": 0.33909180760383608,
+            "score": 0.15954415500164033,
             "creature": true,
-            "games": 585
+            "games": 97
         },
         {
-            "card": "The Chosen One",
-            "tier": "C",
-            "score": 0.3549639582633972,
-            "creature": true,
-            "games": 194
-        },
-        {
-            "card": "Hedonic Treadmillionaire",
-            "tier": "C",
-            "score": 0.36558255553245547,
-            "creature": true,
-            "games": 200
-        },
-        {
-            "card": "Micromanager",
-            "tier": "C",
-            "score": 0.3873305320739746,
-            "creature": true,
-            "games": 388
-        },
-        {
-            "card": "Cleaning Robot",
-            "tier": "C",
-            "score": 0.39472445845603945,
-            "creature": true,
-            "games": 595
-        },
-        {
-            "card": "Antihero",
-            "tier": "C",
-            "score": 0.40228819847106936,
+            "card": "Sleeper Agent",
+            "tier": "D",
+            "score": 0.2304387092590332,
             "creature": true,
             "games": 400
         },
         {
-            "card": "Fat Tony",
-            "tier": "C",
-            "score": 0.43860143423080447,
+            "card": "Pluriemployed Hustler",
+            "tier": "D",
+            "score": 0.25641027092933657,
             "creature": true,
-            "games": 600
+            "games": 160
         },
         {
-            "card": "Meatproxy As A Service",
-            "tier": "C",
-            "score": 0.48731884360313418,
-            "creature": true,
-            "games": 123
-        },
-        {
-            "card": "Deep Cover",
-            "tier": "C",
-            "score": 0.49656084179878237,
-            "creature": true,
-            "games": 200
-        },
-        {
-            "card": "Chimera",
-            "tier": "C",
-            "score": 0.5095056891441345,
-            "creature": true,
-            "games": 172
-        },
-        {
-            "card": "Day Trader",
-            "tier": "C",
-            "score": 0.5305538177490234,
-            "creature": true,
-            "games": 731
-        },
-        {
-            "card": "Supreme Court",
-            "tier": "C",
-            "score": 0.5335968136787415,
-            "creature": true,
-            "games": 161
-        },
-        {
-            "card": "Holy Ghost",
-            "tier": "C",
-            "score": 0.5531914830207825,
+            "card": "Mathematician",
+            "tier": "D",
+            "score": 0.2888889014720917,
             "creature": true,
             "games": 81
         },
         {
-            "card": "Mummy",
-            "tier": "C",
-            "score": 0.560491144657135,
+            "card": "Holy Pigeon",
+            "tier": "D",
+            "score": 0.3412935435771942,
             "creature": true,
-            "games": 200
+            "games": 234
         },
         {
-            "card": "Technical Debt",
-            "tier": "C",
-            "score": 0.5643765926361084,
+            "card": "Vampire",
+            "tier": "D",
+            "score": 0.3487575054168701,
             "creature": true,
-            "games": 397
+            "games": 178
         },
         {
-            "card": "Golden Parachute",
-            "tier": "C",
-            "score": 0.5928089618682861,
+            "card": "Unpaid Intern",
+            "tier": "D",
+            "score": 0.3580246865749359,
             "creature": true,
-            "games": 200
+            "games": 248
         },
         {
-            "card": "Sherman Tank",
-            "tier": "C",
-            "score": 0.5977289080619812,
+            "card": "Phoenix",
+            "tier": "D",
+            "score": 0.40395480394363406,
             "creature": true,
-            "games": 399
+            "games": 97
         },
         {
-            "card": "Reality TV Star",
-            "tier": "C",
-            "score": 0.6142693758010864,
+            "card": "Bomber Drone",
+            "tier": "D",
+            "score": 0.4399586021900177,
             "creature": true,
-            "games": 400
+            "games": 236
+        },
+        {
+            "card": "Holy Ghost",
+            "tier": "D",
+            "score": 0.4444444477558136,
+            "creature": true,
+            "games": 100
+        },
+        {
+            "card": "The Lobster Professor",
+            "tier": "D",
+            "score": 0.4477911591529846,
+            "creature": true,
+            "games": 186
+        },
+        {
+            "card": "Cultist",
+            "tier": "D",
+            "score": 0.5454545617103577,
+            "creature": true,
+            "games": 82
+        },
+        {
+            "card": "Counterfeit",
+            "tier": "D",
+            "score": 0.579365074634552,
+            "creature": true,
+            "games": 101
         },
         {
             "card": "Scientific Method",
-            "tier": "C",
-            "score": 0.6161616444587708,
+            "tier": "D",
+            "score": 0.5954023003578186,
             "creature": true,
-            "games": 105
+            "games": 112
         },
         {
-            "card": "Digital Nomad",
-            "tier": "C",
-            "score": 0.6705027222633362,
+            "card": "Nonchalant Agent",
+            "tier": "D",
+            "score": 0.6814035177230835,
             "creature": true,
-            "games": 400
-        },
-        {
-            "card": "Football Hooligans",
-            "tier": "C",
-            "score": 0.6792292594909668,
-            "creature": true,
-            "games": 400
-        },
-        {
-            "card": "Perpetual Motion Machine",
-            "tier": "C",
-            "score": 0.6857143044471741,
-            "creature": true,
-            "games": 64
-        },
-        {
-            "card": "Threat Hunter",
-            "tier": "C",
-            "score": 0.7128309607505798,
-            "creature": true,
-            "games": 371
+            "games": 186
         },
         {
             "card": "Short King",
-            "tier": "C",
-            "score": 0.7567567229270935,
+            "tier": "D",
+            "score": 0.7024250030517578,
             "creature": true,
-            "games": 316
+            "games": 449
         },
         {
-            "card": "Drone Operator",
-            "tier": "C",
-            "score": 0.8222222328186035,
+            "card": "Longevity Hub",
+            "tier": "D",
+            "score": 0.7103174924850464,
             "creature": true,
-            "games": 67
+            "games": 167
         },
         {
-            "card": "Lone Gunman",
-            "tier": "C",
-            "score": 0.8254545331001282,
+            "card": "Killer Rabbit of Caerbannog",
+            "tier": "D",
+            "score": 0.7194444537162781,
             "creature": true,
-            "games": 182
+            "games": 95
         },
         {
             "card": "Multilevel Marketing Seller",
-            "tier": "C",
-            "score": 0.8285163640975952,
+            "tier": "D",
+            "score": 0.7299578189849854,
             "creature": true,
-            "games": 129
+            "games": 115
         },
         {
-            "card": "King Emeritus",
-            "tier": "C",
-            "score": 0.8386473059654236,
+            "card": "Genetically Modified Organism",
+            "tier": "D",
+            "score": 0.7496131062507629,
             "creature": true,
-            "games": 181
+            "games": 522
         },
         {
-            "card": "Camper Van",
-            "tier": "C",
-            "score": 0.8401083946228027,
+            "card": "Pope",
+            "tier": "D",
+            "score": 0.7513002157211304,
             "creature": true,
-            "games": 82
+            "games": 199
         },
         {
-            "card": "Influencer",
-            "tier": "C",
-            "score": 0.857519805431366,
-            "creature": true,
-            "games": 176
-        },
-        {
-            "card": "Holy Pigeon",
-            "tier": "C",
-            "score": 0.8703703880310059,
-            "creature": true,
-            "games": 82
-        },
-        {
-            "card": "Chronically Online",
-            "tier": "C",
-            "score": 0.8762987852096558,
-            "creature": true,
-            "games": 400
-        },
-        {
-            "card": "Listen Kid",
-            "tier": "C",
-            "score": 0.8866724371910095,
-            "creature": true,
-            "games": 358
-        },
-        {
-            "card": "Ministry for Equality",
-            "tier": "C",
-            "score": 0.9185184836387634,
+            "card": "Inhuman Resources",
+            "tier": "D",
+            "score": 0.7548309564590454,
             "creature": true,
             "games": 161
         },
         {
-            "card": "Longevity Hub",
-            "tier": "C",
-            "score": 0.9215229153633118,
+            "card": "Micromanager",
+            "tier": "D",
+            "score": 0.759755551815033,
             "creature": true,
-            "games": 184
+            "games": 351
         },
         {
-            "card": "Compromised Agent",
+            "card": "Martyr",
+            "tier": "D",
+            "score": 0.7658119797706604,
+            "creature": true,
+            "games": 128
+        },
+        {
+            "card": "Underdog",
+            "tier": "D",
+            "score": 0.7661290168762207,
+            "creature": true,
+            "games": 109
+        },
+        {
+            "card": "Technical Debt",
+            "tier": "D",
+            "score": 0.8032490611076355,
+            "creature": true,
+            "games": 397
+        },
+        {
+            "card": "Whistleblower",
+            "tier": "D",
+            "score": 0.8233917951583862,
+            "creature": true,
+            "games": 163
+        },
+        {
+            "card": "Unicorn",
             "tier": "C",
-            "score": 0.9542921185493469,
+            "score": 0.8383838534355164,
             "creature": true,
             "games": 156
         },
         {
             "card": "Shell Company",
             "tier": "C",
-            "score": 1.0399999618530274,
+            "score": 0.8594377636909485,
             "creature": true,
-            "games": 153
+            "games": 77
         },
         {
-            "card": "Hipster",
+            "card": "Supreme Court",
             "tier": "C",
-            "score": 1.0458316802978516,
+            "score": 0.8614318370819092,
             "creature": true,
-            "games": 200
+            "games": 271
+        },
+        {
+            "card": "Lone Gunman",
+            "tier": "C",
+            "score": 0.8667435050010681,
+            "creature": true,
+            "games": 377
+        },
+        {
+            "card": "Digital Nomad",
+            "tier": "C",
+            "score": 0.8937764763832092,
+            "creature": true,
+            "games": 382
+        },
+        {
+            "card": "Drug Pigeon",
+            "tier": "C",
+            "score": 0.9029982686042786,
+            "creature": true,
+            "games": 331
+        },
+        {
+            "card": "Perpetual Motion Machine",
+            "tier": "C",
+            "score": 0.9050504565238953,
+            "creature": true,
+            "games": 131
+        },
+        {
+            "card": "Charles Ponzi",
+            "tier": "C",
+            "score": 0.9114173054695129,
+            "creature": true,
+            "games": 301
+        },
+        {
+            "card": "Compromised Agent",
+            "tier": "C",
+            "score": 0.9150823950767517,
+            "creature": true,
+            "games": 162
+        },
+        {
+            "card": "Work Shift Rotation",
+            "tier": "C",
+            "score": 0.9856114983558655,
+            "creature": true,
+            "games": 106
         },
         {
             "card": "Catfish",
             "tier": "C",
-            "score": 1.107207179069519,
+            "score": 0.9887294769287109,
             "creature": true,
-            "games": 169
+            "games": 369
         },
         {
-            "card": "Conspiracy Theorist",
+            "card": "Meatproxy As A Service",
             "tier": "C",
-            "score": 1.1285053491592408,
+            "score": 0.9898648858070374,
             "creature": true,
-            "games": 200
+            "games": 233
         },
         {
-            "card": "Nonchalant Agent",
+            "card": "Threat Hunter",
             "tier": "C",
-            "score": 1.1385620832443238,
+            "score": 0.9932126998901367,
             "creature": true,
-            "games": 165
+            "games": 517
         },
         {
-            "card": "Content Creator",
+            "card": "Antimatter",
             "tier": "C",
-            "score": 1.1474359035491944,
-            "creature": true,
-            "games": 118
-        },
-        {
-            "card": "Big Four",
-            "tier": "C",
-            "score": 1.1523663997650147,
-            "creature": true,
-            "games": 199
-        },
-        {
-            "card": "Crypto \"Entrepreneur\"",
-            "tier": "C",
-            "score": 1.1606602668762208,
-            "creature": true,
-            "games": 400
-        },
-        {
-            "card": "Templar Knight",
-            "tier": "C",
-            "score": 1.1658707857131959,
+            "score": 1.002517580986023,
             "creature": true,
             "games": 374
         },
         {
-            "card": "EMP Drone",
-            "tier": "B",
-            "score": 1.1705069541931153,
+            "card": "Red Herring",
+            "tier": "C",
+            "score": 1.0112115144729615,
             "creature": true,
-            "games": 142
+            "games": 583
         },
         {
-            "card": "Buddy Christ",
-            "tier": "B",
-            "score": 1.1879671812057496,
+            "card": "Quantum Physicist",
+            "tier": "C",
+            "score": 1.0118342638015748,
             "creature": true,
-            "games": 334
+            "games": 131
         },
         {
-            "card": "Antimatter",
-            "tier": "B",
-            "score": 1.221516728401184,
-            "creature": true,
-            "games": 362
-        },
-        {
-            "card": "Protocol Enforcers",
-            "tier": "B",
-            "score": 1.2335680723190308,
-            "creature": true,
-            "games": 166
-        },
-        {
-            "card": "Script Kiddie",
-            "tier": "B",
-            "score": 1.2350932359695435,
-            "creature": true,
-            "games": 579
-        },
-        {
-            "card": "Surveillance Giraffe",
-            "tier": "B",
-            "score": 1.2483400106430054,
-            "creature": true,
-            "games": 159
-        },
-        {
-            "card": "Grim Reaper",
-            "tier": "B",
-            "score": 1.2542141675949097,
-            "creature": true,
-            "games": 200
-        },
-        {
-            "card": "Black Knight",
-            "tier": "B",
-            "score": 1.2650260925292969,
-            "creature": true,
-            "games": 371
-        },
-        {
-            "card": "Horsemen Of Apocalypse",
-            "tier": "B",
-            "score": 1.3181076049804688,
-            "creature": true,
-            "games": 200
-        },
-        {
-            "card": "Roko's Basilisk",
-            "tier": "B",
-            "score": 1.3429968357086182,
-            "creature": true,
-            "games": 595
-        },
-        {
-            "card": "Phoenix",
-            "tier": "B",
-            "score": 1.388888955116272,
-            "creature": true,
-            "games": 123
-        },
-        {
-            "card": "Underdog",
-            "tier": "B",
-            "score": 1.4259259700775147,
-            "creature": true,
-            "games": 53
-        },
-        {
-            "card": "Drug Pigeon",
-            "tier": "B",
-            "score": 1.4397634267807007,
-            "creature": true,
-            "games": 185
-        },
-        {
-            "card": "Control Room",
-            "tier": "B",
-            "score": 1.517934799194336,
-            "creature": true,
-            "games": 399
-        },
-        {
-            "card": "Wet Work",
-            "tier": "B",
-            "score": 1.5258044004440308,
-            "creature": true,
-            "games": 365
-        },
-        {
-            "card": "Demagogue",
-            "tier": "B",
-            "score": 1.5455840826034547,
-            "creature": true,
-            "games": 186
-        },
-        {
-            "card": "NPC",
-            "tier": "B",
-            "score": 1.562406301498413,
-            "creature": true,
-            "games": 400
-        },
-        {
-            "card": "Middle Manager",
-            "tier": "B",
-            "score": 1.7016316652297974,
-            "creature": true,
-            "games": 155
-        },
-        {
-            "card": "C-Suite",
-            "tier": "B",
-            "score": 1.7231372594833375,
-            "creature": true,
-            "games": 192
-        },
-        {
-            "card": "Political Decoy",
-            "tier": "B",
-            "score": 1.762418508529663,
-            "creature": true,
-            "games": 200
-        },
-        {
-            "card": "Living Dead",
-            "tier": "B",
-            "score": 1.7739698886871338,
-            "creature": true,
-            "games": 338
-        },
-        {
-            "card": "Dead Man's Switch",
-            "tier": "B",
-            "score": 1.7817178964614869,
-            "creature": true,
-            "games": 180
-        },
-        {
-            "card": "U Mad Bro?",
-            "tier": "B",
-            "score": 1.8120018243789673,
+            "card": "Hypermetamorphosis",
+            "tier": "C",
+            "score": 1.017241358757019,
             "creature": true,
             "games": 198
         },
         {
-            "card": "Sex Clanker",
-            "tier": "B",
-            "score": 1.8839396238327027,
+            "card": "Script Kiddie",
+            "tier": "C",
+            "score": 1.0396270751953126,
             "creature": true,
-            "games": 400
+            "games": 515
         },
         {
-            "card": "Police Officer Productivity Target",
-            "tier": "B",
-            "score": 1.8971014022827149,
+            "card": "Private Equity",
+            "tier": "C",
+            "score": 1.0497967004776,
             "creature": true,
-            "games": 184
+            "games": 174
         },
         {
-            "card": "One-Trick Pony",
-            "tier": "B",
-            "score": 1.9067598581314088,
+            "card": "Wet Work",
+            "tier": "C",
+            "score": 1.0586111545562745,
             "creature": true,
-            "games": 129
+            "games": 558
         },
         {
-            "card": "Meta Group Chat",
-            "tier": "B",
-            "score": 1.9300538301467896,
+            "card": "Chimera",
+            "tier": "C",
+            "score": 1.0791367292404175,
             "creature": true,
-            "games": 599
-        },
-        {
-            "card": "If I Told You, I'd Have to Kill You",
-            "tier": "B",
-            "score": 1.9499390125274659,
-            "creature": true,
-            "games": 200
+            "games": 344
         },
         {
             "card": "Cold Fusion",
-            "tier": "B",
-            "score": 1.9582961797714234,
+            "tier": "C",
+            "score": 1.0960144996643067,
             "creature": true,
-            "games": 390
+            "games": 189
         },
         {
-            "card": "Particle Accelerator",
-            "tier": "B",
-            "score": 2.0692567825317385,
+            "card": "Surveillance Giraffe",
+            "tier": "C",
+            "score": 1.1453901529312134,
             "creature": true,
-            "games": 349
+            "games": 173
         },
         {
-            "card": "SysAdmin",
-            "tier": "B",
-            "score": 2.0803606510162355,
+            "card": "Content Creator",
+            "tier": "C",
+            "score": 1.1513668298721314,
             "creature": true,
-            "games": 392
+            "games": 470
         },
         {
-            "card": "Extremophile",
-            "tier": "B",
-            "score": 2.098039150238037,
+            "card": "Mummy",
+            "tier": "C",
+            "score": 1.1598109006881714,
             "creature": true,
-            "games": 90
+            "games": 199
         },
         {
-            "card": "Man o' War",
-            "tier": "B",
-            "score": 2.1497955322265627,
+            "card": "Clone",
+            "tier": "C",
+            "score": 1.165605068206787,
             "creature": true,
-            "games": 598
+            "games": 128
         },
         {
-            "card": "Ship of Theseus",
-            "tier": "B",
-            "score": 2.176638126373291,
+            "card": "Deep Cover",
+            "tier": "C",
+            "score": 1.1770925521850587,
+            "creature": true,
+            "games": 547
+        },
+        {
+            "card": "Political Decoy",
+            "tier": "C",
+            "score": 1.1856578588485718,
             "creature": true,
             "games": 399
         },
         {
-            "card": "Hikikomori",
-            "tier": "B",
-            "score": 2.186342477798462,
-            "creature": true,
-            "games": 170
-        },
-        {
-            "card": "Drill Sergeant",
-            "tier": "B",
-            "score": 2.194444417953491,
-            "creature": true,
-            "games": 120
-        },
-        {
-            "card": "Clone",
-            "tier": "B",
-            "score": 2.2028985023498537,
-            "creature": true,
-            "games": 104
-        },
-        {
-            "card": "Mole",
-            "tier": "B",
-            "score": 2.2332682609558107,
-            "creature": true,
-            "games": 200
-        },
-        {
-            "card": "White Dwarf",
-            "tier": "B",
-            "score": 2.243107795715332,
+            "card": "Dead Man's Switch",
+            "tier": "C",
+            "score": 1.2058287858963013,
             "creature": true,
             "games": 113
         },
         {
-            "card": "Introvert",
+            "card": "Mole",
+            "tier": "C",
+            "score": 1.2193913459777833,
+            "creature": true,
+            "games": 193
+        },
+        {
+            "card": "U Mad Bro?",
+            "tier": "C",
+            "score": 1.2255154848098755,
+            "creature": true,
+            "games": 397
+        },
+        {
+            "card": "Buddy Christ",
+            "tier": "C",
+            "score": 1.2366540431976319,
+            "creature": true,
+            "games": 345
+        },
+        {
+            "card": "Particle Accelerator",
+            "tier": "C",
+            "score": 1.2399566173553467,
+            "creature": true,
+            "games": 176
+        },
+        {
+            "card": "White Dwarf",
+            "tier": "C",
+            "score": 1.253875970840454,
+            "creature": true,
+            "games": 322
+        },
+        {
+            "card": "C-Suite",
+            "tier": "C",
+            "score": 1.2577133178710938,
+            "creature": true,
+            "games": 195
+        },
+        {
+            "card": "Drone Operator",
+            "tier": "C",
+            "score": 1.2941176891326905,
+            "creature": true,
+            "games": 32
+        },
+        {
+            "card": "EMP Drone",
+            "tier": "C",
+            "score": 1.3081140518188477,
+            "creature": true,
+            "games": 223
+        },
+        {
+            "card": "Zealot",
+            "tier": "C",
+            "score": 1.3132685422897339,
+            "creature": true,
+            "games": 328
+        },
+        {
+            "card": "Bodybuilder",
+            "tier": "C",
+            "score": 1.3810606002807618,
+            "creature": true,
+            "games": 280
+        },
+        {
+            "card": "Tutankhamun",
+            "tier": "C",
+            "score": 1.3886979818344117,
+            "creature": true,
+            "games": 590
+        },
+        {
+            "card": "Multimillionaire Philanthropist",
+            "tier": "C",
+            "score": 1.4245282411575318,
+            "creature": true,
+            "games": 552
+        },
+        {
+            "card": "Signal Jammer",
+            "tier": "C",
+            "score": 1.4602487087249756,
+            "creature": true,
+            "games": 399
+        },
+        {
+            "card": "Camper Van",
+            "tier": "C",
+            "score": 1.4937107563018799,
+            "creature": true,
+            "games": 79
+        },
+        {
+            "card": "Influencer",
+            "tier": "C",
+            "score": 1.5110670328140259,
+            "creature": true,
+            "games": 384
+        },
+        {
+            "card": "Control Room",
+            "tier": "C",
+            "score": 1.5144433975219727,
+            "creature": true,
+            "games": 393
+        },
+        {
+            "card": "Day Trader",
             "tier": "B",
-            "score": 2.352971076965332,
+            "score": 1.519774079322815,
+            "creature": true,
+            "games": 306
+        },
+        {
+            "card": "Conspiracy Theorist",
+            "tier": "B",
+            "score": 1.5774048566818238,
+            "creature": true,
+            "games": 399
+        },
+        {
+            "card": "NPC",
+            "tier": "B",
+            "score": 1.5858792066574097,
+            "creature": true,
+            "games": 380
+        },
+        {
+            "card": "Middle Manager",
+            "tier": "B",
+            "score": 1.6516339778900147,
+            "creature": true,
+            "games": 309
+        },
+        {
+            "card": "Reincarnation",
+            "tier": "B",
+            "score": 1.6520874500274659,
+            "creature": true,
+            "games": 375
+        },
+        {
+            "card": "Socrates",
+            "tier": "B",
+            "score": 1.6544864177703858,
+            "creature": true,
+            "games": 419
+        },
+        {
+            "card": "Florida Man",
+            "tier": "B",
+            "score": 1.6973179578781129,
+            "creature": true,
+            "games": 135
+        },
+        {
+            "card": "King Emeritus",
+            "tier": "B",
+            "score": 1.7166531085968018,
+            "creature": true,
+            "games": 381
+        },
+        {
+            "card": "Meta Group Chat",
+            "tier": "B",
+            "score": 1.7256362438201905,
+            "creature": true,
+            "games": 793
+        },
+        {
+            "card": "Black Knight",
+            "tier": "B",
+            "score": 1.7762303352355958,
+            "creature": true,
+            "games": 197
+        },
+        {
+            "card": "Its Been 84 Years...",
+            "tier": "B",
+            "score": 1.8160675764083863,
+            "creature": true,
+            "games": 800
+        },
+        {
+            "card": "Crypto \"Entrepreneur\"",
+            "tier": "B",
+            "score": 1.8288519382476807,
+            "creature": true,
+            "games": 398
+        },
+        {
+            "card": "Good Boi",
+            "tier": "B",
+            "score": 1.836719036102295,
+            "creature": true,
+            "games": 399
+        },
+        {
+            "card": "Golden Parachute",
+            "tier": "B",
+            "score": 1.8482789993286133,
+            "creature": true,
+            "games": 353
+        },
+        {
+            "card": "Templar Knight",
+            "tier": "B",
+            "score": 1.8760234117507935,
+            "creature": true,
+            "games": 168
+        },
+        {
+            "card": "Thirst Trap",
+            "tier": "B",
+            "score": 1.926733136177063,
+            "creature": true,
+            "games": 784
+        },
+        {
+            "card": "SysAdmin",
+            "tier": "B",
+            "score": 1.9342403411865235,
+            "creature": true,
+            "games": 595
+        },
+        {
+            "card": "Here Be Dragons",
+            "tier": "B",
+            "score": 1.950761318206787,
+            "creature": true,
+            "games": 598
+        },
+        {
+            "card": "Grim Reaper",
+            "tier": "B",
+            "score": 1.9693012237548829,
+            "creature": true,
+            "games": 397
+        },
+        {
+            "card": "Teflon Don",
+            "tier": "B",
+            "score": 1.9709954261779786,
+            "creature": true,
+            "games": 553
+        },
+        {
+            "card": "Drug Smuggler",
+            "tier": "B",
+            "score": 1.9895833730697632,
+            "creature": true,
+            "games": 60
+        },
+        {
+            "card": "Resurrected T-Rex",
+            "tier": "B",
+            "score": 1.9962430000305176,
+            "creature": true,
+            "games": 591
+        },
+        {
+            "card": "Hedonic Treadmillionaire",
+            "tier": "B",
+            "score": 2.0106773376464845,
+            "creature": true,
+            "games": 396
+        },
+        {
+            "card": "Demagogue",
+            "tier": "B",
+            "score": 2.0376343727111818,
+            "creature": true,
+            "games": 117
+        },
+        {
+            "card": "Delivery Cyclist",
+            "tier": "B",
+            "score": 2.039215564727783,
+            "creature": true,
+            "games": 128
+        },
+        {
+            "card": "Sex Clanker",
+            "tier": "B",
+            "score": 2.0976994037628176,
             "creature": true,
             "games": 600
         },
         {
-            "card": "Civil Servant",
+            "card": "Chain Smoker",
             "tier": "B",
-            "score": 2.3693416118621828,
+            "score": 2.103078842163086,
             "creature": true,
             "games": 184
         },
         {
             "card": "Bloomberg Terminal",
             "tier": "B",
-            "score": 2.381526231765747,
+            "score": 2.1357576847076418,
             "creature": true,
-            "games": 182
+            "games": 165
         },
         {
-            "card": "Schrodinger's Cat",
+            "card": "Chronically Online",
             "tier": "B",
-            "score": 2.403038501739502,
+            "score": 2.1457085609436037,
             "creature": true,
-            "games": 237
+            "games": 394
+        },
+        {
+            "card": "Bomb Squad",
+            "tier": "B",
+            "score": 2.1713497638702394,
+            "creature": true,
+            "games": 399
+        },
+        {
+            "card": "Cleaner",
+            "tier": "B",
+            "score": 2.2012712955474855,
+            "creature": true,
+            "games": 193
+        },
+        {
+            "card": "Extremophile",
+            "tier": "B",
+            "score": 2.201320171356201,
+            "creature": true,
+            "games": 157
+        },
+        {
+            "card": "Sapper",
+            "tier": "B",
+            "score": 2.218390703201294,
+            "creature": true,
+            "games": 388
+        },
+        {
+            "card": "Reality TV Star",
+            "tier": "B",
+            "score": 2.2267980575561525,
+            "creature": true,
+            "games": 552
+        },
+        {
+            "card": "Diplomat",
+            "tier": "B",
+            "score": 2.239804744720459,
+            "creature": true,
+            "games": 377
+        },
+        {
+            "card": "Keyboard Warrior",
+            "tier": "B",
+            "score": 2.2470898628234865,
+            "creature": true,
+            "games": 740
+        },
+        {
+            "card": "Cleaning Robot",
+            "tier": "B",
+            "score": 2.254826307296753,
+            "creature": true,
+            "games": 172
+        },
+        {
+            "card": "Spin Doctor",
+            "tier": "B",
+            "score": 2.287531852722168,
+            "creature": true,
+            "games": 263
+        },
+        {
+            "card": "One-Trick Pony",
+            "tier": "B",
+            "score": 2.2904040813446047,
+            "creature": true,
+            "games": 404
+        },
+        {
+            "card": "Living Dead",
+            "tier": "B",
+            "score": 2.319751024246216,
+            "creature": true,
+            "games": 417
         },
         {
             "card": "Scope Creep",
             "tier": "B",
-            "score": 2.408151865005493,
+            "score": 2.3201870918273927,
             "creature": true,
-            "games": 324
+            "games": 529
         },
         {
-            "card": "Absentee Parents",
+            "card": "Plot Armor",
             "tier": "B",
-            "score": 2.4793102741241457,
+            "score": 2.3743960857391359,
             "creature": true,
-            "games": 174
+            "games": 127
+        },
+        {
+            "card": "Arsonist",
+            "tier": "B",
+            "score": 2.3866302967071535,
+            "creature": true,
+            "games": 774
+        },
+        {
+            "card": "Karen",
+            "tier": "B",
+            "score": 2.3932178020477297,
+            "creature": true,
+            "games": 343
+        },
+        {
+            "card": "Mercenaries",
+            "tier": "A",
+            "score": 2.3998444080352785,
+            "creature": true,
+            "games": 376
         },
         {
             "card": "Spite-Elected President",
             "tier": "A",
-            "score": 2.4876272678375246,
+            "score": 2.422727346420288,
             "creature": true,
-            "games": 357
-        },
-        {
-            "card": "Spin Doctor",
-            "tier": "A",
-            "score": 2.4944443702697756,
-            "creature": true,
-            "games": 123
-        },
-        {
-            "card": "Bomb Squad",
-            "tier": "A",
-            "score": 2.5701754093170168,
-            "creature": true,
-            "games": 133
-        },
-        {
-            "card": "Security Guard",
-            "tier": "A",
-            "score": 2.5833332538604738,
-            "creature": true,
-            "games": 114
-        },
-        {
-            "card": "Teflon Don",
-            "tier": "A",
-            "score": 2.5963637828826906,
-            "creature": true,
-            "games": 197
-        },
-        {
-            "card": "Vampire",
-            "tier": "A",
-            "score": 2.6168224811553957,
-            "creature": true,
-            "games": 101
-        },
-        {
-            "card": "MK Ultra Test Subject",
-            "tier": "A",
-            "score": 2.682765245437622,
-            "creature": true,
-            "games": 198
-        },
-        {
-            "card": "Signal Jammer",
-            "tier": "A",
-            "score": 2.7135679721832277,
-            "creature": true,
-            "games": 200
-        },
-        {
-            "card": "Arsonist",
-            "tier": "A",
-            "score": 2.722979784011841,
-            "creature": true,
-            "games": 397
-        },
-        {
-            "card": "Sapper",
-            "tier": "A",
-            "score": 2.7382113933563234,
-            "creature": true,
-            "games": 138
+            "games": 161
         },
         {
             "card": "Biohacker",
             "tier": "A",
-            "score": 2.823676109313965,
+            "score": 2.4365642070770265,
             "creature": true,
-            "games": 313
+            "games": 304
         },
         {
-            "card": "Keyboard Warrior",
+            "card": "If I Told You, I'd Have to Kill You",
             "tier": "A",
-            "score": 2.8315110206604006,
+            "score": 2.446735382080078,
             "creature": true,
             "games": 399
         },
         {
             "card": "Pessimist",
             "tier": "A",
-            "score": 2.9671239852905275,
+            "score": 2.4840970039367677,
             "creature": true,
-            "games": 200
-        },
-        {
-            "card": "Florida Man",
-            "tier": "A",
-            "score": 2.991452932357788,
-            "creature": true,
-            "games": 109
-        },
-        {
-            "card": "Socrates",
-            "tier": "A",
-            "score": 2.992846965789795,
-            "creature": true,
-            "games": 156
-        },
-        {
-            "card": "Legacy Code",
-            "tier": "A",
-            "score": 2.995114326477051,
-            "creature": true,
-            "games": 397
-        },
-        {
-            "card": "Tutankhamun",
-            "tier": "A",
-            "score": 2.9952940940856935,
-            "creature": true,
-            "games": 188
-        },
-        {
-            "card": "Cleaner",
-            "tier": "A",
-            "score": 3.043639659881592,
-            "creature": true,
-            "games": 574
-        },
-        {
-            "card": "Resurrected T-Rex",
-            "tier": "A",
-            "score": 3.0681235790252687,
-            "creature": true,
-            "games": 589
-        },
-        {
-            "card": "Congruent Use of Force",
-            "tier": "A",
-            "score": 3.0964913368225099,
-            "creature": true,
-            "games": 38
-        },
-        {
-            "card": "Here Be Dragons",
-            "tier": "A",
-            "score": 3.1723804473876955,
-            "creature": true,
-            "games": 397
-        },
-        {
-            "card": "Hypermetamorphosis",
-            "tier": "A",
-            "score": 3.186781644821167,
-            "creature": true,
-            "games": 94
-        },
-        {
-            "card": "Scam Artist",
-            "tier": "A",
-            "score": 3.219858169555664,
-            "creature": true,
-            "games": 83
-        },
-        {
-            "card": "Whistleblower",
-            "tier": "A",
-            "score": 3.2741618156433107,
-            "creature": true,
-            "games": 131
-        },
-        {
-            "card": "Ankylorhiza",
-            "tier": "A",
-            "score": 3.2933847904205324,
-            "creature": true,
-            "games": 385
-        },
-        {
-            "card": "Zealot",
-            "tier": "A",
-            "score": 3.446265935897827,
-            "creature": true,
-            "games": 127
-        },
-        {
-            "card": "Genetically Modified Organism",
-            "tier": "A",
-            "score": 3.466996669769287,
-            "creature": true,
-            "games": 138
-        },
-        {
-            "card": "Good Boi",
-            "tier": "A",
-            "score": 3.5181777477264406,
-            "creature": true,
-            "games": 200
+            "games": 595
         },
         {
             "card": "Legal Department",
             "tier": "A",
-            "score": 3.5892748832702638,
+            "score": 2.5599730014801027,
             "creature": true,
-            "games": 197
+            "games": 383
         },
         {
-            "card": "Not on My Watch",
+            "card": "Scam Artist",
             "tier": "A",
-            "score": 3.617117166519165,
+            "score": 2.563063144683838,
             "creature": true,
-            "games": 73
+            "games": 64
         },
         {
-            "card": "Frankenstein",
+            "card": "Police Officer Productivity Target",
             "tier": "A",
-            "score": 3.7147650718688967,
+            "score": 2.569343090057373,
             "creature": true,
-            "games": 353
+            "games": 127
         },
         {
-            "card": "Drug Smuggler",
+            "card": "Antihero",
             "tier": "A",
-            "score": 3.85185170173645,
+            "score": 2.575249433517456,
             "creature": true,
-            "games": 66
+            "games": 368
         },
         {
-            "card": "Lost Generation",
+            "card": "Fat Tony",
             "tier": "A",
-            "score": 3.907630443572998,
+            "score": 2.5924999713897707,
             "creature": true,
-            "games": 129
+            "games": 751
         },
         {
-            "card": "Internal Revenue Service",
+            "card": "Drill Sergeant",
             "tier": "A",
-            "score": 4.151634216308594,
+            "score": 2.6066665649414064,
             "creature": true,
-            "games": 160
+            "games": 122
         },
         {
-            "card": "Spite Voter",
+            "card": "Protocol Enforcers",
             "tier": "A",
-            "score": 4.161110877990723,
+            "score": 2.614035129547119,
             "creature": true,
             "games": 133
         },
         {
-            "card": "Its Been 84 Years...",
-            "tier": "S",
-            "score": 4.178753852844238,
+            "card": "Introvert",
+            "tier": "A",
+            "score": 2.6185038089752199,
             "creature": true,
-            "games": 200
+            "games": 597
         },
         {
-            "card": "Thirst Trap",
-            "tier": "S",
-            "score": 4.269841194152832,
+            "card": "Legacy Code",
+            "tier": "A",
+            "score": 2.6415202617645265,
             "creature": true,
-            "games": 197
+            "games": 598
         },
         {
-            "card": "Omniscient Space-Time Bending Bearded Wizard",
-            "tier": "S",
-            "score": 4.31632661819458,
+            "card": "Absentee Parents",
+            "tier": "A",
+            "score": 2.644320249557495,
             "creature": true,
-            "games": 193
+            "games": 410
+        },
+        {
+            "card": "Security Guard",
+            "tier": "A",
+            "score": 2.645021677017212,
+            "creature": true,
+            "games": 127
+        },
+        {
+            "card": "Ankylorhiza",
+            "tier": "A",
+            "score": 2.678457260131836,
+            "creature": true,
+            "games": 594
+        },
+        {
+            "card": "Civil Servant",
+            "tier": "A",
+            "score": 2.6984126567840578,
+            "creature": true,
+            "games": 343
         },
         {
             "card": "Empath",
-            "tier": "S",
-            "score": 4.339837551116943,
+            "tier": "A",
+            "score": 2.70387601852417,
             "creature": true,
-            "games": 134
+            "games": 432
         },
         {
-            "card": "Femme Fatale",
-            "tier": "S",
-            "score": 4.413333415985107,
+            "card": "Roko's Basilisk",
+            "tier": "A",
+            "score": 2.7272162437438967,
             "creature": true,
-            "games": 398
+            "games": 591
+        },
+        {
+            "card": "Horsemen Of Apocalypse",
+            "tier": "A",
+            "score": 2.7604167461395265,
+            "creature": true,
+            "games": 166
+        },
+        {
+            "card": "Football Hooligans",
+            "tier": "A",
+            "score": 2.7756412029266359,
+            "creature": true,
+            "games": 299
+        },
+        {
+            "card": "Ministry for Equality",
+            "tier": "A",
+            "score": 2.7878787517547609,
+            "creature": true,
+            "games": 121
+        },
+        {
+            "card": "The Chosen One",
+            "tier": "A",
+            "score": 2.81166672706604,
+            "creature": true,
+            "games": 146
+        },
+        {
+            "card": "Ship of Theseus",
+            "tier": "A",
+            "score": 2.8134772777557375,
+            "creature": true,
+            "games": 599
+        },
+        {
+            "card": "MK Ultra Test Subject",
+            "tier": "A",
+            "score": 2.9195046424865724,
+            "creature": true,
+            "games": 552
+        },
+        {
+            "card": "Satoshi Nakamoto",
+            "tier": "A",
+            "score": 2.99015474319458,
+            "creature": true,
+            "games": 152
+        },
+        {
+            "card": "Berserker",
+            "tier": "A",
+            "score": 3.007023811340332,
+            "creature": true,
+            "games": 783
+        },
+        {
+            "card": "Lost Generation",
+            "tier": "A",
+            "score": 3.007042169570923,
+            "creature": true,
+            "games": 126
+        },
+        {
+            "card": "Omniscient Space-Time Bending Bearded Wizard",
+            "tier": "A",
+            "score": 3.138392686843872,
+            "creature": true,
+            "games": 392
         },
         {
             "card": "Clingy Ex",
-            "tier": "S",
-            "score": 4.510822296142578,
-            "creature": true,
-            "games": 71
-        },
-        {
-            "card": "Peace Force",
-            "tier": "S",
-            "score": 4.514981269836426,
-            "creature": true,
-            "games": 194
-        },
-        {
-            "card": "Riot Police",
-            "tier": "S",
-            "score": 4.5966668128967289,
-            "creature": true,
-            "games": 173
-        },
-        {
-            "card": "Delivery Cyclist",
-            "tier": "S",
-            "score": 4.628205299377441,
-            "creature": true,
-            "games": 72
-        },
-        {
-            "card": "Anti-Vaxxer",
-            "tier": "S",
-            "score": 4.728888988494873,
-            "creature": true,
-            "games": 141
-        },
-        {
-            "card": "Plot Armor",
-            "tier": "S",
-            "score": 4.770833492279053,
+            "tier": "A",
+            "score": 3.177570104598999,
             "creature": true,
             "games": 99
         },
         {
-            "card": "Berserker",
-            "tier": "S",
-            "score": 5.270031929016113,
+            "card": "Boomer",
+            "tier": "A",
+            "score": 3.1873767375946047,
             "creature": true,
-            "games": 190
-        },
-        {
-            "card": "Heretic",
-            "tier": "S",
-            "score": 5.333333492279053,
-            "creature": true,
-            "games": 163
-        },
-        {
-            "card": "Sleepwalker",
-            "tier": "S",
-            "score": 5.6964006423950199,
-            "creature": true,
-            "games": 147
+            "games": 354
         },
         {
             "card": "Psychiatrists",
-            "tier": "S",
-            "score": 6.488888740539551,
+            "tier": "A",
+            "score": 3.2963387966156008,
             "creature": true,
-            "games": 147
+            "games": 417
+        },
+        {
+            "card": "Spite Voter",
+            "tier": "A",
+            "score": 3.337486982345581,
+            "creature": true,
+            "games": 278
+        },
+        {
+            "card": "Heretic",
+            "tier": "A",
+            "score": 3.6892623901367189,
+            "creature": true,
+            "games": 585
+        },
+        {
+            "card": "Hipster",
+            "tier": "S",
+            "score": 3.7181742191314699,
+            "creature": true,
+            "games": 478
+        },
+        {
+            "card": "Big Four",
+            "tier": "S",
+            "score": 3.7227723598480226,
+            "creature": true,
+            "games": 86
+        },
+        {
+            "card": "Hikikomori",
+            "tier": "S",
+            "score": 3.724637746810913,
+            "creature": true,
+            "games": 161
+        },
+        {
+            "card": "Schrodinger's Cat",
+            "tier": "S",
+            "score": 4.007326126098633,
+            "creature": true,
+            "games": 90
+        },
+        {
+            "card": "Congruent Use of Force",
+            "tier": "S",
+            "score": 4.023679256439209,
+            "creature": true,
+            "games": 279
+        },
+        {
+            "card": "Fidget Spinner",
+            "tier": "S",
+            "score": 4.084033489227295,
+            "creature": true,
+            "games": 105
+        },
+        {
+            "card": "Anti-Vaxxer",
+            "tier": "S",
+            "score": 4.097670078277588,
+            "creature": true,
+            "games": 294
+        },
+        {
+            "card": "Not on My Watch",
+            "tier": "S",
+            "score": 4.4148149490356449,
+            "creature": true,
+            "games": 204
+        },
+        {
+            "card": "Riot Police",
+            "tier": "S",
+            "score": 4.448409080505371,
+            "creature": true,
+            "games": 546
+        },
+        {
+            "card": "Frankenstein",
+            "tier": "S",
+            "score": 4.585258483886719,
+            "creature": true,
+            "games": 189
+        },
+        {
+            "card": "Listen Kid",
+            "tier": "S",
+            "score": 4.991379261016846,
+            "creature": true,
+            "games": 99
         },
         {
             "card": "Quark",
             "tier": "S",
-            "score": 8.04127025604248,
+            "score": 5.163636207580566,
             "creature": true,
-            "games": 96
+            "games": 98
         },
         {
-            "card": "Reincarnation",
+            "card": "Internal Revenue Service",
             "tier": "S",
-            "score": 8.819999694824219,
+            "score": 5.1807861328125,
             "creature": true,
-            "games": 138
+            "games": 511
+        },
+        {
+            "card": "Femme Fatale",
+            "tier": "S",
+            "score": 5.250992774963379,
+            "creature": true,
+            "games": 593
+        },
+        {
+            "card": "Peace Force",
+            "tier": "S",
+            "score": 5.2715840339660648,
+            "creature": true,
+            "games": 406
+        },
+        {
+            "card": "Man o' War",
+            "tier": "S",
+            "score": 5.335692405700684,
+            "creature": true,
+            "games": 600
+        },
+        {
+            "card": "Sleepwalker",
+            "tier": "S",
+            "score": 5.457541465759277,
+            "creature": true,
+            "games": 222
         },
         {
             "card": "Backup Dancer",
             "tier": "S",
-            "score": 8.930817604064942,
+            "score": 5.585507392883301,
             "creature": true,
-            "games": 53
+            "games": 271
         }
     ]
 }

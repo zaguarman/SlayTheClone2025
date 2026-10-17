@@ -2,45 +2,45 @@ AI TOURNAMENT: THE LEVELS
 Each deck against itself, each pairing, both seats. 1500 games, called off after 80 Days.
 
 Ranking: share of all its games won (draws count as not won)
-  Medium             67% of 1000
-  Hard               58% of 1000  Weighs everything the same: the plain Hard AI.
-  Easy               23% of 1000
+  Medium             70% of 1000
+  Hard               60% of 1000  Weighs everything the same: the plain Hard AI.
+  Easy               21% of 1000
 
 Head to head: the row's wins - the column's wins
                           Easy      Medium        Hard
-  Easy                       -   104 - 395   129 - 370
-  Medium             395 - 104           -   277 - 208
-  Hard               370 - 129   208 - 277           -
+  Easy                       -   100 - 400   108 - 392
+  Medium             400 - 100           -   296 - 204
+  Hard               392 - 108   204 - 296           -
 
-Seats: Player 1 won 759, Player 2 won 724, 17 draws; 20,4 Days on average
+Seats: Player 1 won 786, Player 2 won 714, 0 draws; 14,7 Days on average
 
 By deck: which AI won the most with it
-  Capital - Shareholder Value: Hard 88%, Medium 58%, Easy 5%
-  Establishment - Order & Paperwork: Medium 83%, Hard 65%, Easy 3%
-  Digital Society - Moods of Modern Life: Medium 55%, Hard 55%, Easy 35%
-  Digital Society - Terminally Online: Medium 78%, Hard 68%, Easy 5%
-  Enlightenment - Results May Vary: Hard 70%, Medium 65%, Easy 15%
-  Establishment - Licence to Kill: Medium 63%, Hard 53%, Easy 35%
-  Capital - Move Fast and Break Things: Medium 80%, Hard 63%, Easy 8%
-  Establishment - Old Gods, New Tricks: Medium 73%, Hard 60%, Easy 18%
-  Enlightenment - All in Your Head: Medium 73%, Hard 43%, Easy 35%
-  Capital - Hustle Rush: Hard 73%, Medium 58%, Easy 20%
-  Establishment - Shock and Awe: Medium 83%, Hard 65%, Easy 3%
-  Digital Society - Underdogs: Medium 80%, Hard 58%, Easy 13%
+  Capital - Shareholder Value: Medium 78%, Hard 73%, Easy 0%
+  Establishment - Order & Paperwork: Medium 85%, Hard 63%, Easy 3%
+  Digital Society - Moods of Modern Life: Medium 73%, Hard 55%, Easy 23%
+  Digital Society - Terminally Online: Medium 80%, Hard 65%, Easy 5%
+  Enlightenment - Results May Vary: Medium 78%, Hard 63%, Easy 10%
+  Establishment - Licence to Kill: Hard 60%, Medium 58%, Easy 33%
+  Capital - Move Fast and Break Things: Medium 78%, Hard 60%, Easy 13%
+  Establishment - Old Gods, New Tricks: Medium 75%, Hard 68%, Easy 8%
+  Enlightenment - All in Your Head: Medium 60%, Hard 55%, Easy 35%
+  Capital - Hustle Rush: Hard 80%, Medium 68%, Easy 3%
+  Establishment - Shock and Awe: Medium 78%, Hard 65%, Easy 8%
+  Digital Society - Underdogs: Medium 63%, Hard 58%, Easy 30%
   Enlightenment - Lab Grown: Medium 75%, Hard 63%, Easy 13%
-  Digital Society - Influencer Economy: Medium 90%, Hard 60%, Easy 0%
-  Establishment - Black Budget: Medium 80%, Easy 35%, Hard 35%
-  Capital - Threat Model: Medium 68%, Hard 60%, Easy 23%
-  Establishment - Blessed Martyrs: Medium 73%, Hard 50%, Easy 28%
-  Enlightenment - Mind Games: Medium 80%, Hard 38%, Easy 33%
-  Establishment + Capital - Prosperity Gospel: Easy 93%, Hard 58%, Medium 0%
-  Digital Society + Establishment - Panopticon: Medium 75%, Hard 73%, Easy 3%
-  Capital + Digital Society - Hustle Culture: Hard 80%, Medium 70%, Easy 0%
-  Establishment + Capital - Military-Industrial Complex: Easy 45%, Medium 35%, Hard 35%
-  Enlightenment + Establishment - Frankenstein: Easy 83%, Hard 35%, Medium 33%
-  Capital + Digital Society - The Algorithm: Medium 68%, Hard 65%, Easy 18%
-  Establishment + Enlightenment - Psyop: Medium 90%, Hard 38%, Easy 20%
+  Digital Society - Influencer Economy: Medium 88%, Hard 63%, Easy 0%
+  Establishment - Black Budget: Medium 73%, Hard 40%, Easy 38%
+  Capital - Threat Model: Medium 68%, Hard 65%, Easy 18%
+  Establishment - Blessed Martyrs: Medium 73%, Hard 48%, Easy 30%
+  Enlightenment - Mind Games: Hard 55%, Medium 53%, Easy 43%
+  Establishment + Capital - Prosperity Gospel: Easy 65%, Medium 53%, Hard 33%
+  Digital Society + Establishment - Panopticon: Medium 80%, Hard 43%, Easy 28%
+  Capital + Digital Society - Hustle Culture: Medium 73%, Hard 58%, Easy 20%
+  Establishment + Capital - Military-Industrial Complex: Medium 80%, Hard 68%, Easy 3%
+  Enlightenment + Establishment - Frankenstein: Hard 80%, Easy 40%, Medium 30%
+  Capital + Digital Society - The Algorithm: Hard 75%, Medium 73%, Easy 3%
+  Establishment + Enlightenment - Psyop: Easy 55%, Medium 55%, Hard 40%
 
 PROBLEMS: 1 kinds
-  [Rules] x1: A creature at # Health is still alive on the board
-      first: Capital + Digital Society - Hustle Culture, Medium vs Hard, seed 2250, Day 11: Pluriemployed Hustler 5/0
+  [Rules] x3: A creature at # Health is still alive on the board
+      first: Capital - Shareholder Value, Easy vs Hard, seed 1028, Day 4: Hedonic Treadmillionaire 4/0
