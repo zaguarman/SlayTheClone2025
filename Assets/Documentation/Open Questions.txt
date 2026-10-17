@@ -53,6 +53,10 @@ STILL OPEN
       cleanse, Mimetic Theory copies the best stats on the board to a friend.
     • Recommendation: Online (a) and Mind (a), one study for both. (a) keeps each faction's character; the measured lesson of
       the night is that reach and tempo move the numbers and points don't.
+    • Measured (Faction Balance Plan 18, study-2026-10-18a): Mind got its seven creatures (the user's call) and fell to 10%
+      with 40-card decks, though the creatures themselves rate A to S. The decks' spells are the problem: half the deck reads
+      the board instead of changing it. Recommendation now: the Mind decks back to 30-32 cards with the seven in and the six
+      weakest reading spells out, and those spells reworked to act (option b), one study for both.
 
 47. The meta: nerf aggression, buff planning (the user, 2026-10-17)
     • Where it stands: the balance report has Midrange and Swarm at 74% and Aggro at 32%, so brute aggro already loses; what

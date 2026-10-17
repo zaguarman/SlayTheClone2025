@@ -250,3 +250,16 @@ creature attacking any slot and no slot bonuses: 17 Days a game (from 12: walls 
 Panopticon 10%, Mind Games 18%, Influencer Economy 18%. Subfactions: Statecraft 76%, Offline 75%, Tech 59%, Corporate 52%,
 Myth 47%, Shadow Ops. 43%, Utopia 41% (from 50%: its Aggro deck fell to 41%), Online 22%, Mind 19% (in pairs 81%: Mind's
 cards win inside Psyop; its own two decks, spell-heavy Control, don't close). Next: study i with the seven creatures in.
+
+18. MIND'S SEVEN CREATURES, MEASURED (2026-10-18, study-2026-10-18a, commit 20d3eda6)
+The creatures are good cards: Ontology S (4.5), Tolerance Paradox A, Phronetic A, Epistemology B, God Is Dead B, The ELIZA
+Effect C, Freudian Slip D. The decks got worse: Mind 10% (both decks 10%, from 20% and 18%), while Mind in pairs stays 81%
+(Psyop). What changed in the decks: 32 cards became 40 (20 creatures, 19 spells): with 2 draws a Day a bigger deck sees its
+few closers later, and the 19 spells that read the board (Reveal, swap, copy, cleanse) are still half the deck. The rest of
+the table held: Statecraft 76%, Offline 75%, Tech 59%, Corporate 53%, Myth 47%, Shadow Ops. 45%, Utopia 42%, Online 24%.
+Strategies: Aggro 58%, Midrange 58%, Swarm 52%, Control 52%, Engine 43%, Combo 30%; 17 Days a game.
+What follows (for the user; Open Questions 48 updated): Mind's own decks need their spells to act, not their creature count
+raised. Two steps, one study: (1) the Mind decks back to 30-32 cards, the seven creatures in and the weakest reading spells
+out (Reality Check 31% potential, Slow Thinking 29%, Legerdemain 35%, Domino Effect 39%, Controlled Chaos 41%, Mimetic
+Theory 41%); (2) those spells reworked to act (Reality Check also deals 1 to what it cleanses, Mimetic Theory copies the
+best stats on the board to a friend, Domino Effect's push deals 1 to the pushed). Online the same way after.
