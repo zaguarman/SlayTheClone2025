@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: PanopticonDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Digital Society + Shadow Ops. - Panopticon
+  deckName: Digital Society + Establishment - Panopticon
   cards:
   - {fileID: 11400000, guid: 9647b2cdb2399ba4b932fbec10283879, type: 2}
   - {fileID: 11400000, guid: 9647b2cdb2399ba4b932fbec10283879, type: 2}
@@ -37,6 +37,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6554717901f6df14ca4d3c000fc6209b, type: 2}
   - {fileID: 11400000, guid: bf805e91aaedf414aa5daad37038b1df, type: 2}
   - {fileID: 11400000, guid: bf805e91aaedf414aa5daad37038b1df, type: 2}
-  lastUpdated: 2026-10-17T14:17:55.2182694Z
+  - {fileID: 11400000, guid: aa26842242b38a34eab1d206848233e6, type: 2}
+  - {fileID: 11400000, guid: 9913554af350944449db2f0ae43f94e5, type: 2}
+  - {fileID: 11400000, guid: fa88f9ca7683fd14dbd86f39fda87ef3, type: 2}
+  - {fileID: 11400000, guid: 8fcb28f9f6067fb4e87b1f82f2e251af, type: 2}
+  lastUpdated: 2026-10-17T18:03:12.0369492Z
   strategy: Combo
   focus: 0

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: CorporateRushDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Corporate - Hustle Rush
+  deckName: Capital - Hustle Rush
   cards:
   - {fileID: 11400000, guid: 885f0b3609889844ca95087ceb297672, type: 2}
   - {fileID: 11400000, guid: 885f0b3609889844ca95087ceb297672, type: 2}

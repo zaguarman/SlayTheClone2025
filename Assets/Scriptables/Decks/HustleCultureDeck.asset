@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: HustleCultureDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Corporate + Digital Society - Hustle Culture
+  deckName: Capital + Digital Society - Hustle Culture
   cards:
   - {fileID: 11400000, guid: 92d6ac95799443142af22521de974f5c, type: 2}
   - {fileID: 11400000, guid: 92d6ac95799443142af22521de974f5c, type: 2}
@@ -38,6 +38,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5b80a160ef1f9244a9069b5128e1df3a, type: 2}
   - {fileID: 11400000, guid: 4d1b91992e3fa194f99ad5471cea7860, type: 2}
   - {fileID: 11400000, guid: 6da251ed4f0f0e1448dedb752e3e8a1a, type: 2}
-  lastUpdated: 2026-10-17T14:17:55.2187722Z
+  - {fileID: 11400000, guid: c2d2e6fbfe011824b84a1af5473615cd, type: 2}
+  - {fileID: 11400000, guid: 0a6c69211fbb13449afdf96d8ce5d6f6, type: 2}
+  lastUpdated: 2026-10-17T18:03:12.0379475Z
   strategy: Aggro
   focus: 0

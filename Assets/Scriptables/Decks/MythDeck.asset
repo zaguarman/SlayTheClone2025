@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: MythDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Myth - Old Gods, New Tricks
+  deckName: Establishment - Old Gods, New Tricks
   cards:
   - {fileID: 11400000, guid: aea5845a243ea96488929ccdc27cb18c, type: 2}
   - {fileID: 11400000, guid: aea5845a243ea96488929ccdc27cb18c, type: 2}
@@ -41,6 +41,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 50facdaaa7a5b434fbce9d1f81af759a, type: 2}
   - {fileID: 11400000, guid: 50facdaaa7a5b434fbce9d1f81af759a, type: 2}
   - {fileID: 11400000, guid: c6f0345e31e606d4f99f519a0324f344, type: 2}
-  lastUpdated: 2026-10-16T17:51:56.0644895Z
+  - {fileID: 11400000, guid: 5c004e52b0ee331428b9660da2a44904, type: 2}
+  - {fileID: 11400000, guid: 400533044c5b65c4e9e2b20a015a7e8f, type: 2}
+  - {fileID: 11400000, guid: 16728698b2920904aafb4ecb88a5f09c, type: 2}
+  - {fileID: 11400000, guid: 420ef2f61ea3a104fac581ccf1446cd3, type: 2}
+  - {fileID: 11400000, guid: ac13c245e63f34c4cadc7663e7e42079, type: 2}
+  - {fileID: 11400000, guid: bdd673e358a34044aa6e898d05eed9f6, type: 2}
+  - {fileID: 11400000, guid: 58393f7e44c440c489cea67f229b73f1, type: 2}
+  - {fileID: 11400000, guid: b9a2a0f9a9265ba4e91b1226a83e5b3d, type: 2}
+  - {fileID: 11400000, guid: 5a8d01f17086a9e4a84b662311eebbeb, type: 2}
+  - {fileID: 11400000, guid: 8154fce2f847a534da2d48a848ac798d, type: 2}
+  - {fileID: 11400000, guid: 708faae99c993bf4fbe1a7a3edab0807, type: 2}
+  - {fileID: 11400000, guid: 182b939e0c71c5e4bbae5e423d1fde83, type: 2}
+  - {fileID: 11400000, guid: 96aa201384a150646acf9a0bb69fc941, type: 2}
+  - {fileID: 11400000, guid: 5c8773554baea2a43885515305062a76, type: 2}
+  lastUpdated: 2026-10-17T18:04:51.1076554Z
   strategy: Control
   focus: 4

@@ -24,7 +24,7 @@ namespace Zeitgeist {
             switch (faction) {
                 case Faction.ShadowOps: return "Shadow Ops.";
                 case Faction.Online: return "Online"; // The internet's half of Digital Society (the user, 2026-10-17)
-                case Faction.Mainstream: return "Mainstream"; // The culture itself, the old Zeitgeist (a name to be changed)
+                case Faction.Offline: return "Offline"; // The culture itself, offline: the old Zeitgeist faction (the user, 2026-10-17: Offline, as it pairs with Online)
                 case Faction.PopCulture: return "Digital Society"; // A dead value: the merged faction's name for a day
                 default: return faction.ToString();
             }

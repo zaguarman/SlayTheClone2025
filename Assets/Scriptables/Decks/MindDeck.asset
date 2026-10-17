@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: MindDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Mind - All in Your Head
+  deckName: Enlightenment - All in Your Head
   cards:
   - {fileID: 11400000, guid: c5405e23f4cdaa747a169a990ebbf035, type: 2}
   - {fileID: 11400000, guid: c5405e23f4cdaa747a169a990ebbf035, type: 2}

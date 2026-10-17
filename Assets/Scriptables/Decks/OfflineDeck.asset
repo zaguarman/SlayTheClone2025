@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
-  m_Name: MainstreamDeck
+  m_Name: OfflineDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Digital Society - Moods of Modern Life
   cards:
@@ -40,6 +40,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9f4905f155bd71642ae2e07a8ebacd24, type: 2}
   - {fileID: 11400000, guid: c79f894222ba454429f775d998624523, type: 2}
   - {fileID: 11400000, guid: c79f894222ba454429f775d998624523, type: 2}
-  lastUpdated: 2026-10-17T15:33:13.7616251Z
+  - {fileID: 11400000, guid: 45188e8b870bfc2448aa8994f6433e81, type: 2}
+  - {fileID: 11400000, guid: 746cdbe9266007441bc9bdf036b7e1a3, type: 2}
+  - {fileID: 11400000, guid: 2a32c31c4c25ace4a9c6b770010be804, type: 2}
+  - {fileID: 11400000, guid: d53e52e1227c8b64da38d17be026dcb5, type: 2}
+  lastUpdated: 2026-10-17T18:04:51.0154891Z
   strategy: Midrange
   focus: 5

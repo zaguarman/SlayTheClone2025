@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: ProsperityGospelDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Myth + Corporate - Prosperity Gospel
+  deckName: Establishment + Capital - Prosperity Gospel
   cards:
   - {fileID: 11400000, guid: 4072f08f10d3bc345959016b982005ec, type: 2}
   - {fileID: 11400000, guid: 4072f08f10d3bc345959016b982005ec, type: 2}
@@ -38,6 +38,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: aea5845a243ea96488929ccdc27cb18c, type: 2}
   - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
   - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
-  lastUpdated: 2026-10-16T16:23:25.4593010Z
+  - {fileID: 11400000, guid: 8787b06cd5de4974989f7c3bcfcc9b2e, type: 2}
+  - {fileID: 11400000, guid: e501123363d163a4092e2ad059abc29d, type: 2}
+  lastUpdated: 2026-10-17T18:03:12.0369492Z
   strategy: Combo
   focus: 0

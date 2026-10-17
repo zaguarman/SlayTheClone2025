@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: UtopiaEngineDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Utopia - Lab Grown
+  deckName: Enlightenment - Lab Grown
   cards:
   - {fileID: 11400000, guid: b3ae63c1449a50941b6b390412364cf9, type: 2}
   - {fileID: 11400000, guid: b3ae63c1449a50941b6b390412364cf9, type: 2}
@@ -50,6 +50,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bb9b151b194b20f40b0c5fcf054d1ae6, type: 2}
   - {fileID: 11400000, guid: 057ed3143191a774991a18ac0637e41b, type: 2}
   - {fileID: 11400000, guid: 057ed3143191a774991a18ac0637e41b, type: 2}
-  lastUpdated: 2026-10-17T13:21:01.2232842Z
+  - {fileID: 11400000, guid: 16806f3d9e0f4d243be07fcafccdaba6, type: 2}
+  - {fileID: 11400000, guid: c6725d3b24e582b49baf71ba5c3e0eec, type: 2}
+  - {fileID: 11400000, guid: c290ade7e4e9b654ba6b19fb2ba160d7, type: 2}
+  - {fileID: 11400000, guid: 8bf01ccda8e799f469fbc04a41eb4085, type: 2}
+  - {fileID: 11400000, guid: 82bf13f9e6c1c7a46b24602df0fe9f4b, type: 2}
+  - {fileID: 11400000, guid: 08fb5163a4b25ff4e8c137dbdc189708, type: 2}
+  - {fileID: 11400000, guid: ffabb0fa11b78e646b662e53c9f2c4d5, type: 2}
+  - {fileID: 11400000, guid: edc3d53fd1fe8bb41879a49711be277c, type: 2}
+  - {fileID: 11400000, guid: c835d8738298d6449b72fa845c985923, type: 2}
+  lastUpdated: 2026-10-17T18:03:12.0338819Z
   strategy: Engine
   focus: 0

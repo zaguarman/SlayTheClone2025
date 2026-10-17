@@ -66,7 +66,7 @@ namespace Zeitgeist {
             Faction.ShadowOps => Hex(0x7C8A99),
             Faction.Tech => Hex(0x3DA9D6),
             Faction.Online => Hex(0x5D7BD6),
-            Faction.Mainstream => Hex(0xD95DD0), // The old Zeitgeist's magenta
+            Faction.Offline => Hex(0xD95DD0), // The old Zeitgeist's magenta
             Faction.Mind => Hex(0x9A6CD6),
             Faction.Utopia => Hex(0xE8E0A0),
             _ => Gold
@@ -104,7 +104,7 @@ namespace Zeitgeist {
             Faction.ShadowOps => "?",       // What it plans shows as ???
             Faction.Tech => "λ",            // Code
             Faction.Online => "@",          // Your handle
-            Faction.Mainstream => "☺",      // The mood of the times
+            Faction.Offline => "☺",      // The mood of the times
             Faction.Mind => "Ψ",            // Psyche
             Faction.Utopia => "∞",          // Endless progress
             _ => "~"

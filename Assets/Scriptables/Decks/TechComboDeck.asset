@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: TechComboDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Tech - Threat Model
+  deckName: Capital - Threat Model
   cards:
   - {fileID: 11400000, guid: 8067d08e7b1cef54ea5563a12c928625, type: 2}
   - {fileID: 11400000, guid: 8067d08e7b1cef54ea5563a12c928625, type: 2}
@@ -48,6 +48,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 886efcce5777c464ab2718a7f2541c5d, type: 2}
   - {fileID: 11400000, guid: ef4d1aeb5483cfc4cb470f3e7e5be01d, type: 2}
   - {fileID: 11400000, guid: ef4d1aeb5483cfc4cb470f3e7e5be01d, type: 2}
-  lastUpdated: 2026-10-17T13:21:01.2253087Z
+  - {fileID: 11400000, guid: 88a40b486c45db944ac39f04bc2ca194, type: 2}
+  - {fileID: 11400000, guid: 65710f2d6a1ab8941aada57b7f689842, type: 2}
+  lastUpdated: 2026-10-17T18:03:12.0348906Z
   strategy: Combo
   focus: 0

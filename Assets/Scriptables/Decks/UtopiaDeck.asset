@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: UtopiaDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Utopia - Results May Vary
+  deckName: Enlightenment - Results May Vary
   cards:
   - {fileID: 11400000, guid: af5e598b03ef2d64f8fcf7cdeb6aad78, type: 2}
   - {fileID: 11400000, guid: af5e598b03ef2d64f8fcf7cdeb6aad78, type: 2}
@@ -43,6 +43,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ba4dbc05f60417b46b64ba1b51cd4512, type: 2}
   - {fileID: 11400000, guid: f5a66d9220ab17143965f589005ac32d, type: 2}
   - {fileID: 11400000, guid: f5a66d9220ab17143965f589005ac32d, type: 2}
-  lastUpdated: 2026-10-16T19:41:39.2470099Z
+  - {fileID: 11400000, guid: 9b0be4d5f3cb7ba45a366c0e62cb1ca6, type: 2}
+  - {fileID: 11400000, guid: 5b6156c7ef49cf941930dda00767412c, type: 2}
+  - {fileID: 11400000, guid: b309dd9e06f4be642bb34396bebddeca, type: 2}
+  - {fileID: 11400000, guid: ad8c29244e698b441bf2084a83ff81e6, type: 2}
+  - {fileID: 11400000, guid: f83ad450ef802624eb4e0cfd80bb1ebc, type: 2}
+  - {fileID: 11400000, guid: 90862f950dd773a45ab00c0b7f63eda3, type: 2}
+  lastUpdated: 2026-10-17T18:03:11.7429394Z
   strategy: Aggro
   focus: 0

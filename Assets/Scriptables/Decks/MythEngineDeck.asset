@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: MythEngineDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Myth - Blessed Martyrs
+  deckName: Establishment - Blessed Martyrs
   cards:
   - {fileID: 11400000, guid: 165f48fe10f0ac143955cdad8d38bae0, type: 2}
   - {fileID: 11400000, guid: 165f48fe10f0ac143955cdad8d38bae0, type: 2}
@@ -58,6 +58,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 01cf59efc70003e4ca83917198e6cfe0, type: 2}
   - {fileID: 11400000, guid: df1a16bb656e51740a9958bda8d722d3, type: 2}
   - {fileID: 11400000, guid: df1a16bb656e51740a9958bda8d722d3, type: 2}
-  lastUpdated: 2026-10-17T13:31:49.3654631Z
+  - {fileID: 11400000, guid: 71480f28925a8f6408faa75909effad4, type: 2}
+  - {fileID: 11400000, guid: d50c4a3c94e970b4aa3350a12dd32521, type: 2}
+  lastUpdated: 2026-10-17T18:03:12.0358949Z
   strategy: Engine
   focus: 0

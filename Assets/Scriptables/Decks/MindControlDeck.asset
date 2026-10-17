@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: MindControlDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Mind - Mind Games
+  deckName: Enlightenment - Mind Games
   cards:
   - {fileID: 11400000, guid: d24770ac471a1d046b9f9aab4645fa00, type: 2}
   - {fileID: 11400000, guid: d24770ac471a1d046b9f9aab4645fa00, type: 2}

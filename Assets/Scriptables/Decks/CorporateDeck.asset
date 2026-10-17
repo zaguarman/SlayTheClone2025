@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: CorporateDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Corporate - Shareholder Value
+  deckName: Capital - Shareholder Value
   cards:
   - {fileID: 11400000, guid: 78c07f0e0a9528b4ea8bafe81aaba835, type: 2}
   - {fileID: 11400000, guid: 78c07f0e0a9528b4ea8bafe81aaba835, type: 2}
@@ -44,6 +44,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8deee5d2f833ac549a779670d370bb3d, type: 2}
   - {fileID: 11400000, guid: 1f3acb3f965f1a64c81c656dc424c030, type: 2}
   - {fileID: 11400000, guid: 1f3acb3f965f1a64c81c656dc424c030, type: 2}
-  lastUpdated: 2026-10-16T19:41:38.7175976Z
+  - {fileID: 11400000, guid: 1976206d5d92a594fbbbd2c75cf75c95, type: 2}
+  - {fileID: 11400000, guid: a7851017bdfde604aadd7a44e123c73d, type: 2}
+  - {fileID: 11400000, guid: 46481a22d80471044a0895bee12c5e64, type: 2}
+  - {fileID: 11400000, guid: d88725980981c9b4fb4cf2d0d68db75f, type: 2}
+  - {fileID: 11400000, guid: cf02074d2bc97004995199ee91ae26ef, type: 2}
+  - {fileID: 11400000, guid: 3feff565f4aab7e4498dc7ef7150aa27, type: 2}
+  - {fileID: 11400000, guid: 606627b13961a99449d83f76158c65cb, type: 2}
+  - {fileID: 11400000, guid: 4b4db16acd9857e4ab6f7170664e7b6b, type: 2}
+  - {fileID: 11400000, guid: 9710b7bd3f0432442af510e22cbc062a, type: 2}
+  - {fileID: 11400000, guid: f26d56a207b6a724194a9ecec3c69150, type: 2}
+  - {fileID: 11400000, guid: 2c92fb9b577f8714680a5c339c579b1c, type: 2}
+  - {fileID: 11400000, guid: 1dc6d856885b4dd44bbbf3c5ad02b9b2, type: 2}
+  lastUpdated: 2026-10-17T18:04:50.9540428Z
   strategy: Engine
   focus: 3

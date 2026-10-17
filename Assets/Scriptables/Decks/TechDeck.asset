@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: TechDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Tech - Move Fast and Break Things
+  deckName: Capital - Move Fast and Break Things
   cards:
   - {fileID: 11400000, guid: b85f92b48bc770645a7b474083851d11, type: 2}
   - {fileID: 11400000, guid: b85f92b48bc770645a7b474083851d11, type: 2}
@@ -34,6 +34,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 14c7984728b3a2b4cae57d75c620d39a, type: 2}
   - {fileID: 11400000, guid: 066b33f864b0b17418d76cebec8ef883, type: 2}
   - {fileID: 11400000, guid: 591eb393342d5c94380d00aea8e8d25a, type: 2}
-  lastUpdated: 2026-10-14T11:17:53.0034258Z
+  - {fileID: 11400000, guid: a0649b416c56bab489f199ec45bad75d, type: 2}
+  lastUpdated: 2026-10-17T18:03:11.9206502Z
   strategy: Midrange
   focus: 0

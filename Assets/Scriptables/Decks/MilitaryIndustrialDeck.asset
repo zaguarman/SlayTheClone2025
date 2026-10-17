@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: MilitaryIndustrialDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Statecraft + Corporate - Military-Industrial Complex
+  deckName: Establishment + Capital - Military-Industrial Complex
   cards:
   - {fileID: 11400000, guid: 2bb835b44c5cf404a81ba7ecff681ecf, type: 2}
   - {fileID: 11400000, guid: 2bb835b44c5cf404a81ba7ecff681ecf, type: 2}
@@ -36,6 +36,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 95aad8a35a8f35b45944c88787ad093f, type: 2}
   - {fileID: 11400000, guid: 3ff8e29e684314f46bebf06737bc9000, type: 2}
   - {fileID: 11400000, guid: 3ff8e29e684314f46bebf06737bc9000, type: 2}
-  lastUpdated: 2026-10-16T16:23:25.5516718Z
+  - {fileID: 11400000, guid: 76ad62cea64f33f4c8862e0a694ce1f5, type: 2}
+  - {fileID: 11400000, guid: 136368a47c6c05e409600ed0c5d3b94e, type: 2}
+  lastUpdated: 2026-10-17T18:03:12.0379475Z
   strategy: Midrange
   focus: 0

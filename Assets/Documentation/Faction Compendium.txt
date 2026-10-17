@@ -15,8 +15,8 @@ CONTENTS
   factions. Establishment (Ω): Statecraft, Myth, Shadow Ops. The old powers: throne, altar and dagger; slow, sturdy and
   inevitable in the open, hidden knives behind. Capital ($): Corporate, Tech. Money and the machines it buys; the most
   card draw, strikes in windows, can't heal and can't bring anything back. Enlightenment (Φ): Utopia, Mind. The mind and
-  the future it designs; slow, strongest late, never a fair fight. Digital Society (@): Mainstream (the culture itself,
-  offline: the old Zeitgeist cards, a name to be changed) and Online (the internet's: the old Digital Society cards);
+  the future it designs; slow, strongest late, never a fair fight. Digital Society (@): Offline (the culture itself,
+  offline: the old Zeitgeist cards) and Online (the internet's: the old Digital Society cards);
   momentum, comebacks and swarms. Everything below about a faction's costs, holes, tempo and rhythm is about a subfaction.
 • Every Mechanic Has an Owner: One faction has it as primary (cheap and common). One or two others have it as secondary (rarer, costlier, or with a drawback). Nobody else gets it.
 • Every Status Has an Owner: Each faction owns at most 3 statuses. A Neutral set (Deployment Time, Revealed, Concealed, Exposed, Muted, Anchored) is open to everyone. Ownership is listed in the 'Status Effects Compendium'.
@@ -99,8 +99,8 @@ Tech: Systems & the Queue
     • Weak Against: Shadow Ops. (concealment), Statecraft (Keep Calm).
     • Note: Tech and Shadow Ops. counter each other; whoever wins the information war wins the matchup.
 
-Mainstream: Moods of Modern Life (the Digital Society faction's offline half; was the Zeitgeist faction until 2026-10-17, when the
-name went to the game; Mainstream is the user's name for now, to be changed)
+Offline: Moods of Modern Life (the Digital Society faction's offline half; was the Zeitgeist faction until 2026-10-17, when the
+name went to the game; Offline is the name since, as it pairs with Online)
     • Theme: The culture itself, offline: films and pop culture everyone quotes, human behaviours and archetypes, social
       trends, modern malaise.
     • Coin: ☺ (the mood of the times) on a coin in its color.

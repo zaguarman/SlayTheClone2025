@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: ShadowOpsDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Shadow Ops. - Licence to Kill
+  deckName: Establishment - Licence to Kill
   cards:
   - {fileID: 11400000, guid: dc8822e884221714d88b9b0a7eadff4d, type: 2}
   - {fileID: 11400000, guid: dc8822e884221714d88b9b0a7eadff4d, type: 2}
@@ -41,6 +41,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 812d0da4decbe4e4e94b36a29281005c, type: 2}
   - {fileID: 11400000, guid: 8b2ece59833f29b498743986db69b0e5, type: 2}
   - {fileID: 11400000, guid: 8b2ece59833f29b498743986db69b0e5, type: 2}
-  lastUpdated: 2026-10-16T17:51:55.8220500Z
+  - {fileID: 11400000, guid: f134ec3c68a18d74bb6e1d161c080065, type: 2}
+  - {fileID: 11400000, guid: aa084a2a3a399fd41a4a063f6bb93add, type: 2}
+  - {fileID: 11400000, guid: ba3d0878bb59945478cea1d58dd29779, type: 2}
+  - {fileID: 11400000, guid: 278e106354652b446b568a5bd8bb0099, type: 2}
+  - {fileID: 11400000, guid: b415b51222ed7d34788481d0e7187533, type: 2}
+  - {fileID: 11400000, guid: 3c6c38f0542624d45bb9332eb7f6bc35, type: 2}
+  - {fileID: 11400000, guid: d95a9b317522f784b847b20b4aa5b5ca, type: 2}
+  - {fileID: 11400000, guid: 8433ea7fd105b3844a4b07510af74a0c, type: 2}
+  - {fileID: 11400000, guid: 953c02338dd6063438480230f528fceb, type: 2}
+  lastUpdated: 2026-10-17T18:03:11.9011031Z
   strategy: Aggro
   focus: 0

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: StatecraftAggroDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Statecraft - Shock and Awe
+  deckName: Establishment - Shock and Awe
   cards:
   - {fileID: 11400000, guid: 725c69c16de79494bbf8a6fb72b51a41, type: 2}
   - {fileID: 11400000, guid: 725c69c16de79494bbf8a6fb72b51a41, type: 2}
@@ -58,6 +58,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 96bf6003f2e24744182611126a47ec10, type: 2}
   - {fileID: 11400000, guid: e4899e810539d9b4386915f753f99225, type: 2}
   - {fileID: 11400000, guid: e4899e810539d9b4386915f753f99225, type: 2}
-  lastUpdated: 2026-10-17T13:21:01.2217807Z
+  - {fileID: 11400000, guid: 3cefd22ce65e81e4d9ff338db02ed2ab, type: 2}
+  lastUpdated: 2026-10-17T18:03:12.0328769Z
   strategy: Aggro
   focus: 0

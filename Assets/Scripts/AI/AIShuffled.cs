@@ -262,7 +262,7 @@ namespace Zeitgeist {
         private static string RoleShort(string role) => role.Contains(" (") ? role.Substring(0, role.IndexOf(" (")) : role;
 
         private static string Abbrev(Faction faction) => faction switch {
-            Faction.Online => "Online", Faction.Mainstream => "Main", Faction.ShadowOps => "Shadow", Faction.Statecraft => "State", Faction.Corporate => "Corp",
+            Faction.Online => "Online", Faction.Offline => "Offline", Faction.ShadowOps => "Shadow", Faction.Statecraft => "State", Faction.Corporate => "Corp",
             _ => CardTextFormatter.FactionName(faction).Length <= 6 ? CardTextFormatter.FactionName(faction) : CardTextFormatter.FactionName(faction).Substring(0, 6)
         };
     }

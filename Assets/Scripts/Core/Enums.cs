@@ -7,9 +7,9 @@ namespace Zeitgeist {
         // The nine factions of the 'Faction Compendium'; None for cards made before factions existed
         // The subfactions (the user, 2026-10-17: "as Slay the Spire's Ironclad is three archetypes at once", four factions hold
         // these as their archetypes; see Umbrella and Umbrellas). In the game's words these are subfactions and the Umbrella is
-        // the faction; the code keeps the old name for them. Online (6) was Digital Society and Mainstream was Zeitgeist (a
+        // the faction; the code keeps the old name for them. Online (6) was Digital Society and Offline was Zeitgeist (a
         // name the game took); PopCulture is a dead value, the merge's name for a day, kept so Mind and Utopia keep their numbers
-        public enum Faction { None, Myth, Statecraft, ShadowOps, Corporate, Tech, Online, PopCulture, Mind, Utopia, Mainstream }
+        public enum Faction { None, Myth, Statecraft, ShadowOps, Corporate, Tech, Online, PopCulture, Mind, Utopia, Offline }
 
         /// <summary>The factions as the player picks them (the user, 2026-10-17): each holds two or three subfactions, mixed freely in a deck.</summary>
         public enum Umbrella { None, Establishment, Capital, Enlightenment, DigitalSociety }

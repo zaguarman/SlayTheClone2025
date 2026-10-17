@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: FrankensteinDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Utopia + Myth - Frankenstein
+  deckName: Enlightenment + Establishment - Frankenstein
   cards:
   - {fileID: 11400000, guid: ef4006553a067244e99be95851a13cad, type: 2}
   - {fileID: 11400000, guid: ef4006553a067244e99be95851a13cad, type: 2}
@@ -36,6 +36,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: da99501379be9924094b1266d4b3a88f, type: 2}
   - {fileID: 11400000, guid: 488d0929b489d5744b1305bca0b1ce0f, type: 2}
   - {fileID: 11400000, guid: 488d0929b489d5744b1305bca0b1ce0f, type: 2}
-  lastUpdated: 2026-10-16T16:23:25.5845349Z
+  - {fileID: 11400000, guid: 60d0f711cb94e2a4aa04c9fe615c003b, type: 2}
+  - {fileID: 11400000, guid: 0d15c21f0ff82f244878df02ced5ee28, type: 2}
+  - {fileID: 11400000, guid: 15122c80637445d49bb99dc37fa3108e, type: 2}
+  - {fileID: 11400000, guid: 4f95cfedbc1cbb54a92ee6f0728595c4, type: 2}
+  lastUpdated: 2026-10-17T18:03:12.0379475Z
   strategy: Engine
   focus: 0

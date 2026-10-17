@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: ShadowOpsControlDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Shadow Ops. - Black Budget
+  deckName: Establishment - Black Budget
   cards:
   - {fileID: 11400000, guid: 7601f026a9b989b479d2bf7b4bed4fd2, type: 2}
   - {fileID: 11400000, guid: 7601f026a9b989b479d2bf7b4bed4fd2, type: 2}
@@ -48,6 +48,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 742d8935ff084a549be4362a431a762d, type: 2}
   - {fileID: 11400000, guid: cbfd3f6f44b9c7344acb7ff6ee624e36, type: 2}
   - {fileID: 11400000, guid: cbfd3f6f44b9c7344acb7ff6ee624e36, type: 2}
-  lastUpdated: 2026-10-17T13:21:01.2247995Z
+  - {fileID: 11400000, guid: fb610ba90b78d784d8af87fa2c5d5885, type: 2}
+  - {fileID: 11400000, guid: b89196ebb9a527744841ad9893254aeb, type: 2}
+  - {fileID: 11400000, guid: bf3b940db1754ec4cbd4602808ad2441, type: 2}
+  - {fileID: 11400000, guid: 8d310d6716c1f9943a0ee190bac7071f, type: 2}
+  - {fileID: 11400000, guid: 0811652e48f94024487b6bb9610bea5b, type: 2}
+  - {fileID: 11400000, guid: 2139cef075f3f0044b618ebcd6a548d9, type: 2}
+  - {fileID: 11400000, guid: 1068c50f2a6568f438557a2f82611632, type: 2}
+  - {fileID: 11400000, guid: 3848abb62f6aa18498632ae17cf10577, type: 2}
+  - {fileID: 11400000, guid: 7865b26a822a16b46a48ac4f606cfaf5, type: 2}
+  lastUpdated: 2026-10-17T18:03:12.0348906Z
   strategy: Control
   focus: 0

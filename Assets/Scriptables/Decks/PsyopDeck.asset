@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: PsyopDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Shadow Ops. + Mind - Psyop
+  deckName: Establishment + Enlightenment - Psyop
   cards:
   - {fileID: 11400000, guid: dc8822e884221714d88b9b0a7eadff4d, type: 2}
   - {fileID: 11400000, guid: dc8822e884221714d88b9b0a7eadff4d, type: 2}
@@ -35,6 +35,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8084b1109215d5f4aa0014e67f969862, type: 2}
   - {fileID: 11400000, guid: 8084b1109215d5f4aa0014e67f969862, type: 2}
   - {fileID: 11400000, guid: 0fc05be701e3249479b51b900492f8c4, type: 2}
-  lastUpdated: 2026-10-17T09:57:45.3294133Z
+  - {fileID: 11400000, guid: 3353b5fb85f36c14cb0b7cb68069c321, type: 2}
+  - {fileID: 11400000, guid: fa14642e6726e7f4188d5733b5852d62, type: 2}
+  - {fileID: 11400000, guid: 72e5515ac22718f4995c2b791e22237b, type: 2}
+  - {fileID: 11400000, guid: 5d5387beccc62a449b9fc0eec2f16420, type: 2}
+  - {fileID: 11400000, guid: 2c068a60d15cd564fab26d396c068e8e, type: 2}
+  lastUpdated: 2026-10-17T18:03:12.0394503Z
   strategy: Control
   focus: 0

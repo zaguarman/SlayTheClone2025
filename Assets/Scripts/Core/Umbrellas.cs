@@ -8,8 +8,8 @@ namespace Zeitgeist {
     /// Exhaust at once, each faction here is two or three of the old factions, now its subfactions, mixed freely in a deck.
     /// A deck is legal with one or two factions, whatever their subfactions. Establishment: the old powers, throne, altar
     /// and dagger (Statecraft, Myth, Shadow Ops.). Capital: money and the machines it buys (Corporate, Tech). Enlightenment:
-    /// the mind and the future it designs (Utopia, Mind). Digital Society: the culture, online and off (Online, Mainstream:
-    /// the old Zeitgeist half, its name to be changed).
+    /// the mind and the future it designs (Utopia, Mind). Digital Society: the culture, online and off (Online, Offline:
+    /// the old Zeitgeist half).
     /// </summary>
     public static class Umbrellas {
         public static readonly IReadOnlyList<Umbrella> All = new[] { Umbrella.Establishment, Umbrella.Capital, Umbrella.Enlightenment, Umbrella.DigitalSociety };
@@ -18,7 +18,7 @@ namespace Zeitgeist {
             Faction.Statecraft or Faction.Myth or Faction.ShadowOps => Umbrella.Establishment,
             Faction.Corporate or Faction.Tech => Umbrella.Capital,
             Faction.Utopia or Faction.Mind => Umbrella.Enlightenment,
-            Faction.Online or Faction.Mainstream or Faction.PopCulture => Umbrella.DigitalSociety,
+            Faction.Online or Faction.Offline or Faction.PopCulture => Umbrella.DigitalSociety,
             _ => Umbrella.None
         };
 
@@ -27,7 +27,7 @@ namespace Zeitgeist {
             Umbrella.Establishment => new[] { Faction.Statecraft, Faction.Myth, Faction.ShadowOps },
             Umbrella.Capital => new[] { Faction.Corporate, Faction.Tech },
             Umbrella.Enlightenment => new[] { Faction.Utopia, Faction.Mind },
-            Umbrella.DigitalSociety => new[] { Faction.Online, Faction.Mainstream },
+            Umbrella.DigitalSociety => new[] { Faction.Online, Faction.Offline },
             _ => new Faction[0]
         };
 

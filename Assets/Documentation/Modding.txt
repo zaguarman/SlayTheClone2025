@@ -22,7 +22,7 @@ A CARD
   {
     "name": "Office Printer",
     "type": "creature",                   creature or spell
-    "faction": "Corporate",               the subfaction: Corporate, Statecraft, Online, Mainstream, Myth, ShadowOps, Tech, Mind, Utopia (None for neutral)
+    "faction": "Corporate",               the subfaction: Corporate, Statecraft, Online, Offline, Myth, ShadowOps, Tech, Mind, Utopia (None for neutral)
     "flavor": "Out of toner.",            the line under the picture
     "notes": "What it's for",             design notes, not printed
     "art": "office_printer.png",          a picture beside the file; 352 x 200 reads best; none shows the faction's frame alone

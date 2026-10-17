@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: StatecraftDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Statecraft - Order & Paperwork
+  deckName: Establishment - Order & Paperwork
   cards:
   - {fileID: 11400000, guid: 9e5672dcf95528d47864ecb52eb686f7, type: 2}
   - {fileID: 11400000, guid: 37b990c5f19b74f4c8822c604863a62e, type: 2}
@@ -39,6 +39,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 189e9eb19a64617499c3606919dc053c, type: 2}
   - {fileID: 11400000, guid: 189e9eb19a64617499c3606919dc053c, type: 2}
   - {fileID: 11400000, guid: 8b48e99bd0a81624791978bd1b03785f, type: 2}
-  lastUpdated: 2026-10-17T14:48:23.2408349Z
+  - {fileID: 11400000, guid: 27995ae4fbab5014e950c0f74f00324c, type: 2}
+  - {fileID: 11400000, guid: dfdd272e85ad6424d8fe13a23ed21e8b, type: 2}
+  - {fileID: 11400000, guid: 8f9bf6a051505e4438e26be98111cd49, type: 2}
+  - {fileID: 11400000, guid: b7960855c8ae89944bfdcb636dbbf8c3, type: 2}
+  - {fileID: 11400000, guid: 1c29a9097a05e0f4697bb40d0e6512b9, type: 2}
+  lastUpdated: 2026-10-17T18:03:11.5880808Z
   strategy: Control
   focus: 0
