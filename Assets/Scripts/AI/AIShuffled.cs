@@ -144,6 +144,8 @@ namespace Zeitgeist {
             try {
                 int seed = 70000;
                 var games = (from first in decks from second in decks where second != first select new Game(first, hard, second, hard, seed++)).ToList();
+                var shown = lists.Select(l => (l.name, l.cards, l.a, l.b)).ToList();
+                ReportsSoFar(soFar => ShuffledReport(shown, usable, soFar, ledger) + "\n" + audit.Report());
                 results = PlayAll(games, audit, ledger, progress);
             }
             finally {

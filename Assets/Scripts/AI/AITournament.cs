@@ -87,9 +87,20 @@ namespace Zeitgeist {
         public static int GamesPlayed { get; private set; }
 
         /// <summary>A new run: not stopped, nothing played yet.</summary>
+        /// <summary>
+        /// Every so many games the report so far is written (the user, 2026-10-17: "something to work on while they finish"):
+        /// the runner under way says how to build it from the games played (<see cref="ReportsSoFar"/>), the menu says
+        /// where it goes (<see cref="WritePartial"/>). Its first line says how far the run is.
+        /// </summary>
+        public static int PartialEvery = 100;
+        public static System.Action<string> WritePartial;
+        private static System.Func<List<Result>, string> partialReport;
+        internal static void ReportsSoFar(System.Func<List<Result>, string> report) => partialReport = report;
+
         public static void BeginRun() {
             StopRequested = Stopped = false;
             GamesPlanned = GamesPlayed = 0;
+            partialReport = null;
         }
 
         internal static List<DeckCards> Read(IReadOnlyList<DeckScriptableObject> decks) =>
@@ -195,7 +206,21 @@ namespace Zeitgeist {
                     results[i] = Play(games[i], audit, ledger);
                     Interlocked.Increment(ref done);
                 }));
-                while (!work.Wait(100)) progress?.Invoke(Volatile.Read(ref done) / (float)games.Count);
+                int lastWritten = 0;
+                while (!work.Wait(100)) {
+                    int now = Volatile.Read(ref done);
+                    progress?.Invoke(now / (float)games.Count);
+                    if (WritePartial == null || partialReport == null || PartialEvery <= 0 || now - lastWritten < PartialEvery) continue;
+                    lastWritten = now;
+                    try { // The games go on while this is built: a tally caught mid-change is skipped, the next one lands
+                        var soFar = results.Where(r => r.Played).ToList();
+                        WritePartial($"PARTIAL REPORT: {now} of {games.Count} games of this stage played ({GamesPlayed + now} in the run so far), written while the run goes on; the final report replaces it.\n\n"
+                                     + partialReport(soFar));
+                    }
+                    catch (System.Exception e) {
+                        Debug.LogWarning($"AI Tournament: the report so far couldn't be written this time ({e.GetType().Name}: {e.Message})");
+                    }
+                }
                 work.GetAwaiter().GetResult(); // What went wrong on a thread, here
             }
             finally {
@@ -249,6 +274,7 @@ namespace Zeitgeist {
             List<Result> results;
             try {
                 int seed = 1000;
+                ReportsSoFar(soFar => Report(title, soFar, entrants, Pairings(entrants), decks) + "\n" + audit.Report());
                 results = PlayAll(PairingGames(entrants, cards, gamesPerSeat, ref seed), audit, null, progress).ToList();
             }
             finally {

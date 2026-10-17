@@ -82,6 +82,7 @@ namespace Zeitgeist {
             var catalog = AssetDatabase.LoadAssetAtPath<DeckCatalog>(AssetDatabase.GUIDToAssetPath(guids[0]));
             AITournament.BeginRun();
             Telemetry.Load(); // Whether the headless games are recorded too (Debug > Telemetry > Settings)
+            AITournament.WritePartial = text => File.WriteAllText(reportPath, text); // The report so far, every so many games (the user)
             try {
                 // Cancel stops it early (the user): the games under way finish, and the report is written from those played
                 var (results, report) = run(catalog.Decks, done => {
@@ -110,6 +111,7 @@ namespace Zeitgeist {
                 return results;
             }
             finally {
+                AITournament.WritePartial = null;
                 EditorUtility.ClearProgressBar();
             }
         }

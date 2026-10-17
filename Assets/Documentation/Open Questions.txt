@@ -14,7 +14,9 @@ STILL OPEN
     • Two things to decide: (1) should a Trend kill every 0-Attack creature on both sides for free? It's hidden board damage
       the card text doesn't say. (2) the lethal check should run at once when a Dusk effect takes a creature to 0.
     • Recommendation: the trade floors Health at 1 (a wall becomes a 1-Health cannon, which is the joke anyway), and the Dusk
-      effects run their lethal checks before the Day ends. Nothing built yet.
+      effects run their lethal checks before the Day ends. Nothing built yet. Seen again the same evening in other clothes:
+      Particle Accelerator 3/0 (shuffled tournament) and Reality TV Star 12/0 (levels tournament): the common thread is a
+      Dusk effect taking Health to 0 with the lethal check left for the next resolution.
 
 45. The Kübler-Ross model as statuses (the user, 2026-10-15)
     • The ask: all five stages of grief as status effects. Proposed, nothing built yet; each lasts N Days unless it says so.

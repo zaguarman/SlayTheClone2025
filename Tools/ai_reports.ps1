@@ -26,8 +26,16 @@ if ($Only -eq "Levels") { $studies += @{ Method = "Zeitgeist.AITournamentMenu.Ru
 foreach ($study in $studies) {
     $started = Get-Date
     Write-Host "Running $($study.Method) in $copy..."
-    $process = Start-Process -FilePath $unity -Wait -PassThru -NoNewWindow -ArgumentList @(
+    $process = Start-Process -FilePath $unity -PassThru -NoNewWindow -ArgumentList @(
         "-batchmode", "-quit", "-projectPath", "`"$copy`"", "-executeMethod", $study.Method, "-logFile", "`"$log`"")
+    # The report so far comes back every half minute (the user, 2026-10-17: something to work on while a run finishes)
+    while (-not $process.HasExited) {
+        Start-Sleep -Seconds 30
+        foreach ($file in $study.Files) {
+            $from = Join-Path $copy $file
+            if ((Test-Path $from) -and (Get-Item $from).LastWriteTime -gt $started) { Copy-Item $from (Join-Path $project $file) -Force }
+        }
+    }
     $minutes = [math]::Round(((Get-Date) - $started).TotalMinutes, 1)
     if ($process.ExitCode -ne 0) { throw "$($study.Method) failed after $minutes minutes (exit code $($process.ExitCode)): see $log" }
     foreach ($file in $study.Files) {

@@ -357,14 +357,18 @@ namespace Zeitgeist {
             try {
                 int seed = 50000;
                 var mirrors = cards.SelectMany(deck => Enumerable.Range(0, CardGamesPerDeck).Select(_ => new Game(deck, hard, deck, hard, seed++))).ToList();
+                var none = new List<Result>();
+                ReportsSoFar(soFar => BalanceReport(decks, soFar, cardLedger, none, styleLedger, none, deckLedger) + "\n" + audit.Report());
                 cardResults = PlayAll(mirrors, audit, cardLedger, p => progress?.Invoke(0.25f * p)).ToList();
 
                 int styleSeed = 1000;
+                ReportsSoFar(soFar => BalanceReport(decks, cardResults, cardLedger, soFar, styleLedger, none, deckLedger) + "\n" + audit.Report());
                 styleResults = PlayAll(PairingGames(Styles, cards, 2, ref styleSeed), audit, styleLedger, p => progress?.Invoke(0.25f + 0.5f * p)).ToList();
 
                 var versus = (from first in cards from second in cards where second != first
                               from game in Enumerable.Range(0, DeckGamesPerPairing) select (first, second)).ToList();
                 var deckGames = versus.Select(v => new Game(v.first, hard, v.second, hard, seed++)).ToList();
+                ReportsSoFar(soFar => BalanceReport(decks, cardResults, cardLedger, styleResults, styleLedger, soFar, deckLedger) + StrategyReport(decks, soFar, deckLedger) + "\n" + audit.Report());
                 deckResults = PlayAll(deckGames, audit, deckLedger, p => progress?.Invoke(0.75f + 0.25f * p)).ToList();
             }
             finally {
