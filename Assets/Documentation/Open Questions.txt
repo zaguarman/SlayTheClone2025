@@ -5,6 +5,24 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+47. The meta: nerf aggression, buff planning (the user, 2026-10-17)
+    • Where it stands: the balance report has Midrange and Swarm at 74% and Aggro at 32%, so brute aggro already loses; what
+      wins is the board, and the plain "strongest first, kill the most" Medium AI beats the planning Hard AI 290 to 210
+      (AI Design.txt). Planning cards win when measured one by one (Prophecy 62%, Set-up 61%, Armor 67%) but the game is
+      decided on tempo: whoever puts more stats on the table sooner. The knobs, each a number in one place:
+        - Starting Health 20 (Player.StartingHealth): 30 gives the slow plans the Days they need (Prophecies, Deployment
+          Time 2, Policies) and makes a lethal race harder. The adventure's 60 is separate.
+        - Beaters' Deployment Time: creatures with 4+ Attack deploy at least 1 Day (today many are 0), so a big body can't
+          land and hit the same Day; the player sees it coming and can answer it. A generator-side rule over the card files.
+        - The Flanks' +1 Attack (Formation.FlankAttack): 0 keeps the Flanks' Speed and reach without rewarding the stack of
+          hitters; the Vanguard's Armor (cap 2) stays or rises to 3, which pays the player who holds the line.
+        - Draws: 2 a Day plus the hand's 5 spells cap; a third draw from Day 4 on (or a spell cap of 6) feeds the decks
+          that plan instead of the ones that dump a hand.
+        - Face damage through an empty lane: 1 less (a minimum of 1) when the attacker entered play this Day or last.
+    • Recommendation: start with the two that change the least and measure once (headless, 7 minutes for both studies):
+      Health 30 and beaters at Deployment Time 1. Then the levels run says whether Hard starts to beat Medium; if not, the
+      Flanks' Attack to 0 next. Each knob is one line and reversible. Nothing changed yet.
+
 46. Liminal Space and the creatures with 0 Attack (2026-10-17)
     • What the shuffled tournament's audit saw: "Perpetual Motion Machine 4/0 is still alive on the board". Liminal Space trades
       every creature's Attack and Health; Perpetual Motion Machine has 0 Attack, so after the trade it has 0 Health (4 Attack from
