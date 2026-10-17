@@ -65,6 +65,15 @@ namespace SlayTheClone.Tests {
                 CollectionAssert.AreEqual(cards.Select(c => c is CreatureCardScriptableObject).OrderByDescending(isCreature => isCreature),
                     gallery.ShownCards.Select(c => c.GetBaseCardData() is CreatureData), "...creatures first, then spells");
             }
+            // The tier tabs (the user, 2026-10-17): the latest study's tiers filter the faction shown; its cards show themselves (no enlarged copy on hover)
+            if (CardScores.HasScores) {
+                Click(GalleryButton(gallery, CardGalleryMenu.TierTab + "S"));
+                Assert.AreEqual("S", gallery.ShownTier);
+                Assert.IsTrue(Shown(gallery).All(name => CardScores.TierOf(name) == "S"), "Tier S shows only the S cards of the faction shown");
+                Assert.IsTrue(gallery.ShownCards.All(c => c.ShowsItself), "Hovered, a gallery card shows no enlarged copy");
+                Click(GalleryButton(gallery, CardGalleryMenu.TierTab + "Any"));
+                Assert.IsNull(gallery.ShownTier);
+            }
             AssertTheWheelScrollsEveryList(gallery);
             yield return null;
             CardsScroll(gallery).verticalNormalizedPosition = 0f;
