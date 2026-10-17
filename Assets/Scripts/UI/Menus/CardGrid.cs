@@ -88,12 +88,21 @@ namespace Zeitgeist {
         }
 
         /// <summary>The factions that have cards on offer, in the Faction Compendium's order.</summary>
-        public static List<Faction> FactionsIn(DeckCatalog catalog) => catalog.AllCards.Select(c => c.faction).Distinct().OrderBy(f => f).ToList();
+        public static List<Faction> FactionsIn(DeckCatalog catalog) => catalog.AllCards.Select(c => c.faction).Distinct().OrderBy(Umbrellas.Order).ToList();
 
-        /// <summary>A faction's cards on offer (null: every card, faction by faction): creatures, then spells, each by name.</summary>
-        public static List<CardDataScriptableObject> CardsOf(DeckCatalog catalog, Faction? faction) => catalog.AllCards
-            .Where(c => faction == null || c.faction == faction)
-            .OrderBy(c => c.faction).ThenBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => c.cardName).ToList();
+        /// <summary>The factions (the four) with cards on offer, in their order.</summary>
+        public static List<Umbrella> UmbrellasIn(DeckCatalog catalog) => catalog.AllCards.Select(c => Umbrellas.Of(c.faction)).Distinct().OrderBy(u => Umbrellas.All.ToList().IndexOf(u)).ToList();
+
+        /// <summary>A subfaction's cards on offer (null: every card, faction by faction): creatures, then spells, each by name.</summary>
+        public static List<CardDataScriptableObject> CardsOf(DeckCatalog catalog, Faction? faction) =>
+            Sorted(catalog.AllCards.Where(c => faction == null || c.faction == faction));
+
+        /// <summary>A faction's cards on offer, all its subfactions: creatures, then spells, each by name.</summary>
+        public static List<CardDataScriptableObject> CardsOf(DeckCatalog catalog, Umbrella umbrella) =>
+            Sorted(catalog.AllCards.Where(c => Umbrellas.Of(c.faction) == umbrella));
+
+        private static List<CardDataScriptableObject> Sorted(IEnumerable<CardDataScriptableObject> cards) => cards
+            .OrderBy(c => Umbrellas.Order(c.faction)).ThenBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => c.cardName).ToList();
 
         /// <summary>"12 cards: 8 creatures, 4 spells".</summary>
         public static string Count(IReadOnlyCollection<CardDataScriptableObject> cards) {

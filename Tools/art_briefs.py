@@ -181,8 +181,8 @@ ART_RULES = [
     "  kept (Assets/Art/PixelCards, ArtArchive/RetroDiffusion) but not assigned.",
 ]
 
-FACTION_NAMES = {"Corporate": "Corporate", "Statecraft": "Statecraft", "Zeitgeist": "Zeitgeist", "DigitalSociety": "Digital Society",
-                 "DigitalSociety": "Digital Society", "ShadowOps": "Shadow Ops.", "Tech": "Tech", "Myth": "Myth",
+FACTION_NAMES = {"Corporate": "Corporate", "Statecraft": "Statecraft", "Zeitgeist": "Mainstream",
+                 "DigitalSociety": "Online", "ShadowOps": "Shadow Ops.", "Tech": "Tech", "Myth": "Myth",
                  "Mind": "Mind", "Utopia": "Utopia"}
 
 

@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: NotonMyWatch
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: fa7050c8-d4c6-499b-b707-423d88ee0992
+  cardName: Not on My Watch
+  description: Feelings are valid. Statuses are not.
+  cardType: 0
+  faction: 10
+  artwork: {fileID: 3286163911610860551, guid: 207ffaf4c7c12c541bf1311596f89ece, type: 3}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  combo: 0
+  setUpBy: []
+  effects: []
+  designNotes: 'Mechanics test: Safe Space. Each Dawn, it and the friendly creatures
+    beside it gain Bless (a ward that stops the next status).'
+  artDescription: A fierce grandma in a crossing-guard vest holding up a stop sign,
+    nervous creatures huddled behind her in a blanket fort.
+  attack: 1
+  health: 5
+  speed: 1
+  turnsUntilOperative: 1
+  movement: 0
+  ability: 27
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

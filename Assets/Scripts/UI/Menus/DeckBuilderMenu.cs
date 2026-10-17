@@ -22,6 +22,7 @@ namespace Zeitgeist {
         public const string StarterDeckButton = "Decks: Starter: ";
         public const string EveryFactionTab = "DeckFaction: Every card";
         public const string FactionTab = "DeckFaction: ";
+        public const string UmbrellaTab = "DeckFactionGroup: ";
         public const string TierTab = "DeckTier: ";
         public const string CardRow = "DeckCard: ";
         public const string CopyButtonName = "DeckCopyButton";
@@ -29,7 +30,6 @@ namespace Zeitgeist {
         public const string BackButtonName = "DecksBackButton";
         private const int CardColumnCount = 4; // Big enough to read at a glance
         private const float DecksWidth = 340f, DeckWidth = 400f;
-        private const int TabsPerRow = 5;
         private const string DeleteLabel = "Delete", DeleteArmedLabel = "Sure? Delete";
 
         private CardGrid cards;
@@ -44,7 +44,8 @@ namespace Zeitgeist {
         private CardPeek cardPeek;
         private bool deleteArmed; // Delete was clicked once: a second click deletes
         private readonly List<(Button button, DeckScriptableObject deck)> deckButtons = new List<(Button, DeckScriptableObject)>();
-        private readonly List<(Button button, Faction? faction)> factionTabs = new List<(Button, Faction?)>();
+        private readonly List<(Button button, Umbrella? umbrella)> umbrellaTabs = new List<(Button, Umbrella?)>();
+        private readonly List<(Button button, Faction faction)> factionTabs = new List<(Button, Faction)>();
         private readonly List<(Button button, string tier)> tierTabs = new List<(Button, string)>();
         private readonly Dictionary<CardController, CardDataScriptableObject> shownAssets = new Dictionary<CardController, CardDataScriptableObject>();
 
@@ -54,6 +55,8 @@ namespace Zeitgeist {
         public bool ShowsStarterDeck => OpenDeck != null && !PlayerDecks.IsPlayers(OpenDeck);
         /// <summary>The faction whose cards are offered; null when every card is.</summary>
         public Faction? ShownFaction { get; private set; }
+        /// <summary>The faction (one of the four) whose cards are offered, whole or narrowed to <see cref="ShownFaction"/>; null when every card is.</summary>
+        public Umbrella? ShownUmbrella { get; private set; }
         /// <summary>The tier offered, "S" to "D" (the latest balance study's, see <see cref="CardScores"/>); null: any.</summary>
         public string ShownTier { get; private set; }
         /// <summary>The cards offered, in order.</summary>
@@ -121,7 +124,19 @@ namespace Zeitgeist {
         /// <summary>Offers the faction's cards; null offers every card.</summary>
         public void ShowFaction(Faction? faction) {
             ShownFaction = faction;
-            var offered = CardGrid.CardsOf(Catalog, faction);
+            ShownUmbrella = faction != null ? Umbrellas.Of(faction.Value) : (Umbrella?)null;
+            Show(CardGrid.CardsOf(Catalog, faction), faction != null ? CardTextFormatter.FactionName(faction.Value) : "Every card");
+        }
+
+        /// <summary>Offers a faction's cards, all its subfactions (the user, 2026-10-17); null offers every card.</summary>
+        public void ShowUmbrella(Umbrella? umbrella) {
+            if (umbrella == null) { ShowFaction(null); return; }
+            ShownFaction = null;
+            ShownUmbrella = umbrella;
+            Show(CardGrid.CardsOf(Catalog, umbrella.Value), Umbrellas.Name(umbrella.Value));
+        }
+
+        private void Show(List<CardDataScriptableObject> offered, string title) {
             if (ShownTier != null) offered = offered.Where(c => CardScores.TierOf(c.cardName) == ShownTier).ToList();
             shownAssets.Clear();
             cards.Show(offered, (face, asset) => {
@@ -130,9 +145,13 @@ namespace Zeitgeist {
                 face.OnCardClicked.AddListener(_ => AddCard(asset));
                 face.OnCardRightClicked.AddListener(_ => RemoveCard(asset));
             });
-            string title = (faction != null ? CardTextFormatter.FactionName(faction.Value) : "Every card") + (ShownTier != null ? $", Tier {ShownTier}" : "");
-            cards.Title.text = $"{title}  <size=70%>{CardGrid.Count(offered)}</size>";
-            foreach (var (tab, listed) in factionTabs) ShowChosen(tab, listed == faction);
+            cards.Title.text = $"{title}{(ShownTier != null ? $", Tier {ShownTier}" : "")}  <size=70%>{CardGrid.Count(offered)}</size>";
+            foreach (var (tab, listed) in umbrellaTabs) ShowChosen(tab, listed == ShownUmbrella);
+            // The chosen faction's subfactions; every card: all of them
+            foreach (var (tab, listed) in factionTabs) {
+                tab.gameObject.SetActive(ShownUmbrella == null || Umbrellas.Of(listed) == ShownUmbrella);
+                ShowChosen(tab, listed == ShownFaction);
+            }
             foreach (var (tab, listed) in tierTabs) ShowChosen(tab, listed == ShownTier);
             Refresh();
         }
@@ -288,11 +307,13 @@ namespace Zeitgeist {
             cardPeek = null;
             deleteArmed = false;
             deckButtons.Clear();
+            umbrellaTabs.Clear();
             factionTabs.Clear();
             tierTabs.Clear(); // Rebuilt with the screen
             shownAssets.Clear();
             OpenDeck = null;
             ShownFaction = null;
+            ShownUmbrella = null;
         }
 
         // Your decks, with New deck first
@@ -314,35 +335,20 @@ namespace Zeitgeist {
             tabsLayout.spacing = 8;
             SetControls(tabsLayout, expandHeight: false);
 
-            var factions = new List<Faction?> { null }.Concat(CardGrid.FactionsIn(Catalog).Select(f => (Faction?)f)).ToList();
-            Transform row = null;
-            for (int i = 0; i < factions.Count; i++) {
-                if (i % TabsPerRow == 0) {
-                    row = NewObject("Row", tabs.transform).transform;
-                    var rowLayout = row.gameObject.AddComponent<HorizontalLayoutGroup>();
-                    rowLayout.spacing = 8;
-                    SetControls(rowLayout, expandHeight: false);
-                }
-                var faction = factions[i];
-                string label = faction != null ? CardTextFormatter.FactionName(faction.Value) : "Every card";
-                string name = faction != null ? FactionTab + CardTextFormatter.FactionName(faction.Value) : EveryFactionTab;
-                var tab = AddButton(row, name, label, -1, () => ShowFaction(faction));
-                var tabElement = tab.GetComponent<LayoutElement>();
-                tabElement.preferredHeight = 44;
-                tabElement.flexibleWidth = 1;
-                tabElement.preferredWidth = 0;
-                var text = tab.GetComponentInChildren<TextMeshProUGUI>();
-                text.enableAutoSizing = true;
-                text.fontSizeMin = 14;
-                text.fontSizeMax = 22;
-                text.textWrappingMode = TextWrappingModes.NoWrap;
-                text.rectTransform.offsetMin = new Vector2(faction != null ? 40f : 8f, 4f);
-                text.rectTransform.offsetMax = new Vector2(-8f, -4f);
-                if (faction != null) {
-                    var coin = UITheme.AddFactionCoin(tab.transform, faction.Value, 28f).rectTransform;
-                    coin.anchorMin = coin.anchorMax = coin.pivot = new Vector2(0f, 0.5f);
-                    coin.anchoredPosition = new Vector2(8f, 0f);
-                }
+            // The four factions in a row (Every card first), their subfactions in the row under it: the chosen faction's, or
+            // all of them under Every card (the user, 2026-10-17)
+            var umbrellaRow = AddTabRow(tabs.transform);
+            foreach (var umbrella in new List<Umbrella?> { null }.Concat(CardGrid.UmbrellasIn(Catalog).Select(u => (Umbrella?)u))) {
+                string label = umbrella != null ? Umbrellas.Name(umbrella.Value) : "Every card";
+                var tab = AddTab(umbrellaRow, umbrella != null ? UmbrellaTab + label : EveryFactionTab, label, () => ShowUmbrella(umbrella), umbrella != null);
+                if (umbrella != null) PlaceCoin(UITheme.AddUmbrellaCoin(tab.transform, umbrella.Value, 28f).rectTransform);
+                umbrellaTabs.Add((tab, umbrella));
+            }
+            var factionRow = AddTabRow(tabs.transform);
+            foreach (var faction in CardGrid.FactionsIn(Catalog)) {
+                string label = CardTextFormatter.FactionName(faction);
+                var tab = AddTab(factionRow, FactionTab + label, label, () => ShowFaction(faction), true);
+                PlaceCoin(UITheme.AddFactionCoin(tab.transform, faction, 28f).rectTransform);
                 factionTabs.Add((tab, faction));
             }
 
@@ -362,10 +368,40 @@ namespace Zeitgeist {
             }
         }
 
+        private static Transform AddTabRow(Transform tabs) {
+            var row = NewObject("Row", tabs).transform;
+            var rowLayout = row.gameObject.AddComponent<HorizontalLayoutGroup>();
+            rowLayout.spacing = 8;
+            SetControls(rowLayout, expandHeight: false);
+            return row;
+        }
+
+        private static Button AddTab(Transform row, string name, string label, System.Action onClick, bool withCoin) {
+            var tab = AddButton(row, name, label, -1, onClick);
+            var tabElement = tab.GetComponent<LayoutElement>();
+            tabElement.preferredHeight = 44;
+            tabElement.flexibleWidth = 1;
+            tabElement.preferredWidth = 0;
+            var text = tab.GetComponentInChildren<TextMeshProUGUI>();
+            text.enableAutoSizing = true;
+            text.fontSizeMin = 14;
+            text.fontSizeMax = 22;
+            text.textWrappingMode = TextWrappingModes.NoWrap;
+            text.rectTransform.offsetMin = new Vector2(withCoin ? 40f : 8f, 4f);
+            text.rectTransform.offsetMax = new Vector2(-8f, -4f);
+            return tab;
+        }
+
+        private static void PlaceCoin(RectTransform coin) {
+            coin.anchorMin = coin.anchorMax = coin.pivot = new Vector2(0f, 0.5f);
+            coin.anchoredPosition = new Vector2(8f, 0f);
+        }
+
         /// <summary>Offers only the cards of this tier in the latest balance study (null: any), in the faction shown.</summary>
         public void ShowTier(string tier) {
             ShownTier = tier;
-            ShowFaction(ShownFaction);
+            if (ShownFaction == null && ShownUmbrella != null) ShowUmbrella(ShownUmbrella);
+            else ShowFaction(ShownFaction);
         }
 
         // The open deck: its name, how full it is, its cards, and Copy and Delete

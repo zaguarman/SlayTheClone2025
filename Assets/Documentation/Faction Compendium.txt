@@ -1,7 +1,7 @@
 CONTENTS
 
 1. How Factions Work
-2. The Nine Factions
+2. The Nine Subfactions
 3. Mechanic Ownership
 4. Counters
 5. Example Two-Faction Decks
@@ -10,6 +10,14 @@ CONTENTS
 
 1. HOW FACTIONS WORK
 
+• Four Factions, Nine Subfactions (the user, 2026-10-17): as Slay the Spire's Ironclad is Strength, Block and Exhaust at
+  once, each faction is two or three subfactions (the nine described below) mixed freely in a deck. A deck holds one or two
+  factions. Establishment (Ω): Statecraft, Myth, Shadow Ops. The old powers: throne, altar and dagger; slow, sturdy and
+  inevitable in the open, hidden knives behind. Capital ($): Corporate, Tech. Money and the machines it buys; the most
+  card draw, strikes in windows, can't heal and can't bring anything back. Enlightenment (Φ): Utopia, Mind. The mind and
+  the future it designs; slow, strongest late, never a fair fight. Digital Society (@): Mainstream (the culture itself,
+  offline: the old Zeitgeist cards, a name to be changed) and Online (the internet's: the old Digital Society cards);
+  momentum, comebacks and swarms. Everything below about a faction's costs, holes, tempo and rhythm is about a subfaction.
 • Every Mechanic Has an Owner: One faction has it as primary (cheap and common). One or two others have it as secondary (rarer, costlier, or with a drawback). Nobody else gets it.
 • Every Status Has an Owner: Each faction owns at most 3 statuses. A Neutral set (Deployment Time, Revealed, Concealed, Exposed, Muted, Anchored) is open to everyone. Ownership is listed in the 'Status Effects Compendium'.
 • Every Faction Has a Cost: There's no mana. Besides Deployment Time, each faction pays for its power in its own way, and that cost is part of its personality. Some costs are additional costs paid during Planning; others are drawbacks built into the card's effect.
@@ -22,7 +30,7 @@ CONTENTS
   protection, blessings, mines and paperwork, and slow, inevitable pressure once they're set up.
 
 
-2. THE NINE FACTIONS
+2. THE NINE SUBFACTIONS
 
 Myth: Faith, Death & Prophecy
     • Theme: Legends, religion, monsters, tarot, the afterlife.
@@ -91,10 +99,10 @@ Tech: Systems & the Queue
     • Weak Against: Shadow Ops. (concealment), Statecraft (Keep Calm).
     • Note: Tech and Shadow Ops. counter each other; whoever wins the information war wins the matchup.
 
-Digital Society: Moods of Modern Life, Virality & the Mob (Zeitgeist and Digital Society as one, the user, 2026-10-17)
-    • Theme: The culture itself, offline and online: films and pop culture everyone quotes, human behaviours and archetypes,
-      social trends, modern malaise; and internet culture: social media, influencers, cancel culture, memes. Two halves of one
-      faction since 2026-10-17 (the name Zeitgeist went to the game).
+Mainstream: Moods of Modern Life (the Digital Society faction's offline half; was the Zeitgeist faction until 2026-10-17, when the
+name went to the game; Mainstream is the user's name for now, to be changed)
+    • Theme: The culture itself, offline: films and pop culture everyone quotes, human behaviours and archetypes, social
+      trends, modern malaise.
     • Coin: ☺ (the mood of the times) on a coin in its color.
     • Plans or Reacts: Reacts. The mood of the times has all the flexibility in the world: they act on what the others have planned and break those plans. Their cards are weaker, but they draw many more cards and play more dynamic strategies.
     • Play Style: Momentum and comebacks. Moods that buff a creature but burn it out; stronger when losing.
@@ -105,7 +113,7 @@ Digital Society: Moods of Modern Life, Virality & the Mob (Zeitgeist and Digital
     • Tempo: Fast to medium (Deployment Time 0–1).
     • Strong Against: Corporate (Strikes), Statecraft (Underdog).
     • Weak Against: Myth (Blessed), Tech and Utopia (Cleanse).
-    • The online half (was Digital Society):
+Online: Virality & the Mob (the Digital Society faction's internet half; was the Digital Society subfaction)
         • Theme: Internet culture: social media, influencers, cancel culture, memes and everything born online.
         • Coin: @ (your handle) on a coin in its color.
         • Play Style: A swarm of cheap Deployment Time 0 tokens, effects that spread, and many creatures piling onto one target.

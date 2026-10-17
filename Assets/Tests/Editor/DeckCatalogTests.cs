@@ -25,7 +25,8 @@ namespace Zeitgeist.Tests {
             Assert.IsNotEmpty(catalog.Decks);
             var factions = catalog.Decks.Select(deck => {
                 var deckFactions = DeckCatalog.FactionsOf(deck);
-                Assert.That(deckFactions.Count, Is.InRange(1, 2), $"{deck.GetDeckName()} mixes too many factions: {string.Join(", ", deckFactions)}");
+                // One or two factions, whatever their subfactions (the user, 2026-10-17: Establishment is Statecraft, Myth and Shadow Ops. at once)
+                Assert.That(DeckCatalog.UmbrellasOf(deck).Count, Is.InRange(1, 2), $"{deck.GetDeckName()} mixes too many factions: {string.Join(", ", deckFactions)}");
                 CollectionAssert.DoesNotContain(deckFactions, Faction.None, $"{deck.GetDeckName()} has cards without a faction");
                 return string.Join(" + ", deckFactions.OrderBy(f => f));
             }).ToList();

@@ -207,6 +207,15 @@ namespace Zeitgeist {
             under.overflowMode = TextOverflowModes.Truncate;
             return button;
         }
+        /// <summary>A choice in a list labelled with a faction's coin (one of the four), like <see cref="AddChoice"/> with one subfaction's.</summary>
+        public static Button AddUmbrellaChoice(Transform parent, string name, string title, string subtitle, Action onClick, Umbrella umbrella) {
+            var button = AddChoice(parent, name, title, subtitle, onClick, new List<Faction>(), CoinSize);
+            var coin = UITheme.AddUmbrellaCoin(button.transform, umbrella, CoinSize).rectTransform;
+            coin.anchorMin = coin.anchorMax = coin.pivot = new Vector2(0f, 0.5f);
+            coin.anchoredPosition = new Vector2(14f, 0f);
+            return button;
+        }
+
         /// <summary>
         /// Faction coins side by side, the first (most cards) on top, overlapping when there's no room for them in the width.
         /// Returns their area, to be placed by the caller.

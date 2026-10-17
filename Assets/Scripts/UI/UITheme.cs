@@ -65,10 +65,29 @@ namespace Zeitgeist {
             Faction.Myth => Hex(0xC9A23D),
             Faction.ShadowOps => Hex(0x7C8A99),
             Faction.Tech => Hex(0x3DA9D6),
-            Faction.DigitalSociety => Hex(0x5D7BD6),
+            Faction.Online => Hex(0x5D7BD6),
+            Faction.Mainstream => Hex(0xD95DD0), // The old Zeitgeist's magenta
             Faction.Mind => Hex(0x9A6CD6),
             Faction.Utopia => Hex(0xE8E0A0),
             _ => Gold
+        };
+
+        /// <summary>A faction's color (the four of them, the user, 2026-10-17): its coin on the deck lists and the tabs.</summary>
+        public static Color UmbrellaColor(Umbrella umbrella) => umbrella switch {
+            Umbrella.Establishment => Hex(0xB8403A), // Throne, altar and dagger: a deep red
+            Umbrella.Capital => Hex(0x3FBF8F),       // Money green
+            Umbrella.Enlightenment => Hex(0x9A86D6), // Violet: the mind, and the lab's glow
+            Umbrella.DigitalSociety => Hex(0x5D7BD6), // The old Digital Society's blue
+            _ => Gold
+        };
+
+        /// <summary>A faction's glyph, as the subfactions have theirs.</summary>
+        public static string UmbrellaGlyph(Umbrella umbrella) => umbrella switch {
+            Umbrella.Establishment => "Ω", // The last word
+            Umbrella.Capital => "$",
+            Umbrella.Enlightenment => "Φ", // Philosophy, and physics
+            Umbrella.DigitalSociety => "@",
+            _ => "~"
         };
 
         /// <summary>The body of a card's frame: its faction's color, deepened toward the table's navy.</summary>
@@ -84,19 +103,25 @@ namespace Zeitgeist {
             Faction.Myth => "†",            // The cross, and death
             Faction.ShadowOps => "?",       // What it plans shows as ???
             Faction.Tech => "λ",            // Code
-            Faction.DigitalSociety => "@",  // Your handle
+            Faction.Online => "@",          // Your handle
+            Faction.Mainstream => "☺",      // The mood of the times
             Faction.Mind => "Ψ",            // Psyche
             Faction.Utopia => "∞",          // Endless progress
             _ => "~"
         };
 
         /// <summary>A faction's coin, like the player plaque's: a disc in its color, ringed in brass, with its glyph in ink.</summary>
-        public static Image AddFactionCoin(Transform parent, Faction faction, float size) {
+        public static Image AddFactionCoin(Transform parent, Faction faction, float size) => AddCoin(parent, FactionColor(faction), FactionGlyph(faction), size);
+
+        /// <summary>A faction's coin (one of the four), like a subfaction's.</summary>
+        public static Image AddUmbrellaCoin(Transform parent, Umbrella umbrella, float size) => AddCoin(parent, UmbrellaColor(umbrella), UmbrellaGlyph(umbrella), size);
+
+        private static Image AddCoin(Transform parent, Color color, string sign, float size) {
             float corners = 32f / size; // Corners half its size: a circle
-            var coin = Round(NewImage("FactionCoin", parent, FactionColor(faction)), FactionColor(faction), corners);
+            var coin = Round(NewImage("FactionCoin", parent, color), color, corners);
             coin.rectTransform.sizeDelta = new Vector2(size, size);
             AddTrim(coin.transform, Gold, corners);
-            var glyph = NewText("Glyph", coin.transform, FactionGlyph(faction), size * 0.62f, Ink);
+            var glyph = NewText("Glyph", coin.transform, sign, size * 0.62f, Ink);
             glyph.fontStyle = FontStyles.Bold;
             glyph.raycastTarget = false;
             Stretch(glyph.rectTransform);

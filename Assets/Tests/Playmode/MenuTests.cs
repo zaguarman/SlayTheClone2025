@@ -57,7 +57,11 @@ namespace Zeitgeist.Tests {
             Assert.IsTrue(gallery.IsOpen, "Cards opens the card gallery");
             Assert.IsFalse(TitleButton("PlayButton").gameObject.activeInHierarchy, "...in place of the title screen");
             CollectionAssert.AreEquivalent(catalog.AllCards.Select(c => c.cardName), Shown(gallery), "It opens on every card on offer");
-            CollectionAssert.AreEquivalent(catalog.AllCards.Select(c => c.faction).Distinct(), gallery.Factions, "...and lists their factions");
+            CollectionAssert.AreEquivalent(catalog.AllCards.Select(c => c.faction).Distinct(), gallery.Factions, "...and lists their subfactions under their factions");
+            // A faction's entry shows all its subfactions' cards (the user, 2026-10-17)
+            var umbrella = Umbrellas.Of(gallery.Factions[0]);
+            Click(GalleryButton(gallery, CardGalleryMenu.UmbrellaButton + Umbrellas.Name(umbrella)));
+            CollectionAssert.AreEquivalent(catalog.AllCards.Where(c => Umbrellas.Of(c.faction) == umbrella).Select(c => c.cardName), Shown(gallery), $"{umbrella}: each of its subfactions' cards once");
             foreach (var faction in gallery.Factions) {
                 Click(GalleryButton(gallery, CardGalleryMenu.FactionButton + CardTextFormatter.FactionName(faction)));
                 var cards = catalog.AllCards.Where(c => c.faction == faction).ToList();
@@ -382,6 +386,9 @@ namespace Zeitgeist.Tests {
             var yourDeck = builder.OpenDeck;
             Assert.IsNotNull(yourDeck, "Clicking a card starts a deck with it");
             Assert.AreEqual(3, yourDeck.Cards.Count, "...and adds a copy at each click: copies aren't limited");
+            // The second subfaction may be another faction's: its tab shows once that faction is chosen (the user, 2026-10-17)
+            Click(GalleryButton(builder, DeckBuilderMenu.UmbrellaTab + Umbrellas.Name(Umbrellas.Of(factions[1]))));
+            Assert.AreEqual(Umbrellas.Of(factions[1]), builder.ShownUmbrella, "A faction tab offers the faction's cards, all its subfactions");
             Click(GalleryButton(builder, DeckBuilderMenu.FactionTab + CardTextFormatter.FactionName(factions[1])));
             foreach (var card in builder.ShownCards.ToList()) ClickCard(card);
             Click(GalleryButton(builder, DeckBuilderMenu.EveryFactionTab));

@@ -56,12 +56,15 @@ namespace Zeitgeist {
         public IReadOnlyList<CardDataScriptableObject> AllCards => AllDecks.SelectMany(d => d.Cards).Where(c => c != null).Distinct()
             .OrderBy(c => c.faction).ThenBy(c => c.cardName).ToList();
 
-        /// <summary>"17 cards · Corporate", "13 cards · Shadow Ops. + Mind": the size of the deck, and its faction or two.</summary>
+        /// <summary>"17 cards · Capital", "13 cards · Establishment + Enlightenment": the size of the deck, and its faction or two (the user, 2026-10-17: the four factions).</summary>
         public static string Describe(DeckScriptableObject deck) {
-            var factions = FactionsOf(deck);
+            var umbrellas = UmbrellasOf(deck);
             string summary = $"{deck.Cards.Count} cards";
-            return factions.Count is 1 or 2 ? $"{summary} · {string.Join(" + ", factions.Select(CardTextFormatter.FactionName))}" : summary;
+            return umbrellas.Count is 1 or 2 ? $"{summary} · {string.Join(" + ", umbrellas.Select(Umbrellas.Name))}" : summary;
         }
+
+        /// <summary>The deck's factions (the four), the one with the most cards first. A deck is legal with one or two.</summary>
+        public static List<Umbrella> UmbrellasOf(DeckScriptableObject deck) => deck == null ? new List<Umbrella>() : Umbrellas.Of(deck.Cards);
 
         /// <summary>The factions of the deck's cards, the one with the most cards first; as many cards: by name.</summary>
         public static List<Faction> FactionsOf(DeckScriptableObject deck) {
@@ -70,10 +73,10 @@ namespace Zeitgeist {
                 .ThenBy(g => CardTextFormatter.FactionName(g.Key)).Select(g => g.Key).ToList();
         }
 
-        /// <summary>The factions a menu shows a deck's coins for: one or two (a deck mixing more shows none), any number for your own decks.</summary>
+        /// <summary>The subfactions a menu shows a deck's coins for: up to three (a faction's whole set), any number for your own decks.</summary>
         public static List<Faction> CoinsFor(DeckScriptableObject deck) {
             var factions = FactionsOf(deck).Where(f => f != Faction.None).ToList();
-            return factions.Count <= 2 || PlayerDecks.IsPlayers(deck) ? factions : new List<Faction>();
+            return factions.Count <= 3 || PlayerDecks.IsPlayers(deck) ? factions : new List<Faction>();
         }
 
         /// <summary>

@@ -16,6 +16,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 07aa431b8e0f1f8418ce31ee74c28f22, type: 2}
   - {fileID: 11400000, guid: e51066c80da8d2d4a813dbb0973d34e3, type: 2}
   - {fileID: 11400000, guid: 33bd3a1ed3d69a643b20e4d82005c25b, type: 2}
+  - {fileID: 11400000, guid: 21fbbf6cc5c66d449b6c6669531b08e5, type: 2}
   - {fileID: 11400000, guid: 808aa0a871a392246a92ca31d6fc7736, type: 2}
   - {fileID: 11400000, guid: fc6d4252fcc8f9d4499a06cf7a2a95c0, type: 2}
   - {fileID: 11400000, guid: 77e785c31491a134cba41678509c8849, type: 2}
@@ -23,7 +24,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 69b2a19a2eedb3446bd97bd846561b82, type: 2}
   - {fileID: 11400000, guid: edd71d7700bffc04383e6172df37bc4e, type: 2}
   - {fileID: 11400000, guid: ab9d755db939da54daac79d182d0b105, type: 2}
-  - {fileID: 11400000, guid: 21fbbf6cc5c66d449b6c6669531b08e5, type: 2}
   - {fileID: 11400000, guid: 9c1b68440bbfa9040b29553b8f0d4d56, type: 2}
   - {fileID: 11400000, guid: 49af619189b316141a9bb4e1e7d34909, type: 2}
   - {fileID: 11400000, guid: b2bf5aa9dc09c1d4681a2022ae3055ab, type: 2}
@@ -48,6 +48,9 @@ MonoBehaviour:
   - name: Your Group Chat
     tagline: 47 unread messages. All of them are about you.
     deck: {fileID: 11400000, guid: 33bd3a1ed3d69a643b20e4d82005c25b, type: 2}
+  - name: Your Feed
+    tagline: Curated just for you. Every post is about how wrong you are.
+    deck: {fileID: 11400000, guid: 21fbbf6cc5c66d449b6c6669531b08e5, type: 2}
   - name: A Billionaire Bound For Mars
     tagline: Will save humanity. Shipping not included.
     deck: {fileID: 11400000, guid: 808aa0a871a392246a92ca31d6fc7736, type: 2}
@@ -69,9 +72,6 @@ MonoBehaviour:
   - name: The Minister of Defence
     tagline: Peace through superior firepower.
     deck: {fileID: 11400000, guid: ab9d755db939da54daac79d182d0b105, type: 2}
-  - name: Your Feed
-    tagline: Curated just for you. Every post is about how wrong you are.
-    deck: {fileID: 11400000, guid: 21fbbf6cc5c66d449b6c6669531b08e5, type: 2}
   - name: Your Neighbourhood
     tagline: Nobody believed in them. Correctly.
     deck: {fileID: 11400000, guid: 9c1b68440bbfa9040b29553b8f0d4d56, type: 2}

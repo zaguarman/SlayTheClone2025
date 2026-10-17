@@ -12,8 +12,8 @@ import os
 
 W, H = 352, 200  # Matches the card art box aspect ratio (144 x 82)
 OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "Assets", "Art", "Cards")
-# Zeitgeist and Digital Society are one faction, Digital Society (the user, 2026-10-17): their drawings keep their themes here and share a folder
-THEME_FOLDER = {"Zeitgeist": "DigitalSociety"}  # Zeitgeist merged into Digital Society (2026-10-17)
+# The Digital Society faction has two subfactions (the user, 2026-10-17): Mainstream (the old Zeitgeist theme, a name to be changed) and Online (the old Digital Society); each has its folder
+THEME_FOLDER = {"Zeitgeist": "Mainstream", "DigitalSociety": "Online"}
 # Pixel art is paused (2026-10-14): every card shows its vector art again. Set USE_PIXEL_ART to True to go back: a card
 # with pixel art (Tools/pixel_art.py) then shows that instead, and its vector art is written to the archive, outside Assets
 USE_PIXEL_ART = False

@@ -1,6 +1,8 @@
 Card Game Factions Overview
 
-(2026-10-17: the game is called Zeitgeist; the Zeitgeist and Digital Society factions are one faction now, Digital Society. Their
+(2026-10-17: the game is called Zeitgeist. Four factions since then, each of two or three subfactions: Establishment (Statecraft, Myth,
+Shadow Ops.), Capital (Corporate, Tech), Enlightenment (Utopia, Mind), Digital Society (Mainstream, the old Zeitgeist faction's cards
+under a name to be changed; Online, the old Digital Society's). Below, the old faction names are the subfactions'. Their
 sections below stay as the two halves of it: the culture itself, and the internet's.)
 	Neutral Resources
 		Tools & Objects

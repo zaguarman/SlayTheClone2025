@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: CamperVan
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: f2830213-ba32-4984-8c67-53aa06296b66
+  cardName: Camper Van
+  description: 'Van life: no rent, no fixed address, no witnesses.'
+  cardType: 0
+  faction: 10
+  artwork: {fileID: 3286163911610860551, guid: 483a5070835749f489cce04b97153352, type: 3}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  combo: 0
+  setUpBy: []
+  effects: []
+  designNotes: 'Hit and Run (U-turn): after its attack it goes back to your hand,
+    fresh, with the next Day''s, and its slot is free for the next summon.'
+  artDescription: A painted hippie camper van speeding away from a dented mailbox,
+    a dreamcatcher swinging from the mirror, the couple inside filming the getaway
+    for their followers.
+  attack: 2
+  health: 4
+  speed: 2
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 42
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

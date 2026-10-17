@@ -32,8 +32,10 @@ namespace Zeitgeist {
             var offered = new List<DeckCatalog.Opponent> {
                 Offer(Build(Faction.Corporate, CorporateCards(), written), "Your Manager", "Has scheduled a quick sync about your attitude."),
                 Offer(Build(Faction.Statecraft, StatecraftCards(), written), "The Ministry of Forms", "Your existence is pending approval."),
-                // Digital Society (the user, 2026-10-17): Zeitgeist (the culture itself) and Digital Society (the internet's) as one faction
-                Offer(Build(Faction.DigitalSociety, ZeitgeistCards().Concat(DigitalSocietyCards()).ToList(), written), "Your Group Chat", "47 unread messages. All of them are about you."),
+                // Digital Society's two subfactions (the user, 2026-10-17): Mainstream, the culture itself (the old Zeitgeist cards, a
+                // name to be changed), and Online, the internet's (the old Digital Society cards)
+                Offer(Build(Faction.Mainstream, ZeitgeistCards(), written), "Your Group Chat", "47 unread messages. All of them are about you."),
+                Offer(Build(Faction.Online, DigitalSocietyCards(), written), "Your Feed", "Curated just for you. Every post is about how wrong you are."),
                 Offer(Build(Faction.Utopia, UtopiaCards(), written), "A Billionaire Bound For Mars", "Will save humanity. Shipping not included."),
                 Offer(Build(Faction.ShadowOps, ShadowOpsCards(), written), "Your Quartermaster", "Please return the car in one piece. You never do."),
                 Offer(Build(Faction.Tech, TechCards(), written), "The IT Department", "Have you tried turning your strategy off and on again?"),
@@ -100,7 +102,6 @@ namespace Zeitgeist {
             // numbers (Faction Balance Plan, step 10 of the next picks): each keeps its strategy, 8 creatures and 7 spells, two of each
             ("Corporate - Hustle Rush", "CorporateRushDeck", "Your Startup's Founder", "Moving fast. Breaking you.", "Aggro", new[] { "Micromanager", "Micromanager", "Cleaning Robot", "Cleaning Robot", "Multilevel Marketing Seller", "Multilevel Marketing Seller", "Bloomberg Terminal", "Bloomberg Terminal", "Charles Ponzi", "Charles Ponzi", "Day Trader", "Day Trader", "Middle Manager", "Middle Manager", "Shell Company", "Shell Company", "Flash Crash", "Flash Crash", "Hostile Takeover", "Hostile Takeover", "Team Building Exercise", "Team Building Exercise", "High-Frequency Trading Scam", "High-Frequency Trading Scam", "Inheritance", "Inheritance", "Venture Capital", "Venture Capital", "Valet", "Valet", "DMCA", "DMCA", "3rd Parallel Job", "3rd Parallel Job", "Legal Department", "Legal Department", "Job Rotation", "Job Rotation", "Resignation Letter", "Resignation Letter", "Teflon Don", "Teflon Don", "Insurance Policy", "Insurance Policy", "Seniority Priority", "Seniority Priority" }),
             ("Statecraft - Shock and Awe", "StatecraftAggroDeck", "The Minister of Defence", "Peace through superior firepower.", "Aggro", new[] { "Mercenaries", "Mercenaries", "Sherman Tank", "Sherman Tank", "Police Officer Productivity Target", "Police Officer Productivity Target", "Spite-Elected President", "Spite-Elected President", "Demagogue", "Demagogue", "Man o' War", "Man o' War", "Preemptive Strike", "Preemptive Strike", "Raised Security Level", "Raised Security Level", "Martial Law", "Martial Law", "Panem Et Circenses", "Weapons of Mass Distraction", "Security Guard", "Security Guard", "Mass Emigration", "Mass Emigration", "Filibuster", "Filibuster", "Curfew", "Curfew", "Spin Doctor", "Spin Doctor", "Civil Servant", "Civil Servant", "Bomb Squad", "Bomb Squad", "Riot Police", "Riot Police", "Drill Sergeant", "Drill Sergeant", "Sapper", "Sapper", "Mutually Assured Destruction", "Mutually Assured Destruction", "Due Process", "Due Process" }),
-            ("Digital Society - Terminally Online", "TerminallyOnlineDeck", "Your Feed", "Curated just for you. Every post is about how wrong you are.", "Swarm", new[] { "Clickbait", "Clickbait", "Dogpile", "Dogpile", "Keyboard Warrior", "Keyboard Warrior", "NPC", "NPC", "Crypto \"Entrepreneur\"", "Crypto \"Entrepreneur\"", "Digital Nomad", "Digital Nomad", "Meta Group Chat", "Meta Group Chat", "Conspiracy Theorist", "Conspiracy Theorist", "Rage Bait", "Cancelled", "Social Panopticon", "Chronically Online" }), // Was Digital Society's best deck (2026-10-17)
             ("Digital Society - Underdogs", "ZeitgeistSwarmDeck", "Your Neighbourhood", "Nobody believed in them. Correctly.", "Swarm", new[] { "Underdog", "Underdog", "Plot Armor", "Plot Armor", "Scam Artist", "Scam Artist", "Delivery Cyclist", "Delivery Cyclist", "Drug Smuggler", "Drug Smuggler", "Hikikomori", "Hikikomori", "Not on My Watch", "Karen", "Karen", "No Glove, No Love", "No Glove, No Love", "One for the Road", "One for the Road", "Rush Hour", "Generational Trauma", "Generational Trauma", "Mental Health Day", "YOLO", "The Friends We Made Along the Way", "The Friends We Made Along the Way", "Absentee Parents", "Absentee Parents", "Ol' Reliable", "Ol' Reliable", "Weaponized Incompetence", "Listen Kid", "Listen Kid", "Lost Generation", "Lost Generation", "Spite Voter", "Spite Voter", "Camper Van", "Universal Basic Income", "Calm Your Tits", "Tourist Trap", "Groundhog Day", "Freaky Friday", "Florida Man", "One-Trick Pony", "Clingy Ex", "Backup Dancer", "Anti-Vaxxer" }),
             ("Utopia - Lab Grown", "UtopiaEngineDeck", "The Gene Therapist", "Side effects may include winning.", "Engine", new[] { "Quark", "Quark", "Ankylorhiza", "Ankylorhiza", "Particle Accelerator", "Particle Accelerator", "Cold Fusion", "Cold Fusion", "Hypermetamorphosis", "Hypermetamorphosis", "Resurrected T-Rex", "Resurrected T-Rex", "Antimatter", "Antimatter", "Biohacker", "Biohacker", "Biohacking", "Biohacking", "Mutation", "Mutation", "Exponential Growth", "Exponential Growth", "Seasteading", "Seasteading", "Blood Transfusion", "Blood Transfusion", "Stasis Field", "Stasis Field", "Gene Editing", "Gene Editing", "Heimlich Maneuver", "Heimlich Maneuver", "Blood Transfusion", "Blood Transfusion", "Peer Review", "Peer Review" }),
             ("Digital Society - Influencer Economy", "DigitalSocietyMidrangeDeck", "Your Favourite Streamer", "Like, subscribe, surrender.", "Midrange", new[] { "Thirst Trap", "Thirst Trap", "Content Creator", "Content Creator", "Short King", "Short King", "Good Boi", "Good Boi", "Its Been 84 Years...", "Its Been 84 Years...", "Catfish", "Catfish", "Meta Group Chat", "Meta Group Chat", "Cancelled", "Cancelled", "Social Panopticon", "Social Panopticon", "Its A Trap", "Dogpile", "Dogpile", "Console Memory Card", "Selfie Esteem", "Selfie Esteem", "Influencer", "Influencer", "U Mad Bro?", "U Mad Bro?" }),
@@ -120,7 +121,7 @@ namespace Zeitgeist {
 
         // The strategy each faction's best deck plays, for the balance study's strategy table
         private static readonly Dictionary<Faction, string> BestDeckStrategies = new Dictionary<Faction, string> {
-            [Faction.Corporate] = "Engine", [Faction.Statecraft] = "Control", [Faction.DigitalSociety] = "Midrange", [Faction.Utopia] = "Aggro",
+            [Faction.Corporate] = "Engine", [Faction.Statecraft] = "Control", [Faction.Mainstream] = "Midrange", [Faction.Online] = "Swarm", [Faction.Utopia] = "Aggro",
             [Faction.ShadowOps] = "Aggro", [Faction.Tech] = "Midrange", [Faction.Myth] = "Control",
             [Faction.Mind] = "Control",
         };
@@ -150,7 +151,7 @@ namespace Zeitgeist {
                 "Border Crossing", "Border Crossing", "Peace Force", "Peace Force", "Si Vis Pacem, Para Bellum",
             }),
             // Chaos on both boards that its sturdy creatures shrug off, and Double Tap on a big hitter
-            [Faction.DigitalSociety] = ("Digital Society - Moods of Modern Life", new[] {
+            [Faction.Mainstream] = ("Digital Society - Moods of Modern Life", new[] {
                 "This Is Fine", "This Is Fine", "Russian Roulette", "Russian Roulette", "Football Hooligans", "Football Hooligans",
                 "Hipster", "Hipster", "Boomer", "Boomer", "Karen", "Karen", "Antihero", "Antihero", "Bodybuilder", "Bodybuilder",
                 "Chain Smoker", "Reality TV Star", "Toxic Positivity", "Toxic Positivity",
@@ -158,6 +159,12 @@ namespace Zeitgeist {
                 "Ol' Reliable", "Ol' Reliable", "Listen Kid", "Listen Kid",
                 // Added 2026-10-16 (the meta picks): the new mechanics' cards that fit this deck
                 "Fidget Spinner", "Fidget Spinner",
+            }),
+            // A swarm of cheap posters piling onto one target; the Online subfaction's deck (was a second Digital Society deck)
+            [Faction.Online] = ("Digital Society - Terminally Online", new[] {
+                "Clickbait", "Clickbait", "Dogpile", "Dogpile", "Keyboard Warrior", "Keyboard Warrior", "NPC", "NPC",
+                "Crypto \"Entrepreneur\"", "Crypto \"Entrepreneur\"", "Digital Nomad", "Digital Nomad", "Meta Group Chat", "Meta Group Chat",
+                "Conspiracy Theorist", "Conspiracy Theorist", "Rage Bait", "Cancelled", "Social Panopticon", "Chronically Online",
             }),
             // Accelerationism: creatures taken to the brink, then boom; Black Hole and Splitting The Atom clear the way
             [Faction.Utopia] = ("Utopia - Results May Vary", new[] {

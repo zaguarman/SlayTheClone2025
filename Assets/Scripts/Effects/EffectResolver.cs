@@ -413,7 +413,7 @@ namespace Zeitgeist {
             TargetRequisite.Outnumbered => creature?.Owner?.Opponent != null && CreatureCount(creature.Owner) < CreatureCount(creature.Owner.Opponent),
             TargetRequisite.AttackAtMost => creature != null && creature.Attack <= value,
             TargetRequisite.Deploying => creature != null && !creature.IsOperative,
-            TargetRequisite.Online => creature?.SourceData?.faction == Faction.DigitalSociety,
+            TargetRequisite.Online => creature?.SourceData?.faction == Faction.Online,
             TargetRequisite.OutsideHeadquarters => creature?.Slot != null && Formation.PositionOf(creature.Slot.Index) != Formation.Position.Headquarters,
             _ => true
         };

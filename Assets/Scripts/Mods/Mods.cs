@@ -29,7 +29,7 @@ namespace Zeitgeist {
         public class ModCard {
             public string name;
             public string type = "creature";   // creature or spell
-            public string faction = "None";    // Corporate, Statecraft, DigitalSociety, Myth, ShadowOps, Tech, Mind, Utopia
+            public string faction = "None";    // Corporate, Statecraft, Online, Mainstream, Myth, ShadowOps, Tech, Mind, Utopia
             public string flavor;              // The line under the picture
             public string notes;               // Design notes (not printed)
             public string art;                 // A PNG beside the file, 352x200 reads best

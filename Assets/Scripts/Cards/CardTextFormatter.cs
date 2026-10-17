@@ -23,7 +23,8 @@ namespace Zeitgeist {
         public static string FactionName(Faction faction) {
             switch (faction) {
                 case Faction.ShadowOps: return "Shadow Ops.";
-                case Faction.DigitalSociety: return "Digital Society"; // Zeitgeist merged into it (2026-10-17)
+                case Faction.Online: return "Online"; // The internet's half of Digital Society (the user, 2026-10-17)
+                case Faction.Mainstream: return "Mainstream"; // The culture itself, the old Zeitgeist (a name to be changed)
                 case Faction.PopCulture: return "Digital Society"; // A dead value: the merged faction's name for a day
                 default: return faction.ToString();
             }
@@ -433,7 +434,7 @@ namespace Zeitgeist {
             TargetRequisite.Outnumbered => " if you have more creatures than its side",
             TargetRequisite.AttackAtMost => $" with {action.value} Attack or less",
             TargetRequisite.Deploying => $" if it's still deploying ({Keywords.Link("Deployment Time")})",
-            TargetRequisite.Online => " if it's Digital Society",
+            TargetRequisite.Online => " if it's Online",
             TargetRequisite.OutsideHeadquarters => " outside Headquarters",
             _ => ""
         };

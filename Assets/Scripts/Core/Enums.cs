@@ -5,7 +5,14 @@ namespace Zeitgeist {
         // Card/Effect Enums
         public enum CardType { Creature, Spell, Enchantment }
         // The nine factions of the 'Faction Compendium'; None for cards made before factions existed
-        public enum Faction { None, Myth, Statecraft, ShadowOps, Corporate, Tech, DigitalSociety, PopCulture, Mind, Utopia } // Zeitgeist merged into Digital Society (the user, 2026-10-17: the merged faction keeps the Digital Society name); PopCulture is a dead value, the merge's name for a day, kept so Mind and Utopia keep their numbers
+        // The subfactions (the user, 2026-10-17: "as Slay the Spire's Ironclad is three archetypes at once", four factions hold
+        // these as their archetypes; see Umbrella and Umbrellas). In the game's words these are subfactions and the Umbrella is
+        // the faction; the code keeps the old name for them. Online (6) was Digital Society and Mainstream was Zeitgeist (a
+        // name the game took); PopCulture is a dead value, the merge's name for a day, kept so Mind and Utopia keep their numbers
+        public enum Faction { None, Myth, Statecraft, ShadowOps, Corporate, Tech, Online, PopCulture, Mind, Utopia, Mainstream }
+
+        /// <summary>The factions as the player picks them (the user, 2026-10-17): each holds two or three subfactions, mixed freely in a deck.</summary>
+        public enum Umbrella { None, Establishment, Capital, Enlightenment, DigitalSociety }
         public enum EffectType { Immediate, Triggered, Continuous, Timed, Status }
         public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted, OnAboutToDie, OnRevealed, OnReplaced,
             OnDiscarded } // OnDiscarded: Laid Off, given up from the hand (the Dawn discard, a discard cost) // New triggers go last: cards store them as numbers
