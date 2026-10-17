@@ -126,6 +126,7 @@ namespace Zeitgeist {
             shownAssets.Clear();
             cards.Show(offered, (face, asset) => {
                 shownAssets[face] = asset;
+                face.ShowsItself = true; // Big enough to read as they are (the user): no enlarged copy on hover, its keywords explain themselves on it
                 face.OnCardClicked.AddListener(_ => AddCard(asset));
                 face.OnCardRightClicked.AddListener(_ => RemoveCard(asset));
             });

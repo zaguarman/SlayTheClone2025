@@ -142,7 +142,7 @@ namespace Zeitgeist {
             // Big bodies that buff each other on arrival, and Mutually Assured Destruction that they survive
             // Its control list: big bodies that buff each other, mines, shields and paperwork, and Mutually Assured Destruction
             [Faction.Statecraft] = ("Statecraft - Order & Paperwork", new[] {
-                "Mutually Assured Destruction", "Preemptive Strike", "Lost Landmine", "Ceasefire", "Red Tape", "Raised Security Level",
+                "Doomsday Clock", "Preemptive Strike", "Lost Landmine", "Ceasefire", "Red Tape", "Raised Security Level",
                 "Panem Et Circenses", "Martial Law", "Supply Depot", "Man o' War", "Diplomat", "Spite-Elected President", "Supreme Court",
                 "Demagogue", "King Emeritus", "Ministry for Equality", "Mercenaries", "Police Officer Productivity Target",
                 "Protocol Enforcers", "Internal Revenue Service",
@@ -642,11 +642,11 @@ namespace Zeitgeist {
                 "We've noticed some irregularities. Specifically, you.",
                 "Future: taxes enemy card plays instead of plain damage (Red Tape on the economy).",
                 On(EffectTrigger.StartOfTurn, Damage(1, TargetType.Enemy))),
-            Creature("Mercenaries", 4, 4, speed: 3, deploy: 0,
+            Creature("Mercenaries", 4, 5, speed: 3, deploy: 0,
                 "Loyal to whoever pays next.",
                 "Future: Recruitment bait. When it dies, the enemy may Recruit it instead.",
                 On(EffectTrigger.OnDeath, Draw(1, TargetType.Enemy))),
-            Creature("Man o' War", 4, 8, speed: 1, deploy: 1,
+            Creature("Man o' War", 5, 8, speed: 1, deploy: 1,
                 "Gunboat diplomacy, minus the diplomacy.",
                 "Future: multi-slot (takes 2 slots) and Heavy.",
                 On(EffectTrigger.OnPlay, Damage(1, TargetType.EnemyCreatures))),
@@ -687,7 +687,7 @@ namespace Zeitgeist {
                 "Elect the least competent. What could go wrong?",
                 "Future: the Kakistocracy Now! Law. Creatures entering with 3+ Attack or Health get -1 of each for 3 Days.",
                 Buff(-1, TargetType.AllCreatures, attack: true, health: false, Each)),
-            Spell("Mutually Assured Destruction", TargetType.AllCreatures,
+            Spell("Doomsday Clock", TargetType.AllCreatures,
                 "Everybody loses. Fairly, for once.",
                 "Future: a countdown everyone can see coming, like a Prophecy.",
                 Damage(3, TargetType.AllCreatures, Each), Damage(3, TargetType.Player, Each), Damage(3, TargetType.Enemy, Each)),
@@ -1693,8 +1693,8 @@ namespace Zeitgeist {
                 SetTrend(Trend.RushHour, 3))
                 .Picture("The pearly gates with a velvet rope and a bouncer angel waving through a line of old beggars, cripples and a snail while a procession of kings and CEOs with golden tickets is held at the back."),
             // The Pokémon picks (the user, 2026-10-17): Wish as Thoughts and Prayers, Wonder Guard as the Holy Ghost
-            Spell("Thoughts and Prayers", TargetType.FriendlyCreatures,
-                "Our thoughts are with you. Our prayers are in the post.",
+            Spell("Novena", TargetType.FriendlyCreatures,
+                "Nine days of prayer. Delivery on the tenth.",
                 "Wish (the user, 2026-10-17): a Prayer on target friendly creature's slot for 2 Days: when they run out, at the end of the next Day, whoever stands in that slot heals 6. Help that arrives late, for whoever is still there to receive it.",
                 PlaceSlotEffect(SlotEffectType.Prayer, 6, 2, TargetType.FriendlyCreatures))
                 .Picture("A hospital bed with a bandaged creature in it, a GET WELL SOON balloon drifting in through the window two days late, and outside, a crowd of politicians with their hands clasped and eyes closed, each holding a phone showing the hashtag #thoughtsandprayers."),
@@ -1756,7 +1756,7 @@ namespace Zeitgeist {
                 On(EffectTrigger.StartOfTurn, Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 1, modifier: AtRandom | Others)))
                 .NotInStarterDeck()
                 .Picture("An old bearded man on a cloud in a bathrobe and slippers, lazily pointing a TV remote at a tiny spinning universe."),
-            Creature("Cultist", 1, 2, speed: 2, deploy: 0,
+            Creature("Cultist", 2, 2, speed: 2, deploy: 0,
                 "The end is near. Brunch is at eleven.",
                 "Fodder: when it dies, every friendly creature gets +1 Attack for good. The first to go when a Sacrifice is paid.",
                 On(EffectTrigger.OnDeath, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, Each)))
@@ -1909,7 +1909,7 @@ namespace Zeitgeist {
                 "Unbothered: enemy effects can't lower its stats. Arms off, legs off: it's only a flesh wound.")
                 .With(CreatureAbility.Unbothered)
                 .Picture("A knight in black armor standing defiantly at a forest bridge with no arms left, sword on the ground, shouting at a bemused king who rides an invisible horse to the sound of coconuts."),
-            Creature("Buddy Christ", 2, 4, speed: 1, deploy: 0,
+            Creature("Buddy Christ", 2, 5, speed: 1, deploy: 0,
                 "Winks. Points. Forgives.",
                 "Each Dawn, every friendly creature heals 1.",
                 On(EffectTrigger.StartOfTurn, Heal(1, TargetType.FriendlyCreatures, Each | Others)))
@@ -2211,8 +2211,8 @@ namespace Zeitgeist {
         // creatures to the brink of death (On the Brink: at 2 Health or less they deal double) and then the breakthrough pays.
         private static List<CardDef> UtopiaCards() => new List<CardDef> {
             // The second Pokémon batch (the user, 2026-10-17): Pain Split, and Peer Review as a reveal
-            Spell("Blood Transfusion", TargetType.AllCreatures,
-                "Universal donor. Universally unwilling.",
+            Spell("Parabiosis", TargetType.AllCreatures,
+                "Two mice, one bloodstream. Neither was consulted.",
                 "Pain Split (the user, 2026-10-17): target creature and the creature facing it share their Health out equally (the odd point to the one that had less). Not damage, not healing: nothing answers it.",
                 Act(ActionType.SplitPain, 0, TargetType.AllCreatures, TargetModifier.None))
                 .Picture("Two hospital beds facing each other with a single blood bag hung between them, the tube running from a huge glowing-pink healthy creature to a grey wilted one, both ending up the same shade of medium pink."),
@@ -2359,7 +2359,7 @@ namespace Zeitgeist {
                 On(EffectTrigger.EndOfTurn, Damage(1, TargetType.Self)))
                 .With(CreatureAbility.Brink)
                 .Picture("A tabletop fusion reactor glowing white-hot in a jar on a garage workbench, the warning gauge in the red, two engineers in sunglasses giving a thumbs-up."),
-            Creature("Antimatter", 4, 5, speed: 2, deploy: 1,
+            Creature("Antimatter", 5, 5, speed: 2, deploy: 1,
                 "One gram costs 62 trillion dollars. Worth it.",
                 "On the Brink: at 2 Health or less it deals double. When ready, 2 damage to itself: it starts on the brink.",
                 On(EffectTrigger.OnPlay, Damage(2, TargetType.Self)))
@@ -2390,7 +2390,7 @@ namespace Zeitgeist {
                 "+1/+1 for good on each of your creatures; side effect: they're Burned for 2 Days.",
                 Buff(1, TargetType.FriendlyCreatures, attack: true, health: true, Each), Status(StatusEffectType.Burned, 2, TargetType.FriendlyCreatures, potency: 1, modifier: Each))
                 .Picture("A petri dish overflowing onto the lab bench, the colony spilling over the edge and climbing up the wall, a scientist backing away holding the lid."),
-            Creature("Scientific Method", 1, 4, speed: 1, deploy: 1,
+            Creature("Scientific Method", 1, 5, speed: 1, deploy: 1,
                 "Hypothesis, experiment, grant renewal.",
                 "Each Dawn, +1 Attack for good on a random friendly creature (peer reviewed).",
                 On(EffectTrigger.StartOfTurn, Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, AtRandom | Others)))
@@ -2401,7 +2401,7 @@ namespace Zeitgeist {
                 On(EffectTrigger.OnPlay, Status(StatusEffectType.Burned, 2, TargetType.Self, potency: 1)),
                 On(EffectTrigger.StartOfTurn, Buff(1, TargetType.Self, attack: true, health: true)))
                 .Picture("A towering stitched-together monster sitting up on a lab table under a lightning bolt, bolts in its neck smoking, the mad scientist cheering with both arms up."),
-            Creature("Chimera", 4, 4, speed: 2, deploy: 1,
+            Creature("Chimera", 4, 5, speed: 2, deploy: 1,
                 "Lion, goat, snake. The ethics committee was on holiday.",
                 "When ready: +2/+2 for good on a random friendly creature, maybe itself (a graft); side effect: it loses 2 Health for good.",
                 On(EffectTrigger.OnPlay, Buff(2, TargetType.FriendlyCreatures, attack: true, health: true, AtRandom | Others), Buff(-1, TargetType.Self, attack: false, health: true)))
@@ -2414,7 +2414,7 @@ namespace Zeitgeist {
                 .Picture("A T-Rex skeleton half covered in new flesh breaking out of a museum display, the DNA sequencer that brought it back still beeping, a guide pointing at the exit."),
             // The user, 2026-10-16: the cards this faction's decks needed most, from the balance study (sturdy bodies, reliable
             // damage and removal, board damage, Armor and healing: what wins; see Faction Balance Plan)
-            Creature("Longevity Hub", 1, 6, speed: 1, deploy: 1,
+            Creature("Longevity Hub", 2, 6, speed: 1, deploy: 1,
                 "Live forever. Subscription renews monthly.",
                 "Utopia's healer (its primary mechanic): each Dawn every other friendly creature heals 2. Pairs with Brink creatures that hurt themselves.",
                 On(EffectTrigger.StartOfTurn, Heal(2, TargetType.FriendlyCreatures, Each | Others)))

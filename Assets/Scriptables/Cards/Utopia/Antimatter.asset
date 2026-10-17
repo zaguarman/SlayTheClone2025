@@ -73,7 +73,7 @@ MonoBehaviour:
     damage to itself: it starts on the brink.'
   artDescription: A tiny shimmering particle in a magnetic bottle, its mirror image
     annihilating the lab bench around it, a physicist ducking behind a clipboard.
-  attack: 4
+  attack: 5
   health: 5
   speed: 2
   turnsUntilOperative: 1

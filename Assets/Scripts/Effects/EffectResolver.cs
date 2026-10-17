@@ -607,7 +607,7 @@ namespace Zeitgeist {
                 }
                 case ActionType.DoubleDown: // 3rd Parallel Job: half its Health for double its Attack
                     return creature != null ? new DoubleDownAction(creature) : null;
-                case ActionType.SplitPain: { // Blood Transfusion: the target and the creature facing it share their Health
+                case ActionType.SplitPain: { // Parabiosis: the target and the creature facing it share their Health
                     var (one, other) = Pair(source, creature);
                     return one != null && other != null ? new SplitPainAction(one, other) : null;
                 }

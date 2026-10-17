@@ -1059,7 +1059,7 @@ Brainstorm List where it had one):
 • 3rd Parallel Job (Corporate; Belly Drum): you take 8 damage; a friendly creature gets +6 Attack for good.
 • Curfew (Statecraft; Gravity, "a logistics shutdown"): every creature on the board is Rooted 2 Days: no moves, swaps or
   Maneuvers.
-• Thoughts and Prayers (Myth; Wish): a Prayer, a visible Slot Effect: when its Days run out, at Dusk, the creature
+• Novena (Myth; Wish): a Prayer, a visible Slot Effect: when its Days run out, at Dusk, the creature
   standing in the slot heals X, whoever it is by then.
 • Spin Doctor (Statecraft): Next Question, the politician's dodge: once a Day, as an attack is about to hit it, it steps
   into an empty slot of its side (one beside it if it can) and the attack hits nothing, the player included. Hemmed in
@@ -1109,7 +1109,7 @@ Mutually Assured (Destiny Bond: the creature that kills it is destroyed too), on
 Assured Destruction (Statecraft, 2 Days), Insurance Policy (Corporate, 3 Days) and Hostage Situation (Shadow Ops., 2 Days
 and Heat Signature 2, so their attacks come to it).
 Spells: Job Rotation (Skill Swap: the target and the creature facing it swap abilities), Resignation Letter (Memento: a
-Sacrifice, and -3 Attack on target enemy creature), Blood Transfusion (Pain Split: the two share their Health out
+Sacrifice, and -3 Attack on target enemy creature), Parabiosis (Pain Split: the two share their Health out
 equally), Tabula Rasa and Reality Check (Haze: every creature's, or the target's, stat changes removed), Peer Review
 (Utopia, kept for another archetype: reveal target enemy creature and Blackout 2). Holy Pigeon (Myth): Leapfrog, Arrival
 Bless 1 on every friendly creature.

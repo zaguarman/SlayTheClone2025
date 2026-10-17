@@ -119,3 +119,32 @@ Corporate 49%, Utopia 40%. Spread 34 points (43 before). No game broke a rule.
 Adventures (30 runs a faction, Ascension 0): bosses beaten Tech 6, Statecraft 5, Corporate 4, Utopia 3, Mind 2, Digital
 Society 2, Zeitgeist 2, Shadow Ops. 1, Myth 0. Elites end most runs; Myth dies to them most.
 From now on the study runs rarely (the user: it blocks manual testing): batch changes, measure once, build for the browser first.
+
+
+8. THE BOTTOM BUFFED (2026-10-17, the user: buff the weakest up to the top, no nerfs, no deck tuning)
+
+After the 7900-game study of 2026-10-17 (Utopia 39%, Shock and Awe 18%, Blessed Martyrs 32%), one point to each weak-tier
+creature of those three, the lever the plan ranks first:
+  Utopia      Scientific Method 1/4 -> 1/5 (lives to tick), Chimera 4/4 -> 4/5 (covers its own graft), Antimatter 4/5 -> 5/5
+              (10 on the brink), Longevity Hub 1/6 -> 2/6.
+  Statecraft  Mercenaries 4/4 -> 4/5, Man o' War 4/8 -> 5/8.
+  Myth        Cultist 1/2 -> 2/2 (fodder that bites), Buddy Christ 2/4 -> 2/5.
+Spells left alone: their low scores (Martial Law, Filibuster, Prion Disease, Monkey Hand) come from timing and cost, not
+numbers, and the plan's lever for those is a rework, not a point. Measured once, after the browser build (section 9).
+
+
+9. MEASURED ONCE (2026-10-17, 7900 games, after the browser build)
+
+Factions (their one-faction decks): Pop Culture 68%, Statecraft 58% (was 44%), Tech 55%, Myth 53% (47%), Shadow Ops. 51%,
+Utopia 41% (39%), Mind 40%, Corporate 40%. The three decks buffed: Shock and Awe 18% -> 41%, Results May Vary 44% -> 47%,
+Blessed Martyrs 32% -> 34%; Lab Grown stays at 34%. Strategies: Swarm 71%, Midrange 70%, Control 57%, Aggro 37%, Engine 33%,
+Combo 30%. Mechanics with the most edge: Prophecy 71%, Trigger: Hurt 66%, Slot effect 64%, Armor 60%, Concealed 58%.
+Read with care: the first study had nine factions (Zeitgeist and Digital Society apart), this one eight, and the decks
+changed with the merge; the second decks' cards still see 60-160 games each, so a tier from them is a hint, not a fact.
+This run still played the older Mutually Assured Destruction (3 damage to everything: now Doomsday Clock) wherever the deck
+lists named it; three cards had been defined twice under one name (Blood Transfusion, Thoughts and Prayers, Mutually Assured
+Destruction), the later definition overwriting the earlier asset. The Pokémon ones are now Parabiosis, Novena and Mutually
+Assured Destruction; the older ones keep Blood Transfusion, Thoughts and Prayers and take Doomsday Clock.
+Next: the bottom is still Corporate's and Utopia's second decks (Hustle Rush 22%, Lab Grown 34%), the Engine and Combo
+strategies as a kind (33%, 30%), and the two-faction decks (Frankenstein 8%, Hustle Culture 6%): cards that make those
+strategies work, not more points.

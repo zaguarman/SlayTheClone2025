@@ -31,7 +31,7 @@ namespace Zeitgeist {
     }
 
     /// <summary>
-    /// Split Pain (the user, 2026-10-17, Pain Split: Blood Transfusion): two creatures share their Health out equally, the odd
+    /// Split Pain (the user, 2026-10-17, Pain Split: Parabiosis): two creatures share their Health out equally, the odd
     /// point to the one that had less. Not damage, not healing: nothing answers it, and nothing turns it round.
     /// </summary>
     public class SplitPainAction : IGameAction {

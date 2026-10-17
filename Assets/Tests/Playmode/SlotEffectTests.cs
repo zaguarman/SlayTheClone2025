@@ -186,7 +186,7 @@ namespace Zeitgeist.Tests {
             CollectionAssert.AreEqual(new[] { 3, 2 }, game.History.DamageTo(p2), "Only once");
         }
 
-        // Thoughts and Prayers (the user, 2026-10-17, Pokémon's Wish): help that arrives late, for whoever is there by then
+        // Novena (the user, 2026-10-17, Pokémon's Wish; was Thoughts and Prayers, a name an older Myth card has): help that arrives late, for whoever is there by then
         [Test]
         public void Prayer_HealsWhoeverStandsThere_WhenItsDaysRunOut() {
             var hurt = game.Summon(p1, game.Creature("Hurt", 1, 10), 0);

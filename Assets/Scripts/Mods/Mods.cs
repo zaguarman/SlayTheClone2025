@@ -182,7 +182,7 @@ namespace Zeitgeist {
             asset.discardCost = Math.Max(0, card.discard);
             asset.sacrifice = Math.Max(0, card.sacrifice);
             asset.prophecy = Math.Max(0, card.prophecy);
-            asset.SetEffects((card.effects ?? new List<ModEffect>()).Select(e => MakeEffect(e, creature, card.name)));
+            asset.ReplaceEffects((card.effects ?? new List<ModEffect>()).Select(e => MakeEffect(e, creature, card.name))); // The runtime setter: SetEffects is the editor's
             switch (asset) {
                 case CreatureCardScriptableObject c:
                     c.attack = Math.Max(0, card.attack);

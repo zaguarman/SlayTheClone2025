@@ -75,7 +75,7 @@ MonoBehaviour:
     a beaker on a bench crowded with labelled flasks, a whiteboard behind her reading
     HYPOTHESIS \u2192 EXPERIMENT \u2192 GRANT."
   attack: 1
-  health: 4
+  health: 5
   speed: 1
   turnsUntilOperative: 1
   movement: 0

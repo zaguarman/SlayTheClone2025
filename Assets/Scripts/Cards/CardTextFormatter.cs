@@ -319,7 +319,7 @@ namespace Zeitgeist {
                     return $"{target} and the creature facing it trade Attack and Health";
                 case ActionType.DoubleDown: // 3rd Parallel Job
                     return $"{target} loses half its Health and its Attack doubles";
-                case ActionType.SplitPain: // Blood Transfusion
+                case ActionType.SplitPain: // Parabiosis
                     return $"{target} and the creature facing it share their Health out equally";
                 case ActionType.SwapAbilities: // Job Rotation
                     return $"{target} and the creature facing it swap abilities";

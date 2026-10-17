@@ -163,6 +163,10 @@ namespace Zeitgeist {
         public const float SwitchDelay = 0.1f;
         // A hand card rises at once, but explains itself only after a longer look: a glance along the hand opens nothing
         public const float HandDelay = 0.8f;
+        // A card of a window (the gallery, the deck builder: big enough to read as it is) explains its keywords on itself, the
+        // first one after a longer look (the user, 2026-10-17: a sweep over the grid opens nothing); the rest of its keywords
+        // open at once while the pointer stays on that card
+        public const float WindowDelay = 0.7f;
         private CardController pendingCard;
         private Coroutine pendingShow;
         private int startBrowse;            // The card of the stack to open on (a tucked card hovered)
@@ -225,6 +229,7 @@ namespace Zeitgeist {
             pendingCard = card;
             pendingSince = Time.unscaledTime;
             float delay = card.GetComponentInParent<HandUI>() != null ? HandDelay
+                : InWindow(card) ? WindowDelay
                 : preview != null && !PointerOnPreview(GameInput.PointerPosition) ? SwitchDelay : HoverDelay;
             pendingShow = card.StartCoroutine(ShowAfter(card, delay)); // Stops if the card goes
         }

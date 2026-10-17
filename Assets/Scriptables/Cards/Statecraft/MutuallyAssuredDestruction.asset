@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
   cardId: 2c7d8f93-9a5c-41b4-b0dd-e212d754955d
   cardName: Mutually Assured Destruction
-  description: Everybody loses. Fairly, for once.
+  description: If we go, you go. That's the whole plan. There is no other plan.
   cardType: 1
   faction: 2
   artwork: {fileID: 3286163911610860551, guid: e19a00601e2d1ff4e9aab21a985f9424, type: 3}
@@ -38,15 +38,15 @@ MonoBehaviour:
     trigger: 0
     oncePerCombat: 0
     actions:
-    - actionType: 0
-      value: 3
-      targetType: 2
-      targetModifier: 2
+    - actionType: 7
+      value: 0
+      targetType: 3
+      targetModifier: 0
       modifyAttack: 1
       modifyHealth: 1
       modifySpeed: 0
-      statusEffectToApply: 0
-      statusDuration: 0
+      statusEffectToApply: 27
+      statusDuration: 2
       statusPotency: 0
       cleanse: 0
       purge: 0
@@ -69,68 +69,9 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-    - actionType: 0
-      value: 3
-      targetType: 0
-      targetModifier: 2
-      modifyAttack: 1
-      modifyHealth: 1
-      modifySpeed: 0
-      statusEffectToApply: 0
-      statusDuration: 0
-      statusPotency: 0
-      cleanse: 0
-      purge: 0
-      slotEffect: 0
-      watchdog:
-        watches: 0
-        side: 0
-        atMost: 0
-        effect: 0
-        charges: 0
-        timing: 0
-        pick: 0
-        moveEarlier: 0
-        damaging: 0
-      trend: 0
-      ability: 0
-      sendFor: 0
-      fromDiscard: 0
-      requires: 0
-      delayDays: 0
-      onlyIfTargetDies: 0
-      decoy: {fileID: 0}
-    - actionType: 0
-      value: 3
-      targetType: 1
-      targetModifier: 2
-      modifyAttack: 1
-      modifyHealth: 1
-      modifySpeed: 0
-      statusEffectToApply: 0
-      statusDuration: 0
-      statusPotency: 0
-      cleanse: 0
-      purge: 0
-      slotEffect: 0
-      watchdog:
-        watches: 0
-        side: 0
-        atMost: 0
-        effect: 0
-        charges: 0
-        timing: 0
-        pick: 0
-        moveEarlier: 0
-        damaging: 0
-      trend: 0
-      ability: 0
-      sendFor: 0
-      fromDiscard: 0
-      requires: 0
-      delayDays: 0
-      onlyIfTargetDies: 0
-      decoy: {fileID: 0}
-  designNotes: 'Future: a countdown everyone can see coming, like a Prophecy.'
-  artDescription: 
-  defaultTargetType: 2
+  designNotes: 'Destiny Bond (the user, 2026-10-17): Mutually Assured for 2 Days
+    on target friendly creature: the creature that kills it is destroyed too.'
+  artDescription: Two generals at either end of a war room table, each with a finger
+    on a big red button, wired to the same bomb between them, both smiling politely,
+    a Cold War map glowing behind them.
+  defaultTargetType: 3

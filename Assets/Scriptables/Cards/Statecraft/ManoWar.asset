@@ -71,7 +71,7 @@ MonoBehaviour:
       decoy: {fileID: 0}
   designNotes: 'Future: multi-slot (takes 2 slots) and Heavy.'
   artDescription: 
-  attack: 4
+  attack: 5
   health: 8
   speed: 1
   turnsUntilOperative: 1

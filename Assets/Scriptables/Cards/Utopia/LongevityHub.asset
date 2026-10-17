@@ -74,7 +74,7 @@ MonoBehaviour:
   artDescription: A gleaming white clinic in the desert where billionaires lie in
     pods drinking smoothies through tubes, a young intern on a treadmill in the corner
     wired to them by a blood line.
-  attack: 1
+  attack: 2
   health: 6
   speed: 1
   turnsUntilOperative: 1

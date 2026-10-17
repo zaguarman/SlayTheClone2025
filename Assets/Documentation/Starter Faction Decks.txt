@@ -127,7 +127,7 @@ Spells
         • Future: a Law (Location) for 3 Days.
     • Kakistocracy: Each creature gets -1 Attack.
         • Future: the Kakistocracy Now! Law.
-    • Mutually Assured Destruction: 3 damage to each creature, to you and to the enemy player.
+    • Doomsday Clock: 3 damage to each creature, to you and to the enemy player.
         • Future: a countdown everyone can see coming.
     • Panem Et Circenses: Heal you for 3; each friendly creature gets +1 Attack.
         • Future: a Law with a paperwork drawback.

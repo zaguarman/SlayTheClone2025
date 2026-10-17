@@ -73,7 +73,7 @@ MonoBehaviour:
   artDescription: 'A smiling plastic Jesus statue winking and giving a big thumbs
     up and a finger point, on a church lawn next to a sign reading CATHOLICISM: WOW!'
   attack: 2
-  health: 4
+  health: 5
   speed: 1
   turnsUntilOperative: 0
   movement: 0

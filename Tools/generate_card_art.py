@@ -996,7 +996,29 @@ def kakistocracy():
     return svg(defs, body)
 
 
-def mutually_assured_destruction():
+def thoughts_and_prayers():
+    # A politician at a podium covered in microphones, eyes closed and hands pressed together in prayer, while behind him
+    # an aide quietly shreds a stack of papers labelled REFORM
+    defs = lin("bg", ["#1a2a4a", "#3a4a6a"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for i in range(13):
+        body += rect(0, i * 16, W, 8, "#b22234" if i % 2 == 0 else "#f4f4f4", 'opacity="0.12"')
+    body += person(250, 180, 1.0, SKIN[0], "#2a2a3a", face="flat", hair="#3a2a1a")
+    body += rect(270, 120, 40, 40, "#d0d0d0", 'stroke="#888" stroke-width="2"') + lettering("REFORM", 290, 106, 7, "#ffffff")
+    for x in (276, 286, 296):
+        body += stroke(f"M{x} 160 L{x} 180", "#f4f4f4", 2)
+    body += person(140, 170, 1.35, SKIN[0], "#1e2440", face="closed", hair="#c8c8c8", tie="#c0392b")
+
+    body += rect(80, 140, 120, 60, "#5a3a2a", 'stroke="#3a2a1a" stroke-width="2"') + circle(140, 166, 12, "#d4af37")
+    body += poly([(130, 142), (150, 142), (140, 112)], SKIN[0], 'stroke="#b88a6a" stroke-width="1.5"')  # Hands together
+    body += stroke("M140 114 L140 140", "#b88a6a", 1.2)
+    for i, x in enumerate((96, 112, 128, 152, 168, 184)):
+        body += stroke(f"M{x} 140 L{140 + (x - 140) * 0.3:.0f} 118", "#2a2a2a", 2) + rect(140 + (x - 140) * 0.3 - 3, 110, 6, 9, "#2a2a2a", 'rx="2"')
+    return svg(defs, body)
+
+def doomsday_clock():
+    # A mushroom cloud rising in an orange glow over a blackened plain, two missiles crossing above it from either side
+    # (the old Mutually Assured Destruction picture; the name went to the Destiny Bond card, 2026-10-17)
     defs = rad("bg", ["#fff3c0", "#ff8a2a", "#5a1a0a"], cy=0.6, r=0.8)
     body = rect(0, 0, W, H, "url(#bg)")
     body += rect(0, 176, W, 24, "#2a1a0a")
@@ -4026,7 +4048,7 @@ CARDS = {
         "InternalRevenueService": internal_revenue_service, "Mercenaries": mercenaries, "ManoWar": man_o_war,
         "MinistryforEquality": ministry_for_equality, "SupremeCourt": supreme_court, "ProtocolEnforcers": protocol_enforcers,
         "Demagogue": demagogue, "RedTape": red_tape, "PreemptiveStrike": preemptive_strike, "MartialLaw": martial_law,
-        "Kakistocracy": kakistocracy, "MutuallyAssuredDestruction": mutually_assured_destruction,
+        "Kakistocracy": kakistocracy, "DoomsdayClock": doomsday_clock,
         "PanemEtCircenses": panem_et_circenses,
         "Ceasefire": ceasefire, "Diplomat": diplomat, "LostLandmine": lost_landmine, "RaisedSecurityLevel": raised_security_level,
     },
@@ -9916,7 +9938,7 @@ def freaky_friday():
     return svg(defs, body)
 
 
-def thoughts_and_prayers():
+def novena():
     # A hospital bed with a bandaged creature in it, a GET WELL SOON balloon drifting in through the window two days late,
     # and outside, a crowd of politicians with hands clasped and eyes closed, each holding a phone showing #prayers
     defs, body = bg_myth()
@@ -10409,7 +10431,7 @@ def buffering():
     return svg(defs, body)
 
 
-def blood_transfusion():
+def parabiosis():
     # Two hospital beds facing each other with one blood bag between them, the tube from a glowing-pink healthy creature to a grey wilted one, both ending medium pink
     defs, body = bg_utopia()
     body += rect(0, 160, W, 40, "#c8d8d8")
@@ -10462,7 +10484,7 @@ CHUNK_MISSING = {
                   "VentureCapital": venture_capital},
     "DigitalSociety": {"Influencer": influencer, "SelfieEsteem": selfie_esteem, "UMadBro": u_mad_bro},
     "Mind": {"Sleepwalker": sleepwalker, "Empath": empath, "TabulaRasa": tabula_rasa, "RealityCheck": reality_check, "SlowThinking": slow_thinking, "LiminalSpace": liminal_space, "MonkeySeeMonkeyDo": monkey_see_monkey_do, "HoldThatThought": hold_that_thought, "Hyperbole": hyperbole, "Projection": projection, "Psychiatrists": psychiatrists},
-    "Myth": {"Tithe": tithe, "Berserker": berserker, "Tutankhamun": tutankhamun, "HolyPigeon": holy_pigeon, "TheLastShallBeFirst": the_last_shall_be_first, "HolyGhost": holy_ghost, "ThoughtsandPrayers": thoughts_and_prayers, "Ambrosia": ambrosia, "BlessinginDisguise": blessing_in_disguise, "DiebytheSword": die_by_the_sword,
+    "Myth": {"Tithe": tithe, "Berserker": berserker, "Tutankhamun": tutankhamun, "HolyPigeon": holy_pigeon, "TheLastShallBeFirst": the_last_shall_be_first, "HolyGhost": holy_ghost, "ThoughtsandPrayers": thoughts_and_prayers, "Novena": novena, "Ambrosia": ambrosia, "BlessinginDisguise": blessing_in_disguise, "DiebytheSword": die_by_the_sword,
              "GraciasJesús": gracias_jesus, "GrimReaper": grim_reaper, "HereBeDragons": here_be_dragons, "Heretic": heretic,
              "Mithril": mithril, "PubliclyFundedFaithSchools": publicly_funded_faith_schools},
     "None": {"Creatine": creatine, "EjectButton": eject_button, "Flamethrower": flamethrower, "Nicotine": nicotine,
@@ -10474,7 +10496,7 @@ CHUNK_MISSING = {
     "Statecraft": {"CivilServant": civil_servant, "BombSquad": bomb_squad, "RiotPolice": riot_police, "DrillSergeant": drill_sergeant, "Sapper": sapper, "MutuallyAssuredDestruction": mutually_assured_destruction, "DueProcess": due_process, "Curfew": curfew, "Filibuster": filibuster, "SpinDoctor": spin_doctor, "BorderCrossing": border_crossing, "Exoskeleton": exoskeleton, "PeaceForce": peace_force,
                    "SecurityGuard": security_guard, "SiVisPacemParaBellum": si_vis_pacem_para_bellum},
     "Tech": {"EMPDrone": emp_drone, "Buffering": buffering, "BomberDrone": bomber_drone, "CodeReview": code_review, "CtrlY": ctrl_y, "Hovercraft": hovercraft},
-    "Utopia": {"BloodTransfusion": blood_transfusion, "PeerReview": peer_review, "Ankylorhiza": ankylorhiza, "Biohacker": biohacker, "FemtosecondLaser": femtosecond_laser,
+    "Utopia": {"Parabiosis": parabiosis, "PeerReview": peer_review, "Ankylorhiza": ankylorhiza, "Biohacker": biohacker, "FemtosecondLaser": femtosecond_laser,
                "LongevityHub": longevity_hub, "Nanobots": nanobots, "PrionDisease": prion_disease, "Quark": quark,
                "Seasteading": seasteading, "WhiteDwarf": white_dwarf},
     "Zeitgeist": {"OneTrickPony": one_trick_pony, "ClingyEx": clingy_ex, "BackupDancer": backup_dancer, "AntiVaxxer": anti_vaxxer, "FloridaMan": florida_man, "FreakyFriday": freaky_friday, "GroundhogDay": groundhog_day, "AbsenteeParents": absentee_parents, "CalmYourTits": calm_your_tits, "CamperVan": camper_van,

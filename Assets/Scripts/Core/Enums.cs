@@ -16,7 +16,7 @@ namespace Zeitgeist {
             SwapSlotEffects, Equip,
             Push, Pull, Shuffle, Spin,
             Mimic, TradeStats, Seal,
-            DoubleDown, SplitPain, SwapAbilities } // 3rd Parallel Job, Blood Transfusion, Job Rotation (2026-10-17). // Mimic (Monkey See, Monkey Do), TradeStats (Freaky Friday), Seal (the DMCA): the Pokémon picks, 2026-10-17. Renamed Buff to ModifyStat. New ones go last: cards store them as numbers. Push/Pull/Shuffle/Spin: moves
+            DoubleDown, SplitPain, SwapAbilities } // 3rd Parallel Job, Parabiosis, Job Rotation (2026-10-17). // Mimic (Monkey See, Monkey Do), TradeStats (Freaky Friday), Seal (the DMCA): the Pokémon picks, 2026-10-17. Renamed Buff to ModifyStat. New ones go last: cards store them as numbers. Push/Pull/Shuffle/Spin: moves
 
         /// <summary>
         /// What a creature must be for an effect to land on it (checked when it lands), e.g. only a Revealed one is Destroyed.

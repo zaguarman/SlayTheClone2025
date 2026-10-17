@@ -73,7 +73,7 @@ MonoBehaviour:
     instead.'
   artDescription: 
   attack: 4
-  health: 4
+  health: 5
   speed: 3
   turnsUntilOperative: 0
   movement: 0

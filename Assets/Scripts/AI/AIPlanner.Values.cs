@@ -273,7 +273,7 @@ namespace Zeitgeist {
                     var (ours, theirs) = creature.Ours ? (creature, other) : (other, creature);
                     return (AttackOf(theirs) - AttackOf(ours)) * 0.8f + (HealthLeft(theirs) - HealthLeft(ours)) * 0.4f;
                 }
-                case ActionType.SplitPain: { // Blood Transfusion: the two share their Health out
+                case ActionType.SplitPain: { // Parabiosis: the two share their Health out
                     var other = Facing(creature);
                     if (other == null) return 0;
                     var (ours, theirs) = creature.Ours ? (creature, other) : (other, creature);

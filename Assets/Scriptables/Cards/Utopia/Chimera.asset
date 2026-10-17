@@ -106,7 +106,7 @@ MonoBehaviour:
     for a tail, all three wearing hospital ID wristbands, in a lab enclosure with
     a sticky note: DO NOT FEED AFTER MIDNIGHT.'
   attack: 4
-  health: 4
+  health: 5
   speed: 2
   turnsUntilOperative: 1
   movement: 0

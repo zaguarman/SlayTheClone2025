@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
   deckName: Statecraft - Order & Paperwork
   cards:
-  - {fileID: 11400000, guid: 96bf6003f2e24744182611126a47ec10, type: 2}
+  - {fileID: 11400000, guid: 9e5672dcf95528d47864ecb52eb686f7, type: 2}
   - {fileID: 11400000, guid: 37b990c5f19b74f4c8822c604863a62e, type: 2}
   - {fileID: 11400000, guid: 1c233811cd9cbce48b3f080ae812def2, type: 2}
   - {fileID: 11400000, guid: fcae0cd15fdb6ab4bbf25a45a31db413, type: 2}
@@ -39,6 +39,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 189e9eb19a64617499c3606919dc053c, type: 2}
   - {fileID: 11400000, guid: 189e9eb19a64617499c3606919dc053c, type: 2}
   - {fileID: 11400000, guid: 8b48e99bd0a81624791978bd1b03785f, type: 2}
-  lastUpdated: 2026-10-16T19:41:38.9009833Z
+  lastUpdated: 2026-10-17T14:48:23.2408349Z
   strategy: Control
   focus: 0
