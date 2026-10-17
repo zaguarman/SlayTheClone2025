@@ -57,8 +57,9 @@ From the first game (likely still the basis):
 4. THE DECKS (the user, 2026-10-15; AdventureDecks.cs)
 
 • You play one of the four factions (the user, 2026-10-17: Establishment, Capital, Enlightenment, Digital Society); its
-  subfactions' cards are all yours. Your starter deck, Slay the Spire style: 12 plain cards of your faction, two simple
-  creatures (4 and 3 copies), a spell that hits (3) and one that helps (2). No big strategy to learn: neutral cards, fit
+  subfactions' cards are all yours. Your starter deck, Slay the Spire style: 12 plain cards of your faction, 7 creatures and 5
+  spells (3 that hit, 2 that help), every card a different one (the user, 2026-10-17: no copies, to show off the options).
+  No big strategy to learn: neutral cards, fit
   for any of the faction's archetypes (no subfaction cost, ability, movement, gamble or disguise), spread over its
   subfactions (each one's plainest creature first). The card packs after a fight drop one card of each subfaction in
   turn (the odd card to one at random); the shop stocks any of them. The enemies play a subfaction of another faction,

@@ -1,0 +1,3588 @@
+{
+    "writtenUtc": "2026-10-17 18:43:11Z",
+    "gamesPlayed": 1560,
+    "cards": [
+        {
+            "card": "3rd Parallel Job",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.38926175236701968,
+            "games": 149,
+            "impact": 0.0,
+            "roles": "Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "Absentee Parents",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.4588744640350342,
+            "games": 231,
+            "impact": 15.913419723510743,
+            "roles": "Beater (4+ Attack), Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Absolute Zero",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.5242718458175659,
+            "games": 103,
+            "impact": 1.1223300695419312,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Accelerationism",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.569767415523529,
+            "games": 86,
+            "impact": 16.965116500854493,
+            "roles": "Board damage, Support (buffs), Support (statuses on yours)"
+        },
+        {
+            "card": "Ambrosia",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.1958041936159134,
+            "games": 143,
+            "impact": 7.621678352355957,
+            "roles": "Support (heal, armor, cleanse), Support (buffs)"
+        },
+        {
+            "card": "Amen",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.0,
+            "games": 0,
+            "impact": 0.0,
+            "roles": "Disruption"
+        },
+        {
+            "card": "Ankylorhiza",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.744966447353363,
+            "games": 149,
+            "impact": 5.7785234451293949,
+            "roles": "Wall (6+ Health), Beater (4+ Attack), Slow deploy (2+), Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Antihero",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.508474588394165,
+            "games": 295,
+            "impact": 14.064406394958496,
+            "roles": "Beater (4+ Attack), Removal"
+        },
+        {
+            "card": "Antimatter",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.4866666793823242,
+            "games": 150,
+            "impact": 5.019999980926514,
+            "roles": "Beater (4+ Attack), Ability creature, Removal"
+        },
+        {
+            "card": "Anti-Vaxxer",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.46927374601364138,
+            "games": 358,
+            "impact": 11.11173152923584,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Antivirus",
+            "faction": "Tech",
+            "creature": false,
+            "winRate": 0.6255924105644226,
+            "games": 211,
+            "impact": 0.0,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Arsonist",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.6176470518112183,
+            "games": 102,
+            "impact": 10.70588207244873,
+            "roles": "Removal"
+        },
+        {
+            "card": "Asset Recruitment",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.5302013158798218,
+            "games": 149,
+            "impact": 3.140939712524414,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Backup Dancer",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.5935483574867249,
+            "games": 155,
+            "impact": 9.96129035949707,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Berserker",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.7224880456924439,
+            "games": 209,
+            "impact": 13.60765552520752,
+            "roles": "Wall (6+ Health), Ability creature"
+        },
+        {
+            "card": "Big Four",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.390625,
+            "games": 192,
+            "impact": 13.916666984558106,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Bilderberg Membership",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.5633803009986877,
+            "games": 142,
+            "impact": 18.873239517211915,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Biohacker",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.3983739912509918,
+            "games": 246,
+            "impact": 11.142276763916016,
+            "roles": "Ability creature, Support (statuses on yours)"
+        },
+        {
+            "card": "Biohacking",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.61654132604599,
+            "games": 133,
+            "impact": 12.16992473602295,
+            "roles": "Removal, Support (buffs)"
+        },
+        {
+            "card": "Black Hole",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.9015151262283325,
+            "games": 132,
+            "impact": 33.34848403930664,
+            "roles": "Removal, Board damage"
+        },
+        {
+            "card": "Black Knight",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.4642857015132904,
+            "games": 140,
+            "impact": 8.928571701049805,
+            "roles": "Wall (6+ Health), Ability creature"
+        },
+        {
+            "card": "Blessing in Disguise",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.625,
+            "games": 152,
+            "impact": 55.931583404541019,
+            "roles": "Support (heal, armor, cleanse), Support (statuses on yours)"
+        },
+        {
+            "card": "Blood Transfusion",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.6496350169181824,
+            "games": 137,
+            "impact": 4.120438098907471,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Bloomberg Terminal",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.4571428596973419,
+            "games": 105,
+            "impact": 6.266666889190674,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Bodybuilder",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.5061124563217163,
+            "games": 409,
+            "impact": 5.058679580688477,
+            "roles": "Beater (4+ Attack), Removal"
+        },
+        {
+            "card": "Bomb Squad",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.6078431606292725,
+            "games": 102,
+            "impact": 7.009803771972656,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Bomber Drone",
+            "faction": "Tech",
+            "creature": true,
+            "winRate": 0.3661971688270569,
+            "games": 71,
+            "impact": 2.2112677097320558,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Boomer",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.44117647409439089,
+            "games": 374,
+            "impact": 11.828877449035645,
+            "roles": "Wall (6+ Health), Beater (4+ Attack), Removal"
+        },
+        {
+            "card": "Border Crossing",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.5177304744720459,
+            "games": 282,
+            "impact": 11.425532341003418,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Buddy Christ",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.568345308303833,
+            "games": 139,
+            "impact": 14.812949180603028,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Buffering",
+            "faction": "Tech",
+            "creature": false,
+            "winRate": 0.4047619104385376,
+            "games": 126,
+            "impact": 0.0,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Burn Notice",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.6148648858070374,
+            "games": 148,
+            "impact": 0.027027027681469919,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Business Expense",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.0,
+            "games": 0,
+            "impact": 0.0,
+            "roles": "Accelerator (draw, send for, rush), Board damage"
+        },
+        {
+            "card": "Business Operating Expenses",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.3466666638851166,
+            "games": 150,
+            "impact": 9.199999809265137,
+            "roles": "Logistics (moves, returns), Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Calm Your Tits",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.5495495200157166,
+            "games": 222,
+            "impact": 8.464864730834961,
+            "roles": "Debuff, Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Camper Van",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.478723406791687,
+            "games": 94,
+            "impact": 4.212766170501709,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Cancelled",
+            "faction": "Online",
+            "creature": false,
+            "winRate": 0.5850340127944946,
+            "games": 147,
+            "impact": 4.729251861572266,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Casino",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.5586206912994385,
+            "games": 145,
+            "impact": 0.0,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Catfish",
+            "faction": "Online",
+            "creature": true,
+            "winRate": 0.36538460850715639,
+            "games": 208,
+            "impact": 6.288461685180664,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Ceasefire",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.5047169923782349,
+            "games": 212,
+            "impact": 3.9735851287841799,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Chain Smoker",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.43042072653770449,
+            "games": 309,
+            "impact": 8.705501556396485,
+            "roles": "Wall (6+ Health), Beater (4+ Attack), Ability creature"
+        },
+        {
+            "card": "Charles Ponzi",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.4313725531101227,
+            "games": 51,
+            "impact": 4.392157077789307,
+            "roles": "Accelerator (draw, send for, rush), Removal"
+        },
+        {
+            "card": "Chimera",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.5958904027938843,
+            "games": 146,
+            "impact": 15.309588432312012,
+            "roles": "Beater (4+ Attack), Support (buffs), Debuff"
+        },
+        {
+            "card": "Chronically Online",
+            "faction": "Online",
+            "creature": true,
+            "winRate": 0.3861386179924011,
+            "games": 202,
+            "impact": 5.267326831817627,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Civil Servant",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.5179487466812134,
+            "games": 195,
+            "impact": 9.015384674072266,
+            "roles": "Wall (6+ Health), Ability creature"
+        },
+        {
+            "card": "Cleaner",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.20000000298023225,
+            "games": 90,
+            "impact": 7.011111259460449,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Cleaning Robot",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.20000000298023225,
+            "games": 150,
+            "impact": 5.766666889190674,
+            "roles": "Wall (6+ Health)"
+        },
+        {
+            "card": "Clickbait",
+            "faction": "Online",
+            "creature": false,
+            "winRate": 0.67136150598526,
+            "games": 213,
+            "impact": 27.00469398498535,
+            "roles": "Board damage"
+        },
+        {
+            "card": "Climate Change",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.34259259700775149,
+            "games": 108,
+            "impact": 28.58148193359375,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Clingy Ex",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.2421875,
+            "games": 128,
+            "impact": 4.9765625,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Clone",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.2620689570903778,
+            "games": 145,
+            "impact": 1.9724137783050538,
+            "roles": "Swarm (summons)"
+        },
+        {
+            "card": "Code Review",
+            "faction": "Tech",
+            "creature": false,
+            "winRate": 0.5853658318519592,
+            "games": 123,
+            "impact": 3.829268217086792,
+            "roles": "Set-up (slots, Trends, Watchdogs), Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Cold Fusion",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.35111111402511599,
+            "games": 225,
+            "impact": 6.408888816833496,
+            "roles": "Wall (6+ Health), Beater (4+ Attack), Ability creature, Removal"
+        },
+        {
+            "card": "Compromised Agent",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.4137931168079376,
+            "games": 58,
+            "impact": 15.162069320678711,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Congruent Use of Force",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.6864407062530518,
+            "games": 236,
+            "impact": 14.055085182189942,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Console Memory Card",
+            "faction": "Online",
+            "creature": false,
+            "winRate": 0.5258215665817261,
+            "games": 213,
+            "impact": 3.995305061340332,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Conspiracy Theorist",
+            "faction": "Online",
+            "creature": true,
+            "winRate": 0.42405062913894656,
+            "games": 158,
+            "impact": 6.2784810066223148,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Content Creator",
+            "faction": "Online",
+            "creature": true,
+            "winRate": 0.42307692766189577,
+            "games": 104,
+            "impact": 2.009615421295166,
+            "roles": "Mobile (Leapfrog/Swap), Support (statuses on yours)"
+        },
+        {
+            "card": "Control Room",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.4663865566253662,
+            "games": 238,
+            "impact": 5.289916038513184,
+            "roles": "Intel"
+        },
+        {
+            "card": "Controlled Chaos",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.41428571939468386,
+            "games": 140,
+            "impact": 0.05714285746216774,
+            "roles": "Logistics (moves, returns)"
+        },
+        {
+            "card": "Corporate Bailouts",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.6971153616905212,
+            "games": 208,
+            "impact": 1.8677884340286255,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Counterfeit",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.29411765933036806,
+            "games": 68,
+            "impact": 2.220588207244873,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Counter-Intelligence",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.43589743971824648,
+            "games": 195,
+            "impact": 0.0,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Counter-Surveillance",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.8804348111152649,
+            "games": 92,
+            "impact": 0.6304348111152649,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Coup d'État",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.3658536672592163,
+            "games": 82,
+            "impact": 0.0,
+            "roles": "Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "Creatine",
+            "faction": "None",
+            "creature": false,
+            "winRate": 0.6258741021156311,
+            "games": 286,
+            "impact": 2.9706294536590578,
+            "roles": "Support (buffs)"
+        },
+        {
+            "card": "Crypto \"Entrepreneur\"",
+            "faction": "Online",
+            "creature": true,
+            "winRate": 0.36986300349235537,
+            "games": 73,
+            "impact": 9.164383888244629,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "C-Suite",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.23423422873020173,
+            "games": 222,
+            "impact": 5.274774551391602,
+            "roles": "Beater (4+ Attack), Ability creature"
+        },
+        {
+            "card": "Ctrl + Y",
+            "faction": "Tech",
+            "creature": false,
+            "winRate": 0.6014492511749268,
+            "games": 138,
+            "impact": 6.840579509735107,
+            "roles": "Removal"
+        },
+        {
+            "card": "Ctrl + Z",
+            "faction": "Tech",
+            "creature": false,
+            "winRate": 0.6097561120986939,
+            "games": 205,
+            "impact": 4.068292617797852,
+            "roles": "Logistics (moves, returns), Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Cultist",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.5403726696968079,
+            "games": 161,
+            "impact": 15.20496940612793,
+            "roles": "Support (buffs)"
+        },
+        {
+            "card": "Curfew",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.6091370582580566,
+            "games": 197,
+            "impact": 2.3654823303222658,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Curse Of Hubris",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.6541353464126587,
+            "games": 133,
+            "impact": 3.9939849376678469,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Cyberpsychosis",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.5918367505073547,
+            "games": 147,
+            "impact": 8.639455795288086,
+            "roles": "Removal"
+        },
+        {
+            "card": "Day Trader",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.4363636374473572,
+            "games": 275,
+            "impact": 12.399999618530274,
+            "roles": "Ability creature, Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "DDOS Attack",
+            "faction": "Tech",
+            "creature": false,
+            "winRate": 0.8581560254096985,
+            "games": 141,
+            "impact": 8.9234037399292,
+            "roles": "Debuff, Removal"
+        },
+        {
+            "card": "Dead Cat Bounce",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.4046511650085449,
+            "games": 215,
+            "impact": 6.160465240478516,
+            "roles": "Support (heal, armor, cleanse), Removal"
+        },
+        {
+            "card": "Dead Drop",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.5396825671195984,
+            "games": 126,
+            "impact": 12.7619047164917,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Dead Man's Switch",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.2753623127937317,
+            "games": 69,
+            "impact": 4.159420490264893,
+            "roles": "Removal"
+        },
+        {
+            "card": "Death By \"Natural Causes\"",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.550000011920929,
+            "games": 140,
+            "impact": 2.7428572177886965,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Deep Cover",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.6065573692321777,
+            "games": 61,
+            "impact": 5.737704753875732,
+            "roles": "Ability creature, Support (statuses on yours)"
+        },
+        {
+            "card": "Delivery Cyclist",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.39520958065986636,
+            "games": 167,
+            "impact": 2.479041814804077,
+            "roles": "Mobile (Leapfrog/Swap)"
+        },
+        {
+            "card": "Demagogue",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.552763819694519,
+            "games": 199,
+            "impact": 17.455276489257814,
+            "roles": "Ability creature, Support (buffs)"
+        },
+        {
+            "card": "Deus Vult",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.5188679099082947,
+            "games": 212,
+            "impact": 14.466980934143067,
+            "roles": "Support (buffs)"
+        },
+        {
+            "card": "Devil's Breath",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.4296296238899231,
+            "games": 135,
+            "impact": 0.4962962865829468,
+            "roles": "Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "Die Another Day",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.5420560836791992,
+            "games": 214,
+            "impact": 3.6112148761749269,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Die by the Sword",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.6342592835426331,
+            "games": 216,
+            "impact": 14.342592239379883,
+            "roles": "Removal, Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Digital Nomad",
+            "faction": "Online",
+            "creature": true,
+            "winRate": 0.2298850566148758,
+            "games": 87,
+            "impact": 2.7931034564971926,
+            "roles": "Mobile (Leapfrog/Swap)"
+        },
+        {
+            "card": "Diplomat",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.6096256971359253,
+            "games": 374,
+            "impact": 8.422459602355957,
+            "roles": "Wall (6+ Health), Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "DMCA",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.7446808218955994,
+            "games": 141,
+            "impact": 9.709219932556153,
+            "roles": "Removal, Debuff"
+        },
+        {
+            "card": "Dogpile",
+            "faction": "Online",
+            "creature": false,
+            "winRate": 0.4137931168079376,
+            "games": 145,
+            "impact": 21.055171966552736,
+            "roles": "Removal"
+        },
+        {
+            "card": "Domino Effect",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.38732394576072695,
+            "games": 142,
+            "impact": 0.0,
+            "roles": "Logistics (moves, returns)"
+        },
+        {
+            "card": "Doomscrolling",
+            "faction": "Online",
+            "creature": false,
+            "winRate": 0.44144144654273989,
+            "games": 111,
+            "impact": 3.3153152465820314,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Doomsday Clock",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.3285714387893677,
+            "games": 140,
+            "impact": 42.19285583496094,
+            "roles": "Board damage, Face damage"
+        },
+        {
+            "card": "Drill Sergeant",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.5073891878128052,
+            "games": 203,
+            "impact": 7.335960388183594,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Drone Operator",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.25438597798347475,
+            "games": 114,
+            "impact": 1.6666666269302369,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Drug Pigeon",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.3913043439388275,
+            "games": 69,
+            "impact": 4.73913049697876,
+            "roles": "Mobile (Leapfrog/Swap), Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Drug Smuggler",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.34545454382896426,
+            "games": 110,
+            "impact": 4.2727274894714359,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Due Process",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.6465517282485962,
+            "games": 116,
+            "impact": 0.0,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Eavesdrop",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.5045871734619141,
+            "games": 109,
+            "impact": 0.12844036519527436,
+            "roles": "Intel"
+        },
+        {
+            "card": "Eject Button",
+            "faction": "None",
+            "creature": false,
+            "winRate": 0.6231883764266968,
+            "games": 276,
+            "impact": 0.0,
+            "roles": "Logistics (moves, returns)"
+        },
+        {
+            "card": "Embassy",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.3928571343421936,
+            "games": 140,
+            "impact": 7.065714359283447,
+            "roles": "Wall (6+ Health), Ability creature, Support (statuses on yours)"
+        },
+        {
+            "card": "EMP Drone",
+            "faction": "Tech",
+            "creature": true,
+            "winRate": 0.28853756189346316,
+            "games": 253,
+            "impact": 3.897233247756958,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Empath",
+            "faction": "Mind",
+            "creature": true,
+            "winRate": 0.47547170519828799,
+            "games": 265,
+            "impact": 7.166037559509277,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "End-to-End Encryption",
+            "faction": "Tech",
+            "creature": false,
+            "winRate": 0.48181816935539248,
+            "games": 110,
+            "impact": 3.0163638591766359,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Escape Goat",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.4266054928302765,
+            "games": 218,
+            "impact": 8.517431259155274,
+            "roles": "Debuff, Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Evolution Theory",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.4444444477558136,
+            "games": 252,
+            "impact": 0.1111111119389534,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Excess of Bread and Wine",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.19811320304870606,
+            "games": 106,
+            "impact": 3.5830187797546388,
+            "roles": "Support (heal, armor, cleanse), Support (statuses on yours)"
+        },
+        {
+            "card": "Exorcism",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.5,
+            "games": 118,
+            "impact": 0.0,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Exploding Pen",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.44999998807907107,
+            "games": 140,
+            "impact": 11.014286041259766,
+            "roles": "Removal"
+        },
+        {
+            "card": "Exponential Growth",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.6153846383094788,
+            "games": 78,
+            "impact": 59.764102935791019,
+            "roles": "Support (buffs), Support (statuses on yours)"
+        },
+        {
+            "card": "Extraction",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.22596153616905213,
+            "games": 208,
+            "impact": 0.0,
+            "roles": "Logistics (moves, returns)"
+        },
+        {
+            "card": "Extremophile",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.4734693765640259,
+            "games": 245,
+            "impact": 8.100000381469727,
+            "roles": "Ability creature, Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "False Flag Operation",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.6891891956329346,
+            "games": 148,
+            "impact": 25.74459457397461,
+            "roles": "Removal, Support (buffs)"
+        },
+        {
+            "card": "Fat Tony",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.6811594367027283,
+            "games": 138,
+            "impact": 7.181159496307373,
+            "roles": "Beater (4+ Attack), Removal"
+        },
+        {
+            "card": "Fell Out of a Window",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.4320000112056732,
+            "games": 125,
+            "impact": 0.7680000066757202,
+            "roles": "Removal"
+        },
+        {
+            "card": "Femme Fatale",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.38260868191719057,
+            "games": 115,
+            "impact": 17.15652084350586,
+            "roles": "Ability creature, Removal, Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Femtosecond Laser",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.5175879597663879,
+            "games": 199,
+            "impact": 12.718592643737793,
+            "roles": "Removal"
+        },
+        {
+            "card": "Fidget Spinner",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.5925925970077515,
+            "games": 189,
+            "impact": 7.243386268615723,
+            "roles": "Logistics (moves, returns)"
+        },
+        {
+            "card": "Filibuster",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.529411792755127,
+            "games": 272,
+            "impact": 1.533088207244873,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Flamethrower",
+            "faction": "None",
+            "creature": false,
+            "winRate": 0.6886792182922363,
+            "games": 212,
+            "impact": 6.462264060974121,
+            "roles": "Removal"
+        },
+        {
+            "card": "Flash Crash",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.5046296119689941,
+            "games": 216,
+            "impact": 30.587963104248048,
+            "roles": "Board damage"
+        },
+        {
+            "card": "Florida Man",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.4022556245326996,
+            "games": 266,
+            "impact": 5.2932329177856449,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Football Hooligans",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.4855072498321533,
+            "games": 276,
+            "impact": 16.155797958374025,
+            "roles": "Beater (4+ Attack), Removal"
+        },
+        {
+            "card": "Frame Job",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.5310344696044922,
+            "games": 145,
+            "impact": 0.013793103396892548,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Frankenstein",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.32236841320991518,
+            "games": 152,
+            "impact": 5.763157844543457,
+            "roles": "Wall (6+ Health), Support (statuses on yours), Support (buffs)"
+        },
+        {
+            "card": "Freaky Friday",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.4771241843700409,
+            "games": 153,
+            "impact": 0.013071895577013493,
+            "roles": "Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "Gene Editing",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.4834437072277069,
+            "games": 151,
+            "impact": 11.505960464477539,
+            "roles": "Support (buffs), Support (statuses on yours)"
+        },
+        {
+            "card": "Generational Trauma",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.44392523169517519,
+            "games": 214,
+            "impact": 8.817756652832032,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Genesis",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.5205479264259338,
+            "games": 146,
+            "impact": 0.0,
+            "roles": "Swarm (summons)"
+        },
+        {
+            "card": "Genetically Modified Organism",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.875,
+            "games": 72,
+            "impact": 5.486111164093018,
+            "roles": "Support (buffs), Removal"
+        },
+        {
+            "card": "Geomagnetic Reversal",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.4466666579246521,
+            "games": 150,
+            "impact": 0.3266666531562805,
+            "roles": "Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "Ghost Army",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.3661971688270569,
+            "games": 142,
+            "impact": 0.0,
+            "roles": "Swarm (summons)"
+        },
+        {
+            "card": "Glomar Response",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.561855673789978,
+            "games": 194,
+            "impact": 0.09278350323438645,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "God's Grace",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.5916666388511658,
+            "games": 120,
+            "impact": 0.0,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Golden Dome",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.4545454680919647,
+            "games": 198,
+            "impact": 0.09595959633588791,
+            "roles": "Wall (6+ Health), Ability creature"
+        },
+        {
+            "card": "Golden Parachute",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.5096774101257324,
+            "games": 155,
+            "impact": 7.064516067504883,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "GoldenEye",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.37899544835090639,
+            "games": 219,
+            "impact": 10.969863891601563,
+            "roles": "Debuff, Intel"
+        },
+        {
+            "card": "Good Boi",
+            "faction": "Online",
+            "creature": true,
+            "winRate": 0.39754098653793337,
+            "games": 244,
+            "impact": 5.131147384643555,
+            "roles": "Wall (6+ Health), Ability creature"
+        },
+        {
+            "card": "Gracias Jesús",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.46405228972435,
+            "games": 153,
+            "impact": 14.758170127868653,
+            "roles": "Support (heal, armor, cleanse), Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Grim Reaper",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.6111111044883728,
+            "games": 144,
+            "impact": 15.333333015441895,
+            "roles": "Beater (4+ Attack), Removal"
+        },
+        {
+            "card": "Groundhog Day",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.5845070481300354,
+            "games": 142,
+            "impact": 2.7830986976623537,
+            "roles": "Debuff"
+        },
+        {
+            "card": "HAARP",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.6754385828971863,
+            "games": 114,
+            "impact": 5.3947367668151859,
+            "roles": "Disruption"
+        },
+        {
+            "card": "He Didn't Kill Himself",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.41013824939727785,
+            "games": 217,
+            "impact": 0.04147465527057648,
+            "roles": "Logistics (moves, returns)"
+        },
+        {
+            "card": "Headhunter",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.6009852290153503,
+            "games": 203,
+            "impact": 3.5960590839385988,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Hedonic Treadmillionaire",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.4039735198020935,
+            "games": 302,
+            "impact": 6.533112525939941,
+            "roles": "Wall (6+ Health), Beater (4+ Attack), Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Heimlich Maneuver",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.3840579688549042,
+            "games": 138,
+            "impact": 0.0,
+            "roles": "Logistics (moves, returns)"
+        },
+        {
+            "card": "Here Be Dragons",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.6193548440933228,
+            "games": 155,
+            "impact": 24.70322608947754,
+            "roles": "Wall (6+ Health), Beater (4+ Attack), Slow deploy (2+), Board damage"
+        },
+        {
+            "card": "Heretic",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.574018120765686,
+            "games": 331,
+            "impact": 14.549848556518555,
+            "roles": "Ability creature, Support (statuses on yours)"
+        },
+        {
+            "card": "High-Frequency Trading Scam",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.6216216087341309,
+            "games": 148,
+            "impact": 15.222972869873047,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Hikikomori",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.32042253017425539,
+            "games": 284,
+            "impact": 1.6408450603485108,
+            "roles": "Wall (6+ Health), Support (statuses on yours)"
+        },
+        {
+            "card": "Hipster",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.6846153736114502,
+            "games": 130,
+            "impact": 17.438461303710939,
+            "roles": "Beater (4+ Attack), Ability creature, Removal"
+        },
+        {
+            "card": "Hold That Thought",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.4578947424888611,
+            "games": 190,
+            "impact": 7.978947162628174,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Hollowed-Out Volcano Lair",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.4878048896789551,
+            "games": 123,
+            "impact": 0.056910570710897449,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Holy Ghost",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.6000000238418579,
+            "games": 70,
+            "impact": 3.3714284896850588,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Holy Hand Grenade of Antioch",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.6749116778373718,
+            "games": 283,
+            "impact": 32.04240417480469,
+            "roles": "Removal"
+        },
+        {
+            "card": "Holy Pigeon",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.6478873491287231,
+            "games": 71,
+            "impact": 8.470422744750977,
+            "roles": "Mobile (Leapfrog/Swap), Support (statuses on yours)"
+        },
+        {
+            "card": "Holy War",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.5446009635925293,
+            "games": 213,
+            "impact": 29.521127700805665,
+            "roles": "Board damage"
+        },
+        {
+            "card": "Horsemen Of Apocalypse",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.44542771577835085,
+            "games": 339,
+            "impact": 8.371681213378907,
+            "roles": "Slow deploy (2+), Board damage"
+        },
+        {
+            "card": "Hostage Situation",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.31343284249305727,
+            "games": 201,
+            "impact": 5.357213973999023,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Hostile Takeover",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.4248366057872772,
+            "games": 153,
+            "impact": 26.346405029296876,
+            "roles": "Removal, Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Human Intelligence",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.5514705777168274,
+            "games": 136,
+            "impact": 4.191176414489746,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Humanitarian Trafficking Action",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.42446044087409975,
+            "games": 139,
+            "impact": 6.497841835021973,
+            "roles": "Support (heal, armor, cleanse), Debuff"
+        },
+        {
+            "card": "Hyperbole",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.6496350169181824,
+            "games": 137,
+            "impact": 2.9459855556488039,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Hypermetamorphosis",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.4752475321292877,
+            "games": 101,
+            "impact": 8.88118839263916,
+            "roles": "Support (buffs)"
+        },
+        {
+            "card": "If I Told You, I'd Have to Kill You",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.48672565817832949,
+            "games": 226,
+            "impact": 7.743362903594971,
+            "roles": "Ability creature, Face damage"
+        },
+        {
+            "card": "Imposter Syndrome",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.534246563911438,
+            "games": 292,
+            "impact": 6.294520378112793,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Inflation",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.5584415793418884,
+            "games": 154,
+            "impact": 26.889610290527345,
+            "roles": "Set-up (Prophecy), Board damage"
+        },
+        {
+            "card": "Influencer",
+            "faction": "Online",
+            "creature": true,
+            "winRate": 0.42666667699813845,
+            "games": 150,
+            "impact": 4.573333263397217,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Inheritance",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.28057554364204409,
+            "games": 139,
+            "impact": 5.530935287475586,
+            "roles": "Support (buffs)"
+        },
+        {
+            "card": "Inhuman Resources",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.3558282256126404,
+            "games": 163,
+            "impact": 3.3006134033203127,
+            "roles": "Removal, Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Insurance Policy",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.2800000011920929,
+            "games": 150,
+            "impact": 5.14133358001709,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Internal Protocol: Quota Crusher Mindset",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.7248908281326294,
+            "games": 229,
+            "impact": 47.3502197265625,
+            "roles": "Support (buffs)"
+        },
+        {
+            "card": "Internal Revenue Service",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.6916996240615845,
+            "games": 253,
+            "impact": 11.901185989379883,
+            "roles": "Wall (6+ Health), Face damage"
+        },
+        {
+            "card": "Introvert",
+            "faction": "Mind",
+            "creature": true,
+            "winRate": 0.5118110179901123,
+            "games": 381,
+            "impact": 15.17322826385498,
+            "roles": "Wall (6+ Health), Beater (4+ Attack), Ability creature"
+        },
+        {
+            "card": "Involuntary Free Polonium Giveaway",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.5986394286155701,
+            "games": 147,
+            "impact": 8.508843421936036,
+            "roles": "Removal, Debuff"
+        },
+        {
+            "card": "Its A Trap",
+            "faction": "Online",
+            "creature": false,
+            "winRate": 0.48130840063095095,
+            "games": 214,
+            "impact": 0.2710280418395996,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Its Been 84 Years...",
+            "faction": "Online",
+            "creature": true,
+            "winRate": 0.6620689630508423,
+            "games": 145,
+            "impact": 15.027585983276368,
+            "roles": "Beater (4+ Attack), Ability creature"
+        },
+        {
+            "card": "Job Rotation",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.3636363744735718,
+            "games": 187,
+            "impact": 0.02139037474989891,
+            "roles": "Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "Just in Time",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.4357142746448517,
+            "games": 140,
+            "impact": 4.085714340209961,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Kakistocracy",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.5960264801979065,
+            "games": 151,
+            "impact": 37.7072868347168,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Karen",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.4493243098258972,
+            "games": 296,
+            "impact": 11.483108520507813,
+            "roles": "Beater (4+ Attack), Ability creature, Support (buffs)"
+        },
+        {
+            "card": "Keyboard Warrior",
+            "faction": "Online",
+            "creature": true,
+            "winRate": 0.6277372241020203,
+            "games": 137,
+            "impact": 7.547445297241211,
+            "roles": "Ability creature, Face damage"
+        },
+        {
+            "card": "Killer Rabbit of Caerbannog",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.5301204919815064,
+            "games": 83,
+            "impact": 2.325301170349121,
+            "roles": "Body (plain creature)"
+        },
+        {
+            "card": "King Emeritus",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.6557376980781555,
+            "games": 183,
+            "impact": 5.39890718460083,
+            "roles": "Wall (6+ Health), Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Laissez-Faire",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.5099337697029114,
+            "games": 151,
+            "impact": 39.50198745727539,
+            "roles": "Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "Lance Of Longinus",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.5890411138534546,
+            "games": 146,
+            "impact": 11.068492889404297,
+            "roles": "Removal"
+        },
+        {
+            "card": "Legacy Code",
+            "faction": "Tech",
+            "creature": true,
+            "winRate": 0.4249422550201416,
+            "games": 433,
+            "impact": 7.420323371887207,
+            "roles": "Wall (6+ Health), Ability creature"
+        },
+        {
+            "card": "Legal Department",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.44107744097709658,
+            "games": 297,
+            "impact": 7.858585834503174,
+            "roles": "Wall (6+ Health), Ability creature"
+        },
+        {
+            "card": "Legerdemain",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.3546099364757538,
+            "games": 141,
+            "impact": 5.120567321777344,
+            "roles": "Logistics (moves, returns), Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Licence to Kill",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.4015151560306549,
+            "games": 132,
+            "impact": 1.8227273225784302,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Liminal Space",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.4444444477558136,
+            "games": 108,
+            "impact": 0.5555555820465088,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Listen Kid",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.3920454680919647,
+            "games": 176,
+            "impact": 7.811363697052002,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Living Dead",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.5398229956626892,
+            "games": 113,
+            "impact": 7.876106262207031,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Lone Gunman",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.5145630836486816,
+            "games": 103,
+            "impact": 3.087378740310669,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Longevity Hub",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.46268656849861147,
+            "games": 134,
+            "impact": 10.276119232177735,
+            "roles": "Wall (6+ Health), Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Lost Generation",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.40707963705062868,
+            "games": 113,
+            "impact": 9.415928840637207,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Lost Landmine",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.42990654706954958,
+            "games": 214,
+            "impact": 4.341121673583984,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Lucid Dreaming",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.54347825050354,
+            "games": 138,
+            "impact": 3.811594247817993,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Man o' War",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.5146666765213013,
+            "games": 375,
+            "impact": 15.133333206176758,
+            "roles": "Wall (6+ Health), Beater (4+ Attack), Removal"
+        },
+        {
+            "card": "Man-in-the-Middle",
+            "faction": "Tech",
+            "creature": false,
+            "winRate": 0.2985074520111084,
+            "games": 134,
+            "impact": 0.0,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Margin Call",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.44343891739845278,
+            "games": 221,
+            "impact": 24.764705657958986,
+            "roles": "Set-up (Prophecy), Board damage, Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Martial Law",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.4655172526836395,
+            "games": 174,
+            "impact": 1.2413792610168458,
+            "roles": "Support (heal, armor, cleanse), Support (statuses on yours)"
+        },
+        {
+            "card": "Martyr",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.5274261832237244,
+            "games": 237,
+            "impact": 5.47468376159668,
+            "roles": "Support (statuses on yours), Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Maslow's Pyramid",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.32307693362236025,
+            "games": 130,
+            "impact": 4.784615516662598,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Mass Emigration",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.6153846383094788,
+            "games": 143,
+            "impact": 0.0559440553188324,
+            "roles": "Logistics (moves, returns)"
+        },
+        {
+            "card": "Mass Layoffs",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.25581395626068118,
+            "games": 43,
+            "impact": 8.093023300170899,
+            "roles": "Board damage, Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Mathematician",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.6086956262588501,
+            "games": 138,
+            "impact": 3.3449275493621828,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Meatproxy As A Service",
+            "faction": "Tech",
+            "creature": true,
+            "winRate": 0.29629629850387576,
+            "games": 135,
+            "impact": 5.140740871429443,
+            "roles": "Accelerator (draw, send for, rush), Removal"
+        },
+        {
+            "card": "Memento Mori",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.46621620655059817,
+            "games": 148,
+            "impact": 3.789189100265503,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Mental Health Day",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.5333333611488342,
+            "games": 150,
+            "impact": 8.309333801269532,
+            "roles": "Support (buffs), Support (statuses on yours)"
+        },
+        {
+            "card": "Mercenaries",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.44915252923965456,
+            "games": 354,
+            "impact": 17.01129913330078,
+            "roles": "Beater (4+ Attack), Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Meta Group Chat",
+            "faction": "Online",
+            "creature": true,
+            "winRate": 0.5016834735870361,
+            "games": 297,
+            "impact": 15.20404052734375,
+            "roles": "Support (buffs), Debuff"
+        },
+        {
+            "card": "Micromanager",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.46464645862579348,
+            "games": 99,
+            "impact": 6.9939398765563969,
+            "roles": "Support (buffs)"
+        },
+        {
+            "card": "Middle Manager",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.41735535860061648,
+            "games": 242,
+            "impact": 3.966942071914673,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Mimetic Theory",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.4148148000240326,
+            "games": 135,
+            "impact": 0.0,
+            "roles": "Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "Ministry for Equality",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.48188406229019167,
+            "games": 276,
+            "impact": 5.753623008728027,
+            "roles": "Wall (6+ Health), Debuff"
+        },
+        {
+            "card": "Mithril",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.5199999809265137,
+            "games": 150,
+            "impact": 8.87066650390625,
+            "roles": "Support (heal, armor, cleanse), Support (statuses on yours)"
+        },
+        {
+            "card": "MK Ultra Test Subject",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.4651162922382355,
+            "games": 258,
+            "impact": 14.135659217834473,
+            "roles": "Removal"
+        },
+        {
+            "card": "Mole",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.3291139304637909,
+            "games": 79,
+            "impact": 5.265822887420654,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Momentum",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.48372092843055727,
+            "games": 215,
+            "impact": 31.15907096862793,
+            "roles": "Support (buffs)"
+        },
+        {
+            "card": "Monkey Hand",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.5206611752510071,
+            "games": 121,
+            "impact": 15.527273178100586,
+            "roles": "Accelerator (draw, send for, rush), Support (statuses on yours)"
+        },
+        {
+            "card": "Monkey See, Monkey Do",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.5048543810844421,
+            "games": 103,
+            "impact": 0.0,
+            "roles": "Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "Moral Bankruptcy",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.27751195430755618,
+            "games": 209,
+            "impact": 8.880382537841797,
+            "roles": "Removal"
+        },
+        {
+            "card": "Mox Nox",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.625,
+            "games": 152,
+            "impact": 0.04605263099074364,
+            "roles": "Set-up (Prophecy), Removal"
+        },
+        {
+            "card": "Multilevel Marketing Seller",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.41013824939727785,
+            "games": 217,
+            "impact": 2.695852518081665,
+            "roles": "Swarm (summons)"
+        },
+        {
+            "card": "Multimillionaire Philanthropist",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.6130267977714539,
+            "games": 261,
+            "impact": 13.694252967834473,
+            "roles": "Wall (6+ Health), Support (buffs), Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Multipass",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.5395683646202087,
+            "games": 139,
+            "impact": 4.280575752258301,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Mummy",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.4821428656578064,
+            "games": 336,
+            "impact": 5.541666507720947,
+            "roles": "Wall (6+ Health), Ability creature"
+        },
+        {
+            "card": "Mutation",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.3178808093070984,
+            "games": 151,
+            "impact": 7.177483558654785,
+            "roles": "Support (buffs), Debuff"
+        },
+        {
+            "card": "Mutually Assured Destruction",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.3546099364757538,
+            "games": 141,
+            "impact": 6.178723335266113,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "NDA",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.18881118297576905,
+            "games": 143,
+            "impact": 2.847552537918091,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Necronomicon",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.5897436141967773,
+            "games": 117,
+            "impact": 8.529914855957032,
+            "roles": "Removal"
+        },
+        {
+            "card": "Never Let Them Know Your Next Move",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.15671642124652863,
+            "games": 134,
+            "impact": 2.8059701919555666,
+            "roles": "Trickery (copies, steals, trades), Support (statuses on yours)"
+        },
+        {
+            "card": "Nicotine",
+            "faction": "None",
+            "creature": false,
+            "winRate": 0.6127946376800537,
+            "games": 297,
+            "impact": 4.0,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "No Glove, No Love",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.41134750843048098,
+            "games": 141,
+            "impact": 6.3262410163879398,
+            "roles": "Support (statuses on yours), Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Nonchalant Agent",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.31092438101768496,
+            "games": 119,
+            "impact": 1.983193278312683,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Not on My Watch",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.47787609696388247,
+            "games": 113,
+            "impact": 3.619468927383423,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Novena",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.0,
+            "games": 0,
+            "impact": 0.0,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "NPC",
+            "faction": "Online",
+            "creature": true,
+            "winRate": 0.22826087474822999,
+            "games": 92,
+            "impact": 4.5652174949646,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Ol' Reliable",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.6204379796981812,
+            "games": 137,
+            "impact": 13.445255279541016,
+            "roles": "Removal, Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Omen Reading",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.7368420958518982,
+            "games": 19,
+            "impact": 4.0,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Omniscient Space-Time Bending Bearded Wizard",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.4215686321258545,
+            "games": 306,
+            "impact": 16.801959991455079,
+            "roles": "Wall (6+ Health), Slow deploy (2+), Support (statuses on yours)"
+        },
+        {
+            "card": "One for the Road",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.3467336595058441,
+            "games": 199,
+            "impact": 0.0,
+            "roles": "Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "One-Trick Pony",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.565517246723175,
+            "games": 145,
+            "impact": 10.910345077514649,
+            "roles": "Beater (4+ Attack), Ability creature"
+        },
+        {
+            "card": "Operation Paperclip",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.3235294222831726,
+            "games": 136,
+            "impact": 0.0,
+            "roles": "Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "Overpopulation",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.48181816935539248,
+            "games": 220,
+            "impact": 0.027272727340459825,
+            "roles": "Swarm (summons)"
+        },
+        {
+            "card": "Overtime",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.3206106722354889,
+            "games": 131,
+            "impact": 0.0,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Pair Programming",
+            "faction": "Tech",
+            "creature": false,
+            "winRate": 0.22368420660495759,
+            "games": 152,
+            "impact": 10.69473648071289,
+            "roles": "Logistics (moves, returns), Support (buffs)"
+        },
+        {
+            "card": "Panem Et Circenses",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.6159169673919678,
+            "games": 289,
+            "impact": 43.044639587402347,
+            "roles": "Support (heal, armor, cleanse), Support (buffs)"
+        },
+        {
+            "card": "Parabiosis",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.5037037134170532,
+            "games": 135,
+            "impact": 0.02222222276031971,
+            "roles": "Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "Particle Accelerator",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.3986486494541168,
+            "games": 148,
+            "impact": 8.932432174682618,
+            "roles": "Wall (6+ Health), Slow deploy (2+), Removal"
+        },
+        {
+            "card": "Peace Force",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.46000000834465029,
+            "games": 150,
+            "impact": 10.91333293914795,
+            "roles": "Ability creature, Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Peace the Frontier",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.44029849767684939,
+            "games": 134,
+            "impact": 7.843283653259277,
+            "roles": "Debuff, Removal"
+        },
+        {
+            "card": "Peer Review",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.4154929518699646,
+            "games": 142,
+            "impact": 3.4591550827026369,
+            "roles": "Intel, Debuff"
+        },
+        {
+            "card": "Perfectly Timed Camera Malfunction",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.5454545617103577,
+            "games": 22,
+            "impact": 3.454545497894287,
+            "roles": "Removal"
+        },
+        {
+            "card": "Perpetual Motion Machine",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.2709677517414093,
+            "games": 155,
+            "impact": 6.141935348510742,
+            "roles": "Wall (6+ Health), Slow deploy (2+), Accelerator (draw, send for, rush), Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Pessimist",
+            "faction": "Mind",
+            "creature": true,
+            "winRate": 0.5705128312110901,
+            "games": 156,
+            "impact": 12.942307472229004,
+            "roles": "Beater (4+ Attack), Ability creature"
+        },
+        {
+            "card": "Philosophy PhD",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.27142858505249026,
+            "games": 70,
+            "impact": 1.6714285612106324,
+            "roles": "Accelerator (draw, send for, rush), Removal"
+        },
+        {
+            "card": "Phoenix",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.4455445408821106,
+            "games": 101,
+            "impact": 4.445544719696045,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Phoenix Feather",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.4545454680919647,
+            "games": 143,
+            "impact": 0.00699300691485405,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Pioneer",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.5040650367736816,
+            "games": 123,
+            "impact": 1.5203251838684083,
+            "roles": "Mobile (Leapfrog/Swap)"
+        },
+        {
+            "card": "Placebo",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.5918367505073547,
+            "games": 147,
+            "impact": 7.895237922668457,
+            "roles": "Support (buffs)"
+        },
+        {
+            "card": "Plausible Deniability",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.45205479860305788,
+            "games": 146,
+            "impact": 9.923288345336914,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Plot Armor",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.5199999809265137,
+            "games": 125,
+            "impact": 3.947999954223633,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Pluriemployed Hustler",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.3224637806415558,
+            "games": 276,
+            "impact": 9.315217018127442,
+            "roles": "Ability creature, Accelerator (draw, send for, rush), Removal"
+        },
+        {
+            "card": "Police Officer Productivity Target",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.551886796951294,
+            "games": 212,
+            "impact": 7.490566253662109,
+            "roles": "Removal"
+        },
+        {
+            "card": "Political Decoy",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.44723618030548098,
+            "games": 199,
+            "impact": 6.361809253692627,
+            "roles": "Wall (6+ Health), Mobile (Leapfrog/Swap)"
+        },
+        {
+            "card": "Polonium Umbrella",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.6733333468437195,
+            "games": 150,
+            "impact": 8.674667358398438,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Pope",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.30985915660858157,
+            "games": 213,
+            "impact": 9.29295825958252,
+            "roles": "Wall (6+ Health), Support (statuses on yours)"
+        },
+        {
+            "card": "Preemptive Strike",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.44186046719551089,
+            "games": 215,
+            "impact": 17.367441177368165,
+            "roles": "Removal"
+        },
+        {
+            "card": "Presidential Pardon",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.7242990732192993,
+            "games": 214,
+            "impact": 3.1719624996185304,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Prion Disease",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.6690140962600708,
+            "games": 142,
+            "impact": 4.830986022949219,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Private Equity",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.46278315782546999,
+            "games": 309,
+            "impact": 3.478964328765869,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Projection",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.4516128897666931,
+            "games": 31,
+            "impact": 0.0,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Protocol Enforcers",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.4054054021835327,
+            "games": 111,
+            "impact": 7.711711883544922,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Psychiatrists",
+            "faction": "Mind",
+            "creature": true,
+            "winRate": 0.540229856967926,
+            "games": 348,
+            "impact": 8.813218116760254,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Publicly Funded Faith Schools",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.7218543291091919,
+            "games": 151,
+            "impact": 14.712583541870118,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Pyramids",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.5947136282920837,
+            "games": 227,
+            "impact": 3.7224669456481935,
+            "roles": "Wall (6+ Health), Ability creature, Slow deploy (2+)"
+        },
+        {
+            "card": "Quantum Physicist",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.3211009204387665,
+            "games": 109,
+            "impact": 2.321100950241089,
+            "roles": "Mobile (Leapfrog/Swap), Debuff"
+        },
+        {
+            "card": "Quark",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.26582279801368716,
+            "games": 79,
+            "impact": 8.58227825164795,
+            "roles": "Mobile (Leapfrog/Swap), Support (buffs)"
+        },
+        {
+            "card": "Rage Bait",
+            "faction": "Online",
+            "creature": false,
+            "winRate": 0.43382352590560915,
+            "games": 136,
+            "impact": 5.2838239669799809,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Raised Security Level",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.591549277305603,
+            "games": 213,
+            "impact": 0.0,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Ransomware Attack",
+            "faction": "Tech",
+            "creature": false,
+            "winRate": 0.6071428656578064,
+            "games": 140,
+            "impact": 23.671428680419923,
+            "roles": "Debuff, Removal, Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Reality Check",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.30645161867141726,
+            "games": 124,
+            "impact": 0.08870967477560044,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Reality TV Star",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.5778546929359436,
+            "games": 289,
+            "impact": 15.626297950744629,
+            "roles": "Beater (4+ Attack), Ability creature, Support (buffs), Removal"
+        },
+        {
+            "card": "Red Herring",
+            "faction": "Mind",
+            "creature": true,
+            "winRate": 0.565371036529541,
+            "games": 283,
+            "impact": 8.757596969604493,
+            "roles": "Wall (6+ Health), Ability creature, Support (statuses on yours), Debuff"
+        },
+        {
+            "card": "Red Tape",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.6172839403152466,
+            "games": 243,
+            "impact": 0.03292180970311165,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Reflect",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.5357142686843872,
+            "games": 140,
+            "impact": 0.014285714365541935,
+            "roles": "Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "Reincarnation",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.546875,
+            "games": 64,
+            "impact": 11.3359375,
+            "roles": "Support (heal, armor, cleanse), Support (buffs)"
+        },
+        {
+            "card": "Religious Instrumentalization",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.5243242979049683,
+            "games": 185,
+            "impact": 0.021621622145175935,
+            "roles": "Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "Research Lab",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.5754716992378235,
+            "games": 212,
+            "impact": 4.367924690246582,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Resignation Letter",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.8461538553237915,
+            "games": 13,
+            "impact": 1.2307692766189576,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Resurrected T-Rex",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.5588235259056091,
+            "games": 306,
+            "impact": 10.130719184875489,
+            "roles": "Wall (6+ Health), Beater (4+ Attack), Ability creature, Debuff"
+        },
+        {
+            "card": "Riot Police",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.692307710647583,
+            "games": 273,
+            "impact": 12.710622787475586,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Roko's Basilisk",
+            "faction": "Mind",
+            "creature": true,
+            "winRate": 0.6111111044883728,
+            "games": 270,
+            "impact": 10.420741081237793,
+            "roles": "Wall (6+ Health), Debuff"
+        },
+        {
+            "card": "Rush Hour",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.3360655605792999,
+            "games": 122,
+            "impact": 0.0,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Russian Roulette",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.2956989109516144,
+            "games": 186,
+            "impact": 7.688171863555908,
+            "roles": "Removal"
+        },
+        {
+            "card": "Sabotage",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.5904255509376526,
+            "games": 188,
+            "impact": 0.4521276652812958,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Sacrificial Ritual",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.4000000059604645,
+            "games": 30,
+            "impact": 7.133333206176758,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Sapper",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.6370370388031006,
+            "games": 270,
+            "impact": 7.581481456756592,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Satoshi Nakamoto",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.585185170173645,
+            "games": 135,
+            "impact": 4.0,
+            "roles": "Ability creature, Support (buffs)"
+        },
+        {
+            "card": "Scam Artist",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.45748987793922427,
+            "games": 247,
+            "impact": 3.174898862838745,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Schrodinger's Cat",
+            "faction": "Mind",
+            "creature": true,
+            "winRate": 0.23364485800266267,
+            "games": 107,
+            "impact": 7.037383079528809,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Scientific Method",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.4460431635379791,
+            "games": 139,
+            "impact": 8.515108108520508,
+            "roles": "Support (buffs)"
+        },
+        {
+            "card": "Scope Creep",
+            "faction": "Tech",
+            "creature": true,
+            "winRate": 0.7042253613471985,
+            "games": 71,
+            "impact": 10.816901206970215,
+            "roles": "Support (buffs)"
+        },
+        {
+            "card": "Script Kiddie",
+            "faction": "Tech",
+            "creature": true,
+            "winRate": 0.5358649492263794,
+            "games": 237,
+            "impact": 6.4261603355407719,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Seasteading",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.277372270822525,
+            "games": 137,
+            "impact": 0.036496348679065707,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Secret Anthrax Laboratory",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.6888889074325562,
+            "games": 135,
+            "impact": 32.50518798828125,
+            "roles": "Board damage, Debuff"
+        },
+        {
+            "card": "Security Guard",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.46581196784973147,
+            "games": 234,
+            "impact": 8.722222328186036,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Selfie Esteem",
+            "faction": "Online",
+            "creature": false,
+            "winRate": 0.47552448511123659,
+            "games": 143,
+            "impact": 6.152447700500488,
+            "roles": "Support (buffs)"
+        },
+        {
+            "card": "Seniority Priority",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.24873095750808717,
+            "games": 197,
+            "impact": 0.0,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Sex Clanker",
+            "faction": "Tech",
+            "creature": true,
+            "winRate": 0.6408450603485107,
+            "games": 284,
+            "impact": 7.88732385635376,
+            "roles": "Wall (6+ Health), Support (statuses on yours)"
+        },
+        {
+            "card": "Shaken, Not Stirred",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.48175182938575747,
+            "games": 137,
+            "impact": 2.001459836959839,
+            "roles": "Support (buffs), Support (statuses on yours)"
+        },
+        {
+            "card": "Shell Company",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.30927833914756777,
+            "games": 194,
+            "impact": 2.6649484634399416,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Ship of Theseus",
+            "faction": "Mind",
+            "creature": true,
+            "winRate": 0.6535947918891907,
+            "games": 153,
+            "impact": 11.666666984558106,
+            "roles": "Beater (4+ Attack), Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Short King",
+            "faction": "Online",
+            "creature": true,
+            "winRate": 0.42105263471603396,
+            "games": 57,
+            "impact": 3.438596487045288,
+            "roles": "Mobile (Leapfrog/Swap), Support (buffs)"
+        },
+        {
+            "card": "Si Vis Pacem, Para Bellum",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.7707316875457764,
+            "games": 205,
+            "impact": 0.0,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Signal Jammer",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.4682539701461792,
+            "games": 126,
+            "impact": 7.769841194152832,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Sleeper Agent",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.6575342416763306,
+            "games": 146,
+            "impact": 1.5068492889404297,
+            "roles": "Board damage"
+        },
+        {
+            "card": "Sleepwalker",
+            "faction": "Mind",
+            "creature": true,
+            "winRate": 0.46086955070495608,
+            "games": 230,
+            "impact": 9.873912811279297,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Slow Thinking",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.2926829159259796,
+            "games": 123,
+            "impact": 0.0,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "Smoke And Mirrors",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.25217390060424807,
+            "games": 115,
+            "impact": 1.9478260278701783,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Social Engineering",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.5985401272773743,
+            "games": 137,
+            "impact": 8.96350383758545,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Social Panopticon",
+            "faction": "Online",
+            "creature": false,
+            "winRate": 0.281879186630249,
+            "games": 149,
+            "impact": 23.210739135742189,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Socrates",
+            "faction": "Mind",
+            "creature": true,
+            "winRate": 0.3141361176967621,
+            "games": 191,
+            "impact": 4.496335029602051,
+            "roles": "Wall (6+ Health), Debuff"
+        },
+        {
+            "card": "Solidarity Towards The Small Businessman",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.31578946113586428,
+            "games": 76,
+            "impact": 5.5,
+            "roles": "Accelerator (draw, send for, rush), Board damage"
+        },
+        {
+            "card": "Soylent",
+            "faction": "None",
+            "creature": false,
+            "winRate": 0.3472222089767456,
+            "games": 288,
+            "impact": 1.8715277910232545,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Spin Doctor",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.5058823823928833,
+            "games": 170,
+            "impact": 8.141176223754883,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Spite Voter",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.5301204919815064,
+            "games": 249,
+            "impact": 7.57831335067749,
+            "roles": "Removal"
+        },
+        {
+            "card": "Spite-Elected President",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.24817518889904023,
+            "games": 137,
+            "impact": 8.737226486206055,
+            "roles": "Ability creature, Removal"
+        },
+        {
+            "card": "Splitting The Atom",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.4848484992980957,
+            "games": 132,
+            "impact": 12.628787994384766,
+            "roles": "Removal, Board damage"
+        },
+        {
+            "card": "Stasis Field",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.8199999928474426,
+            "games": 200,
+            "impact": 6.069000244140625,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Stealth Suit",
+            "faction": "None",
+            "creature": false,
+            "winRate": 0.4106280207633972,
+            "games": 207,
+            "impact": 11.72946834564209,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Stimulant Drug",
+            "faction": "None",
+            "creature": false,
+            "winRate": 0.6905829310417175,
+            "games": 223,
+            "impact": 1.1551569700241089,
+            "roles": "Support (buffs)"
+        },
+        {
+            "card": "Strike",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.4015151560306549,
+            "games": 132,
+            "impact": 1.915151596069336,
+            "roles": "Debuff, Support (statuses on yours)"
+        },
+        {
+            "card": "Superglue",
+            "faction": "None",
+            "creature": false,
+            "winRate": 0.42465752363204958,
+            "games": 219,
+            "impact": 0.0,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Supply Chain Attack",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.6571428775787354,
+            "games": 140,
+            "impact": 8.664285659790039,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Supply Depot",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.6465116143226624,
+            "games": 215,
+            "impact": 3.799999952316284,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Supreme Court",
+            "faction": "Statecraft",
+            "creature": true,
+            "winRate": 0.4312267601490021,
+            "games": 269,
+            "impact": 2.278810501098633,
+            "roles": "Wall (6+ Health), Ability creature, Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Surveillance Giraffe",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.29931971430778506,
+            "games": 147,
+            "impact": 6.034013748168945,
+            "roles": "Wall (6+ Health), Intel"
+        },
+        {
+            "card": "Survivorship Bias",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.43382352590560915,
+            "games": 136,
+            "impact": 4.323529243469238,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Suspicious USB Stick in the Parking Lot",
+            "faction": "Tech",
+            "creature": true,
+            "winRate": 0.5925925970077515,
+            "games": 216,
+            "impact": 0.07777778059244156,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "SysAdmin",
+            "faction": "Tech",
+            "creature": true,
+            "winRate": 0.7847222089767456,
+            "games": 144,
+            "impact": 3.7708332538604738,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Tabula Rasa",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.7777777910232544,
+            "games": 126,
+            "impact": 0.0,
+            "roles": "Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Tapped Communications",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.4663461446762085,
+            "games": 208,
+            "impact": 3.1932692527770998,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Taqiyya",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.45205479860305788,
+            "games": 73,
+            "impact": 2.0493152141571047,
+            "roles": "Ability creature, Slow deploy (2+), Trickery (copies, steals, trades), Removal, Support (statuses on yours), Debuff"
+        },
+        {
+            "card": "Tax-Exempt Corruption",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.5302013158798218,
+            "games": 149,
+            "impact": 25.342281341552736,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Taxpayer Funds Venture Capital Profits",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.5416666865348816,
+            "games": 144,
+            "impact": 33.11805725097656,
+            "roles": "Accelerator (draw, send for, rush), Board damage"
+        },
+        {
+            "card": "Team Building Exercise",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.582524299621582,
+            "games": 103,
+            "impact": 24.70485496520996,
+            "roles": "Board damage, Support (buffs)"
+        },
+        {
+            "card": "Technical Debt",
+            "faction": "Tech",
+            "creature": true,
+            "winRate": 0.30821916460990908,
+            "games": 146,
+            "impact": 8.431507110595704,
+            "roles": "Beater (4+ Attack), Removal"
+        },
+        {
+            "card": "Teflon Don",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.4880546033382416,
+            "games": 293,
+            "impact": 9.822525978088379,
+            "roles": "Beater (4+ Attack), Ability creature"
+        },
+        {
+            "card": "Templar Knight",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.4908424913883209,
+            "games": 273,
+            "impact": 8.344322204589844,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "The Chosen One",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.5025125741958618,
+            "games": 199,
+            "impact": 6.527637958526611,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "The Friends We Made Along the Way",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.754807710647583,
+            "games": 208,
+            "impact": 46.68846130371094,
+            "roles": "Support (buffs)"
+        },
+        {
+            "card": "The Golden Gun",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.6573426723480225,
+            "games": 143,
+            "impact": 4.748251914978027,
+            "roles": "Removal"
+        },
+        {
+            "card": "The Great Flood",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.44999998807907107,
+            "games": 140,
+            "impact": 15.407142639160157,
+            "roles": "Set-up (Prophecy), Board damage"
+        },
+        {
+            "card": "The Holy Grail",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.6879432797431946,
+            "games": 141,
+            "impact": 6.751772880554199,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "The Invisible Hand",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.2977527976036072,
+            "games": 178,
+            "impact": 5.355056285858154,
+            "roles": "Ability creature, Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "The Last Shall Be First",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.7272727489471436,
+            "games": 121,
+            "impact": 0.06611569970846176,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "The Lobster Professor",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.5903614163398743,
+            "games": 166,
+            "impact": 11.975903511047364,
+            "roles": "Wall (6+ Health), Support (buffs)"
+        },
+        {
+            "card": "The Lost Ark",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.42281877994537356,
+            "games": 149,
+            "impact": 39.436241149902347,
+            "roles": "Board damage, Support (statuses on yours)"
+        },
+        {
+            "card": "The Omen",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.5634920597076416,
+            "games": 126,
+            "impact": 1.2603174448013306,
+            "roles": "Slow deploy (2+), Debuff"
+        },
+        {
+            "card": "The Wicker Man",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.43921568989753725,
+            "games": 255,
+            "impact": 23.627450942993165,
+            "roles": "Board damage"
+        },
+        {
+            "card": "Thirst Trap",
+            "faction": "Online",
+            "creature": true,
+            "winRate": 0.5053763389587402,
+            "games": 186,
+            "impact": 8.854838371276856,
+            "roles": "Support (statuses on yours), Support (buffs)"
+        },
+        {
+            "card": "This Is Fine",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.4716981053352356,
+            "games": 212,
+            "impact": 74.97075653076172,
+            "roles": "Support (buffs), Board damage"
+        },
+        {
+            "card": "Thoughts and Prayers",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.4761904776096344,
+            "games": 147,
+            "impact": 30.367347717285158,
+            "roles": "Support (statuses on yours)"
+        },
+        {
+            "card": "Threat Hunter",
+            "faction": "Tech",
+            "creature": true,
+            "winRate": 0.4320000112056732,
+            "games": 250,
+            "impact": 2.8968000411987306,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Tithe",
+            "faction": "Myth",
+            "creature": false,
+            "winRate": 0.5480769276618958,
+            "games": 208,
+            "impact": 4.123076915740967,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Tourist Trap",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.45736435055732729,
+            "games": 129,
+            "impact": 0.0,
+            "roles": "Logistics (moves, returns)"
+        },
+        {
+            "card": "Toxic Positivity",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.4736842215061188,
+            "games": 133,
+            "impact": 26.5233097076416,
+            "roles": "Support (buffs), Board damage"
+        },
+        {
+            "card": "Tracking Beacon",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.5179855823516846,
+            "games": 139,
+            "impact": 10.903596878051758,
+            "roles": "Debuff, Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Trolley Problem",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.5373831987380981,
+            "games": 214,
+            "impact": 14.962616920471192,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Tutankhamun",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.6174496412277222,
+            "games": 298,
+            "impact": 6.154362201690674,
+            "roles": "Wall (6+ Health), Ability creature"
+        },
+        {
+            "card": "U Mad Bro?",
+            "faction": "Online",
+            "creature": true,
+            "winRate": 0.32407405972480776,
+            "games": 108,
+            "impact": 4.255555629730225,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Underdog",
+            "faction": "Offline",
+            "creature": true,
+            "winRate": 0.6226415038108826,
+            "games": 53,
+            "impact": 7.864151477813721,
+            "roles": "Support (buffs)"
+        },
+        {
+            "card": "Unicorn",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.3417266309261322,
+            "games": 278,
+            "impact": 5.320143699645996,
+            "roles": "Wall (6+ Health), Accelerator (draw, send for, rush), Removal"
+        },
+        {
+            "card": "Universal Basic Income",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.6423357725143433,
+            "games": 137,
+            "impact": 17.065692901611329,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Unpaid Intern",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.5,
+            "games": 132,
+            "impact": 2.954545497894287,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Usury",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.43457943201065066,
+            "games": 214,
+            "impact": 13.663551330566407,
+            "roles": "Board damage"
+        },
+        {
+            "card": "Vaccine",
+            "faction": "Utopia",
+            "creature": false,
+            "winRate": 0.5775862336158752,
+            "games": 116,
+            "impact": 1.637930989265442,
+            "roles": "Support (heal, armor, cleanse), Debuff"
+        },
+        {
+            "card": "Valet",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.6029411554336548,
+            "games": 136,
+            "impact": 0.08088235557079315,
+            "roles": "Logistics (moves, returns)"
+        },
+        {
+            "card": "Vampire",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.2933333218097687,
+            "games": 150,
+            "impact": 4.434666633605957,
+            "roles": "Ability creature, Debuff, Support (heal, armor, cleanse)"
+        },
+        {
+            "card": "Venture Capital",
+            "faction": "Corporate",
+            "creature": false,
+            "winRate": 0.6644295454025269,
+            "games": 149,
+            "impact": 20.165102005004884,
+            "roles": "Support (buffs), Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Violence Monopoly",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.7054263353347778,
+            "games": 129,
+            "impact": 0.0,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "We Are Not The Same",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.49295774102211,
+            "games": 284,
+            "impact": 0.007042253389954567,
+            "roles": "Trickery (copies, steals, trades)"
+        },
+        {
+            "card": "Weaponized Incompetence",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.6592592597007752,
+            "games": 135,
+            "impact": 2.642963171005249,
+            "roles": "Debuff"
+        },
+        {
+            "card": "Weapons of Mass Distraction",
+            "faction": "Statecraft",
+            "creature": false,
+            "winRate": 0.0,
+            "games": 0,
+            "impact": 0.0,
+            "roles": "Logistics (moves, returns)"
+        },
+        {
+            "card": "Web Scraping",
+            "faction": "Tech",
+            "creature": false,
+            "winRate": 0.3835616409778595,
+            "games": 219,
+            "impact": 4.7031965255737309,
+            "roles": "Accelerator (draw, send for, rush)"
+        },
+        {
+            "card": "Wet Work",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.4880000054836273,
+            "games": 250,
+            "impact": 4.079999923706055,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Whistleblower",
+            "faction": "ShadowOps",
+            "creature": true,
+            "winRate": 0.3571428656578064,
+            "games": 154,
+            "impact": 6.123376846313477,
+            "roles": "Debuff"
+        },
+        {
+            "card": "White Dwarf",
+            "faction": "Utopia",
+            "creature": true,
+            "winRate": 0.5313653349876404,
+            "games": 271,
+            "impact": 10.597785949707032,
+            "roles": "Wall (6+ Health), Ability creature"
+        },
+        {
+            "card": "Witness Protection Program",
+            "faction": "ShadowOps",
+            "creature": false,
+            "winRate": 0.40714284777641299,
+            "games": 140,
+            "impact": 0.0,
+            "roles": "Logistics (moves, returns)"
+        },
+        {
+            "card": "Work Shift Rotation",
+            "faction": "Corporate",
+            "creature": true,
+            "winRate": 0.38793104887008669,
+            "games": 232,
+            "impact": 2.1982758045196535,
+            "roles": "Ability creature"
+        },
+        {
+            "card": "Yesn't",
+            "faction": "Mind",
+            "creature": false,
+            "winRate": 0.4409448802471161,
+            "games": 127,
+            "impact": 0.031496062874794009,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        },
+        {
+            "card": "YOLO",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.39726027846336367,
+            "games": 146,
+            "impact": 2.1808218955993654,
+            "roles": "Support (buffs), Board damage"
+        },
+        {
+            "card": "Zealot",
+            "faction": "Myth",
+            "creature": true,
+            "winRate": 0.4853801131248474,
+            "games": 171,
+            "impact": 9.625731468200684,
+            "roles": "Beater (4+ Attack), Support (statuses on yours)"
+        },
+        {
+            "card": "Zeitgeist",
+            "faction": "Offline",
+            "creature": false,
+            "winRate": 0.6216216087341309,
+            "games": 111,
+            "impact": 0.0,
+            "roles": "Set-up (slots, Trends, Watchdogs)"
+        }
+    ]
+}

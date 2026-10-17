@@ -20,7 +20,7 @@ foreach ($folder in "Assets", "Packages", "ProjectSettings") {
 }
 
 $studies = @()
-if ($Only -eq "Both" -or $Only -eq "Balance") { $studies += @{ Method = "Zeitgeist.AITournamentMenu.RunBalance"; Files = @("Assets\Documentation\Balance Report.txt", "Assets\Resources\CardScores.json") } }
+if ($Only -eq "Both" -or $Only -eq "Balance") { $studies += @{ Method = "Zeitgeist.AITournamentMenu.RunBalance"; Files = @("Assets\Documentation\Balance Report (AI games).txt", "Assets\Resources\CardScores.json") } }
 if ($Only -eq "Both" -or $Only -eq "Shuffled") { $studies += @{ Method = "Zeitgeist.AITournamentMenu.RunShuffled"; Files = @("Assets\Documentation\Shuffled Tournament.txt", "Assets\Resources\ShuffledScores.json") } }
 if ($Only -eq "Levels") { $studies += @{ Method = "Zeitgeist.AITournamentMenu.RunLevelsHeadless"; Files = @("Assets\Documentation\AI Tournament.txt") } }
 foreach ($study in $studies) {

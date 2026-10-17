@@ -1,225 +1,227 @@
 SHUFFLED TOURNAMENT (every card in play)
-Run 2026-10-17 18:54 at commit b6ad5cb8: tag it study-2026-10-17.
-1560 games: 40 random decks of 30 cards drawn from the whole pool (398 cards, each in at least two decks), half the decks from two factions, half from anywhere, every deck against every other in both seats, the Very Hard AI on both sides. Called off after 40 Days. Decks this random don't play like built ones: read the numbers as potential, not as balance.
+Run 2026-10-17 20:43 at commit f839a70d (run headless in the mirrored copy, which has no .git): tagged study-2026-10-17b.
+1560 games: 40 random decks of 30 cards drawn from the whole pool (398 cards, each in at least two decks), half the decks from two factions, half from anywhere, every deck against every other in both seats, the Very Hard AI on both sides. Called off after 80 Days. Decks this random don't play like built ones: read the numbers as potential, not as balance.
 
 1. THE DECKS, by win share, with their factions and what they're made of
-  Shuffle 5 (Mind + Statecraft)                         92%   Statecraft 16, Mind 9;  Wall 9, Ability creature 8, Support 7, Removal 4
-  Shuffle 40 (anything)                                 92%   Shadow Ops. 8, Corporate 4, Statecraft 4;  Ability creature 11, Debuff 8, Support 6, Wall 5
-  Shuffle 14 (anything)                                 87%   Myth 7, Digital Society 7, Tech 4;  Removal 5, Wall 4, Ability creature 4, Accelerator 4
-  Shuffle 10 (anything)                                 79%   Digital Society 10, Myth 5, Corporate 4;  Removal 6, Wall 5, Support 5, Ability creature 5
-  Shuffle 15 (Digital Society + Statecraft)             78%   Digital Society 14, Statecraft 14, Shadow Ops. 2;  Ability creature 10, Debuff 6, Beater 4, Removal 4
-  Shuffle 37 (Shadow Ops. + Myth)                       78%   Shadow Ops. 15, Myth 10, Digital Society 3;  Ability creature 7, Accelerator 5, Wall 4, Board damage 3
-  Shuffle 4 (anything)                                  73%   Myth 7, Shadow Ops. 7, Digital Society 4;  Debuff 9, Removal 7, Accelerator 5, Ability creature 4
-  Shuffle 24 (anything)                                 73%   Shadow Ops. 8, Statecraft 8, Corporate 5;  Ability creature 7, Wall 5, Support 5, Support 4
-  Shuffle 9 (Statecraft + Digital Society)              65%   Digital Society 22, Statecraft 6, Shadow Ops. 1;  Ability creature 10, Debuff 6, Support 4, Support 4
-  Shuffle 28 (anything)                                 65%   Statecraft 6, Digital Society 6, Myth 6;  Ability creature 9, Debuff 6, Accelerator 5, Wall 4
-  Shuffle 30 (anything)                                 65%   Statecraft 7, Myth 6, Corporate 4;  Ability creature 7, Wall 5, Debuff 5, Removal 4
-  Shuffle 39 (Utopia + Statecraft)                      65%   Statecraft 14, Utopia 11, Shadow Ops. 2;  Ability creature 7, Wall 6, Support 6, Removal 4
-  Shuffle 13 (Corporate + Myth)                         63%   Corporate 13, Myth 11, Digital Society 2;  Ability creature 9, Support 9, Removal 6, Accelerator 5
-  Shuffle 11 (Statecraft + Corporate)                   60%   Corporate 19, Statecraft 8, Shadow Ops. 1;  Accelerator 10, Ability creature 7, Wall 5, Board damage 5
-  Shuffle 16 (anything)                                 51%   Myth 7, Digital Society 6, Corporate 4;  Ability creature 11, Board damage 5, Debuff 4, Support 3
-  Shuffle 34 (anything)                                 51%   Digital Society 6, Shadow Ops. 5, Corporate 5;  Ability creature 11, Support 6, Debuff 5, Removal 3
-  Shuffle 31 (Corporate + Mind)                         50%   Corporate 14, Mind 10, Utopia 2;  Accelerator 12, Ability creature 5, Removal 3, Debuff 3
-  Shuffle 1 (Utopia + Shadow Ops.)                      46%   Shadow Ops. 15, Utopia 12, Myth 3;  Wall 8, Support 7, Ability creature 5, Support 5
-  Shuffle 6 (anything)                                  45%   Corporate 9, Shadow Ops. 5, Myth 4;  Ability creature 10, Accelerator 6, Support 4, Wall 4
-  Shuffle 8 (anything)                                  45%   Shadow Ops. 6, Digital Society 6, Corporate 5;  Ability creature 10, Accelerator 5, Removal 5, Wall 4
-  Shuffle 25 (Corporate + Myth)                         44%   Corporate 20, Myth 8;  Ability creature 11, Accelerator 7, Support 4, Board damage 4
-  Shuffle 2 (anything)                                  42%   Myth 9, Digital Society 8, Utopia 5;  Ability creature 7, Removal 7, Support 5, Support 4
-  Shuffle 20 (anything)                                 42%   Digital Society 10, Corporate 7, Statecraft 4;  Debuff 8, Ability creature 6, Accelerator 5, Trickery 4
-  Shuffle 26 (anything)                                 42%   Digital Society 6, Utopia 5, Statecraft 4;  Ability creature 7, Wall 6, Set-up 5, Debuff 4
-  Shuffle 36 (anything)                                 41%   Digital Society 9, Shadow Ops. 6, Utopia 5;  Ability creature 8, Removal 7, Beater 5, Support 5
-  Shuffle 12 (anything)                                 40%   Corporate 8, Statecraft 6, Digital Society 5;  Wall 8, Ability creature 8, Debuff 7, Accelerator 4
-  Shuffle 27 (Utopia + Digital Society)                 40%   Digital Society 15, Utopia 12, Shadow Ops. 2;  Debuff 9, Removal 5, Accelerator 4, Wall 4
-  Shuffle 3 (Utopia + Tech)                             38%   Utopia 19, Tech 8, Shadow Ops. 1;  Support 10, Wall 6, Support 6, Debuff 6
-  Shuffle 21 (Myth + Mind)                              36%   Myth 14, Mind 13, Digital Society 2;  Ability creature 8, Wall 6, Support 6, Slow deploy 5
-  Shuffle 22 (anything)                                 33%   Digital Society 7, Statecraft 5, Myth 4;  Ability creature 11, Wall 6, Support 4, Accelerator 4
-  Shuffle 33 (Tech + Mind)                              33%   Mind 16, Tech 10, Digital Society 1;  Ability creature 7, Debuff 7, Wall 6, Support 6
-  Shuffle 29 (Corporate + Shadow Ops.)                  32%   Corporate 15, Shadow Ops. 13, Tech 1;  Ability creature 9, Removal 6, Support 5, Beater 4
-  Shuffle 38 (anything)                                 31%   Myth 8, Digital Society 7, Utopia 4;  Ability creature 9, Debuff 7, Support 5, Support 4
-  Shuffle 35 (Digital Society + Tech)                   29%   Digital Society 15, Tech 7, Myth 4;  Removal 7, Accelerator 7, Support 6, Debuff 5
-  Shuffle 19 (Myth + Statecraft)                        28%   Myth 16, Statecraft 12;  Support 8, Wall 7, Support 7, Debuff 6
-  Shuffle 7 (Digital Society + Corporate)               24%   Corporate 12, Digital Society 11, Shadow Ops. 1;  Ability creature 8, Accelerator 7, Removal 6, Beater 4
-  Shuffle 17 (Myth + Corporate)                         22%   Corporate 14, Myth 14, Shadow Ops. 1;  Accelerator 7, Removal 7, Ability creature 6, Support 6
-  Shuffle 23 (Shadow Ops. + Utopia)                     21%   Shadow Ops. 17, Utopia 12, Myth 1;  Ability creature 9, Debuff 8, Removal 7, Support 4
-  Shuffle 32 (anything)                                 15%   Digital Society 8, Shadow Ops. 7, Utopia 4;  Ability creature 8, Wall 7, Accelerator 6, Support 5
-  Shuffle 18 (anything)                                 14%   Tech 8, Myth 5, Utopia 4;  Removal 7, Accelerator 6, Ability creature 6, Wall 5
-  Two-faction decks win 47% of their games on average, the anything-goes decks 51%.
+  Shuffle 14 (anything)                                 94%   Myth 7, Tech 5, Utopia 5;  Removal 7, Support 5, Wall 4, Ability creature 4
+  Shuffle 10 (anything)                                 90%   Offline 7, Myth 4, Corporate 4;  Wall 6, Debuff 6, Removal 6, Support 5
+  Shuffle 11 (Statecraft + Tech)                        87%   Statecraft 20, Tech 6, Offline 1;  Ability creature 11, Wall 5, Set-up 5, Support 4
+  Shuffle 5 (Utopia + Statecraft)                       85%   Utopia 14, Statecraft 13, Myth 1;  Ability creature 10, Removal 8, Wall 5, Support 5
+  Shuffle 13 (Corporate + Myth)                         81%   Corporate 14, Myth 12, Shadow Ops. 2;  Support 9, Ability creature 8, Removal 6, Accelerator 5
+  Shuffle 40 (anything)                                 81%   Shadow Ops. 8, Utopia 5, Corporate 4;  Ability creature 11, Debuff 8, Support 7, Wall 5
+  Shuffle 28 (anything)                                 77%   Statecraft 7, Myth 5, Offline 4;  Ability creature 9, Debuff 7, Wall 4, Support 4
+  Shuffle 4 (anything)                                  73%   Shadow Ops. 7, Myth 6, Corporate 4;  Debuff 7, Accelerator 6, Removal 6, Ability creature 4
+  Shuffle 3 (Offline + Online)                          71%   Offline 16, Online 11, Corporate 1;  Ability creature 8, Support 7, Debuff 6, Beater 5
+  Shuffle 27 (Offline + Mind)                           68%   Offline 16, Mind 12;  Ability creature 8, Debuff 8, Wall 5, Beater 5
+  Shuffle 17 (Myth + Tech)                              64%   Myth 19, Tech 8, Shadow Ops. 1;  Wall 6, Support 6, Accelerator 6, Support 5
+  Shuffle 25 (Corporate + Myth)                         63%   Corporate 20, Myth 9;  Ability creature 11, Accelerator 9, Support 4, Board damage 4
+  Shuffle 21 (Myth + Utopia)                            60%   Myth 18, Utopia 7, Corporate 1;  Slow deploy 8, Support 8, Wall 6, Ability creature 5
+  Shuffle 6 (anything)                                  58%   Corporate 8, Shadow Ops. 7, Myth 3;  Ability creature 10, Accelerator 7, Wall 5, Support 3
+  Shuffle 15 (Online + Statecraft)                      56%   Statecraft 18, Online 6, Shadow Ops. 2;  Ability creature 7, Support 6, Wall 5, Debuff 4
+  Shuffle 30 (anything)                                 55%   Statecraft 7, Myth 5, Shadow Ops. 4;  Ability creature 7, Wall 5, Removal 5, Debuff 5
+  Shuffle 34 (anything)                                 54%   Corporate 6, Shadow Ops. 5, Offline 5;  Ability creature 11, Support 7, Debuff 4, Support 3
+  Shuffle 20 (anything)                                 50%   Corporate 6, Offline 6, Statecraft 5;  Debuff 8, Ability creature 7, Accelerator 6, Wall 5
+  Shuffle 37 (Shadow Ops. + Myth)                       50%   Shadow Ops. 16, Myth 9, Utopia 2;  Ability creature 7, Removal 5, Accelerator 5, Wall 4
+  Shuffle 23 (Shadow Ops. + Offline)                    46%   Offline 17, Shadow Ops. 11, Tech 1;  Ability creature 7, Debuff 6, Beater 5, Accelerator 5
+  Shuffle 26 (anything)                                 46%   Statecraft 5, Utopia 4, Offline 4;  Ability creature 8, Wall 6, Debuff 5, Set-up 5
+  Shuffle 35 (Online + Mind)                            46%   Mind 17, Online 9, Myth 2;  Ability creature 13, Wall 4, Beater 3, Debuff 3
+  Shuffle 24 (anything)                                 45%   Shadow Ops. 8, Statecraft 8, Corporate 5;  Ability creature 7, Wall 5, Debuff 4, Support 4
+  Shuffle 31 (Corporate + Utopia)                       41%   Utopia 18, Corporate 10, Myth 1;  Support 9, Accelerator 8, Wall 6, Debuff 6
+  Shuffle 12 (anything)                                 40%   Corporate 7, Online 5, Tech 4;  Wall 8, Ability creature 7, Debuff 7, Accelerator 4
+  Shuffle 16 (anything)                                 40%   Myth 6, Corporate 6, Offline 5;  Ability creature 11, Board damage 5, Debuff 4, Wall 3
+  Shuffle 39 (Offline + Shadow Ops.)                    40%   Shadow Ops. 15, Offline 12, Myth 1;  Removal 8, Debuff 6, Beater 4, Ability creature 3
+  Shuffle 9 (Statecraft + Mind)                         38%   Statecraft 14, Mind 12, Shadow Ops. 2;  Support 10, Ability creature 9, Wall 7, Debuff 5
+  Shuffle 8 (anything)                                  37%   Shadow Ops. 7, Offline 6, Corporate 3;  Ability creature 9, Removal 6, Accelerator 4, Wall 4
+  Shuffle 2 (anything)                                  35%   Myth 7, Shadow Ops. 5, Online 4;  Removal 7, Ability creature 6, Support 6, Support 4
+  Shuffle 22 (anything)                                 32%   Offline 6, Statecraft 5, Corporate 4;  Ability creature 11, Wall 5, Accelerator 5, Removal 4
+  Shuffle 19 (Myth + Statecraft)                        31%   Myth 16, Statecraft 12, Tech 1;  Support 8, Wall 7, Support 7, Debuff 6
+  Shuffle 18 (anything)                                 28%   Tech 8, Myth 4, Statecraft 4;  Removal 8, Wall 6, Accelerator 6, Beater 5
+  Shuffle 38 (anything)                                 28%   Myth 7, Utopia 5, Offline 5;  Ability creature 9, Debuff 6, Support 6, Trickery 4
+  Shuffle 1 (Offline + Corporate)                       21%   Corporate 15, Offline 10, Shadow Ops. 2;  Ability creature 10, Accelerator 8, Wall 4, Beater 4
+  Shuffle 32 (anything)                                 21%   Offline 7, Shadow Ops. 6, Utopia 4;  Ability creature 8, Wall 7, Accelerator 6, Support 6
+  Shuffle 33 (Online + Utopia)                          21%   Utopia 20, Online 7, Shadow Ops. 3;  Ability creature 7, Wall 6, Support 5, Support 5
+  Shuffle 7 (Mind + Corporate)                          18%   Corporate 19, Mind 7, Utopia 1;  Accelerator 10, Wall 6, Ability creature 6, Removal 5
+  Shuffle 36 (anything)                                 17%   Shadow Ops. 8, Offline 5, Corporate 4;  Ability creature 9, Removal 6, Beater 4, Support 4
+  Shuffle 29 (Tech + Corporate)                         15%   Corporate 17, Tech 9, Mind 2;  Ability creature 11, Accelerator 9, Removal 4, Debuff 4
+  Two-faction decks win 50% of their games on average, the anything-goes decks 50%.
 
 2. CARDS: how the games where their side played them ended (8+ games), and their impact a game
    Win%: games won by the side that played it. Impact: all it dealt, set up and supplied (see the balance report), a game it was played in.
   Spells with the most potential (win share)
     Card                                     Faction          Win% Games  Impact/g  Plays/g  Roles
-    Legerdemain                              Mind              88%    82       7,3      2,2  Logistics (moves, returns), Accelerator (draw, send for, rush)
-    Weaponized Incompetence                  Digital Society   85%   138       2,4      1,9  Debuff
-    Supply Chain Attack                      Shadow Ops.       85%   150       9,1      2,2  Debuff
-    The Friends We Made Along the Way        Digital Society   84%   152      41,1      1,9  Support (buffs)
-    The Great Flood                          Myth              79%   151      15,9      2,3  Set-up (Prophecy), Board damage
-    Mass Emigration                          Statecraft        79%   147       0,2      2,5  Logistics (moves, returns)
-    Corporate Bailouts                       Corporate         78%   147       2,1      2,0  Support (heal, armor, cleanse)
-    God's Grace                              Myth              78%   148       0,0      2,0  Support (heal, armor, cleanse)
-    The Golden Gun                           Shadow Ops.       77%   150       4,7      1,0  Removal
-    Universal Basic Income                   Digital Society   76%   139      15,2      1,0  Accelerator (draw, send for, rush)
-    Ceasefire                                Statecraft        74%   215       4,1      2,4  Support (statuses on yours)
-    No Glove, No Love                        Digital Society   74%   147       9,3      2,7  Support (statuses on yours), Support (heal, armor, cleanse)
-    Sabotage                                 Shadow Ops.       74%   209       0,5      1,9  Set-up (slots, Trends, Watchdogs)
-    Holy Hand Grenade of Antioch             Myth              73%   223      29,6      2,1  Removal
-    Burn Notice                              Shadow Ops.       72%   149       0,0      2,4  Set-up (slots, Trends, Watchdogs)
-    Gene Editing                             Utopia            72%   150       9,5      2,2  Support (buffs), Support (statuses on yours)
-    Publicly Funded Faith Schools            Myth              69%   151      13,9      1,0  Support (statuses on yours)
-    Tracking Beacon                          Shadow Ops.       69%   130       8,2      1,9  Debuff, Accelerator (draw, send for, rush)
-    Counter-Surveillance                     Shadow Ops.       69%   141       0,8      2,3  Set-up (slots, Trends, Watchdogs)
-    DDOS Attack                              Tech              69%   148      11,9      2,4  Debuff, Removal
+    Black Hole                               Utopia            90%   132      33,3      1,7  Removal, Board damage
+    Counter-Surveillance                     Shadow Ops.       88%    92       0,6      1,6  Set-up (slots, Trends, Watchdogs)
+    DDOS Attack                              Tech              86%   141       8,9      1,9  Debuff, Removal
+    Resignation Letter                       Corporate         85%    13       1,2      1,0  Debuff
+    Stasis Field                             Utopia            82%   200       6,1      2,3  Support (statuses on yours)
+    Tabula Rasa                              Mind              78%   126       0,0      2,2  Support (heal, armor, cleanse)
+    Si Vis Pacem, Para Bellum                Statecraft        77%   205       0,0      1,0  Support (heal, armor, cleanse)
+    The Friends We Made Along the Way        Offline           75%   208      46,7      1,9  Support (buffs)
+    DMCA                                     Corporate         74%   141       9,7      2,4  Removal, Debuff
+    Omen Reading                             Myth              74%    19       4,0      2,0  Accelerator (draw, send for, rush)
+    The Last Shall Be First                  Myth              73%   121       0,1      1,6  Set-up (slots, Trends, Watchdogs)
+    Internal Protocol: Quota Crusher Mindset Corporate         72%   229      47,4      1,0  Support (buffs)
+    Presidential Pardon                      Statecraft        72%   214       3,2      2,4  Support (statuses on yours)
+    Publicly Funded Faith Schools            Myth              72%   151      14,7      1,0  Support (statuses on yours)
+    Violence Monopoly                        Statecraft        71%   129       0,0      2,4  Set-up (slots, Trends, Watchdogs)
+    Corporate Bailouts                       Corporate         70%   208       1,9      1,9  Support (heal, armor, cleanse)
+    Stimulant Drug                           None              69%   223       1,2      1,0  Support (buffs)
+    False Flag Operation                     Shadow Ops.       69%   148      25,7      2,7  Removal, Support (buffs)
+    Secret Anthrax Laboratory                Shadow Ops.       69%   135      32,5      2,0  Board damage, Debuff
+    Flamethrower                             None              69%   212       6,5      1,0  Removal
 
   Creatures with the most potential (win share)
     Card                                     Faction          Win% Games  Impact/g  Plays/g  Roles
-    Sleeper Agent                            Shadow Ops.       86%   152       1,1      2,0  Board damage
-    Thirst Trap                              Digital Society   73%   123      11,0      1,7  Support (statuses on yours), Support (buffs)
-    King Emeritus                            Statecraft        72%   192       9,8      2,1  Wall (6+ Health), Support (heal, armor, cleanse)
-    Spite-Elected President                  Statecraft        71%   142      13,5      1,6  Ability creature, Removal
-    Camper Van                               Digital Society   71%    94       4,3      1,9  Ability creature
-    Peace Force                              Statecraft        71%   211      12,1      1,3  Ability creature, Support (heal, armor, cleanse)
-    Protocol Enforcers                       Statecraft        70%   120       6,8      1,4  Support (heal, armor, cleanse)
-    Drone Operator                           Statecraft        70%   166       5,9      1,5  Ability creature
-    Internal Revenue Service                 Statecraft        68%   253      11,1      1,9  Wall (6+ Health), Face damage
-    Tutankhamun                              Myth              68%   222       8,1      1,9  Wall (6+ Health), Ability creature
-    Reality TV Star                          Digital Society   67%   222      14,1      1,7  Beater (4+ Attack), Ability creature, Support (buffs), Removal
-    Living Dead                              Myth              67%   113      14,2      1,3  Accelerator (draw, send for, rush)
-    Man o' War                               Statecraft        67%   385      17,5      1,8  Wall (6+ Health), Beater (4+ Attack), Removal
-    Drill Sergeant                           Statecraft        67%   241       8,9      1,9  Debuff
-    Civil Servant                            Statecraft        66%   264       9,6      1,5  Wall (6+ Health), Ability creature
-    Riot Police                              Statecraft        66%   145       9,8      1,5  Ability creature
-    Berserker                                Myth              65%   142      11,8      1,5  Wall (6+ Health), Ability creature
-    Taqiyya                                  Myth              65%    81       3,9      1,2  Ability creature, Slow deploy (2+), Trickery (copies, steals, trades), Removal, Support (statuses on yours), Debuff
-    Hedonic Treadmillionaire                 Corporate         65%   232       8,2      1,6  Wall (6+ Health), Beater (4+ Attack), Accelerator (draw, send for, rush)
-    Political Decoy                          Shadow Ops.       65%   206       8,2      1,8  Wall (6+ Health), Mobile (Leapfrog/Swap)
+    Genetically Modified Organism            Utopia            88%    72       5,5      1,1  Support (buffs), Removal
+    SysAdmin                                 Tech              78%   144       3,8      1,4  Support (heal, armor, cleanse)
+    Ankylorhiza                              Utopia            74%   149       5,8      1,9  Wall (6+ Health), Beater (4+ Attack), Slow deploy (2+), Support (heal, armor, cleanse)
+    Berserker                                Myth              72%   209      13,6      1,6  Wall (6+ Health), Ability creature
+    Scope Creep                              Tech              70%    71      10,8      1,2  Support (buffs)
+    Riot Police                              Statecraft        69%   273      12,7      1,6  Ability creature
+    Internal Revenue Service                 Statecraft        69%   253      11,9      1,8  Wall (6+ Health), Face damage
+    Congruent Use of Force                   Statecraft        69%   236      14,1      1,3  Ability creature
+    Hipster                                  Offline           68%   130      17,4      1,4  Beater (4+ Attack), Ability creature, Removal
+    Fat Tony                                 Corporate         68%   138       7,2      1,6  Beater (4+ Attack), Removal
+    Its Been 84 Years...                     Online            66%   145      15,0      1,9  Beater (4+ Attack), Ability creature
+    Sleeper Agent                            Shadow Ops.       66%   146       1,5      2,0  Board damage
+    King Emeritus                            Statecraft        66%   183       5,4      1,4  Wall (6+ Health), Support (heal, armor, cleanse)
+    Ship of Theseus                          Mind              65%   153      11,7      1,8  Beater (4+ Attack), Support (heal, armor, cleanse)
+    Holy Pigeon                              Myth              65%    71       8,5      1,3  Mobile (Leapfrog/Swap), Support (statuses on yours)
+    Sex Clanker                              Tech              64%   284       7,9      1,6  Wall (6+ Health), Support (statuses on yours)
+    Sapper                                   Statecraft        64%   270       7,6      1,5  Ability creature
+    Keyboard Warrior                         Online            63%   137       7,5      1,3  Ability creature, Face damage
+    Underdog                                 Offline           62%    53       7,9      1,1  Support (buffs)
+    Here Be Dragons                          Myth              62%   155      24,7      4,0  Wall (6+ Health), Beater (4+ Attack), Slow deploy (2+), Board damage
 
   The most impact a game, either kind
     Card                                     Faction          Win% Games  Impact/g  Plays/g  Roles
-    This Is Fine                             Digital Society   56%   206      73,4      2,1  Support (buffs), Board damage
-    The Lost Ark                             Myth              50%   136      64,3      3,3  Board damage, Support (statuses on yours)
-    Doomsday Clock                           Statecraft        65%   144      49,1      2,3  Board damage, Face damage
-    Panem Et Circenses                       Statecraft        57%   293      47,6      2,3  Support (heal, armor, cleanse), Support (buffs)
-    Internal Protocol: Quota Crusher Mindset Corporate         68%   226      46,3      1,0  Support (buffs)
-    Black Hole                               Utopia            47%   139      44,7      2,3  Removal, Board damage
-    The Friends We Made Along the Way        Digital Society   84%   152      41,1      1,9  Support (buffs)
-    Laissez-Faire                            Corporate         39%   222      39,6      4,3  Trickery (copies, steals, trades)
-    Hostile Takeover                         Corporate         35%   151      37,0      4,5  Removal, Accelerator (draw, send for, rush)
-    Exponential Growth                       Utopia            46%    78      36,8      2,0  Support (buffs), Support (statuses on yours)
-    Taxpayer Funds Venture Capital Profits   Corporate         47%   220      35,3      3,4  Accelerator (draw, send for, rush), Board damage
-    Momentum                                 Mind              34%   219      34,6      2,7  Support (buffs)
-    Secret Anthrax Laboratory                Shadow Ops.       60%   213      34,5      2,2  Board damage, Debuff
-    Clickbait                                Digital Society   67%   226      33,2      2,8  Board damage
-    Margin Call                              Corporate         38%   220      31,9      4,0  Set-up (Prophecy), Board damage, Accelerator (draw, send for, rush)
+    This Is Fine                             Offline           47%   212      75,0      2,3  Support (buffs), Board damage
+    Exponential Growth                       Utopia            62%    78      59,8      2,2  Support (buffs), Support (statuses on yours)
+    Blessing in Disguise                     Myth              63%   152      55,9      3,4  Support (heal, armor, cleanse), Support (statuses on yours)
+    Internal Protocol: Quota Crusher Mindset Corporate         72%   229      47,4      1,0  Support (buffs)
+    The Friends We Made Along the Way        Offline           75%   208      46,7      1,9  Support (buffs)
+    Panem Et Circenses                       Statecraft        62%   289      43,0      2,0  Support (heal, armor, cleanse), Support (buffs)
+    Doomsday Clock                           Statecraft        33%   140      42,2      2,0  Board damage, Face damage
+    Laissez-Faire                            Corporate         51%   151      39,5      3,0  Trickery (copies, steals, trades)
+    The Lost Ark                             Myth              42%   149      39,4      2,2  Board damage, Support (statuses on yours)
+    Kakistocracy                             Statecraft        60%   151      37,7      2,2  Debuff
+    Black Hole                               Utopia            90%   132      33,3      1,7  Removal, Board damage
+    Taxpayer Funds Venture Capital Profits   Corporate         54%   144      33,1      3,2  Accelerator (draw, send for, rush), Board damage
+    Secret Anthrax Laboratory                Shadow Ops.       69%   135      32,5      2,0  Board damage, Debuff
+    Holy Hand Grenade of Antioch             Myth              67%   283      32,0      2,3  Removal
+    Momentum                                 Mind              48%   215      31,2      2,1  Support (buffs)
 
   The least potential (the games they're played in are lost)
     Card                                     Faction          Win% Games  Impact/g  Plays/g  Roles
-    Mass Layoffs                             Corporate         11%    28       6,4      1,1  Board damage, Accelerator (draw, send for, rush)
-    Extraction                               Shadow Ops.       21%   211       0,0      2,0  Logistics (moves, returns)
-    Perpetual Motion Machine                 Utopia            26%    84       3,9      1,2  Wall (6+ Health), Slow deploy (2+), Accelerator (draw, send for, rush), Support (heal, armor, cleanse)
-    Threat Hunter                            Tech              26%   158       3,0      1,4  Debuff
-    Technical Debt                           Tech              26%   218       6,9      1,9  Beater (4+ Attack), Removal
-    Never Let Them Know Your Next Move       Shadow Ops.       27%   133       2,8      1,7  Trickery (copies, steals, trades), Support (statuses on yours)
-    Operation Paperclip                      Shadow Ops.       27%   132       0,1      2,0  Trickery (copies, steals, trades)
-    The Invisible Hand                       Corporate         28%   232       8,7      1,8  Ability creature, Trickery (copies, steals, trades)
-    Charles Ponzi                            Corporate         29%   121       4,1      1,3  Accelerator (draw, send for, rush), Removal
-    Digital Nomad                            Digital Society   29%   196       3,1      1,5  Mobile (Leapfrog/Swap)
-    Clone                                    Utopia            29%   190       3,8      1,3  Swarm (summons)
-    Phoenix                                  Myth              29%    78       2,9      1,3  Accelerator (draw, send for, rush)
-    Hostage Situation                        Shadow Ops.       30%   136       4,3      1,9  Support (statuses on yours)
-    Blessing in Disguise                     Myth              30%   137      26,5      2,1  Support (heal, armor, cleanse), Support (statuses on yours)
-    Man-in-the-Middle                        Tech              30%   209       0,0      2,2  Set-up (slots, Trends, Watchdogs)
-    Cleaner                                  Shadow Ops.       30%    71       7,0      1,3  Ability creature
-    Mercenaries                              Statecraft        30%   224      15,8      2,5  Beater (4+ Attack), Accelerator (draw, send for, rush)
-    Arsonist                                 Shadow Ops.       30%   122       9,0      1,6  Removal
-    Pope                                     Myth              31%   215       8,0      1,9  Wall (6+ Health), Support (statuses on yours)
-    Whistleblower                            Shadow Ops.       31%   119       4,9      1,2  Debuff
+    Never Let Them Know Your Next Move       Shadow Ops.       16%   134       2,8      1,8  Trickery (copies, steals, trades), Support (statuses on yours)
+    NDA                                      Corporate         19%   143       2,8      2,1  Debuff
+    Ambrosia                                 Myth              20%   143       7,6      1,7  Support (heal, armor, cleanse), Support (buffs)
+    Excess of Bread and Wine                 Myth              20%   106       3,6      1,7  Support (heal, armor, cleanse), Support (statuses on yours)
+    Cleaning Robot                           Corporate         20%   150       5,8      1,8  Wall (6+ Health)
+    Cleaner                                  Shadow Ops.       20%    90       7,0      1,3  Ability creature
+    Pair Programming                         Tech              22%   152      10,7      3,6  Logistics (moves, returns), Support (buffs)
+    Extraction                               Shadow Ops.       23%   208       0,0      1,9  Logistics (moves, returns)
+    NPC                                      Online            23%    92       4,6      1,2  Ability creature
+    Digital Nomad                            Online            23%    87       2,8      1,3  Mobile (Leapfrog/Swap)
+    Schrodinger's Cat                        Mind              23%   107       7,0      1,4  Support (heal, armor, cleanse)
+    C-Suite                                  Corporate         23%   222       5,3      2,2  Beater (4+ Attack), Ability creature
+    Clingy Ex                                Offline           24%   128       5,0      1,7  Ability creature
+    Spite-Elected President                  Statecraft        25%   137       8,7      1,6  Ability creature, Removal
+    Seniority Priority                       Corporate         25%   197       0,0      2,5  Set-up (slots, Trends, Watchdogs)
+    Smoke And Mirrors                        Shadow Ops.       25%   115       1,9      1,6  Support (statuses on yours)
+    Drone Operator                           Statecraft        25%   114       1,7      1,5  Ability creature
+    Mass Layoffs                             Corporate         26%    43       8,1      1,3  Board damage, Accelerator (draw, send for, rush)
+    Clone                                    Utopia            26%   145       2,0      1,3  Swarm (summons)
+    Quark                                    Utopia            27%    79       8,6      1,3  Mobile (Leapfrog/Swap), Support (buffs)
 
   Never played, dealt and all (4; the AI found no use for them, or they can't be played as dealt): Amen, Business Expense, Novena, Weapons of Mass Distraction
 
 3. ROLES: the potential of each kind of card
    Cards: average win share of the cards playing the role (8+ games each). Decks: the win share of the decks richest in it (top third by count) against the poorest (bottom third).
     Role                                 Cards  Win%  Impact/g   Rich decks Poor decks
-    Ability creature                        83   49%       7,6          53%        47%
-    Accelerator (draw, send for, rush)      58   49%       9,4          43%        45%
-    Beater (4+ Attack)                      29   48%      11,1          49%        56%
-    Board damage                            24   51%      26,9          53%        48%
-    Body (plain creature)                    1   41%       3,7          53%        50%
-    Debuff                                  59   51%       7,5          50%        46%
-    Disruption                               1   66%       4,8          52%        50%
-    Face damage                              4   57%      18,4          55%        40%
-    Intel                                    5   44%       5,1          50%        51%
-    Logistics (moves, returns)              15   51%       2,6          51%        51%
-    Mobile (Leapfrog/Swap)                  10   46%       4,9          49%        44%
-    Removal                                 57   49%      11,5          41%        46%
-    Set-up (Prophecy)                        4   48%      18,2          51%        48%
-    Set-up (slots, Trends, Watchdogs)       25   54%       1,0          54%        44%
-    Slow deploy (2+)                         9   43%       6,6          43%        48%
-    Support (buffs)                         45   51%      15,8          55%        40%
-    Support (heal, armor, cleanse)          42   50%       7,4          51%        47%
-    Support (statuses on yours)             50   48%       9,3          45%        56%
-    Swarm (summons)                          5   39%       1,2          44%        50%
-    Trickery (copies, steals, trades)       18   45%       3,2          45%        57%
-    Wall (6+ Health)                        43   50%       8,2          47%        43%
+    Ability creature                        83   46%       7,7          50%        50%
+    Accelerator (draw, send for, rush)      58   48%       9,2          46%        56%
+    Beater (4+ Attack)                      29   52%      11,9          50%        50%
+    Board damage                            24   51%      24,1          51%        55%
+    Body (plain creature)                    1   53%       2,3          55%        44%
+    Debuff                                  59   52%       7,7          57%        48%
+    Disruption                               1   68%       5,4          51%        42%
+    Face damage                              4   53%      17,3          58%        40%
+    Intel                                    5   41%       5,2          42%        45%
+    Logistics (moves, returns)              15   44%       2,4          46%        54%
+    Mobile (Leapfrog/Swap)                  10   40%       4,3          53%        46%
+    Removal                                 57   52%      10,8          56%        49%
+    Set-up (Prophecy)                        4   52%      16,8          49%        46%
+    Set-up (slots, Trends, Watchdogs)       25   51%       0,9          50%        54%
+    Slow deploy (2+)                         9   50%       8,6          50%        48%
+    Support (buffs)                         45   53%      16,1          60%        46%
+    Support (heal, armor, cleanse)          42   50%       7,8          56%        44%
+    Support (statuses on yours)             50   48%      10,0          50%        50%
+    Swarm (summons)                          5   41%       0,9          43%        50%
+    Trickery (copies, steals, trades)       18   42%       2,8          41%        61%
+    Wall (6+ Health)                        43   48%       8,4          45%        44%
 
-4. FACTIONS: the potential of each faction's cards, and of the pairs
+4. FACTIONS: the potential of each faction's cards (the four, then their subfactions), and of the pairs
     Faction         Cards Played  Win%  Impact/g   Strongest roles (its cards' win share)   Weakest
-    Corporate          59     58   47%      10,7   Support 63%, Logistics 56%               Set-up 40%, Trickery 39%
-    Digital Society    71     71   50%       9,3   Support 58%, Support 57%                 Wall 39%, Mobile 38%
-    Mind               31     31   53%       6,4   Accelerator 64%, Logistics 62%           Trickery 50%, Support 48%
-    Myth               59     57   48%      10,3   Set-up 57%, Removal 53%                  Support 43%, Support 42%
-    None                8      8   50%       3,6   Support 54%, Support 48%                 Support 54%, Support 48%
-    Shadow Ops.        61     61   50%       5,7   Board damage 73%, Set-up 61%             Trickery 42%, Logistics 33%
-    Statecraft         42     41   59%       9,3   Removal 66%, Face damage 66%             Beater 49%, Accelerator 40%
-    Tech               22     22   44%       5,4   Removal 48%, Accelerator 48%             Ability creature 40%, Wall 37%
-    Utopia             45     45   45%       8,6   Support 54%, Board damage 48%            Intel 37%, Swarm 31%
+    Establishment     162    159   51%       8,4   Set-up 60%, Set-up 54%             Logistics 41%, Trickery 38%
+    Capital            81     80   46%       8,7   Support 63%, Debuff 57%            Ability creature 40%, Trickery 39%
+    Enlightenment      76     76   49%       7,5   Board damage 65%, Beater 56%       Mobile 36%, Intel 36%
+    Digital Society    71     71   47%       9,1   Logistics 52%, Beater 52%          Wall 40%, Mobile 37%
+    Subfactions:
+    Statecraft         42     41   54%       9,1   Support 58%, Set-up 57%                  Beater 48%, Removal 44%
+    Myth               59     57   53%      10,8   Removal 60%, Beater 57%                  Support 48%, Support 47%
+    Shadow Ops.        61     61   48%       5,8   Board damage 67%, Set-up 60%             Logistics 35%, Trickery 32%
+    Corporate          59     58   45%       9,8   Support 56%, Support 55%                 Ability creature 39%, Trickery 39%
+    Tech               22     22   50%       5,7   Debuff 63%, Support 57%                  Logistics 42%, Ability creature 40%
+    Utopia             45     45   49%       8,5   Board damage 65%, Beater 55%             Mobile 36%, Intel 36%
+    Mind               31     31   48%       6,0   Beater 58%, Debuff 54%                   Set-up 41%, Logistics 39%
+    Online             24     24   44%       8,1   Accelerator 48%, Support 48%             Debuff 43%, Mobile 36%
+    Offline            47     47   49%       9,7   Support 54%, Accelerator 53%             Support 42%, Wall 40%
+    None                8      8   55%       3,5   Support 66%, Support 39%                 Support 66%, Support 39%
 
   Pairs: the two-faction decks' win share (one deck each; a hint, not a verdict)
-    Mind + Statecraft                   92%
-    Digital Society + Statecraft        78%
-    Shadow Ops. + Myth                  78%
-    Statecraft + Digital Society        65%
-    Utopia + Statecraft                 65%
+    Statecraft + Tech                   87%
+    Utopia + Statecraft                 85%
+    Corporate + Myth                    81%
+    Offline + Online                    71%
+    Offline + Mind                      68%
+    Myth + Tech                         64%
     Corporate + Myth                    63%
-    Statecraft + Corporate              60%
-    Corporate + Mind                    50%
-    Utopia + Shadow Ops.                46%
-    Corporate + Myth                    44%
-    Utopia + Digital Society            40%
-    Utopia + Tech                       38%
-    Myth + Mind                         36%
-    Tech + Mind                         33%
-    Corporate + Shadow Ops.             32%
-    Digital Society + Tech              29%
-    Myth + Statecraft                   28%
-    Digital Society + Corporate         24%
-    Myth + Corporate                    22%
-    Shadow Ops. + Utopia                21%
+    Myth + Utopia                       60%
+    Online + Statecraft                 56%
+    Shadow Ops. + Myth                  50%
+    Shadow Ops. + Offline               46%
+    Online + Mind                       46%
+    Corporate + Utopia                  41%
+    Offline + Shadow Ops.               40%
+    Statecraft + Mind                   38%
+    Myth + Statecraft                   31%
+    Offline + Corporate                 21%
+    Online + Utopia                     21%
+    Mind + Corporate                    18%
+    Tech + Corporate                    15%
 
-5. WHAT EACH FACTION LACKS: its share of each role against the whole pool's (- below, + above, in points)
-    Role                                   Corp DigSoc   Mind   Myth Shadow  State   Tech Utopia
-    Accelerator (draw, send for, rush)       26     -4     -5     -3     -5    -10      8     -8
-    Support (heal, armor, cleanse)           -7     -8      6     10     -7     11     -6      5
-    Support (buffs)                           1      6     -8     -3     -8     -7     -2     15
-    Logistics (moves, returns)               -1     -1      6     -4      1      1      5     -2
-    Removal                                   3      0    -11     -2      2     -5      8      6
-    Board damage                              9     -1     -6      4     -3     -4     -6      0
-    Face damage                              -1      0     -1     -1      1      4     -1     -1
-    Debuff                                   -6      2      5     -5      3     -1     -1      7
-    Set-up (slots, Trends, Watchdogs)        -3     -2      6     -3      3      3     12     -4
-    Set-up (Prophecy)                         2     -1     -1      2     -1     -1     -1     -1
-    Intel                                    -1     -1     -1     -1      4     -1     -1      3
-    Swarm (summons)                           0     -1     -1      0      0     -1     -1      3
-    Trickery (copies, steals, trades)         2      0      5     -1      2     -5     -5      0
-    Wall (6+ Health)                         -2     -5      2      4     -8      8     -2      9
-    Beater (4+ Attack)                       -1      8      2     -2     -7     -3     -3      4
-    Ability creature                          1      9     -1     -4     -4     10     -3     -8
-    (Abbreviations: Corp Corporate, DigSoc Digital Society, Mind Mind, Myth Myth, Shadow Shadow Ops., State Statecraft, Tech Tech, Utopia Utopia)
+5. WHAT EACH FACTION LACKS: its share of each role against the whole pool's (- below, + above, in points); the four factions first, then the subfactions
+    Role                                 Establ Capitl Enligh DigSoc  |  State   Myth Shadow   Corp   Tech Utopia   Mind Online Offline
+    Accelerator (draw, send for, rush)       -6     21     -7     -4  |    -10     -3     -5     26      8     -8     -5     -6     -2
+    Support (heal, armor, cleanse)            4     -7      5     -8  |     11     10     -7     -7     -6      5      6    -11     -6
+    Support (buffs)                          -6      0      6      6  |     -7     -3     -8      1     -2     15     -8      5      6
+    Logistics (moves, returns)               -1      1      1     -1  |      1     -4      1     -1      5     -2      6     -4      0
+    Removal                                  -1      4     -1      0  |     -5     -2      2      3      8      6    -11    -10      5
+    Board damage                             -1      5     -2     -1  |     -4      4     -3      9     -6      0     -6     -2      0
+    Face damage                               1     -1     -1      0  |      4     -1      1     -1     -1     -1     -1      3     -1
+    Debuff                                   -1     -5      6      2  |     -1     -5      3     -6     -1      7      5      6      0
+    Set-up (slots, Trends, Watchdogs)         1      1      0     -2  |      3     -3      3     -3     12     -4      6     -2     -2
+    Set-up (Prophecy)                         0      1     -1     -1  |     -1      2     -1      2     -1     -1     -1     -1     -1
+    Intel                                     1     -1      1     -1  |     -1     -1      4     -1     -1      3     -1     -1     -1
+    Swarm (summons)                           0      0      1     -1  |     -1      0      0      0     -1      3     -1     -1     -1
+    Trickery (copies, steals, trades)        -1      0      2      0  |     -5     -1      2      2     -5      0      5     -5      2
+    Wall (6+ Health)                          1     -2      6     -5  |      8      4     -8     -2     -2      9      2     -7     -4
+    Beater (4+ Attack)                       -4     -1      3      8  |     -3     -2     -7     -1     -3      4      2     -3     14
+    Ability creature                          0      0     -5      9  |     10     -4     -4      1     -3     -8     -1     17      5
+    (Abbreviations: Establ Establishment, Capitl Capital, Enligh Enlightenment, DigSoc Digital Society; State Statecraft, Myth Myth, Shadow Shadow Ops., Corp Corporate, Tech Tech, Utopia Utopia, Mind Mind, Online Online, Offline Offline)
 
 
-PROBLEMS: 3 kinds
-  [Rules] x270: Actions left in the queue after the turn
-      first: Shuffle 33 (Tech + Mind) vs Shuffle 7 (Digital Society + Corporate), Very Hard vs Very Hard, seed 71254, Day 7: BattlefieldCombatAction
-  [Rules] x3: A creature at # Health is still alive on the board
-      first: Shuffle 18 (anything) vs Shuffle 16 (anything), Very Hard vs Very Hard, seed 70678, Day 9: Perpetual Motion Machine 4/0
-  [Warning] x1: [Effects, Creatures] ModifierManager: Modifier 'BorrowedTime Effect' (ID: #B#) not found on Martyr.
-      first: Shuffle 32 (anything) vs Shuffle 22 (anything), Very Hard vs Very Hard, seed 71230, Day 4
+PROBLEMS: 1 kinds
+  [Rules] x4: A creature at # Health is still alive on the board
+      first: Shuffle 33 (Online + Utopia) vs Shuffle 16 (anything), Very Hard vs Very Hard, seed 71263, Day 17: Particle Accelerator 3/0

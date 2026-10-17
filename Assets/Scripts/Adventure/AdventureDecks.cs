@@ -117,40 +117,39 @@ namespace Zeitgeist {
             return true;
         }
 
+        public const int StarterCreatures = 7; // And 5 spells: 3 that hit, 2 that help
+
         /// <summary>
-        /// Your first deck, Slay the Spire style: 12 plain cards of your faction (one of the four), two simple creatures (4 and
-        /// 3 copies) and two simple spells, one that hits (3 copies) and one that helps (2). Neutral cards, fit for any of its
-        /// subfactions' archetypes (<see cref="Neutral"/>), spread over the subfactions, the plainest, of middling strength.
+        /// Your first deck, Slay the Spire style: 12 plain cards of your faction (one of the four), 7 creatures and 5 spells (3
+        /// that hit, 2 that help), every card a different one when the faction has enough (the user, 2026-10-17: no copies of
+        /// the same creature, "I want the game to feel original and to show off all the options you have"). Neutral cards, fit
+        /// for any of its subfactions' archetypes (<see cref="Neutral"/>), spread over the subfactions, the plainest, of
+        /// middling strength.
         /// </summary>
         public static DeckScriptableObject Starter(Umbrella faction, IEnumerable<CardDataScriptableObject> pool) {
-            var cards = pool.Where(c => c != null && Umbrellas.Of(c.faction) == faction).Distinct().ToList();
+            var cards = pool.Where(c => c != null && Umbrellas.Of(c.faction) == faction && !(c is CreatureCardScriptableObject { token: true })).Distinct().ToList();
             var tiers = Tiers(pool);
             float Middling(CardDataScriptableObject c) => Math.Abs((int)tiers[c] - (int)Tier.C);
             // Nothing of Tier A or S in a starter (a text-less 6/6 is plain but no starter card), when the faction has enough below
             bool Modest(CardDataScriptableObject c) => tiers[c] <= Tier.B;
             var neutral = cards.Where(Neutral).ToList();
             if (neutral.Count(c => c is CreatureCardScriptableObject) < 2 || neutral.Count(c => c is not CreatureCardScriptableObject) < 2) neutral = cards;
-            var plainCreatures = neutral.OfType<CreatureCardScriptableObject>().Where(c => !c.token).Cast<CardDataScriptableObject>().ToList();
-            if (plainCreatures.Count(Modest) >= 2) plainCreatures = plainCreatures.Where(Modest).ToList();
-            var creatures = Spread(plainCreatures.OrderBy(Complexity).ThenBy(Middling).ThenBy(c => c.cardName), 2);
+            var plainCreatures = neutral.OfType<CreatureCardScriptableObject>().Cast<CardDataScriptableObject>().ToList();
+            if (plainCreatures.Count(Modest) >= StarterCreatures) plainCreatures = plainCreatures.Where(Modest).ToList();
+            var creatures = Spread(plainCreatures.OrderBy(Complexity).ThenBy(Middling).ThenBy(c => c.cardName), StarterCreatures);
             var spells = neutral.Where(c => c is not CreatureCardScriptableObject).OrderBy(c => Modest(c) ? 0 : 1).ThenBy(Complexity).ThenBy(Middling).ThenBy(c => c.cardName).ToList();
-            var strike = spells.FirstOrDefault(Hits);
-            // The one that helps helps your side: aimed at your creatures or you (not a curse on theirs, like Memento Mori); of
-            // another subfaction than the strike's, when there is one as plain
-            var defend = spells.Where(s => s != strike && Helps(s)).OrderBy(s => strike != null && s.faction == strike.faction ? 1 : 0).FirstOrDefault()
-                ?? spells.FirstOrDefault(s => s != strike && !Hits(s));
-
-            var deck = new List<CardDataScriptableObject>();
-            if (creatures.Count > 0) deck.AddRange(Enumerable.Repeat(creatures[0], 4));
-            if (creatures.Count > 1) deck.AddRange(Enumerable.Repeat(creatures[1], 3));
-            if (strike != null) deck.AddRange(Enumerable.Repeat(strike, 3));
-            if (defend != null) deck.AddRange(Enumerable.Repeat(defend, 2));
-            // A faction short of plain cards fills up with its plainest others
-            foreach (var extra in cards.OrderBy(Complexity).ThenBy(c => c.cardName)) {
+            int spellCount = StarterSize - creatures.Count;
+            var strikes = Spread(spells.Where(Hits), Math.Min(3, spellCount));
+            // The ones that help help your side: aimed at your creatures or you (not a curse on theirs, like Memento Mori)
+            var helps = Spread(spells.Where(s => !strikes.Contains(s) && Helps(s)), spellCount - strikes.Count);
+            var deck = creatures.Concat(strikes).Concat(helps).ToList();
+            // Short of hits or help: the plainest other spells, then any plain card of the faction, each once
+            foreach (var extra in spells.Concat(cards.OrderBy(Complexity).ThenBy(c => c.cardName))) {
                 if (deck.Count >= StarterSize) break;
                 if (!deck.Contains(extra)) deck.Add(extra);
             }
-            while (deck.Count < StarterSize && deck.Count > 0) deck.Add(deck[deck.Count % Math.Min(deck.Count, 4)]);
+            // A faction with fewer than 12 cards plays some twice: the only time a starter repeats a card
+            while (deck.Count < StarterSize && deck.Count > 0) deck.Add(deck[deck.Count % Math.Min(deck.Count, StarterSize)]);
             return DeckScriptableObject.Make($"{Umbrellas.Name(faction)} Starter", deck.Take(StarterSize));
         }
 

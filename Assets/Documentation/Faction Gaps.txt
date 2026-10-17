@@ -1,0 +1,108 @@
+FACTION GAPS (2026-10-17, from the shuffled tournament and the balance report of study-2026-10-17b)
+
+What each of the four factions has, what it lacks, and what to add, so each gets a gameplay tone of its own (the user). The
+numbers come from two studies run the same evening, after every card went into a deck:
+  • The shuffled tournament (Shuffled Tournament.txt): 40 random 30-card decks from the whole pool, 1560 games between the
+    Very Hard AI. "Win share" is the share of games a card's side won when it played the card: a card's potential, free of the
+    decks we built. "Pool" is how much of a faction's cards play a role, against the whole pool's share (in points).
+  • The balance report (Balance Report (AI games).txt): the built decks against each other, 7900 games.
+A faction here is one of the four; its subfactions are the archetypes inside it, as Slay the Spire's Ironclad is Strength,
+Block and Exhaust at once. The point of the regrouping: a faction's subfactions should cover each other's holes, and the
+faction as a whole should keep one or two on purpose, as its tone.
+
+THE PICTURE IN ONE TABLE
+
+  Faction          Cards' win share   Built decks   In pairs   Card edge (mirror games)
+  Establishment          51%              45%         50%            48%
+  Capital                46%              44%         50%            51%
+  Enlightenment          49%              49%         49%            47%
+  Digital Society        47%              68%         44%            45%
+
+  Digital Society's built decks win most (Terminally Online 84%, Moods of Modern Life 75%) while its cards, one by one, are the
+  weakest of the four: its decks are tuned and its swarm strategy (74%) is the strongest in the game right now, not its cards.
+  Establishment's cards are the strongest one by one and its decks middling: Order & Paperwork 81%, but Shock and Awe,
+  Licence to Kill and Black Budget at 35%, 31% and 28%. Strategies: Swarm 74%, Midrange 74%, Control 57%, Engine 36%, Aggro
+  32%, Combo 30%. Midrange and Swarm beat Aggro 92% and 89% of the time: the fast decks lose to boards.
+
+
+1. ESTABLISHMENT (Statecraft, Myth, Shadow Ops.): the old powers. Slow, sturdy, inevitable; hidden knives behind.
+
+  Has: the best set-up cards in the game (slots, Trends, Watchdogs: 60% win share), Statecraft's walls and support (58%),
+       Myth's removal (60%) and beaters (57%), Shadow Ops.' board damage (67%) and traps (60%). The most cards (162).
+  Lacks: accelerators (−6 points: Statecraft −10, Shadow −5, Myth −3), buffs (−6: all three below the pool), logistics
+       (41% win share, Shadow Ops.' 35% the worst in the game), trickery (38%). Shadow Ops. has no walls (−8), no beaters
+       (−7), no support (−7): it is glass through and through, and its decks show it (Licence to Kill 31%, Black Budget 28%).
+  Its tone: the status-quo faction. It should stay slow and draw-poor; that's the price of its walls and inevitability. Myth and
+       Statecraft hold the board, Shadow Ops. is the knife. The holes to leave open: accelerators and buffs.
+  To add (within the tone):
+    • Shadow Ops. needs a body or two that survive a hit, so its knives have time: a 2/5 Undercover agent, a Safe House wall
+      with Concealed (the cover is the toughness). Not healing: the faction can't heal.
+    • Cheaper logistics for Statecraft (it has the set-up but not the moves): a Redeployment that moves a creature and gives it
+      Armor, a Convoy that swaps two of yours. Myth's logistics stay poor on purpose (it can't move its creatures).
+    • A Statecraft removal that isn't a wrath: it has −5 removal and leans on Preemptive Strike. A Court Martial (destroy a
+      Revealed or Deploying enemy creature) fits its paperwork.
+    • Shadow Ops.' Aggro deck (Licence to Kill) should become a Control deck: Aggro loses to every board (32%); Black Budget
+      is already Control but has no body to control from.
+
+2. CAPITAL (Corporate, Tech): money and the machines it buys. Draws the most, strikes in windows, can't heal.
+
+  Has: accelerators (+21 points, Corporate +26: a third of the game's draw), support buffs that win (63%), debuffs (57%),
+       Tech's set-up (+12: Watchdogs, slots) and removal (+8), Corporate's board damage (+9). The best card edge in mirror
+       games (51%): its cards do what they say.
+  Lacks: ability creatures that win (40%) and trickery (39%); heal/armor support (−7); its decks are the problem, not its
+       cards: Shareholder Value 35%, Hustle Rush 32%, Threat Model 32%; only Move Fast and Break Things (76%, Midrange) wins.
+       Both Corporate decks are Engine/Aggro, the two strategies that lose to boards (36% and 32%).
+  Its tone: the timing faction. Draw, set up, strike in a window. Its hole stays: no healing, no walls to speak of (−2).
+  To add (within the tone):
+    • Nothing to the card pool first: rebuild Corporate's decks around Midrange (the draw feeding 3/5 bodies and Inflation),
+      the way Military-Industrial Complex (92%, Statecraft + Corporate) already plays it. The pool has the pieces.
+    • Tech is thin (22 cards): a second Midrange deck's worth of 2-to-3-deploy bodies with Watchdogs on arrival, and one more
+      SysAdmin-style wall. Its Combo deck (Threat Model 32%) needs a payoff that ends games, or to become Midrange too.
+    • One or two Corporate creatures whose ability earns the draw back (a Headhunter-like body: draw when it kills), since
+      its ability creatures sit at 39%.
+
+3. ENLIGHTENMENT (Utopia, Mind): the mind and the future it designs. Slow, strongest late, never a fair fight.
+
+  Has: board damage (65%: Utopia's physics), beaters that grow (56%), buffs (+6, Utopia +15: the most in the game), walls
+       (+6), debuffs (+6). Its decks are the most even of the four: 49% alone and 49% in pairs; All in Your Head 60%.
+  Lacks: accelerators (−7: Utopia −8, Mind −5), ability creatures (−5, Utopia −8), mobility and intel that win (36% each),
+       and Mind has no removal of its own (−11) and no buffs (−8): it bends, it doesn't kill, as designed, but then Utopia
+       must kill for it, and Utopia's kills are slow (Engine 48%, Aggro 51%).
+  Its tone: the faction that wins late and sideways. Keep it draw-poor (its research is slow) and keep Mind without raw damage.
+  To add (within the tone):
+    • Prophecies that pay sooner (the user's ask, still open): Utopia's experiments as 1-Day Prophecies (Mox Nox-style
+      timing) so the slow faction has a window before Day 6. Prophecy cards win 62% of their games already: more of them.
+    • One cheap Utopia draw (a Peer Review that draws 1 and gives a creature +1/+1), its research paying in cards, not only
+      stats: the faction's −7 accelerators is the biggest brake on a late-game plan.
+    • Mind's removal stays indirect, but it needs one more finisher that converts its control: a Trolley Problem-style
+      destroy with a cost, or a debuff that stacks to 0 Attack and keeps the creature as a wall for us.
+
+4. DIGITAL SOCIETY (Online, Offline): the culture, on the internet and off. Momentum, comebacks, swarms.
+
+  Has: beaters (+8, Offline +14: the game's biggest hitters), ability creatures (+9, Online +17), logistics that work (52%),
+       and the two best built decks (Terminally Online 84% Swarm, Moods of Modern Life 75% Midrange); Clickbait and Dogpile
+       carry the swarm (40 and 28 damage a game).
+  Lacks: walls (−5, Online −7), heal/armor support (−8: Online −11), removal in Online (−10), and its cards win least one
+       by one (47%; Online 44%, the lowest subfaction): the decks carry weak cards. In pairs it drops to 44%: its cards don't
+       travel; the swarm needs the whole deck.
+  Its tone: the faction that lives in the moment: no healing, no walls, no intel (as designed). Its swarm is the game's best
+       strategy today, which is as much a problem for the others as a strength of its own: watch it after the rebalance.
+  To add (within the tone):
+    • Online removal that fits the mob: a Pile-On (destroy a creature with 3 or more of yours facing or beside it), a Ratio
+      (−X Attack for each of your creatures). Not hard removal on its own.
+    • Offline's second deck (Underdogs, 60%) is a Swarm that loses to Terminally Online 0%: give it the comeback identity
+      instead (Underdog, Plot Armor, Generational Trauma) as a Midrange deck, so the two subfactions play differently.
+    • A few more Online cards (24, the smallest pool after Tech): the subfaction can't fill a 40-card deck without doubles.
+
+
+WHAT THE WHOLE POOL LACKS
+  • Aggro, Engine and Combo decks all lose to Midrange and Swarm (8% to 18% against them). Either the fast decks get reach
+    (Face damage wins 53% and there are 4 such cards in the game) or the boards get something to fear: a few more
+    cheap removal spells across Capital and Enlightenment, and a Trend that punishes wide boards.
+  • Trickery (copies, steals, trades) wins 42% and Mobile (Leapfrog, Swap) 40%: the clever cards don't pay. Either their
+    numbers go up (a Mimic that keeps the copy, a Swap that gives Speed) or they stay as flavour and the decks carry fewer.
+  • Intel (41%) and swarm summons (41%) are weak as cards but win as strategies (Terminally Online): they need the deck
+    around them. Fine for the built decks; they shouldn't be the adventure's reward picks for a new player.
+
+Next: rebuild the decks from these numbers (the user's "redo all decks", with the ShuffledScores and CardScores files), then
+measure again. The buffs stay buffs: no nerfs to Digital Society until the others have been lifted.

@@ -216,6 +216,7 @@ namespace Zeitgeist.Tests {
                 && AdventureRun.Deck.Cards.Any(c => c is not CreatureCardScriptableObject), "...of its faction, creatures and spells");
             Assert.IsTrue(AdventureRun.Deck.Cards.All(AdventureDecks.Neutral), "...neutral ones, fit for any of its subfactions' archetypes");
             Assert.GreaterOrEqual(AdventureRun.Deck.Cards.Select(c => c.faction).Distinct().Count(), 2, "...spread over its subfactions");
+            Assert.AreEqual(AdventureDecks.StarterSize, AdventureRun.Deck.Cards.Distinct().Count(), "...every card a different one (the user, 2026-10-17: no copies in a starter)");
             // The run opens with a choice (Orientation Day): one of four perks, then the map; the boss's faction is known
             Assert.IsTrue(AdventureRun.InEvent && AdventureRun.Event.Id == "Onboarding", "...opened by a choice");
             Assert.AreNotEqual(Faction.None, AdventureRun.BossFaction, "The boss's faction is known from the start...");
