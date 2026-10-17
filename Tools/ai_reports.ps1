@@ -28,6 +28,7 @@ foreach ($study in $studies) {
     Write-Host "Running $($study.Method) in $copy..."
     $process = Start-Process -FilePath $unity -PassThru -NoNewWindow -ArgumentList @(
         "-batchmode", "-quit", "-projectPath", "`"$copy`"", "-executeMethod", $study.Method, "-logFile", "`"$log`"")
+    $null = $process.Handle # Without this PowerShell reads no exit code from a process it didn't wait on
     # The report so far comes back every half minute (the user, 2026-10-17: something to work on while a run finishes)
     while (-not $process.HasExited) {
         Start-Sleep -Seconds 30
@@ -37,6 +38,7 @@ foreach ($study in $studies) {
         }
     }
     $minutes = [math]::Round(((Get-Date) - $started).TotalMinutes, 1)
+    $process.WaitForExit()
     if ($process.ExitCode -ne 0) { throw "$($study.Method) failed after $minutes minutes (exit code $($process.ExitCode)): see $log" }
     foreach ($file in $study.Files) {
         $from = Join-Path $copy $file
