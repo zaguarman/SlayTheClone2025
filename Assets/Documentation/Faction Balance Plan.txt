@@ -241,3 +241,12 @@ card file and the briefs; not drawn yet (the user decides). Measured next as stu
 Also checked tonight: no creature prints odd stats any more (no Speed above 3, no 1/2/7); the 0-Attack walls (Satoshi
 Nakamoto, Pyramids, Embassy, Golden Dome, Supreme Court, Philosophy PhD, Perpetual Motion Machine, Sleeper Agent, the USB
 Stick) are by design and tied to Open Questions 46.
+
+17. THE FORMATION ROLLED BACK, MEASURED (2026-10-17 night, study-2026-10-17h, commit 8f6b0b00)
+Meant as the Mind creatures' study, it measured the rollback instead: the card assets had been regenerated before the seven
+were written into the card file, so the Mind decks in it still had 13 creatures (the seven are in from study i on). With any
+creature attacking any slot and no slot bonuses: 17 Days a game (from 12: walls hold again). Strategies: Aggro 58%, Midrange
+57%, Control 54%, Swarm 51%, Engine 41%, Combo 29%. Decks: Order & Paperwork 96%, Underdogs 81%, Psyop 81%; at the bottom
+Panopticon 10%, Mind Games 18%, Influencer Economy 18%. Subfactions: Statecraft 76%, Offline 75%, Tech 59%, Corporate 52%,
+Myth 47%, Shadow Ops. 43%, Utopia 41% (from 50%: its Aggro deck fell to 41%), Online 22%, Mind 19% (in pairs 81%: Mind's
+cards win inside Psyop; its own two decks, spell-heavy Control, don't close). Next: study i with the seven creatures in.
