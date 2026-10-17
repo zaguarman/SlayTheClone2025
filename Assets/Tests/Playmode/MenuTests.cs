@@ -449,6 +449,7 @@ namespace Zeitgeist.Tests {
             AIController.TurnPause = 0.1f;
             yield return game.Start(Seed, () => Click(SetupButton(MatchSetupMenu.StartButtonName)));
             Assert.AreEqual(AISeats.Both, MatchSetup.AI);
+            Assert.IsTrue(MatchSetup.IsChosen && (bool)MatchSetup.OpponentDeck, "The opponent's deck (a mod's, made at run time) is alive: a play session loads the mods afresh");
 
             SceneGame.AssertPlays(game.Player1, yourDeck);
             SceneGame.AssertPlays(game.Player2, theirDeck);

@@ -83,6 +83,16 @@ namespace Zeitgeist {
 
         private static readonly HashSet<int> loadedInto = new HashSet<int>();
 
+        // Each play session loads afresh: leaving play mode destroys the decks and cards made last time, while the catalog
+        // asset and these statics outlive it when the domain isn't reloaded (the test runner, Enter Play Mode options). A
+        // guard left standing then offered opponents whose decks were dead, and the match fell back to random decks
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void OnPlayStart() {
+            loadedInto.Clear();
+            Loaded.Clear();
+            Problems.Clear();
+        }
+
         /// <summary>Where mods are looked for: next to the project (or the build), and under the game's data folder.</summary>
         public static IEnumerable<string> Folders() {
             yield return Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Mods"));
@@ -92,6 +102,7 @@ namespace Zeitgeist {
         /// <summary>Loads every mod file into the catalog, once per catalog: its decks are offered beside the game's own.</summary>
         public static void LoadInto(DeckCatalog catalog) {
             if (catalog == null || !loadedInto.Add(catalog.GetInstanceID())) return;
+            catalog.ForgetMods(); // Whatever an earlier session left on the asset
             foreach (var folder in Folders().Distinct()) {
                 string[] files;
                 try {

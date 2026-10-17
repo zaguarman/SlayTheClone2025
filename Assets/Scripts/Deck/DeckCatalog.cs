@@ -39,8 +39,15 @@ namespace Zeitgeist {
             modOpponents.AddRange(moddedOpponents.Where(o => o?.deck != null));
         }
 
-        public IReadOnlyList<DeckScriptableObject> Decks => decks.Where(d => d != null).Concat(modDecks).ToList();
-        public IReadOnlyList<Opponent> Opponents => opponents.Where(o => o != null && o.deck != null).Concat(modOpponents).ToList();
+        /// <summary>Drops the mods loaded into this asset (a new play session loads them again; the old decks are dead by then).</summary>
+        public void ForgetMods() {
+            modDecks.Clear();
+            modOpponents.Clear();
+        }
+
+        // A mod deck is a runtime object: dead once play mode was left, so it's checked like the asset ones
+        public IReadOnlyList<DeckScriptableObject> Decks => decks.Concat(modDecks).Where(d => d != null).ToList();
+        public IReadOnlyList<Opponent> Opponents => opponents.Concat(modOpponents).Where(o => o != null && o.deck != null).ToList();
         public IReadOnlyList<DeckScriptableObject> TestDecks => testDecks.Where(d => d != null).ToList();
         /// <summary>Everything a player can pick: the faction decks, then the test decks.</summary>
         public IReadOnlyList<DeckScriptableObject> AllDecks => Decks.Concat(TestDecks).ToList();
