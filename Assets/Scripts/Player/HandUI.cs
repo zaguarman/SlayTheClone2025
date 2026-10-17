@@ -103,7 +103,7 @@ namespace SlayTheClone {
         // Unity asks before the hand (or a card in it) takes the pointer: at rest as usual, while a card is carried only in the oval
         public bool IsRaycastLocationValid(Vector2 screenPoint, Camera eventCamera) => CardController.Dragged == null || InDropArea(screenPoint);
 
-        // The combo glow (the user, 2026-10-17): in your hand, a card that what's already played or in play sets up glows softly
+        // The combo glow (the user, 2026-10-17): in your hand, a card set up by one already played from your hand today glows softly
         // (see Combo.IsSetUp). Checked a few times a second, while you plan
         private float nextComboCheck;
 
@@ -114,7 +114,7 @@ namespace SlayTheClone {
             foreach (var card in cards) {
                 if (card == null) continue;
                 card.SetComboGlow(planning && !card.IsQueued
-                                  && Combo.IsSetUp(card.GetLinkedCardInstance(), Player, GameManager?.ActionsQueue, GameManager?.TrendSystem));
+                                  && Combo.IsSetUp(card.GetLinkedCardInstance(), Player, GameManager?.ActionsQueue));
             }
         }
 

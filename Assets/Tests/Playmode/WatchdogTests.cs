@@ -68,7 +68,7 @@ namespace SlayTheClone.Tests {
                         watchdog = Spec(WatchdogEffect.Nullify, WatchedAction.Attack) }
                 }
             });
-            StringAssert.Contains("Disable the next enemy attack 2", Keywords.Plain(CardTextFormatter.GetRulesText(firewallData)));
+            StringAssert.Contains("Watchdog: disable the next enemy attack 2", Keywords.Plain(CardTextFormatter.GetRulesText(firewallData)));
             var firewall = game.GiveCard(p1, firewallData);
             game.Declare(late, p1.Battlefield[0]); // Planned first
             game.Play(firewall, p1, null);
@@ -101,7 +101,7 @@ namespace SlayTheClone.Tests {
                 trigger = EffectTrigger.OnPlay,
                 actions = new List<EffectAction> { new EffectAction { actionType = ActionType.CreateWatchdog, targetType = TargetType.Enemy, watchdog = yesnt } }
             });
-            StringAssert.Contains("Disable the next 2 enemy spells that deal damage", Keywords.Plain(CardTextFormatter.GetRulesText(yesntData)));
+            StringAssert.Contains("Watchdog: disable the next 2 enemy spells that deal damage", Keywords.Plain(CardTextFormatter.GetRulesText(yesntData)));
             Watch(yesnt, p2);
             game.Play(game.GiveCard(p1, game.Spell("Pep Talk", TargetType.EnemyCreatures, TestCards.Effect(EffectTrigger.OnPlay, ActionType.Heal, 1, TargetType.EnemyCreatures))), p1, p2.Battlefield[0]);
             game.Resolve();
@@ -168,7 +168,7 @@ namespace SlayTheClone.Tests {
                         watchdog = Spec(WatchdogEffect.Nullify, timing: WatchdogTiming.Briefing) }
                 }
             });
-            StringAssert.Contains("Disable the first enemy attack this Day", Keywords.Plain(CardTextFormatter.GetRulesText(counterData)));
+            StringAssert.Contains("Watchdog: disable the first enemy attack this Day", Keywords.Plain(CardTextFormatter.GetRulesText(counterData)));
             var counter = game.GiveCard(p1, counterData);
             game.StartTurn();
             game.ActionsQueue.BriefWatchdogs(); // Nothing set yet

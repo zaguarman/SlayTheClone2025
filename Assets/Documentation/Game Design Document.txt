@@ -1022,13 +1022,16 @@ Logistics), Corporate; Heimlich Maneuver (Push, Logistics), Utopia. Push was arc
   spell's targets, a creature's own slots, a Gift's empty ones on the other side), or the whole battlefield for a spell
   that plays anywhere and does something there. Under the pointer, the slot or side lights up fully, as before.
 • The combo glow (the user, like Slay the Spire's cards that glow when their bonus is on): a card in your hand glows softly,
-  a slow golden pulse around it, once what it was made to follow is in place. Intended combos are the designers' own, set
-  on the card ("set up by"): one of those cards queued by you today, or a creature of yours in play. Two more come from the
-  rules: a Combo card once another spell of yours is queued today, and an On Trend creature while a Trend is on or queued.
+  a slow golden pulse around it, once what it was made to follow has been played from your hand today (only cards played
+  count, not what's already in play). Only real payoffs glow: the second card clearly better, or only working, after the
+  first; merely nice synergies don't, or the glow stops meaning anything. Intended combos are the designers' own, set on
+  the card ("set up by"). Two more come from the rules: a Combo card once another spell of yours is queued today, and an
+  On Trend creature once you've queued a Trend.
   The first designed combos, from the cards' notes: Tapped Communications before Perfectly Timed Camera Malfunction and
   Asset Recruitment; Phoenix Feather before Necronomicon; False Flag Operation before Never Let Them Know Your Next Move;
-  Dead Man's Switch in play for He Didn't Kill Himself; Threat Hunter or Sex Clanker in play for Ctrl + Z. Which combos
-  deserve a glow is still to be discussed with the user.
+  Dead Man's Switch before He Didn't Kill Himself; Threat Hunter or Sex Clanker before Ctrl + Z.
+  Later, maybe (the user: "keep this in the afterburner"): a glow when a target condition is met, e.g. Perfectly Timed
+  Camera Malfunction whenever an enemy is Revealed, however that happened.
 
 
 6. DESIGN PHILOSOPHY & BALANCING

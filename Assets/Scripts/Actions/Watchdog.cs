@@ -73,10 +73,8 @@ namespace SlayTheClone {
                 _ => "both sides"
             };
             if (!forController) return $"Watching {watched}: ???";
-            string what = Spec.watches.ToString().ToLower() + (Spec.watches == WatchedAction.Ability ? "" : "s");
-            string atMost = Spec.atMost > 0 ? $" of {Spec.atMost} or less" : "";
-            if (Spec.damaging) what = "damaging " + what;
-            return $"{what}{atMost} by {watched} -> {WatchdogRules.NameOf(Spec.effect)} ({ChargesLeft} left{(Spec.timing == WatchdogTiming.Briefing ? ", Briefing" : "")})";
+            // As its card says it (the user, 2026-10-17: plain words on the board too), with the charges it has left
+            return Keywords.Plain(CardTextFormatter.WatchdogSentence(Spec, ChargesLeft, Days == 1 ? 1 : 0, WatchedCreature?.Name));
         }
 
         public override string ToString() =>

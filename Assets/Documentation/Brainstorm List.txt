@@ -1760,8 +1760,6 @@ Card Game Factions Overview
 			Safe Weapon
 			Sewers (a location)
 			Speed Limit
-			Tourist Trap
-			Valet (parking)
 			World Trade Center
 			Yield (the road sign)
 		Faction to decide
@@ -1772,6 +1770,7 @@ Card Game Factions Overview
 			Disarm (added 2026-10-15, no faction given): picture: a guy whose arms have fallen off onto the floor while a
 				policeman shouts "Put your hands up! Police!"
 			Touch Grass (added 2026-10-15, no faction given)
+			Afterburner (added 2026-10-17, no faction given)
 		Mechanic ideas
 			Cards that come back to the hand when a condition is met
 			More tempo-altering effects (2026-10-14): some that raise your creatures' Speed, others that cut Deployment Time

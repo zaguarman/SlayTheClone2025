@@ -347,8 +347,7 @@ namespace SlayTheClone {
                 case ActionType.CutDraws:
                     return $"{target} draws {value} fewer card{(value == 1 ? "" : "s")} with the next hand";
                 case ActionType.WipeWatchdogs:
-                    // Every Watchdog of theirs, in what they do (the user: no "Watchdog" on cards)
-                    return $"end every {(action.targetType == TargetType.Player ? "one of your" : "enemy")} effect{(action.targetType == TargetType.Player ? "s" : "")} still waiting to {Keywords.Link("Disable")} or {Keywords.Link("Redirect")} actions";
+                    return $"end {(action.targetType == TargetType.Player ? "your" : "every enemy")} {Keywords.Link("Watchdog", action.targetType == TargetType.Player ? "Watchdogs" : "Watchdog")}";
                 case ActionType.Funnel:
                     return $"every other creature on its side hands its stat raises to {target}";
                 case ActionType.Consolidate:
@@ -377,7 +376,7 @@ namespace SlayTheClone {
                 case ActionType.Equip:
                     return $"{Keywords.Link("Gear", "equip")} {target} with {AbilityName(action.ability)}";
                 case ActionType.EndDay:
-                    return "the Day ends here: every other action still in the queue, both sides', is discarded";
+                    return "the Day ends here: every other action still to come today, both sides', is cancelled";
                 case ActionType.Earthquake:
                     return $"an {Keywords.Link("Earthquake", "earthquake")}: from a random slot, a zigzag across the board, one hit in every column, the sides taking turns, {value} damage each";
                 case ActionType.SetTrend: // "Trend: Rush Hour [sand watch]3" (one word, Trend, everywhere: the user, 2026-10-15)
@@ -395,7 +394,7 @@ namespace SlayTheClone {
                 case ActionType.CreateWatchdog:
                     return DescribeWatchdog(action, target);
                 case ActionType.Reveal: // Instant: it resolves as soon as it's played
-                    if (action.targetType is TargetType.Player or TargetType.Enemy) return $"{Keywords.Link("Reveal", "reveal")} which actions {target}'s waiting effects will {Keywords.Link("Disable")} or {Keywords.Link("Redirect")}";
+                    if (action.targetType is TargetType.Player or TargetType.Enemy) return $"{Keywords.Link("Reveal", "reveal")} what {target}'s {Keywords.Link("Watchdog", "Watchdogs")} watch for";
                     return action.targetModifier.HasFlag(TargetModifier.Random)
                         ? $"{Keywords.Link("Reveal", "reveal")} {target}"
                         : $"{Keywords.Link("Reveal", "reveal")} {SlotTarget(action, isSpell)}";
@@ -526,24 +525,29 @@ namespace SlayTheClone {
         // " [sand watch]3": how many Days a timed change lasts. Nothing for a lasting one
         private static string DaysTag(int days) => days > 0 ? " " + Keywords.Link("Days", $"{EffectIcons.Tag(EffectIcons.Days)}{days}") : "";
 
-        // A Watchdog in plain words, without naming it (the user, 2026-10-17: the player doesn't need to know how the game works
-        // inside, and no "->"): "Disable the next 2 enemy attacks", "Redirect the first enemy attack this Day". It catches
-        // actions as they come up; a Briefing one picks from the whole Day's plans, from the Day it's set
-        private static string DescribeWatchdog(EffectAction action, string target) {
-            var spec = action.watchdog;
-            int charges = System.Math.Max(1, spec.charges);
+        // A Watchdog: the word as a label, then one plain sentence (the user, 2026-10-17: sparse, never "condition -> effect,
+        // charges (Briefing)"): "Watchdog: disable the next 2 enemy attacks", "Watchdog: redirect the first enemy attack this
+        // Day". It catches actions as they come up; a Briefing one picks from the whole Day's plans, from the Day it's set
+        private static string DescribeWatchdog(EffectAction action, string target) =>
+            $"{Keywords.Link("Watchdog")}: {WatchdogSentence(action.watchdog, action.watchdog.charges, action.statusDuration, action.targetType is TargetType.Player or TargetType.Enemy ? null : target)}";
+
+        /// <summary>
+        /// What a Watchdog does, in one plain sentence starting in lower case: on its card, and in the board's list of the
+        /// Watchdogs set (with the charges it has left, and the creature it watches by name).
+        /// </summary>
+        public static string WatchdogSentence(WatchdogSpec spec, int charges, int days, string watchedCreature) {
+            charges = System.Math.Max(1, charges);
             string whose = spec.side switch { WatchdogSide.Enemy => "enemy ", WatchdogSide.Friendly => "friendly ", _ => "" };
             (string one, string many) = spec.watches switch {
                 WatchedAction.Attack => ("attack", "attacks"), WatchedAction.Spell => ("spell", "spells"), WatchedAction.Move => ("move", "moves"),
                 WatchedAction.Ability => ("ability", "abilities"), WatchedAction.Summon => ("summon", "summons"),
                 WatchedAction.Intelligence => (Keywords.Link("Reveal", "reveal"), Keywords.Link("Reveal", "reveals")), _ => ("status", "statuses")
             };
-            bool watchesCreature = action.targetType is not (TargetType.Player or TargetType.Enemy);
             bool briefing = spec.timing == WatchdogTiming.Briefing;
             bool plural = !briefing && charges > 1 || briefing && spec.pick == BriefingPick.Every;
             string what = $"{whose}{(plural ? many : one)}";
             if (spec.atMost > 0) what += $" of {spec.atMost} or less";
-            if (watchesCreature) what += $" by {target}";
+            if (watchedCreature != null) what += $" by {watchedCreature}";
             if (spec.damaging) what += plural ? " that deal damage" : " that deals damage";
             if (spec.effect == WatchdogEffect.Backfire) what += plural ? " to their attackers" : " to its attacker";
             // A Briefing one acts once a Day: "each Day" only when it can act more than once
@@ -555,14 +559,14 @@ namespace SlayTheClone {
                     _ => $"the first {what}{eachDay}"
                 };
             string sentence = spec.effect switch {
-                WatchdogEffect.Nullify => $"{Keywords.Link("Disable")} {thing}",
-                WatchdogEffect.Redirect or WatchdogEffect.Backfire => $"{Keywords.Link("Redirect")} {thing}",
-                WatchdogEffect.Reveal => $"{Keywords.Link("Reveal")} {thing}",
+                WatchdogEffect.Nullify => $"{Keywords.Link("Disable", "disable")} {thing}",
+                WatchdogEffect.Redirect or WatchdogEffect.Backfire => $"{Keywords.Link("Redirect", "redirect")} {thing}",
+                WatchdogEffect.Reveal => $"{Keywords.Link("Reveal", "reveal")} {thing}",
                 _ => $"{Keywords.Link("Reorder", "move")} {thing} to the {(spec.moveEarlier ? "start" : "end")} of the {Keywords.Link("Day")}"
             };
             // How often a Briefing one acts, once a Day: "2 times"; Every: as many as it has left
             if (briefing && charges > 1) sentence += spec.pick == BriefingPick.Every ? $", {charges} in all" : $", {charges} times";
-            return sentence + (action.statusDuration == 1 ? $" this {Keywords.Link("Day")}" : DaysTag(action.statusDuration));
+            return sentence + (days == 1 ? $" this {Keywords.Link("Day")}" : DaysTag(days));
         }
 
         // Slot Effects aim at the slot, whoever stands in it

@@ -25,23 +25,20 @@ namespace SlayTheClone {
 
         /// <summary>
         /// The combo glow (the user, 2026-10-17: like Slay the Spire's cards that glow when their bonus is on): a card in your
-        /// hand lights up softly once what it was made to follow is in place. Its intended combos are the designers' (the cards
-        /// that set it up, named on it: queued by you today, or a creature of yours in play), plus two the rules give: a Combo
-        /// card once another spell of yours is queued today, and an On Trend creature while a Trend is on or one is queued.
+        /// hand lights up softly once what it was made to follow has been played from your hand today. Only real payoffs glow (the
+        /// second card clearly better, or only working, after the first), and only cards played count, not what's already in
+        /// play (the user). Its intended combos are the designers' (the cards that set it up, named on it), plus two the rules
+        /// give: a Combo card once another spell of yours is queued today, and an On Trend creature once you've queued a Trend.
+        /// Later, maybe: a glow when a target condition is met (any enemy Revealed for Perfectly Timed Camera Malfunction).
         /// </summary>
-        public static bool IsSetUp(ICard card, IPlayer owner, IActionsQueue queue, ITrendSystem trends) {
+        public static bool IsSetUp(ICard card, IPlayer owner, IActionsQueue queue) {
             var data = card?.SourceData;
             if (data == null || owner == null) return false;
             var queued = queue?.GetPendingActions().OfType<PlayCardAction>().Where(p => p.GetOwner() == owner && p.GetCard() != card)
                 .Select(p => p.GetCard()).Where(c => c != null).ToList() ?? new List<ICard>();
-            if (data.setUpBy is { Length: > 0 }) {
-                var inPlace = queued.Select(c => c.Name)
-                    .Concat(owner.Battlefield.Select(s => s.OccupyingCreature).Where(c => c is { IsDead: false }).Select(c => c.Name));
-                if (inPlace.Any(name => data.setUpBy.Contains(name))) return true;
-            }
+            if (data.setUpBy is { Length: > 0 } && queued.Any(c => data.setUpBy.Contains(c.Name))) return true;
             if (data.combo && queued.Any(c => c is Spell)) return true;
-            return data is CreatureData { ability: CreatureAbility.OnTrend }
-                   && (trends != null && trends.Current != Trend.None || queued.OfType<Spell>().Any(EffectResolver.IsTrend));
+            return data is CreatureData { ability: CreatureAbility.OnTrend } && queued.OfType<Spell>().Any(EffectResolver.IsTrend);
         }
 
         /// <summary>As it resolves: its numbers go up by 1 for each other spell its player plays today.</summary>

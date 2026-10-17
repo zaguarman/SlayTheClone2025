@@ -211,9 +211,9 @@ namespace SlayTheClone.Tests {
             yield return null;
             Assert.AreEqual("", Badge(p2.Battlefield[1]), "Used up: gone from the slot");
 
-            StringAssert.Contains("attacks by the enemy -> Disable (2 left)", game.BoardView(p1).WatchdogText);
+            StringAssert.Contains("disable the next 2 enemy attacks", game.BoardView(p1).WatchdogText, "Your Watchdog, in plain words, with the charges it has left");
             StringAssert.Contains("???", game.BoardView(p2).WatchdogText, "The enemy's Watchdog condition is hidden");
-            StringAssert.DoesNotContain("Disable", game.BoardView(p2).WatchdogText);
+            StringAssert.DoesNotContain("disable", game.BoardView(p2).WatchdogText);
 
             var sneak = game.Summon(p2, game.Cards.Creature("Test Sneak", 2, 5), 4);
             var stealthy = game.Cards.Creature("Test Sleeper", 1, 5);
@@ -299,7 +299,7 @@ namespace SlayTheClone.Tests {
             Assert.Less(Height(enemyCard), Height(game.HandView(p2)));
             ExecuteEvents.Execute(enemyCard.gameObject, new PointerEventData(EventSystem.current) { position = Vector2.zero }, ExecuteEvents.pointerExitHandler);
             Tooltip.Existing.HideTooltip();
-            StringAssert.Contains("Disable", game.BoardView(p2).WatchdogText, "...the enemy's Watchdog conditions too");
+            StringAssert.Contains("disable", game.BoardView(p2).WatchdogText, "...the enemy's Watchdog conditions too");
             queuePanel.SetOpen(true);
             StringAssert.Contains("Test Sneak</color> attacks", Listed(), "...and the queue");
             StringAssert.Contains("Test Incoming", Listed());

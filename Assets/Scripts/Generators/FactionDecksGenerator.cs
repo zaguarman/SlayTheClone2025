@@ -2361,7 +2361,8 @@ namespace SlayTheClone {
 
             public string[] SetUpByNames; // The cards made to come before it (an intended combo): it glows in the hand once one is played
 
-            // An intended combo (the user, 2026-10-17): these cards, played first today or in play, set this one up
+            // An intended combo (the user, 2026-10-17): these cards, played first from your hand today, set this one up. Only real
+            // payoffs: the second card clearly better, or only working, after the first
             public CardDef SetUpBy(params string[] cards) {
                 SetUpByNames = cards;
                 return this;
