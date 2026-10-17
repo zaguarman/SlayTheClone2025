@@ -348,6 +348,19 @@ namespace Zeitgeist {
             return go;
         }
 
+        /// <summary>
+        /// What a right click on this does. The menus' key language (the user, 2026-10-17): a left click decides (picks, adds,
+        /// opens), a right click takes back (removes, cancels, undoes), Escape goes back.
+        /// </summary>
+        public static void OnRightClick(GameObject target, Action onRightClick) => target.AddComponent<RightClickAction>().action = onRightClick;
+
+        private class RightClickAction : MonoBehaviour, UnityEngine.EventSystems.IPointerClickHandler {
+            public Action action;
+            public void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData) {
+                if (eventData.button == UnityEngine.EventSystems.PointerEventData.InputButton.Right) action?.Invoke();
+            }
+        }
+
         public static void Stretch(GameObject go, float margin = 0) {
             var rect = (RectTransform)go.transform;
             rect.anchorMin = Vector2.zero;

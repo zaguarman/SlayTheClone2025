@@ -18,7 +18,7 @@ namespace Zeitgeist {
     /// </summary>
     public static partial class AITournament {
         private sealed class AdventureSim {
-            public Faction Faction;
+            public Umbrella Faction; // One of the four
             public int Index;
             public System.Random Random;
             public AdventureMap Map;
@@ -36,7 +36,7 @@ namespace Zeitgeist {
         }
 
         /// <summary>Plays <paramref name="runsPerFaction"/> adventures for each faction; returns the report.</summary>
-        public static string RunAdventures(IReadOnlyList<Faction> factions, IReadOnlyList<CardDataScriptableObject> pool, int runsPerFaction,
+        public static string RunAdventures(IReadOnlyList<Umbrella> factions, IReadOnlyList<CardDataScriptableObject> pool, int runsPerFaction,
             AIEntrant player, System.Action<float> progress = null, IReadOnlyList<CardDataScriptableObject> potionPool = null) {
             var cards = pool.Where(c => c != null).Distinct().ToList();
             potions = (potionPool ?? new List<CardDataScriptableObject>()).Where(p => p != null).ToList();
@@ -50,7 +50,7 @@ namespace Zeitgeist {
                         Faction = faction, Index = i, Random = new System.Random(seed), Map = AdventureMap.Generate(seed),
                         Deck = AdventureDecks.Starter(faction, cards).Cards.ToList()
                     };
-                    var rivals = factions.Where(f => f != faction).ToList();
+                    var rivals = Rivals(faction, cards);
                     sim.BossFaction = rivals[sim.Random.Next(rivals.Count)]; // Known from the start, as the map shows it
                     GainRelic(sim); // The opening choice: it takes the relic
                     sims.Add(sim);
@@ -123,7 +123,11 @@ namespace Zeitgeist {
 
         // Walks on (rooms at random along the paths) up to the next fight, which is set up: its enemy deck and faction. Shops
         // buy and remove; the other rooms do nothing here
-        private static void WalkToFight(AdventureSim sim, IReadOnlyList<Faction> factions, List<CardDataScriptableObject> pool, Dictionary<CardDataScriptableObject, AdventureDecks.Tier> tiers) {
+        // The subfactions an enemy can play: those of the other factions in the pool
+        private static List<Faction> Rivals(Umbrella faction, IEnumerable<CardDataScriptableObject> pool) =>
+            pool.Select(c => c.faction).Where(f => f != Faction.None && Umbrellas.Of(f) != faction).Distinct().OrderBy(f => f).ToList();
+
+        private static void WalkToFight(AdventureSim sim, IReadOnlyList<Umbrella> factions, List<CardDataScriptableObject> pool, Dictionary<CardDataScriptableObject, AdventureDecks.Tier> tiers) {
             while (true) {
                 var options = sim.Current == null ? sim.Map.Row(0).ToList() : sim.Current.Next;
                 if (options.Count == 0) {
@@ -133,7 +137,7 @@ namespace Zeitgeist {
                 var room = options[sim.Random.Next(options.Count)];
                 if (room.IsCombat) {
                     sim.Fighting = room;
-                    var rivals = factions.Where(f => f != sim.Faction).ToList();
+                    var rivals = Rivals(sim.Faction, pool);
                     sim.FightingFaction = room.Type == RoomType.Boss ? sim.BossFaction : rivals[sim.Random.Next(rivals.Count)];
                     // An elite carries a relic, the boss two (as the adventure does)
                     sim.EnemyRelics.Clear();
@@ -221,7 +225,7 @@ namespace Zeitgeist {
             }
         }
 
-        private static string AdventureReport(List<AdventureSim> sims, IReadOnlyList<Faction> factions, int runs, AIEntrant player, int fights, GameAudit audit,
+        private static string AdventureReport(List<AdventureSim> sims, IReadOnlyList<Umbrella> factions, int runs, AIEntrant player, int fights, GameAudit audit,
             List<CardDataScriptableObject> pool) {
             var text = new StringBuilder();
             text.AppendLine("ADVENTURE SIMULATION");
@@ -240,7 +244,7 @@ namespace Zeitgeist {
             text.AppendLine($"{"Faction",-18}{"Boss beaten",12}{"Fights won (avg)",18}{"Died: fight",13}{"elite",7}{"boss",6}{"stalled",9}{"Deck at end",13}");
             foreach (var group in sims.GroupBy(s => s.Faction).OrderBy(g => g.Count(s => s.Won)).ThenBy(g => g.Average(s => s.FightsWon))) {
                 var lost = group.Where(s => !s.Won).ToList();
-                text.AppendLine($"{CardTextFormatter.FactionName(group.Key),-18}{group.Count(s => s.Won),5} of {group.Count(),-4}{group.Average(s => s.FightsWon),14:0.0}    "
+                text.AppendLine($"{Umbrellas.Name(group.Key),-18}{group.Count(s => s.Won),5} of {group.Count(),-4}{group.Average(s => s.FightsWon),14:0.0}    "
                     + $"{lost.Count(s => s.Current?.Type == RoomType.Fight),9}{lost.Count(s => s.Current?.Type == RoomType.Elite),7}{lost.Count(s => s.Current?.Type == RoomType.Boss),6}"
                     + $"{group.Count(s => s.Stalled),9}{group.Average(s => s.Deck.Count),13:0.0}");
             }
@@ -249,7 +253,7 @@ namespace Zeitgeist {
             foreach (var group in sims.GroupBy(s => s.Faction).OrderBy(g => g.Count(s => s.Won)).ThenBy(g => g.Average(s => s.FightsWon))) {
                 var lost = group.Where(s => !s.Won).ToList();
                 text.AppendLine();
-                text.AppendLine($"{CardTextFormatter.FactionName(group.Key)}");
+                text.AppendLine($"{Umbrellas.Name(group.Key)}");
                 if (lost.Count == 0) {
                     text.AppendLine("    Never lost.");
                     continue;
@@ -265,7 +269,7 @@ namespace Zeitgeist {
             text.AppendLine("3. STARTER DECKS (12 cards: the plainest of the faction)");
             foreach (var faction in factions) {
                 var first = AdventureDecks.Starter(faction, pool);
-                text.AppendLine($"    {CardTextFormatter.FactionName(faction)}: {string.Join(", ", first.Cards.GroupBy(c => c.cardName).Select(g => $"{g.Key} x{g.Count()}"))}");
+                text.AppendLine($"    {Umbrellas.Name(faction)}: {string.Join(", ", first.Cards.GroupBy(c => c.cardName).Select(g => $"{g.Key} x{g.Count()}"))}");
                 Object.DestroyImmediate(first);
             }
             if (audit.Problems.Count > 0) {

@@ -51,11 +51,9 @@ namespace Zeitgeist {
         public Action StartGame;
 
         /// <summary>The faction picked to start a run with.</summary>
-        public Faction? Chosen { get; private set; }
-        /// <summary>The factions on offer, each with its deck.</summary>
-        public IReadOnlyList<(Faction faction, DeckScriptableObject deck)> Factions =>
-            Catalog.Opponents.Select(o => o.deck).Where(d => DeckCatalog.FactionsOf(d).Count == 1).Select(d => (DeckCatalog.FactionOf(d), d))
-                .Where(f => f.Item1 != Faction.None).GroupBy(f => f.Item1).Select(g => g.First()).ToList();
+        public Umbrella? Chosen { get; private set; }
+        /// <summary>The factions on offer (the four, the user, 2026-10-17): those with cards in the catalog.</summary>
+        public IReadOnlyList<Umbrella> Factions => CardGrid.UmbrellasIn(Catalog);
         /// <summary>The map's room buttons, by room.</summary>
         public IReadOnlyDictionary<MapNode, Button> Rooms => rooms;
         /// <summary>What the last room did, or how the run ended.</summary>
@@ -74,7 +72,7 @@ namespace Zeitgeist {
         public IReadOnlyList<CardController> ShopCards => shopGrid != null ? shopGrid.Cards : new List<CardController>();
         private CardGrid reward, deckGrid, shopGrid;
 
-        private readonly Dictionary<Faction, Button> factionButtons = new Dictionary<Faction, Button>();
+        private readonly Dictionary<Umbrella, Button> factionButtons = new Dictionary<Umbrella, Button>();
         private readonly Dictionary<MapNode, Button> rooms = new Dictionary<MapNode, Button>();
         private Button embark;
         private TextMeshProUGUI chosenText;
@@ -92,7 +90,7 @@ namespace Zeitgeist {
 
         protected override void Opened() {
             if (!AdventureRun.Active) {
-                Pick(Chosen ?? Factions.FirstOrDefault().faction);
+                Pick(Chosen ?? Factions.FirstOrDefault());
                 return;
             }
             if (mapScroll == null) return; // The card reward is up
@@ -114,12 +112,12 @@ namespace Zeitgeist {
         }
 
         #region Choosing a faction
-        public void Pick(Faction faction) {
+        public void Pick(Umbrella faction) {
             Chosen = faction;
             foreach (var pair in factionButtons) ShowChosen(pair.Value, pair.Key == faction);
-            bool offered = Factions.Any(f => f.faction == faction);
+            bool offered = Factions.Contains(faction);
             if (chosenText != null) chosenText.text = offered
-                ? $"{CardTextFormatter.FactionName(faction)}, with <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>a starter deck of {AdventureDecks.StarterSize} plain cards</color>" : "";
+                ? $"{Umbrellas.Name(faction)} ({string.Join(", ", Umbrellas.Subfactions(faction).Select(CardTextFormatter.FactionName))}), with <color=#{ColorUtility.ToHtmlStringRGB(AccentColor)}>a starter deck of {AdventureDecks.StarterSize} plain cards</color>" : "";
             if (embark != null) embark.interactable = offered;
             AscensionLevel = Mathf.Min(AscensionLevel, Ascension.Unlocked(faction));
             ShowAscension();
@@ -159,7 +157,7 @@ namespace Zeitgeist {
 
         /// <summary>Starts a run with the chosen faction's starter deck, on a new map, and shows it.</summary>
         public void Embark() {
-            if (Chosen == null || !Factions.Any(f => f.faction == Chosen)) return;
+            if (Chosen == null || !Factions.Contains(Chosen.Value)) return;
             AdventureRun.Start(Chosen.Value, AdventureDecks.Starter(Chosen.Value, Catalog.AllCards), Environment.TickCount, Catalog.AllCards, Catalog.Potions,
                 Mathf.Min(AscensionLevel, Ascension.Unlocked(Chosen.Value)));
             lastWalk = "Your journey begins. Pick a room on the bottom row.";
@@ -177,13 +175,13 @@ namespace Zeitgeist {
             layout.spacing = new Vector2(24f, 24f);
             layout.childAlignment = TextAnchor.MiddleCenter;
             grid.AddComponent<LayoutElement>().flexibleHeight = 1;
-            foreach (var (faction, _) in Factions) {
-                var button = AddButton(grid.transform, FactionButton + CardTextFormatter.FactionName(faction), "", -1, () => Pick(faction));
-                var coin = UITheme.AddFactionCoin(button.transform, faction, CoinSize).rectTransform;
+            foreach (var faction in Factions) {
+                var button = AddButton(grid.transform, FactionButton + Umbrellas.Name(faction), "", -1, () => Pick(faction));
+                var coin = UITheme.AddUmbrellaCoin(button.transform, faction, CoinSize).rectTransform;
                 coin.anchorMin = coin.anchorMax = coin.pivot = new Vector2(0.5f, 1f);
                 coin.anchoredPosition = new Vector2(0f, -20f);
                 var label = button.GetComponentInChildren<TextMeshProUGUI>();
-                label.text = CardTextFormatter.FactionName(faction);
+                label.text = Umbrellas.Name(faction);
                 label.alignment = TextAlignmentOptions.Bottom;
                 label.enableAutoSizing = true;
                 label.fontSizeMin = 16;
@@ -233,8 +231,9 @@ namespace Zeitgeist {
         /// </summary>
         public void SetUpFight(MapNode room) {
             var random = new System.Random(AdventureRun.Map.Seed * 31 + room.Row * 7 + room.Column);
-            var rivals = Factions.Select(f => f.faction).Where(f => f != AdventureRun.Faction).ToList();
-            if (rivals.Count == 0) rivals = Factions.Select(f => f.faction).ToList();
+            // The enemy plays a subfaction of another faction than yours
+            var rivals = CardGrid.FactionsIn(Catalog).Where(f => Umbrellas.Of(f) != AdventureRun.Umbrella).ToList();
+            if (rivals.Count == 0) rivals = CardGrid.FactionsIn(Catalog).ToList();
             var faction = rivals[random.Next(rivals.Count)];
             if (room.Type == RoomType.Boss && AdventureRun.BossFaction != Faction.None) faction = AdventureRun.BossFaction; // The one the map showed
             string name = AdventureDecks.EnemyName(faction, room);
@@ -276,7 +275,7 @@ namespace Zeitgeist {
         }
 
         private GameObject BuildMap() {
-            string faction = CardTextFormatter.FactionName(AdventureRun.Faction);
+            string faction = Umbrellas.Name(AdventureRun.Umbrella);
             var screen = AddScreen(transform, "AdventurePanel", $"Adventure: {faction}");
 
             var mapColumn = AddColumn(screen.columns, null);
@@ -297,7 +296,7 @@ namespace Zeitgeist {
             sideElement.flexibleWidth = 0;
             var coinHolder = NewObject("Coin", side);
             coinHolder.AddComponent<LayoutElement>().preferredHeight = CoinSize + 10;
-            var coin = UITheme.AddFactionCoin(coinHolder.transform, AdventureRun.Faction, CoinSize).rectTransform;
+            var coin = UITheme.AddUmbrellaCoin(coinHolder.transform, AdventureRun.Umbrella, CoinSize).rectTransform;
             coin.anchorMin = coin.anchorMax = coin.pivot = new Vector2(0.5f, 0.5f);
             AddText(side, AdventureRun.Deck != null ? $"Your deck: {CardGrid.Count(AdventureRun.Deck.Cards)}" : "", 22, UITheme.Hex(0xC9C0AE), FontStyles.Italic, height: 34);
             AddText(side, $"Health: <b>{AdventureRun.Health}</b>    EuroYuans: {AdventureRun.Money(AdventureRun.EuroYuans)}", 26, AccentColor, FontStyles.Normal, height: 38);
@@ -587,7 +586,7 @@ namespace Zeitgeist {
 
         private string StatusText() {
             if (AdventureRun.Won) return "<b>The boss is beaten.</b> Your adventure is won!"
-                + (AdventureRun.AscensionUnlocked > 0 ? $" Ascension {AdventureRun.AscensionUnlocked} is open for {CardTextFormatter.FactionName(AdventureRun.Faction)}." : "");
+                + (AdventureRun.AscensionUnlocked > 0 ? $" Ascension {AdventureRun.AscensionUnlocked} is open for {Umbrellas.Name(AdventureRun.Umbrella)}." : "");
             if (AdventureRun.Lost) return $"<b>Defeated</b> after {AdventureRun.Path.Count} rooms. The run is over.";
             return lastWalk ?? (AdventureRun.Current == null ? "Pick a room on the bottom row." : "Pick the next room along your path.");
         }

@@ -12,9 +12,11 @@ namespace Zeitgeist {
     /// On the left, your decks and New deck (which asks for its name at once), then the starter decks: open one to see its
     /// cards, and Copy it (or click a card) to make a deck of your own from it; in the middle, the cards, faction by faction:
     /// click one to add a copy to the open deck, right-click it to take one out; on the right, the open deck: its name (type to
-    /// rename it, 20 characters at most), how full it is, and
-    /// its cards, a click on one taking a copy out (hover it to see the card). Every change is saved at once. Clicking a
-    /// card with no deck open starts a new one. Once a deck has 20 cards (40 at most), the match setup offers it.
+    /// rename it, 20 characters at most), how full it is, and its cards: a click on one finds it in the middle, a right click
+    /// takes a copy out, hovering it shows the card, whose keywords can be read and which can be right-clicked too (the
+    /// menus' key language, the user, 2026-10-17: a left click decides, a right click takes back, Escape goes back). Every
+    /// change is saved at once. Clicking a card with no deck open starts a new one. Once a deck has 20 cards (40 at most),
+    /// the match setup offers it.
     /// </summary>
     public class DeckBuilderMenu : MenuScreen {
         public const string NewDeckButton = "Decks: + New deck";
@@ -224,9 +226,21 @@ namespace Zeitgeist {
             }
         }
 
-        // A card in the open deck: its faction's emblem, its name and copies. Clicking takes a copy out; hovering shows the card
+        /// <summary>Shows the card among its subfaction's in the middle, scrolled into view (the user, 2026-10-17: to see the cards around it).</summary>
+        public void ShowCard(CardDataScriptableObject card) {
+            if (card == null) return;
+            if (ShownFaction != card.faction || (ShownTier != null && CardScores.TierOf(card.cardName) != ShownTier)) {
+                ShownTier = null;
+                ShowFaction(card.faction);
+            }
+            cards.KeepInView(shownAssets.FirstOrDefault(p => p.Value == card).Key);
+        }
+
+        // A card in the open deck: its faction's emblem, its name and copies. A click finds it in the middle, a right click
+        // takes a copy out (the menus' key language: left decides, right takes back); hovering shows the card
         private void AddCardRow(CardDataScriptableObject card) {
-            var row = AddButton(rows, CardRow + card.cardName, card.cardName, -1, () => RemoveCard(card));
+            var row = AddButton(rows, CardRow + card.cardName, card.cardName, -1, () => ShowCard(card));
+            OnRightClick(row.gameObject, () => RemoveCard(card));
             row.GetComponent<LayoutElement>().preferredHeight = 40;
             var label = row.GetComponentInChildren<TextMeshProUGUI>();
             var coin = UITheme.AddFactionCoin(row.transform, card.faction, 26f).rectTransform;
@@ -285,7 +299,13 @@ namespace Zeitgeist {
             BuildCards(columns);
             BuildDeck(columns);
             AddButton(AddFooter(screen.panel.transform), BackButtonName, "Back", BackWidth, Hide);
-            cardPeek = new CardPeek(screen.panel.transform, Catalog.CardPrefab);
+            cardPeek = new CardPeek(screen.panel.transform, Catalog.CardPrefab) { Readable = true }; // Its keywords can be read on it
+            // A right click on the shown card takes a copy out; the card stays up while there are copies left
+            cardPeek.RightClicked = card => {
+                var at = cardPeek.ShownAt;
+                RemoveCard(card);
+                if (PlayerDecks.CopiesOf(OpenDeck, card) > 0) cardPeek.Show(card, at);
+            };
             return screen.panel;
         }
 
@@ -447,7 +467,7 @@ namespace Zeitgeist {
             WheelScroll.AddTo(scroll);
             rows = content.transform;
 
-            var hint = AddText(column, "Click a card to add a copy (two at most, 20 to 60 cards); click it here, or right-click it, to take one out.", 18, UITheme.Hex(0xC9C0AE), FontStyles.Italic, height: 48);
+            var hint = AddText(column, "Click a card in the middle to add a copy, right-click it to take one out. Here, click a card to find it among its subfaction's; right-click it, or the card shown, to take one out.", 18, UITheme.Hex(0xC9C0AE), FontStyles.Italic, height: 48);
             hint.textWrappingMode = TextWrappingModes.Normal;
 
             var buttons = NewObject("Buttons", column);

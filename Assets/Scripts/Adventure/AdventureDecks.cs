@@ -106,22 +106,39 @@ namespace Zeitgeist {
             spell.ToCardData().effects?.SelectMany(e => e.actions).Any(a => a.actionType == ActionType.Damage && a.targetType is TargetType.Enemy or TargetType.EnemyCreatures) == true;
 
         /// <summary>
-        /// Your first deck, Slay the Spire style: 12 plain cards of your faction, two simple creatures (4 and 3 copies) and
-        /// two simple spells, one that hits (3 copies) and one that helps (2). The plainest the faction has, of middling strength.
+        /// A card that fits any archetype of its faction (the user, 2026-10-17: a starter deck of neutral cards): nothing of a
+        /// subfaction's own ways, no cost of its own (discard, sacrifice, doom, prophecy, a gamble, single use), no ability,
+        /// movement, gift or disguise; not a token.
         /// </summary>
-        public static DeckScriptableObject Starter(Faction faction, IEnumerable<CardDataScriptableObject> pool) {
-            var cards = pool.Where(c => c != null && c.faction == faction).Distinct().ToList();
+        public static bool Neutral(CardDataScriptableObject card) {
+            if (card == null || card.discardCost > 0 || card.sacrifice > 0 || card.doomCost > 0 || card.prophecy > 0 || card.gamble || card.singleUse) return false;
+            if (card is CreatureCardScriptableObject creature && (creature.token || creature.ability != CreatureAbility.None || creature.movement != MovementKeyword.None
+                || creature.gift || creature.disguise != null)) return false;
+            return true;
+        }
+
+        /// <summary>
+        /// Your first deck, Slay the Spire style: 12 plain cards of your faction (one of the four), two simple creatures (4 and
+        /// 3 copies) and two simple spells, one that hits (3 copies) and one that helps (2). Neutral cards, fit for any of its
+        /// subfactions' archetypes (<see cref="Neutral"/>), spread over the subfactions, the plainest, of middling strength.
+        /// </summary>
+        public static DeckScriptableObject Starter(Umbrella faction, IEnumerable<CardDataScriptableObject> pool) {
+            var cards = pool.Where(c => c != null && Umbrellas.Of(c.faction) == faction).Distinct().ToList();
             var tiers = Tiers(pool);
             float Middling(CardDataScriptableObject c) => Math.Abs((int)tiers[c] - (int)Tier.C);
             // Nothing of Tier A or S in a starter (a text-less 6/6 is plain but no starter card), when the faction has enough below
             bool Modest(CardDataScriptableObject c) => tiers[c] <= Tier.B;
-            var plainCreatures = cards.OfType<CreatureCardScriptableObject>().Where(c => !c.token).Cast<CardDataScriptableObject>().ToList();
+            var neutral = cards.Where(Neutral).ToList();
+            if (neutral.Count(c => c is CreatureCardScriptableObject) < 2 || neutral.Count(c => c is not CreatureCardScriptableObject) < 2) neutral = cards;
+            var plainCreatures = neutral.OfType<CreatureCardScriptableObject>().Where(c => !c.token).Cast<CardDataScriptableObject>().ToList();
             if (plainCreatures.Count(Modest) >= 2) plainCreatures = plainCreatures.Where(Modest).ToList();
-            var creatures = plainCreatures.OrderBy(Complexity).ThenBy(Middling).ThenBy(c => c.cardName).Take(2).ToList();
-            var spells = cards.Where(c => c is not CreatureCardScriptableObject).OrderBy(c => Modest(c) ? 0 : 1).ThenBy(Complexity).ThenBy(Middling).ThenBy(c => c.cardName).ToList();
+            var creatures = Spread(plainCreatures.OrderBy(Complexity).ThenBy(Middling).ThenBy(c => c.cardName), 2);
+            var spells = neutral.Where(c => c is not CreatureCardScriptableObject).OrderBy(c => Modest(c) ? 0 : 1).ThenBy(Complexity).ThenBy(Middling).ThenBy(c => c.cardName).ToList();
             var strike = spells.FirstOrDefault(Hits);
-            // The one that helps helps your side: aimed at your creatures or you (not a curse on theirs, like Memento Mori)
-            var defend = spells.FirstOrDefault(s => s != strike && Helps(s)) ?? spells.FirstOrDefault(s => s != strike && !Hits(s));
+            // The one that helps helps your side: aimed at your creatures or you (not a curse on theirs, like Memento Mori); of
+            // another subfaction than the strike's, when there is one as plain
+            var defend = spells.Where(s => s != strike && Helps(s)).OrderBy(s => strike != null && s.faction == strike.faction ? 1 : 0).FirstOrDefault()
+                ?? spells.FirstOrDefault(s => s != strike && !Hits(s));
 
             var deck = new List<CardDataScriptableObject>();
             if (creatures.Count > 0) deck.AddRange(Enumerable.Repeat(creatures[0], 4));
@@ -134,7 +151,16 @@ namespace Zeitgeist {
                 if (!deck.Contains(extra)) deck.Add(extra);
             }
             while (deck.Count < StarterSize && deck.Count > 0) deck.Add(deck[deck.Count % Math.Min(deck.Count, 4)]);
-            return DeckScriptableObject.Make($"{CardTextFormatter.FactionName(faction)} Starter", deck.Take(StarterSize));
+            return DeckScriptableObject.Make($"{Umbrellas.Name(faction)} Starter", deck.Take(StarterSize));
+        }
+
+        // The first so many of the ranked cards, each subfaction's first before any subfaction's second: the picks span the faction
+        private static List<CardDataScriptableObject> Spread(IEnumerable<CardDataScriptableObject> ranked, int count) {
+            var list = ranked.ToList();
+            var picked = new List<CardDataScriptableObject>();
+            foreach (var card in list) if (picked.Count < count && picked.All(p => p.faction != card.faction)) picked.Add(card);
+            foreach (var card in list) if (picked.Count < count && !picked.Contains(card)) picked.Add(card);
+            return picked;
         }
         #endregion
 
@@ -205,9 +231,28 @@ namespace Zeitgeist {
         }
         #endregion
 
-        /// <summary>After a fight won: three different cards of your own faction (the user, 2026-10-16: only your deck's faction drops), to take one of or none.</summary>
-        public static List<CardDataScriptableObject> Reward(Faction faction, float strength, IEnumerable<CardDataScriptableObject> pool, Random random,
-            ICollection<CardDataScriptableObject> skip = null, int choices = RewardChoices) => Roll(faction, strength, pool, random, choices, skip);
+        /// <summary>
+        /// After a fight won: three different cards of your own faction (the user, 2026-10-16: only your deck's faction drops),
+        /// one of each of its subfactions in turn (the user, 2026-10-17; the odd card goes to a subfaction at random), to take
+        /// one of or none.
+        /// </summary>
+        public static List<CardDataScriptableObject> Reward(Umbrella faction, float strength, IEnumerable<CardDataScriptableObject> pool, Random random,
+            ICollection<CardDataScriptableObject> skip = null, int choices = RewardChoices) {
+            var cards = (pool ?? Enumerable.Empty<CardDataScriptableObject>()).Where(c => c != null).ToList();
+            var subfactions = Umbrellas.Subfactions(faction).Where(f => cards.Any(c => c.faction == f)).ToList();
+            var picked = new List<CardDataScriptableObject>();
+            if (subfactions.Count == 0) return picked;
+            int first = random.Next(subfactions.Count);
+            for (int i = 0; picked.Count < choices && i < choices * 2; i++) {
+                var taken = skip == null ? picked : skip.Concat(picked).ToList();
+                picked.AddRange(Roll(subfactions[(first + i) % subfactions.Count], strength, cards, random, 1, taken));
+            }
+            return picked;
+        }
+
+        /// <summary>Cards of the faction (one of the four), any of its subfactions, rolled by tier like <see cref="Roll(Faction, float, IEnumerable{CardDataScriptableObject}, Random, int, ICollection{CardDataScriptableObject})"/>.</summary>
+        public static List<CardDataScriptableObject> Roll(Umbrella faction, float strength, IEnumerable<CardDataScriptableObject> pool, Random random, int count,
+            ICollection<CardDataScriptableObject> skip = null) => Roll(f => Umbrellas.Of(f) == faction, strength, pool, random, count, skip);
 
         // The odds of each tier, D to S, at the bottom of the map and at the top (Slay the Spire's rarities, the user: random,
         // a high tier unlikely early): in between they blend by the room's strength
@@ -218,10 +263,13 @@ namespace Zeitgeist {
         /// then a card of that tier picked at random (the nearest tier that has one left, if it hasn't).
         /// </summary>
         public static List<CardDataScriptableObject> Roll(Faction faction, float strength, IEnumerable<CardDataScriptableObject> pool, Random random, int count,
-            ICollection<CardDataScriptableObject> skip = null) {
+            ICollection<CardDataScriptableObject> skip = null) => Roll(f => f == faction, strength, pool, random, count, skip);
+
+        private static List<CardDataScriptableObject> Roll(Func<Faction, bool> of, float strength, IEnumerable<CardDataScriptableObject> pool, Random random, int count,
+            ICollection<CardDataScriptableObject> skip) {
             var cards = (pool ?? Enumerable.Empty<CardDataScriptableObject>()).Where(c => c != null && !(c is CreatureCardScriptableObject { token: true })).Distinct().ToList();
             var tiers = Tiers(cards);
-            var left = cards.Where(c => c.faction == faction && (skip == null || !skip.Contains(c))).ToList();
+            var left = cards.Where(c => of(c.faction) && (skip == null || !skip.Contains(c))).ToList();
             var picked = new List<CardDataScriptableObject>();
             float t = Math.Clamp(strength, 0f, 1f);
             var odds = OddsEarly.Select((early, i) => early + (OddsLate[i] - early) * t).ToArray();

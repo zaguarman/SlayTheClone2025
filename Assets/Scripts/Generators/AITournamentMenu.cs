@@ -25,8 +25,7 @@ namespace Zeitgeist {
         public static void RunAdventures(int runsPerFaction = 20) =>
             Run(AdventureReportPath, (decks, progress) => {
                 var catalog = AssetDatabase.LoadAssetAtPath<DeckCatalog>(AssetDatabase.GUIDToAssetPath(AssetDatabase.FindAssets("t:DeckCatalog")[0]));
-                var factions = catalog.Opponents.Select(o => DeckCatalog.FactionsOf(o.deck)).Where(f => f.Count == 1).Select(f => f[0])
-                    .Where(f => f != Enums.Faction.None).Distinct().ToList();
+                var factions = Umbrellas.All.Where(u => catalog.AllCards.Any(c => Umbrellas.Of(c.faction) == u)).ToList(); // The four (2026-10-17)
                 return (new List<AITournament.Result>(), AITournament.RunAdventures(factions, catalog.AllCards, runsPerFaction, new AIEntrant(AILevel.Hard), progress, catalog.Potions));
             });
 

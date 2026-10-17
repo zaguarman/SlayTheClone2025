@@ -202,7 +202,7 @@ namespace Zeitgeist {
                 new GameRecorder.Seat { Name = Player2.Name, Deck = MatchSetup.OpponentDeck?.GetDeckName() ?? "Scene deck", PlayedBy = Who(Player2),
                     Cards = cards2, Relics = string.Join(", ", Player2.Relics.Select(Relics.NameOf)) },
                 adventure ? new AdventureRecord {
-                    runId = AdventureRun.RunId, faction = CardTextFormatter.FactionName(AdventureRun.Faction), room = room.Type.ToString(),
+                    runId = AdventureRun.RunId, faction = Umbrellas.Name(AdventureRun.Umbrella), room = room.Type.ToString(),
                     row = room.Row + 1, fightsWonBefore = AdventureRun.FightsWon, ascension = AdventureRun.Ascension
                 } : null,
                 Who);

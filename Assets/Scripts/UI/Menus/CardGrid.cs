@@ -24,6 +24,11 @@ namespace Zeitgeist {
         /// <summary>The cards shown, in order.</summary>
         public List<CardController> Cards { get; } = new List<CardController>();
 
+        /// <summary>Scrolls the grid so this card of it is in view.</summary>
+        public void KeepInView(CardController card) {
+            if (card != null && Cards.Contains(card)) MenuWidgets.KeepInView(scroll, (RectTransform)card.transform.parent);
+        }
+
         public CardGrid(Transform parent, CardController cardPrefab, int columnCount) {
             cardViews = CardViews.ForDisplay(cardPrefab);
 

@@ -93,7 +93,8 @@ namespace Zeitgeist {
         /// <summary>What taking a card out costs now.</summary>
         public static int RemovalCost => Discounted(RemovalPrice + RemovalRise * removals);
         private static int removals;
-        public static Faction Faction { get; private set; }
+        /// <summary>Your faction, one of the four (the user, 2026-10-17); your cards are of its subfactions.</summary>
+        public static Umbrella Umbrella { get; private set; }
         /// <summary>The Ascension level the boss's defeat just opened for this faction; 0 if none.</summary>
         public static int AscensionUnlocked { get; private set; }
         /// <summary>This run, for the telemetry's records of its fights.</summary>
@@ -146,20 +147,20 @@ namespace Zeitgeist {
         /// <summary>The relics an elite or a boss can carry: the ones that work in a fight.</summary>
         public static readonly Relic[] EnemyPerks = { Relic.Taser, Relic.Kevlar, Relic.ProteinShake, Relic.Coffee, Relic.AirFryer, Relic.MemoNote };
 
-        public static void Start(Faction faction, DeckScriptableObject deck, int seed, IEnumerable<CardDataScriptableObject> pool = null,
+        public static void Start(Umbrella faction, DeckScriptableObject deck, int seed, IEnumerable<CardDataScriptableObject> pool = null,
             IEnumerable<CardDataScriptableObject> potions = null, int ascension = 0) {
             Clear();
             RunId = System.Guid.NewGuid().ToString("N");
             Pool = (pool ?? Enumerable.Empty<CardDataScriptableObject>()).Where(c => c != null).Distinct().ToList();
             PotionPool = (potions ?? Enumerable.Empty<CardDataScriptableObject>()).Where(c => c != null).Distinct().ToList();
             Active = true;
-            Faction = faction;
+            Umbrella = faction;
             Deck = deck;
             Ascension = Mathf.Clamp(ascension, 0, Zeitgeist.Ascension.Max);
             Health = Zeitgeist.Ascension.StartHealth(Ascension);
             Map = AdventureMap.Generate(seed);
-            // The boss: a faction other than yours, among those in the pool, decided now and shown on the map
-            var rivals = Pool.Select(c => c.faction).Where(f => f != Faction.None && f != faction).Distinct().OrderBy(f => f).ToList();
+            // The boss: a subfaction of another faction than yours, among those in the pool, decided now and shown on the map
+            var rivals = Pool.Select(c => c.faction).Where(f => f != Faction.None && Umbrellas.Of(f) != faction).Distinct().OrderBy(f => f).ToList();
             BossFaction = rivals.Count > 0 ? rivals[new System.Random(seed * 13 + 5).Next(rivals.Count)] : Faction.None;
             // The run opens with a choice (Slay the Spire's Neow): a relic, potions, Health or upgrades
             Event = AdventureEvents.Onboarding();
@@ -308,7 +309,7 @@ namespace Zeitgeist {
             var tiers = AdventureDecks.Tiers(cards);
             var random = new System.Random(Map.Seed * 23 + room.Row * 11 + room.Column);
             // Each card's tier rolled like a reward's: the better ones rarer, more likely higher up the map
-            var own = AdventureDecks.Roll(Faction, AdventureDecks.StrengthOf(room), cards, random, ShopCards);
+            var own = AdventureDecks.Roll(Umbrella, AdventureDecks.StrengthOf(room), cards, random, ShopCards); // Any of your faction's subfactions
             foreach (var card in own.OrderBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => tiers[c]))
                 Shop.Add(new ShopOffer { Card = card, Price = Discounted(PriceOf(tiers[card])) });
             // Two potions, different ones
@@ -369,7 +370,7 @@ namespace Zeitgeist {
             Found.Clear();
             if (room.Type == RoomType.Boss) {
                 Won = true;
-                if (Zeitgeist.Ascension.UnlockAfterWin(Faction, Ascension)) AscensionUnlocked = Ascension + 1;
+                if (Zeitgeist.Ascension.UnlockAfterWin(Umbrella, Ascension)) AscensionUnlocked = Ascension + 1;
                 return;
             }
             Rewards.Clear();
@@ -387,8 +388,8 @@ namespace Zeitgeist {
                 var pack = new RewardPack();
                 // Cards of your own faction (the user); a second pack shows others, when there are enough
                 int choices = Relics.Contains(Relic.Backpack) ? AdventureDecks.RewardChoices + 1 : AdventureDecks.RewardChoices;
-                var fresh = AdventureDecks.Reward(Faction, strength, Pool, random, offered, choices);
-                pack.Cards.AddRange(fresh.Count > 0 ? fresh : AdventureDecks.Reward(Faction, strength, Pool, random, null, choices));
+                var fresh = AdventureDecks.Reward(Umbrella, strength, Pool, random, offered, choices);
+                pack.Cards.AddRange(fresh.Count > 0 ? fresh : AdventureDecks.Reward(Umbrella, strength, Pool, random, null, choices));
                 foreach (var card in pack.Cards) offered.Add(card);
                 if (pack.Cards.Count > 0) Rewards.Add(pack);
             }
@@ -449,7 +450,7 @@ namespace Zeitgeist {
             eventRoom = null;
             seenEvents.Clear();
             Shop.Clear();
-            Faction = Faction.None;
+            Umbrella = Umbrella.None;
             Deck = EnemyDeck = null;
             Rewards.Clear();
             Map = null;

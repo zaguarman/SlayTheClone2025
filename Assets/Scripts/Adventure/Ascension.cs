@@ -24,13 +24,13 @@ namespace Zeitgeist {
             "The boss has 80 Health."
         };
 
-        private static string Key(Faction faction) => $"Ascension.{faction}";
+        private static string Key(Umbrella faction) => $"Ascension.{faction}"; // By faction, one of the four (2026-10-17: the old subfaction unlocks don't carry over)
 
         /// <summary>The highest level this faction may play: 0 until its boss is beaten.</summary>
-        public static int Unlocked(Faction faction) => Mathf.Clamp(PlayerPrefs.GetInt(Key(faction), 0), 0, Max);
+        public static int Unlocked(Umbrella faction) => Mathf.Clamp(PlayerPrefs.GetInt(Key(faction), 0), 0, Max);
 
         /// <summary>A run won at this level opens the next one, for that faction.</summary>
-        public static bool UnlockAfterWin(Faction faction, int level) {
+        public static bool UnlockAfterWin(Umbrella faction, int level) {
             if (level >= Max || Unlocked(faction) > level) return false;
             PlayerPrefs.SetInt(Key(faction), level + 1);
             PlayerPrefs.Save();

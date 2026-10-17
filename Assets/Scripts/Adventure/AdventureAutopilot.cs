@@ -48,7 +48,7 @@ namespace Zeitgeist {
 
         private readonly List<string> runLog = new List<string>();
         private string logPath;
-        private Faction faction;
+        private Umbrella faction;
         private System.Random random;
         private float wait;
         private bool stepOnce;
@@ -87,13 +87,13 @@ namespace Zeitgeist {
         }
 
         private void StartRun(bool fresh) {
-            faction = AdventureRun.Faction;
+            faction = AdventureRun.Umbrella;
             random = new System.Random(Environment.TickCount);
             runLog.Clear();
             runEnded = false;
             Directory.CreateDirectory(LogFolder);
-            logPath = Path.Combine(LogFolder, $"{DateTime.Now:yyyy-MM-dd HH-mm-ss} {CardTextFormatter.FactionName(faction).TrimEnd('.')}.txt");
-            Write($"Adventure on autopilot: {CardTextFormatter.FactionName(faction)}" + (AdventureRun.Ascension > 0 ? $", Ascension {AdventureRun.Ascension}" : "")
+            logPath = Path.Combine(LogFolder, $"{DateTime.Now:yyyy-MM-dd HH-mm-ss} {Umbrellas.Name(faction)}.txt");
+            Write($"Adventure on autopilot: {Umbrellas.Name(faction)}" + (AdventureRun.Ascension > 0 ? $", Ascension {AdventureRun.Ascension}" : "")
                   + $", map seed {AdventureRun.Map.Seed}, the boss plays {CardTextFormatter.FactionName(AdventureRun.BossFaction)}, your seat played by the {new AIEntrant(Level).Name} AI"
                   + (fresh ? "" : $" (taken over in room {AdventureRun.Path.Count}, Health {AdventureRun.Health})"));
             Write($"Starter deck: {DeckList(AdventureRun.Deck.Cards)}");
@@ -434,7 +434,7 @@ namespace Zeitgeist {
             string where = AdventureRun.Won ? "won" : AdventureRun.Lost ? "lost"
                 : AdventureRun.Fighting != null ? $"fight, row {AdventureRun.Fighting.Row + 1}"
                 : AdventureRun.Current == null ? "at the start" : $"row {AdventureRun.Current.Row + 1}";
-            statusText.text = $"<b>Autopilot</b>: {CardTextFormatter.FactionName(faction)}, {where}\n{AdventureRun.Health} Health"
+            statusText.text = $"<b>Autopilot</b>: {Umbrellas.Name(faction)}, {where}\n{AdventureRun.Health} Health"
                               + (Runs > 0 ? $", run {Runs + (runEnded ? 0 : 1)} ({Wins} won)" : "");
             speedText.text = Paused ? "<color=#E04B3A>paused</color>" : $"{Speed:0.##}x";
             pauseText.text = Paused ? "Resume" : "Pause";

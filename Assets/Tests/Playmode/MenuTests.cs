@@ -205,18 +205,21 @@ namespace Zeitgeist.Tests {
             Click(TitleButton(MainMenu.AdventureButtonName));
             var adventure = Object.FindFirstObjectByType<AdventureMenu>();
             Assert.IsTrue(adventure.IsOpen, "Adventure asks for a faction first");
-            CollectionAssert.AreEquivalent(catalog.Opponents.Select(o => DeckCatalog.FactionOf(o.deck)).Distinct(), adventure.Factions.Select(f => f.faction), "...each once");
-            var yours = adventure.Factions[1].faction;
-            Click(GalleryButton(adventure, AdventureMenu.FactionButton + CardTextFormatter.FactionName(yours)));
+            // One of the four factions (the user, 2026-10-17), its subfactions' cards all yours
+            CollectionAssert.AreEquivalent(catalog.AllCards.Select(c => Umbrellas.Of(c.faction)).Distinct(), adventure.Factions, "...each once");
+            var yours = adventure.Factions[1];
+            Click(GalleryButton(adventure, AdventureMenu.FactionButton + Umbrellas.Name(yours)));
             Click(GalleryButton(adventure, AdventureMenu.EmbarkButtonName));
-            Assert.IsTrue(AdventureRun.Active && AdventureRun.Faction == yours, "Embark starts a run with it...");
+            Assert.IsTrue(AdventureRun.Active && AdventureRun.Umbrella == yours, "Embark starts a run with it...");
             Assert.AreEqual(AdventureDecks.StarterSize, AdventureRun.Deck.Cards.Count, "...and a small starter deck...");
-            Assert.IsTrue(AdventureRun.Deck.Cards.All(c => c.faction == yours) && AdventureRun.Deck.Cards.Any(c => c is CreatureCardScriptableObject)
+            Assert.IsTrue(AdventureRun.Deck.Cards.All(c => Umbrellas.Of(c.faction) == yours) && AdventureRun.Deck.Cards.Any(c => c is CreatureCardScriptableObject)
                 && AdventureRun.Deck.Cards.Any(c => c is not CreatureCardScriptableObject), "...of its faction, creatures and spells");
+            Assert.IsTrue(AdventureRun.Deck.Cards.All(AdventureDecks.Neutral), "...neutral ones, fit for any of its subfactions' archetypes");
+            Assert.GreaterOrEqual(AdventureRun.Deck.Cards.Select(c => c.faction).Distinct().Count(), 2, "...spread over its subfactions");
             // The run opens with a choice (Orientation Day): one of four perks, then the map; the boss's faction is known
             Assert.IsTrue(AdventureRun.InEvent && AdventureRun.Event.Id == "Onboarding", "...opened by a choice");
             Assert.AreNotEqual(Faction.None, AdventureRun.BossFaction, "The boss's faction is known from the start...");
-            Assert.AreNotEqual(yours, AdventureRun.BossFaction, "...and isn't yours");
+            Assert.AreNotEqual(yours, Umbrellas.Of(AdventureRun.BossFaction), "...and isn't yours");
             Click(GalleryButton(adventure, AdventureMenu.EventChoiceButton + 0));
             Assert.AreEqual(1, AdventureRun.Relics.Count, "The company perk: a relic");
             AdventureRun.Relics.Clear(); // A random one: the Health, pay and pack checks below count without it
@@ -238,7 +241,7 @@ namespace Zeitgeist.Tests {
             Assert.AreSame(AdventureRun.Deck, MatchSetup.PlayerDeck, "...your faction's deck...");
             Assert.AreEqual(AdventureRun.StartingHealth, MatchSetup.PlayerHealth, "...at the run's Health (60 to begin with)...");
             Assert.AreEqual(AdventureRun.HealthStep, MatchSetup.OpponentHealth, "...against an enemy at 5 Health, the first time (5 more each fight won, the boss 60)...");
-            Assert.AreNotEqual(yours, DeckCatalog.FactionOf(MatchSetup.OpponentDeck), "...against another faction's...");
+            Assert.AreNotEqual(yours, Umbrellas.Of(DeckCatalog.FactionOf(MatchSetup.OpponentDeck)), "...against another faction's...");
             Assert.AreEqual(AILevel.Easy, MatchSetup.AILevel, "...the first ones easy...");
             var tiers = AdventureDecks.Tiers(catalog.AllCards);
             double TierOf(DeckScriptableObject deck) => deck.Cards.Average(c => (int)tiers[c]);
@@ -266,7 +269,8 @@ namespace Zeitgeist.Tests {
             var taken = adventure.RewardCards[0].GetBaseCardData().cardName;
             ClickCard(adventure.RewardCards[0]);
             Assert.AreEqual(AdventureDecks.StarterSize + 1, AdventureRun.Deck.Cards.Count, "...and opened again: clicking one takes it into your deck...");
-            Assert.IsTrue(AdventureRun.Deck.Cards.Any(c => c.cardName == taken && c.faction == yours), "...a card of your own faction (only those drop)");
+            Assert.IsTrue(AdventureRun.Deck.Cards.Any(c => c.cardName == taken && Umbrellas.Of(c.faction) == yours), "...a card of your own faction (only those drop)");
+            Assert.GreaterOrEqual(AdventureRun.Rewards[0].Cards.Select(c => c.faction).Distinct().Count(), Mathf.Min(AdventureDecks.RewardChoices, Umbrellas.Subfactions(yours).Count), "...the pack one card of each of its subfactions");
             Assert.IsFalse(GalleryButton(adventure, AdventureMenu.PackButton + 0).interactable, "The pack is used up");
             Click(GalleryButton(adventure, AdventureMenu.ProceedButtonName));
             Assert.IsFalse(AdventureRun.InRewards, "Proceed: on to the map");
@@ -315,7 +319,7 @@ namespace Zeitgeist.Tests {
                 Click(adventure.Rooms[shop]);
                 Assert.IsTrue(AdventureRun.InShop, "A shop opens...");
                 Assert.AreEqual(AdventureRun.ShopCards + AdventureRun.ShopPotions, adventure.ShopCards.Count, "...its cards on show, and two potions...");
-                Assert.IsTrue(AdventureRun.Shop.Where(o => !o.IsPotion && !o.IsRelic).All(o => o.Card.faction == yours), "...the cards all of your faction...");
+                Assert.IsTrue(AdventureRun.Shop.Where(o => !o.IsPotion && !o.IsRelic).All(o => Umbrellas.Of(o.Card.faction) == yours), "...the cards all of your faction...");
                 Assert.AreEqual(1, AdventureRun.Shop.Count(o => o.IsRelic), "...and a relic");
                 Assert.IsEmpty(AdventureRun.Reachable(), "No walking on from a shop before leaving it");
                 var cheapest = AdventureRun.Shop.Where(o => !o.IsPotion && !o.IsRelic).OrderBy(o => o.Price).First();
@@ -408,8 +412,12 @@ namespace Zeitgeist.Tests {
             name.text = "Mixtape";
             name.onEndEdit.Invoke(name.text);
             Assert.AreEqual("Mixtape", yourDeck.GetDeckName(), "Typing a name renames it");
+            // The menus' key language (the user, 2026-10-17): a left click decides, a right click takes back
             Click(GalleryButton(builder, DeckBuilderMenu.CardRow + firstName));
-            Assert.AreEqual(PlayerDecks.MaxDeckSize - 1, yourDeck.Cards.Count, "Clicking a card in the deck takes a copy out");
+            Assert.AreEqual(factions[0], builder.ShownFaction, "Clicking a card in the deck finds it among its subfaction's cards");
+            Assert.AreEqual(PlayerDecks.MaxDeckSize, yourDeck.Cards.Count, "...and takes nothing out");
+            RightClick(GalleryButton(builder, DeckBuilderMenu.CardRow + firstName));
+            Assert.AreEqual(PlayerDecks.MaxDeckSize - 1, yourDeck.Cards.Count, "Right-clicking a card in the deck takes a copy out");
 
             Click(GalleryButton(builder, DeckBuilderMenu.CopyButtonName));
             Assert.AreEqual("Mixtape 2", builder.OpenDeck.GetDeckName(), "Copy makes another deck, opened, with a name of its own");
@@ -601,6 +609,9 @@ namespace Zeitgeist.Tests {
         private static ScrollRect CardsScroll(Component screen) => screen.GetComponentsInChildren<ScrollRect>().Single(s => s.name == "Cards");
 
         // A left click, the way the card itself hears it
+        private static void RightClick(Button button) =>
+            ExecuteEvents.Execute(button.gameObject, new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Right }, ExecuteEvents.pointerClickHandler);
+
         private static void ClickCard(CardController card) =>
             ExecuteEvents.Execute(card.gameObject, new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left }, ExecuteEvents.pointerClickHandler);
 
