@@ -104,9 +104,9 @@ namespace SlayTheClone {
             Add("Last Rites", "A [Doomed] creature's final attack on the slot opposite it, even if it can't act.");
             Add("Blessed", "Bless X (no number: 1): the next X statuses that would land on it are stopped, good or bad. Each stack also saves it once from being [Destroy|destroyed] by a spell or an ability (a Sacrifice isn't stopped).");
             Add("Heat Signature", "Heat Signature X (no number: 1): [Random|random] effects, [Homing] ones and redirected attacks go to the creature with the most Heat Signature, on either side. It stays until cleansed.");
-            Add("Concealed", "Conceal X (no number: 1): for X [Days], its plans show as ??? to the enemy and their [Watchdog|Watchdogs] can't see them.");
+            Add("Concealed", "Conceal X (no number: 1): for X [Days], its plans show as ??? to the enemy, and the enemy's effects waiting to [Disable] or [Redirect] actions can't catch them.");
             Add("Revealed", "Revealed X (no number: 1): for X [Days], it can't be [Concealed]: its plans can be seen.");
-            Add("Encrypted", "Encrypt X (no number: 1): for X [Days], its actions slip past every [Watchdog], the enemy's and yours: none reacts to them, and none spends a charge on them. Unlike [Concealed], everyone still sees what it plans.");
+            Add("Encrypted", "Encrypt X (no number: 1): for X [Days], nothing can [Disable], [Redirect] or [Reorder] its actions, the enemy's cards or yours. Unlike [Concealed], everyone still sees what it plans.");
             Add("Untouchable", "Untouchable X (no number: 1): takes no damage at all for X [Days], counting the Day it lands: 1 is this Day only.");
             Add("Cooldown", "Cooldown X (no number: 1): its Active ability rests and can't be used for the next X [Days].");
             Add("Brainwashed", "Brainwashed X (no number: 1): when its X [Days] run out, at [Dusk], it changes sides for good ([Take Control|taken] by the other side) and loses its ability until its card is reshuffled. A [Cleanse] can't remove it: only taking it off the board in time (back to a hand, or [Gone Dark|gone dark]) saves it.");
@@ -128,10 +128,10 @@ namespace SlayTheClone {
             // The Watchdog's words (the user, 2026-10-16): it intercepts an action, then disables, redirects, reorders or reveals it
             Add("Watchdog", "A trap in the action queue: it [Intercept|intercepts] the actions it watches as they come up. One charge per action.");
             Add("Intercept", "A [Watchdog] catches an action it watches, before it resolves, and does what it says to it: [Disable], [Redirect], [Reorder] or [Reveal].");
-            Add("Briefing", "Each [Day], once everyone has planned and before anything resolves, the [Watchdog] reads the whole queue and [Intercept|intercepts] what it watches. It starts the Day after it's set.");
-            Add("Disable", "The intercepted action is cancelled: it doesn't happen.");
-            Add("Redirect", "The intercepted action hits another creature, picked at [Random|random]. Redirected to the attacker: an attack that doesn't happen, its attacker taking its own Attack as damage instead.");
-            Add("Reorder", "The intercepted action moves to the start or the end of its turn in the queue.");
+            Add("Briefing", "Each [Day], once everyone has planned and before anything resolves, the [Watchdog] reads the whole queue and [Intercept|intercepts] what it watches. Set during a Day, it looks at what's still to come at once.");
+            Add("Disable", "The action is cancelled: it doesn't happen.");
+            Add("Redirect", "The action hits another creature instead, picked at [Random|random]. Redirected to its attacker: the attack doesn't happen, and the attacker takes its own Attack as damage.");
+            Add("Reorder", "The action moves to the start or the end of the Day.");
 
             // ---------------------------------------------------------------- Slot Effects
             group = "Slot Effects";

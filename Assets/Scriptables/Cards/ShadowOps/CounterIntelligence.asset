@@ -45,7 +45,7 @@ MonoBehaviour:
       modifyHealth: 1
       modifySpeed: 0
       statusEffectToApply: 0
-      statusDuration: 0
+      statusDuration: 1
       statusPotency: 0
       cleanse: 0
       purge: 0
@@ -55,9 +55,9 @@ MonoBehaviour:
         side: 0
         atMost: 0
         effect: 1
-        charges: 2
+        charges: 1
         timing: 1
-        pick: 1
+        pick: 0
         moveEarlier: 0
         damaging: 0
       trend: 0
@@ -68,10 +68,9 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'Mechanics test: a Briefing Watchdog (GDD 3.11). From the Day after
-    it''s created, before anything resolves, it redirects the strongest enemy attack
-    to a random creature (the one with the most Heat first). 2 charges, one per attack
-    it redirects.'
+  designNotes: 'A counter (the user, 2026-10-17): the first enemy attack this Day
+    is redirected to a random creature (the one with the most Heat first). A Briefing
+    Watchdog, online the Day it''s played, for that Day only.'
   artDescription: 'A remake of the first Counter-Strike box cover: a counter-terrorist
     and a terrorist in a tense standoff in a dusty corridor, but both are accountants
     in thick glasses, aiming pocket calculators at each other like rifles, ledgers

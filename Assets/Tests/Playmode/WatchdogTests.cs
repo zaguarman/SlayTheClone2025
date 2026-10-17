@@ -6,7 +6,7 @@ using static SlayTheClone.Enums;
 namespace SlayTheClone.Tests {
     /// <summary>
     /// Watchdogs (GDD 3.11): created through the queue, they nullify, redirect, reorder or reveal matching actions, On Watch
-    /// (just before each action) or at the Briefing (once a Day, from the Day after they're created). Each changed action uses
+    /// (just before each action) or at the Briefing (once a Day, from the Day they're created). Each changed action uses
     /// a charge; when several match, the oldest triggers. Runs the real rules without the scene (see <see cref="TestGame"/>).
     /// </summary>
     public class WatchdogTests {
@@ -68,7 +68,7 @@ namespace SlayTheClone.Tests {
                         watchdog = Spec(WatchdogEffect.Nullify, WatchedAction.Attack) }
                 }
             });
-            StringAssert.Contains("Watchdog: enemy attacks -> Disable (2)", Keywords.Plain(CardTextFormatter.GetRulesText(firewallData)));
+            StringAssert.Contains("Disable the next enemy attack 2", Keywords.Plain(CardTextFormatter.GetRulesText(firewallData)));
             var firewall = game.GiveCard(p1, firewallData);
             game.Declare(late, p1.Battlefield[0]); // Planned first
             game.Play(firewall, p1, null);
@@ -101,7 +101,7 @@ namespace SlayTheClone.Tests {
                 trigger = EffectTrigger.OnPlay,
                 actions = new List<EffectAction> { new EffectAction { actionType = ActionType.CreateWatchdog, targetType = TargetType.Enemy, watchdog = yesnt } }
             });
-            StringAssert.Contains("Watchdog: enemy damaging spells -> Disable, 2 charges", Keywords.Plain(CardTextFormatter.GetRulesText(yesntData)));
+            StringAssert.Contains("Disable the next 2 enemy spells that deal damage", Keywords.Plain(CardTextFormatter.GetRulesText(yesntData)));
             Watch(yesnt, p2);
             game.Play(game.GiveCard(p1, game.Spell("Pep Talk", TargetType.EnemyCreatures, TestCards.Effect(EffectTrigger.OnPlay, ActionType.Heal, 1, TargetType.EnemyCreatures))), p1, p2.Battlefield[0]);
             game.Resolve();
@@ -141,31 +141,41 @@ namespace SlayTheClone.Tests {
         }
 
         [Test]
-        public void Briefing_StartsTheDayAfter_PicksEveryOrTheStrongest_OneChargePerAction_AndDaysRunOut() {
+        public void Briefing_OnlineTheDayItsSet_PicksEveryOrTheStrongest_OneChargePerAction_AndDaysRunOut() {
             var a = game.Summon(p2, game.Creature("A", 2, 10), 0);
             var b = game.Summon(p2, game.Creature("B", 3, 10), 1);
             var c = game.Summon(p2, game.Creature("C", 4, 10), 2);
-            Watch(Spec(WatchdogEffect.Nullify, timing: WatchdogTiming.Briefing, pick: BriefingPick.Every, charges: 3), p1);
+            Watch(Spec(WatchdogEffect.Nullify, timing: WatchdogTiming.Briefing, pick: BriefingPick.Every, charges: 2), p1);
 
             game.Declare(a, p1.Battlefield[0]);
             game.ActionsQueue.BriefWatchdogs();
             game.Resolve();
-            Assert.AreEqual(Player.StartingHealth - 2, p1.Health, "Created today: it briefs from tomorrow");
+            Assert.AreEqual(Player.StartingHealth, p1.Health, "Online the Day it's set (the user, 2026-10-17)");
 
             game.StartTurn();
             game.Declare(a, p1.Battlefield[0]);
             game.Declare(b, p1.Battlefield[1]);
             game.ActionsQueue.BriefWatchdogs();
             game.Resolve();
-            Assert.AreEqual(Player.StartingHealth - 2, p1.Health, "Every enemy attack nullified");
-            Assert.AreEqual(1, game.ActionsQueue.Watchdogs.Single().ChargesLeft, "One charge per action it changed");
+            Assert.AreEqual(Player.StartingHealth - 3, p1.Health, "One charge per action: its last one only stops the first, B's attack lands");
+            Assert.IsEmpty(game.ActionsQueue.Watchdogs);
 
+            // Counter-Intelligence: played mid-Day, it catches that Day's first enemy attack, planned before it
+            var counterData = game.Spell("Counter", TargetType.Player, new CardEffect {
+                trigger = EffectTrigger.OnPlay,
+                actions = new List<EffectAction> {
+                    new EffectAction { actionType = ActionType.CreateWatchdog, targetType = TargetType.Enemy, statusDuration = 1,
+                        watchdog = Spec(WatchdogEffect.Nullify, timing: WatchdogTiming.Briefing) }
+                }
+            });
+            StringAssert.Contains("Disable the first enemy attack this Day", Keywords.Plain(CardTextFormatter.GetRulesText(counterData)));
+            var counter = game.GiveCard(p1, counterData);
             game.StartTurn();
-            game.Declare(a, p1.Battlefield[0]);
+            game.ActionsQueue.BriefWatchdogs(); // Nothing set yet
             game.Declare(c, p1.Battlefield[2]);
-            game.ActionsQueue.BriefWatchdogs();
-            game.Resolve();
-            Assert.AreEqual(Player.StartingHealth - 2 - 4, p1.Health, "Its last charge only stops the first: C's attack lands");
+            game.Play(counter, p1, null);
+            game.Resolve(); // The spell layer comes before attacks
+            Assert.AreEqual(Player.StartingHealth - 3, p1.Health, "Set by a spell, it stopped C's attack the same Day");
             Assert.IsEmpty(game.ActionsQueue.Watchdogs);
 
             Watch(Spec(WatchdogEffect.Nullify, timing: WatchdogTiming.Briefing, pick: BriefingPick.Strongest), p1);
@@ -176,7 +186,7 @@ namespace SlayTheClone.Tests {
             game.Declare(c, p1.Battlefield[2]);
             game.ActionsQueue.BriefWatchdogs();
             game.Resolve();
-            Assert.AreEqual(Player.StartingHealth - 2 - 4 - 2, p1.Health, "It picked the strongest: only A's attack lands");
+            Assert.AreEqual(Player.StartingHealth - 3 - 2, p1.Health, "It picked the strongest: only A's attack lands");
 
             // Backfire (Sabotage): the strongest attack doesn't happen, and its attacker takes its own Attack instead
             Watch(Spec(WatchdogEffect.Backfire, timing: WatchdogTiming.Briefing, pick: BriefingPick.Strongest), p1);

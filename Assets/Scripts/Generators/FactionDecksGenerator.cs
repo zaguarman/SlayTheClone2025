@@ -1013,9 +1013,9 @@ namespace SlayTheClone {
                 .Picture("The Banksy auction stunt: a spy's portrait, painted in the style of Girl with Balloon, has just sold at auction, and the canvas is sliding down through a shredder hidden in its gilded frame, the strips stamped BURN NOTICE. In the audience, the spy himself watches his face being shredded."),
             Spell("Counter-Intelligence", TargetType.Player,
                 "We knew you knew we knew.",
-                "Mechanics test: a Briefing Watchdog (GDD 3.11). From the Day after it's created, before anything resolves, it redirects the strongest enemy attack to a random creature (the one with the most Heat first). 2 charges, one per attack it redirects.",
+                "A counter (the user, 2026-10-17): the first enemy attack this Day is redirected to a random creature (the one with the most Heat first). A Briefing Watchdog, online the Day it's played, for that Day only.",
                 CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Attack, side = WatchdogSide.Enemy, effect = WatchdogEffect.Redirect,
-                    charges = 2, timing = WatchdogTiming.Briefing, pick = BriefingPick.Strongest }, TargetType.Enemy))
+                    charges = 1, timing = WatchdogTiming.Briefing, pick = BriefingPick.First }, TargetType.Enemy, days: 1))
                 .Picture("A remake of the first Counter-Strike box cover: a counter-terrorist and a terrorist in a tense standoff in a dusty corridor, but both are accountants in thick glasses, aiming pocket calculators at each other like rifles, ledgers fluttering around them."),
             Creature("Mole", 3, 3, speed: 2, deploy: 0,
                 "Twenty years with the company. Twenty-one with the other one.",
@@ -1192,7 +1192,7 @@ namespace SlayTheClone {
                 .Picture("A press officer at a podium with a perfectly blank face, every line on his teleprompter blacked out with thick redaction bars, reporters raising their hands in vain."),
             Spell("Sabotage", TargetType.Enemy,
                 "Someone filled the cannon with sand. Someone else lit it.",
-                "A Briefing Watchdog: from the Day after it's set, the strongest enemy attack backfires: it doesn't happen, and the attacker takes its own Attack as damage. 1 charge.",
+                "A Briefing Watchdog: from the Day it's set, the strongest enemy attack backfires: it doesn't happen, and the attacker takes its own Attack as damage. 1 charge.",
                 CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Attack, side = WatchdogSide.Enemy, effect = WatchdogEffect.Backfire,
                     charges = 1, timing = WatchdogTiming.Briefing, pick = BriefingPick.Strongest }, TargetType.Enemy))
                 .NotInStarterDeck()

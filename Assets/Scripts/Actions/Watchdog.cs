@@ -15,6 +15,7 @@ namespace SlayTheClone {
         public int Days { get; }                  // 0: until its charges are used
         public int Sequence { get; }              // The oldest triggers when several match
         public int ChargesLeft { get; private set; }
+        public int BriefedOn { get; private set; } = -1; // The last Day it briefed
 
         /// <summary>Players who saw its condition through Intelligence (a Reveal), besides its controller.</summary>
         public System.Collections.Generic.HashSet<IPlayer> RevealedTo { get; } = new System.Collections.Generic.HashSet<IPlayer>();
@@ -32,8 +33,13 @@ namespace SlayTheClone {
         public bool IsSpent => ChargesLeft <= 0;
         public bool HasExpired(int turn) => Days > 0 && turn >= TurnCreated + Days;
 
-        /// <summary>Briefing Watchdogs only brief from the Day after they were created.</summary>
-        public bool CanBrief(int turn) => Spec.timing == WatchdogTiming.Briefing && turn > TurnCreated;
+        /// <summary>
+        /// A Briefing Watchdog briefs once a Day, from the Day it's set (the user, 2026-10-17: online at once, like a counter;
+        /// it used to wait for the next Day).
+        /// </summary>
+        public bool CanBrief(int turn) => Spec.timing == WatchdogTiming.Briefing && BriefedOn < turn;
+
+        public void Briefed(int turn) => BriefedOn = turn;
 
         public void SpendCharge() => ChargesLeft--;
 

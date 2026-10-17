@@ -344,7 +344,8 @@ namespace SlayTheClone {
                 case ActionType.CutDraws:
                     return $"{target} draws {value} fewer card{(value == 1 ? "" : "s")} with the next hand";
                 case ActionType.WipeWatchdogs:
-                    return $"wipe out the {target}'s {Keywords.Link("Watchdog", "Watchdogs")}";
+                    // Every Watchdog of theirs, in what they do (the user: no "Watchdog" on cards)
+                    return $"end every {(action.targetType == TargetType.Player ? "one of your" : "enemy")} effect{(action.targetType == TargetType.Player ? "s" : "")} still waiting to {Keywords.Link("Disable")} or {Keywords.Link("Redirect")} actions";
                 case ActionType.Funnel:
                     return $"every other creature on its side hands its stat raises to {target}";
                 case ActionType.Consolidate:
@@ -380,7 +381,7 @@ namespace SlayTheClone {
                 case ActionType.CreateWatchdog:
                     return DescribeWatchdog(action, target);
                 case ActionType.Reveal: // Instant: it resolves as soon as it's played
-                    if (action.targetType is TargetType.Player or TargetType.Enemy) return $"{Keywords.Link("Reveal", "reveal")} {target}'s {Keywords.Link("Watchdog")} conditions";
+                    if (action.targetType is TargetType.Player or TargetType.Enemy) return $"{Keywords.Link("Reveal", "reveal")} which actions {target}'s waiting effects will {Keywords.Link("Disable")} or {Keywords.Link("Redirect")}";
                     return action.targetModifier.HasFlag(TargetModifier.Random)
                         ? $"{Keywords.Link("Reveal", "reveal")} {target}"
                         : $"{Keywords.Link("Reveal", "reveal")} {SlotTarget(action, isSpell)}";
@@ -511,33 +512,43 @@ namespace SlayTheClone {
         // " [sand watch]3": how many Days a timed change lasts. Nothing for a lasting one
         private static string DaysTag(int days) => days > 0 ? " " + Keywords.Link("Days", $"{EffectIcons.Tag(EffectIcons.Days)}{days}") : "";
 
-        // The GDD card format: "Watchdog: [condition] -> [effect], N charges (timing)". A Watchdog checks each action as it comes
-        // up unless it's a Briefing one: that's how a Watchdog works, so only Briefing is written (the user)
+        // A Watchdog in plain words, without naming it (the user, 2026-10-17: the player doesn't need to know how the game works
+        // inside, and no "->"): "Disable the next 2 enemy attacks", "Redirect the first enemy attack this Day". It catches
+        // actions as they come up; a Briefing one picks from the whole Day's plans, from the Day it's set
         private static string DescribeWatchdog(EffectAction action, string target) {
             var spec = action.watchdog;
+            int charges = System.Math.Max(1, spec.charges);
             string whose = spec.side switch { WatchdogSide.Enemy => "enemy ", WatchdogSide.Friendly => "friendly ", _ => "" };
-            string what = spec.watches switch {
-                WatchedAction.Attack => "attacks", WatchedAction.Spell => "spells", WatchedAction.Move => "moves",
-                WatchedAction.Ability => "abilities", WatchedAction.Summon => "summons",
-                WatchedAction.Intelligence => $"{Keywords.Link("Reveal", "reveals")}", _ => "statuses"
+            (string one, string many) = spec.watches switch {
+                WatchedAction.Attack => ("attack", "attacks"), WatchedAction.Spell => ("spell", "spells"), WatchedAction.Move => ("move", "moves"),
+                WatchedAction.Ability => ("ability", "abilities"), WatchedAction.Summon => ("summon", "summons"),
+                WatchedAction.Intelligence => (Keywords.Link("Reveal", "reveal"), Keywords.Link("Reveal", "reveals")), _ => ("status", "statuses")
             };
             bool watchesCreature = action.targetType is not (TargetType.Player or TargetType.Enemy);
-            string by = watchesCreature ? $" by {target}" : "";
-            string atMost = spec.atMost > 0 ? $" of {spec.atMost} or less" : "";
-            if (spec.damaging) what = "damaging " + what;
-            string effect = spec.effect switch {
-                WatchdogEffect.Nullify => Keywords.Link("Disable"), WatchdogEffect.Redirect => Keywords.Link("Redirect"),
-                WatchdogEffect.Reveal => Keywords.Link("Reveal"),
-                WatchdogEffect.Backfire => Keywords.Link("Redirect", "Redirect to the attacker"),
-                _ => Keywords.Link("Reorder", spec.moveEarlier ? "move it first" : "move it last")
+            bool briefing = spec.timing == WatchdogTiming.Briefing;
+            bool plural = !briefing && charges > 1 || briefing && spec.pick == BriefingPick.Every;
+            string what = $"{whose}{(plural ? many : one)}";
+            if (spec.atMost > 0) what += $" of {spec.atMost} or less";
+            if (watchesCreature) what += $" by {target}";
+            if (spec.damaging) what += plural ? " that deal damage" : " that deals damage";
+            if (spec.effect == WatchdogEffect.Backfire) what += plural ? " to their attackers" : " to its attacker";
+            // A Briefing one acts once a Day: "each Day" only when it can act more than once
+            string eachDay = charges > 1 ? $" each {Keywords.Link("Day")}" : "";
+            string thing = !briefing ? (charges > 1 ? $"the next {charges} {what}" : $"the next {what}")
+                : spec.pick switch {
+                    BriefingPick.Strongest => $"the strongest {what}{eachDay}",
+                    BriefingPick.Every => $"every {what}{eachDay}",
+                    _ => $"the first {what}{eachDay}"
+                };
+            string sentence = spec.effect switch {
+                WatchdogEffect.Nullify => $"{Keywords.Link("Disable")} {thing}",
+                WatchdogEffect.Redirect or WatchdogEffect.Backfire => $"{Keywords.Link("Redirect")} {thing}",
+                WatchdogEffect.Reveal => $"{Keywords.Link("Reveal")} {thing}",
+                _ => $"{Keywords.Link("Reorder", "move")} {thing} to the {(spec.moveEarlier ? "start" : "end")} of the {Keywords.Link("Day")}"
             };
-            int charges = System.Math.Max(1, spec.charges);
-            string pick = spec.timing == WatchdogTiming.Briefing && spec.pick != BriefingPick.First ? $"{spec.pick.ToString().ToLower()} " : "";
-            string timing = (spec.timing == WatchdogTiming.Briefing ? Keywords.Link("Briefing") : "") + DaysTag(action.statusDuration);
-            timing = timing.Trim();
-            // One charge goes without saying (the user): only more are written
-            return $"{Keywords.Link("Watchdog")}: {pick}{whose}{what}{atMost}{by} -> {effect}{(charges > 1 ? $", {charges} charges" : "")}" +
-                   (timing.Length > 0 ? $" ({timing})" : "");
+            // How often a Briefing one acts, once a Day: "2 times"; Every: as many as it has left
+            if (briefing && charges > 1) sentence += spec.pick == BriefingPick.Every ? $", {charges} in all" : $", {charges} times";
+            return sentence + (action.statusDuration == 1 ? $" this {Keywords.Link("Day")}" : DaysTag(action.statusDuration));
         }
 
         // Slot Effects aim at the slot, whoever stands in it

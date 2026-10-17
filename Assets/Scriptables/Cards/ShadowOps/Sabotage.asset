@@ -68,9 +68,9 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'A Briefing Watchdog: from the Day after it''s set, the strongest
-    enemy attack backfires: it doesn''t happen, and the attacker takes its own Attack
-    as damage. 1 charge.'
+  designNotes: 'A Briefing Watchdog: from the Day it''s set, the strongest enemy
+    attack backfires: it doesn''t happen, and the attacker takes its own Attack as
+    damage. 1 charge.'
   artDescription: A tank that has just fired, its barrel peeled back like a banana
     and the crew blackened and blinking, while a saboteur in coveralls tiptoes away
     with an empty sack marked SUGAR - FOR THE FUEL TANK.

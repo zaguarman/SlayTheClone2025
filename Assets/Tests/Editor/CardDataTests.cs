@@ -85,8 +85,10 @@ namespace SlayTheClone.Tests {
                     .Where(a => a.actionType is ActionType.GrantAbility or ActionType.Equip).Select(a => a.ability));
                 Object.DestroyImmediate(data);
             }
+            // Hover and Self-Repair were Gear only: shelved with it as a maybe (the user, 2026-10-17)
+            var shelved = new[] { CreatureAbility.Hover, CreatureAbility.SelfRepair };
             var missing = System.Enum.GetValues(typeof(CreatureAbility)).Cast<CreatureAbility>()
-                .Where(a => a != CreatureAbility.None && !carried.Contains(a));
+                .Where(a => a != CreatureAbility.None && !carried.Contains(a) && !shelved.Contains(a));
             CollectionAssert.IsEmpty(missing, "Abilities no card has ('Abilities Compendium')");
         }
 

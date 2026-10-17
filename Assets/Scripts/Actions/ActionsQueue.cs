@@ -490,11 +490,19 @@ namespace SlayTheClone {
         public IReadOnlyList<Watchdog> Watchdogs =>
             watchdogs.Where(w => !w.IsSpent && !w.HasExpired(executionContext.TurnClock.TurnNumber)).ToList().AsReadOnly();
 
-        /// <summary>A Watchdog becomes active (GDD 3.11). From now on it watches; a Briefing one briefs from tomorrow.</summary>
+        /// <summary>
+        /// A Watchdog becomes active (GDD 3.11). From now on it watches. A Briefing one set while the Day resolves looks at what's
+        /// still to come right away (the user, 2026-10-17: online the Day it's set, like a counter); when it finds a match, that
+        /// was its Briefing for the Day. Otherwise it briefs at the next Briefing.
+        /// </summary>
         public Watchdog AddWatchdog(WatchdogSpec spec, IPlayer controller, ICreature watchedCreature, int days) {
             var watchdog = new Watchdog(spec, controller, watchedCreature, executionContext.TurnClock.TurnNumber, days, watchdogSequence++);
             watchdogs.Add(watchdog);
             Log($"Active: {watchdog}", LogTag.Actions | LogTag.Effects);
+            if (resolving && watchdog.CanBrief(Today) && Brief(watchdog)) {
+                watchdog.Briefed(Today);
+                DropFinishedWatchdogs();
+            }
             gameMediator.NotifyActionsQueueChanged();
             return watchdog;
         }
@@ -579,64 +587,71 @@ namespace SlayTheClone {
         }
 
         /// <summary>
-        /// The Briefing (GDD 3.7): before the actions of the Day resolve, each Briefing Watchdog (active since an earlier Day)
-        /// looks at the whole queue once, picks the first, the strongest or every matching action, and changes them.
+        /// The Briefing (GDD 3.7): before the actions of the Day resolve, each Briefing Watchdog that hasn't briefed today looks
+        /// at the whole queue once, picks the first, the strongest or every matching action, and changes them.
         /// Each action it changes uses 1 charge.
         /// </summary>
         public void BriefWatchdogs() {
             DropFinishedWatchdogs();
             int turn = executionContext.TurnClock.TurnNumber;
             foreach (var watchdog in watchdogs.Where(w => w.CanBrief(turn)).ToList()) {
-                var matches = waiting.Where(e => !e.Watched && !e.Environment && Sees(watchdog, e) && watchdog.Matches(e.Action, e.Source))
-                    .OrderBy(e => e.Layer).ThenBy(e => e, InLayerOrder).ToList();
-                if (matches.Count == 0) continue;
-
-                // Each action it changes uses a charge: "every" means every match it still has charges for
-                var picked = watchdog.Spec.pick switch {
-                    BriefingPick.Every => matches.Take(watchdog.ChargesLeft).ToList(),
-                    BriefingPick.Strongest => matches.OrderByDescending(e => WatchdogRules.StrengthOf(e.Action)).Take(1).ToList(),
-                    _ => matches.Take(1).ToList()
-                };
-                foreach (var entry in picked) {
-                    watchdog.SpendCharge();
-                    entry.Watched = true;
-                    switch (watchdog.Spec.effect) {
-                        case WatchdogEffect.Nullify:
-                            WatchdogRules.LogTrigger(watchdog, entry.Action, "nullified at the Briefing");
-                            waiting.Remove(entry);
-                            string activeCreatureId = GetActiveCreatureId(entry.Action);
-                            if (activeCreatureId != null && activeCreatureActions.TryGetValue(activeCreatureId, out var active) && active == entry) {
-                                activeCreatureActions.Remove(activeCreatureId);
-                            }
-                            break;
-                        case WatchdogEffect.Backfire: // In its place, when it would have struck: its own Attack, to itself
-                            var backfire = WatchdogRules.Backfire(entry.Action);
-                            WatchdogRules.LogTrigger(watchdog, entry.Action, "backfires at the Briefing");
-                            if (backfire == null) {
-                                waiting.Remove(entry);
-                                break;
-                            }
-                            string attackerId = GetActiveCreatureId(entry.Action);
-                            if (attackerId != null && activeCreatureActions.TryGetValue(attackerId, out var planned) && planned == entry) activeCreatureActions.Remove(attackerId);
-                            entry.Action = backfire;
-                            break;
-                        case WatchdogEffect.Reorder:
-                            entry.Reordered = watchdog.Spec.moveEarlier ? -1 : 1;
-                            WatchdogRules.LogTrigger(watchdog, entry.Action, watchdog.Spec.moveEarlier ? "moved first in its layer" : "moved last in its layer");
-                            break;
-                        case WatchdogEffect.Redirect:
-                            entry.Action = WatchdogRules.Redirect(entry.Action, entry.Source);
-                            WatchdogRules.LogTrigger(watchdog, entry.Action, "redirected at the Briefing");
-                            break;
-                        default:
-                            RevealTo(watchdog.Controller, entry.Action);
-                            WatchdogRules.LogTrigger(watchdog, entry.Action, "revealed at the Briefing");
-                            break;
-                    }
-                }
+                Brief(watchdog);
+                watchdog.Briefed(turn);
             }
             DropFinishedWatchdogs();
             gameMediator.NotifyActionsQueueChanged();
+        }
+
+        // One Watchdog's Briefing over what's still waiting; false when nothing matched
+        private bool Brief(Watchdog watchdog) {
+            var matches = waiting.Where(e => !e.Watched && !e.Environment && Sees(watchdog, e) && watchdog.Matches(e.Action, e.Source))
+                .OrderBy(e => e.Layer).ThenBy(e => e, InLayerOrder).ToList();
+            if (matches.Count == 0) return false;
+
+            // Each action it changes uses a charge: "every" means every match it still has charges for
+            var picked = watchdog.Spec.pick switch {
+                BriefingPick.Every => matches.Take(watchdog.ChargesLeft).ToList(),
+                BriefingPick.Strongest => matches.OrderByDescending(e => WatchdogRules.StrengthOf(e.Action)).Take(1).ToList(),
+                _ => matches.Take(1).ToList()
+            };
+            foreach (var entry in picked) {
+                watchdog.SpendCharge();
+                entry.Watched = true;
+                switch (watchdog.Spec.effect) {
+                    case WatchdogEffect.Nullify:
+                        WatchdogRules.LogTrigger(watchdog, entry.Action, "nullified at the Briefing");
+                        waiting.Remove(entry);
+                        string activeCreatureId = GetActiveCreatureId(entry.Action);
+                        if (activeCreatureId != null && activeCreatureActions.TryGetValue(activeCreatureId, out var active) && active == entry) {
+                            activeCreatureActions.Remove(activeCreatureId);
+                        }
+                        break;
+                    case WatchdogEffect.Backfire: // In its place, when it would have struck: its own Attack, to itself
+                        var backfire = WatchdogRules.Backfire(entry.Action);
+                        WatchdogRules.LogTrigger(watchdog, entry.Action, "backfires at the Briefing");
+                        if (backfire == null) {
+                            waiting.Remove(entry);
+                            break;
+                        }
+                        string attackerId = GetActiveCreatureId(entry.Action);
+                        if (attackerId != null && activeCreatureActions.TryGetValue(attackerId, out var planned) && planned == entry) activeCreatureActions.Remove(attackerId);
+                        entry.Action = backfire;
+                        break;
+                    case WatchdogEffect.Reorder:
+                        entry.Reordered = watchdog.Spec.moveEarlier ? -1 : 1;
+                        WatchdogRules.LogTrigger(watchdog, entry.Action, watchdog.Spec.moveEarlier ? "moved first in its layer" : "moved last in its layer");
+                        break;
+                    case WatchdogEffect.Redirect:
+                        entry.Action = WatchdogRules.Redirect(entry.Action, entry.Source);
+                        WatchdogRules.LogTrigger(watchdog, entry.Action, "redirected at the Briefing");
+                        break;
+                    default:
+                        RevealTo(watchdog.Controller, entry.Action);
+                        WatchdogRules.LogTrigger(watchdog, entry.Action, "revealed at the Briefing");
+                        break;
+                }
+            }
+            return true;
         }
         #endregion
 
