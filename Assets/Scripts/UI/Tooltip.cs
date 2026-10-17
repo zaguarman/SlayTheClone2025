@@ -74,7 +74,7 @@ namespace SlayTheClone {
             tooltipText.alignment = TextAlignmentOptions.Center;
             tooltipText.fontSize = Roulette.detailsFontSize;
             tooltipText.color = UITheme.Parchment;
-            tooltipText.enableWordWrapping = true;
+            tooltipText.textWrappingMode = TMPro.TextWrappingModes.Normal;
             tooltipText.raycastTarget = false; // Nor the text: under the pointer, it would take the hover from the row it explains, and flicker
 
             // Configure text RectTransform

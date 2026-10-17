@@ -38,7 +38,7 @@ namespace SlayTheClone {
                 return;
             }
 
-            turnUI = FindObjectOfType<TurnUI>() ?? CreateTurnUI();
+            turnUI = FindFirstObjectByType<TurnUI>() ?? CreateTurnUI();
 
             InitializeChildUI();
             InitializeControllers();

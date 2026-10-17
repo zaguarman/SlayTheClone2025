@@ -65,7 +65,7 @@ namespace SlayTheClone {
         }
 
         private static bool TryFind<T>(out T component) where T : Object {
-            component = FindObjectOfType<T>();
+            component = FindFirstObjectByType<T>();
             if (component == null) {
                 LogError($"{typeof(T).Name} component not found in scene! Initialization cannot proceed.", LogTag.Initialization);
                 return false;
