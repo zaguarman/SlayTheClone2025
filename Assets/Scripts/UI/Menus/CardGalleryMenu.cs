@@ -59,7 +59,8 @@ namespace Zeitgeist {
             if (ShownTier != null) shown = shown.Where(c => CardScores.TierOf(c.cardName) == ShownTier).ToList();
             cards.Show(shown, (face, _) => face.ShowsItself = true); // Big enough as they are: no enlarged copy on hover
             string tier = ShownTier != null ? $", Tier {ShownTier}" : "";
-            cards.Title.text = title != null ? $"{title}{tier}  <size=70%>{CardGrid.Count(shown)}</size>"
+            string thin = ShownTier != null ? CardScores.ThinNote(shown) : ""; // A tier from few games is a hint, not a verdict
+            cards.Title.text = title != null ? $"{title}{tier}  <size=70%>{CardGrid.Count(shown)}{thin}</size>"
                 : $"Every card{tier}  <size=70%>{shown.Count} cards in {umbrellaButtons.Count} factions</size>";
             foreach (var (button, listed) in umbrellaButtons) ShowChosen(button, ShownFaction == null && listed == ShownUmbrella);
             foreach (var (button, listed) in factionButtons) {

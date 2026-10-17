@@ -147,7 +147,7 @@ namespace Zeitgeist {
                 face.OnCardClicked.AddListener(_ => AddCard(asset));
                 face.OnCardRightClicked.AddListener(_ => RemoveCard(asset));
             });
-            cards.Title.text = $"{title}{(ShownTier != null ? $", Tier {ShownTier}" : "")}  <size=70%>{CardGrid.Count(offered)}</size>";
+            cards.Title.text = $"{title}{(ShownTier != null ? $", Tier {ShownTier}" : "")}  <size=70%>{CardGrid.Count(offered)}{(ShownTier != null ? CardScores.ThinNote(offered) : "")}</size>";
             foreach (var (tab, listed) in umbrellaTabs) ShowChosen(tab, listed == ShownUmbrella);
             // The chosen faction's subfactions; every card: all of them
             foreach (var (tab, listed) in factionTabs) {

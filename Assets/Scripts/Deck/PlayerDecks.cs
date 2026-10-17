@@ -40,6 +40,25 @@ namespace Zeitgeist {
         private static List<DeckScriptableObject> decks;
         private static DeckCatalog catalog;
 
+        // The product was SlayTheClone2025 until 2026-10-17: the decks saved under that name come over once, the first time
+        // Zeitgeist finds none of its own (the save folders are named after the product)
+        private const string OldProductName = "SlayTheClone2025";
+        private static void MigrateFromOldProduct() {
+            try {
+                if (filePath != null && filePath != Path.Combine(Application.persistentDataPath, "decks.json")) return; // A test's file
+                string parent = Path.GetDirectoryName(Application.persistentDataPath.TrimEnd('/', '\\'));
+                if (parent == null) return;
+                string old = Path.Combine(parent, OldProductName, "decks.json");
+                if (!File.Exists(old)) return;
+                Directory.CreateDirectory(Path.GetDirectoryName(FilePath));
+                File.Copy(old, FilePath);
+                Log($"Your decks came over from {old}", LogTag.Initialization);
+            }
+            catch (System.Exception e) {
+                LogWarning($"The old decks couldn't be copied over: {e.Message}", LogTag.Initialization);
+            }
+        }
+
         /// <summary>Where the decks are kept. Tests point it at a file of their own.</summary>
         public static string FilePath {
             get => filePath ??= Path.Combine(Application.persistentDataPath, "decks.json");
@@ -134,6 +153,7 @@ namespace Zeitgeist {
             if (decks != null && (cardsFrom == null || cardsFrom == catalog)) return;
             catalog = cardsFrom;
             decks = new List<DeckScriptableObject>();
+            if (!File.Exists(FilePath)) MigrateFromOldProduct();
             if (!File.Exists(FilePath)) return;
             try {
                 var saved = JsonUtility.FromJson<SavedDecks>(File.ReadAllText(FilePath));

@@ -57,6 +57,21 @@ namespace Zeitgeist {
             return cardName != null && byName.TryGetValue(cardName, out var entry) ? entry.tier : null;
         }
 
+        /// <summary>A tier from this many games or more is solid; fewer is a hint (the dossier, 2026-10-17: a C from 65 games is noise).</summary>
+        public const int SolidGames = 150;
+
+        /// <summary>How many games of the latest study the card's tier rests on (0: none).</summary>
+        public static int GamesOf(string cardName) {
+            _ = Latest;
+            return cardName != null && byName.TryGetValue(cardName, out var entry) ? entry.games : 0;
+        }
+
+        /// <summary>"3 of them from under 150 games": how many of these cards' tiers are hints rather than solid; empty when all are solid.</summary>
+        public static string ThinNote(IEnumerable<CardDataScriptableObject> cards) {
+            int thin = cards.Count(c => GamesOf(c.cardName) < SolidGames);
+            return thin == 0 ? "" : $" · <color=#C9C0AE>{thin} of them rated from under {SolidGames} games</color>";
+        }
+
         /// <summary>Forget what was loaded (after the study writes new scores).</summary>
         public static void Reload() => loaded = null;
 

@@ -162,13 +162,15 @@ namespace Zeitgeist.Tests {
             game.Attack(digger, p2.Battlefield[1]);
             Assert.AreEqual(10 - digger.Attack, buffed.Health, "Underground, attacking: as if the Health buff weren't there (its 3 and its Flank's +1)");
 
-            var tech = With(CreatureAbility.PennyStock, p1, 2, attack: 2); // 2, and its Flank's +1: 3
+            var tech = With(CreatureAbility.PennyStock, p1, 2, attack: 2); // 2, and whatever its Flank adds
             var target = With(CreatureAbility.None, p2, 2, health: 20);
+            int Penny(int attack) => attack <= 3 ? attack * 2 : attack; // A hit of 3 or less doubles
             game.Attack(tech, p2.Battlefield[2]);
-            Assert.AreEqual(14, target.Health, "Penny Stock: 3 becomes 6");
+            int afterFirst = 20 - Penny(2 + Formation.FlankAttack);
+            Assert.AreEqual(afterFirst, target.Health, "Penny Stock: a small hit doubles");
             ChangeAttack(tech, 1, p1);
             game.Attack(tech, p2.Battlefield[2]);
-            Assert.AreEqual(10, target.Health, "4 is too much to double");
+            Assert.AreEqual(afterFirst - Penny(3 + Formation.FlankAttack), target.Health, "...and one over 3 doesn't");
 
             // (The reach, GDD 2.4: from Headquarters an attack reaches their Vanguard alone, so the targets below stand there, each replacing the last)
             var insider = With(CreatureAbility.InsiderJob, p1, 3, attack: 3);
