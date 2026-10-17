@@ -74,10 +74,10 @@ MonoBehaviour:
       targetType: 3
       targetModifier: 1
       modifyAttack: 1
-      modifyHealth: 0
+      modifyHealth: 1
       modifySpeed: 0
       statusEffectToApply: 0
-      statusDuration: 1
+      statusDuration: 0
       statusPotency: 0
       cleanse: 0
       purge: 0

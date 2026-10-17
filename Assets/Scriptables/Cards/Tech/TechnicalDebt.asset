@@ -74,7 +74,7 @@ MonoBehaviour:
     an empty, cracked piggy bank, the dashed outlines of the missing banknotes floating
     above.
   attack: 4
-  health: 5
+  health: 6
   speed: 2
   turnsUntilOperative: 1
   movement: 0

@@ -22,7 +22,7 @@ MonoBehaviour:
   discardChosen: 0
   singleUse: 0
   sacrifice: 0
-  doomCost: 3
+  doomCost: 2
   prophecy: 0
   prophecyLatest: 0
   gamble: 0
@@ -39,7 +39,7 @@ MonoBehaviour:
     oncePerCombat: 0
     actions:
     - actionType: 32
-      value: 4
+      value: 5
       targetType: 0
       targetModifier: 0
       modifyAttack: 1

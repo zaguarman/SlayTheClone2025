@@ -74,7 +74,7 @@ MonoBehaviour:
     that pulls the hits.'
   artDescription: A smug teenager in a gaming chair, trollface on his hoodie, typing
     'u mad bro?' while a wall of furious replies piles up on his screen.
-  attack: 2
+  attack: 3
   health: 4
   speed: 2
   turnsUntilOperative: 0

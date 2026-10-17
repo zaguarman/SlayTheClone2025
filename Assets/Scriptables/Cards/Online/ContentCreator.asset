@@ -76,7 +76,7 @@ MonoBehaviour:
   artDescription: A streamer in a headset under a ring light screaming at the camera
     with a shocked face and a giant red arrow pointing at nothing, the thumbnail
     on the monitor behind showing the same face, 100K in gold letters.
-  attack: 1
+  attack: 2
   health: 3
   speed: 2
   turnsUntilOperative: 0

@@ -78,7 +78,7 @@ MonoBehaviour:
       modifySpeed: 0
       statusEffectToApply: 5
       statusDuration: 1
-      statusPotency: 1
+      statusPotency: 2
       cleanse: 0
       purge: 0
       slotEffect: 0

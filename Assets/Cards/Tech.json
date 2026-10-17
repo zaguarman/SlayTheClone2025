@@ -2,7 +2,7 @@
   "mod": "Tech",
   "cards": [
     {
-      "name": "EMP Drone", "type": "creature", "attack": 1, "health": 4, "speed": 2, "deploy": 0, "ability": "JammingField",
+      "name": "EMP Drone", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 0, "ability": "JammingField",
       "flavor": "No signal. No abilities. No complaints: nobody can call to complain.",
       "notes": "Jamming Field (Pokémon's Neutralizing Gas): every other creature's ability is switched off while it stands, on either side. Yours too.",
       "picture": "A quadcopter drone hovering over the battlefield emitting concentric rings of static, every creature below holding a phone with no bars, their glowing ability icons flickering out one by one."
@@ -25,7 +25,7 @@
       "picture": "A cat scratching at a laptop screen, claw marks tearing the web page open and spilling out cards and data.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
-          { "action": "SendFor", "value": 5, "target": "Player" }
+          { "action": "SendFor", "value": 5, "target": "Player" }, { "action": "Draw", "value": 1, "target": "Player" }
         ] }
       ]
     },
@@ -48,7 +48,7 @@
       "picture": "A panda in shining knight's armor, an antivirus logo on its shield, blocking a glowing spell scroll at a castle gate, while the castle walls behind it are plastered with its own pop-ups: \"RENEW NOW - 60% OFF\".",
       "effects": [
         { "trigger": "OnPlay", "actions": [
-          { "action": "CreateWatchdog", "target": "Enemy", "watchdog": { "watches": "Spell", "side": "Enemy", "effect": "Nullify", "charges": 1 } }
+          { "action": "CreateWatchdog", "target": "Enemy", "watchdog": { "watches": "Spell", "side": "Enemy", "effect": "Nullify", "charges": 2 } }
         ] }
       ]
     },
@@ -87,7 +87,7 @@
       ]
     },
     {
-      "name": "Meatproxy As A Service", "type": "creature", "attack": 1, "health": 4, "speed": 1, "deploy": 1,
+      "name": "Meatproxy As A Service", "type": "creature", "attack": 1, "health": 4, "speed": 1, "deploy": 0,
       "flavor": "Powered by AI. The AI is Dave. Dave copies and pastes.",
       "notes": "A draw each Dawn, paid with 1 of your Health. Future: Technical Debt (fewer draws next Day).",
       "picture": "A raw steak sitting at a desk, copy-pasting text from one window to another on a computer screen, a price tag on the monitor: $9.99/MONTH.",
@@ -118,12 +118,12 @@
       "picture": "A man squeezed on a park bench between two lovers, holding both of their phones and reading their texts.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
-          { "action": "CreateWatchdog", "target": "Enemy", "watchdog": { "watches": "Spell", "side": "Enemy", "effect": "Redirect", "charges": 1 } }
+          { "action": "CreateWatchdog", "target": "Enemy", "watchdog": { "watches": "Spell", "side": "Enemy", "effect": "Redirect", "charges": 2 } }
         ] }
       ]
     },
     {
-      "name": "Technical Debt", "type": "creature", "attack": 4, "health": 5, "speed": 2, "deploy": 1,
+      "name": "Technical Debt", "type": "creature", "attack": 4, "health": 6, "speed": 2, "deploy": 1,
       "flavor": "Ship it now. Someone will fix it later. You are someone.",
       "notes": "Decay 1: strong today, it pays for it every Dusk.",
       "picture": "A laptop held together with duct tape and a TODO sticky note, beside an empty, cracked piggy bank, the dashed outlines of the missing banknotes floating above.",
@@ -156,7 +156,7 @@
       ]
     },
     {
-      "name": "Threat Hunter", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 1, "homing": true,
+      "name": "Threat Hunter", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 0, "homing": true,
       "flavor": "Assume breach. Then go looking for it.",
       "notes": "Homing (the user, 2026-10-16): its attacks lock on the enemy creature in the slot it's aimed at and follow it if it moves. Arrival: Heat Signature 1 on a random enemy creature, which then pulls every Homing effect, its own included: aim at anything and the hottest one takes it. Tech's Heat and Homing in one card.",
       "picture": "A security analyst in a headlamp crawling on hands and knees through a tunnel of server cables with a magnifying glass, following a trail of glowing red footprints to a tiny hooded hacker hiding behind a rack.",
@@ -186,7 +186,7 @@
       "effects": [
         { "trigger": "OnPlay", "actions": [
           { "action": "SwapPositions", "target": "FriendlyCreatures" },
-          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "WithAdjacent", "days": 1, "attackStat": true, "healthStat": false }
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "WithAdjacent", "attackStat": true, "healthStat": true }
         ] }
       ]
     },
@@ -215,7 +215,7 @@
       ]
     },
     {
-      "name": "Bomber Drone", "type": "creature", "attack": 3, "health": 2, "speed": 3, "deploy": 0, "ability": "HitAndRun",
+      "name": "Bomber Drone", "type": "creature", "attack": 3, "health": 3, "speed": 3, "deploy": 0, "ability": "HitAndRun",
       "flavor": "Delivered in 30 minutes, or your village is free.",
       "notes": "Hit and Run: after its attack it goes back to your hand, fresh, with the next Day's. It strikes and is gone before the answer comes.",
       "picture": "A quadcopter drone with a delivery company's logo dropping a small bomb on a tank and zipping away, a 5-star rating popping up on its operator's phone below."

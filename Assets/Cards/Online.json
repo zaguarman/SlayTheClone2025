@@ -25,13 +25,13 @@
       ]
     },
     {
-      "name": "Doomscrolling", "type": "spell", "target": "Player", "doom": 3,
+      "name": "Doomscrolling", "type": "spell", "target": "Player", "doom": 2,
       "flavor": "Just one more. Just one more. Just one more.",
       "notes": "Digital Society's scouting: send for any card among the top 4 of your deck; it joins your next hand. Costs Doom 3: your weakest creature not yet Doomed is Doomed first (the feed eats someone).",
       "picture": "The Living the Dream wojak, MS Paint style: bald, shirtless, baggy-eyed and expressionless at 3AM, holding up a phone (we see its black back) where the meme had a computer, its glow on his face, cards drifting up out of the feed.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
-          { "action": "SendFor", "value": 4, "target": "Player" }
+          { "action": "SendFor", "value": 5, "target": "Player" }
         ] }
       ]
     },
@@ -42,7 +42,7 @@
       "picture": "A guy in sunglasses and a hoodie on top of a human pyramid of recruits, a glowing coin passed down from hand to hand."
     },
     {
-      "name": "Digital Nomad", "type": "creature", "attack": 3, "health": 2, "speed": 2, "deploy": 0, "movement": "Leapfrog",
+      "name": "Digital Nomad", "type": "creature", "attack": 3, "health": 3, "speed": 2, "deploy": 0, "movement": "Leapfrog",
       "flavor": "Works from Bali. Works from Lisbon. Works, allegedly.",
       "notes": "Mechanics test: Leapfrog on a cheap, fast creature.",
       "picture": "A Tuareg nomad in a white turban and face veil, sitting cross-legged on a sand dune, typing on a laptop on his knees."
@@ -76,7 +76,7 @@
       "picture": "A phone screen with a glowing red notification, reflected in the furious eyes of the person holding it.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
-          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Burned", "days": 2, "potency": 2 }
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Burned", "days": 3, "potency": 2 }
         ] }
       ]
     },
@@ -87,12 +87,12 @@
       "picture": "The free-boat sting: a bald, stubbled Homer Simpson strolls into a police station waving a letter, \"CONGRATULATIONS! YOU'VE WON A FREE BOAT!\", while the grinning police chief behind the counter slides him a pile of unpaid fines instead. A \"FREE BOAT PICKUP\" banner hangs over the open door of a holding cell.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
-          { "action": "PlaceSlotEffect", "value": 2, "target": "EnemyCreatures", "slotEffect": "BarbedSnare" }
+          { "action": "PlaceSlotEffect", "value": 3, "target": "EnemyCreatures", "slotEffect": "BarbedSnare" }
         ] }
       ]
     },
     {
-      "name": "NPC", "type": "creature", "attack": 2, "health": 3, "speed": 2, "deploy": 0, "ability": "Copypasta",
+      "name": "NPC", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 0, "ability": "Copypasta",
       "flavor": "Has opinions. All of them yours.",
       "notes": "Mechanics test: Copypasta. When ready, and each Dawn after that, it copies the ability of the creature opposite it (and loses Copypasta).",
       "picture": "A crowd of identical grey, featureless NPC Wojak faces, every speech bubble repeating the same sentence, one of them proudly holding a \"Think For Yourself\" sign."
@@ -104,7 +104,7 @@
       "picture": "A pale figure in a dark room lit only by three monitors, a cork board of red strings and printed memes behind them, an energy-drink pyramid on the desk."
     },
     {
-      "name": "Catfish", "type": "creature", "attack": 3, "health": 2, "speed": 3, "deploy": 0, "ability": "Undercover",
+      "name": "Catfish", "type": "creature", "attack": 3, "health": 3, "speed": 3, "deploy": 0, "ability": "Undercover",
       "flavor": "Six foot, a doctor, loves dogs. Is a fish.",
       "notes": "Undercover: its plans are Concealed Actions, and it stays ??? to the other side until revealed.",
       "picture": "A cat and a goldfish in love: the cat presses its face to the fishbowl, the fish kisses the glass back, hearts all around."
@@ -158,12 +158,12 @@
       "effects": [
         { "trigger": "OnPlay", "actions": [
           { "action": "ApplyStatus", "target": "EnemyCreatures", "modifier": "AllSameTypeTargets", "status": "Revealed", "days": 2 },
-          { "action": "ApplyStatus", "target": "EnemyCreatures", "modifier": "AllSameTypeTargets", "status": "HeatSignature", "days": 1, "potency": 1 }
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "modifier": "AllSameTypeTargets", "status": "HeatSignature", "days": 1, "potency": 2 }
         ] }
       ]
     },
     {
-      "name": "Short King", "type": "creature", "attack": 2, "health": 2, "speed": 3, "deploy": 0, "movement": "Leapfrog",
+      "name": "Short King", "type": "creature", "attack": 2, "health": 3, "speed": 3, "deploy": 0, "movement": "Leapfrog",
       "flavor": "Five foot four. Six foot in the bio.",
       "notes": "A leaper: Leapfrog, it jumps over creatures to an empty slot. Arrival: +2 Attack this Day, a big entrance. Fast and cheap, it hops to the target the rest of the swarm is piling on (Dogpile).",
       "picture": "A short man wearing a paper crown standing on a stack of phone books to take a selfie at arm's length, the profile on his phone screen reading 6 FT.",
@@ -174,7 +174,7 @@
       ]
     },
     {
-      "name": "Content Creator", "type": "creature", "attack": 1, "health": 3, "speed": 2, "deploy": 0, "movement": "Swap",
+      "name": "Content Creator", "type": "creature", "attack": 2, "health": 3, "speed": 2, "deploy": 0, "movement": "Swap",
       "flavor": "Smash that like button. Smash it. Please.",
       "notes": "A swapper: Swap, it trades places with a friendly creature however far. Each Dawn it goes live: Heat Signature 1 on itself, for good (Digital Society pays with exposure), so random effects and Homing ones come to it. Swap it next to the creature you want spared, or in front of the hit.",
       "picture": "A streamer in a headset under a ring light screaming at the camera with a shocked face and a giant red arrow pointing at nothing, the thumbnail on the monitor behind showing the same face, 100K in gold letters.",
@@ -210,13 +210,13 @@
       ]
     },
     {
-      "name": "Influencer", "type": "creature", "attack": 2, "health": 3, "speed": 2, "deploy": 0, "ability": "OnTrend",
+      "name": "Influencer", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 0, "ability": "OnTrend",
       "flavor": "Partnered with whatever's trending. Allergic to whatever isn't.",
       "notes": "On Trend: +2 Attack while a Trend is on. Digital Society lives on what's trending.",
       "picture": "An influencer posing in front of a melting glacier with a branded water bottle, an assistant holding a reflector, the caption 'so grateful' on the phone."
     },
     {
-      "name": "U Mad Bro?", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 0,
+      "name": "U Mad Bro?", "type": "creature", "attack": 3, "health": 4, "speed": 2, "deploy": 0,
       "flavor": "Didn't read your argument. Disagrees anyway. Has posted the trollface.",
       "notes": "Arrival: Provoke 2 on the creature facing it (Taunt): it has to attack this troll for the next Days, and can't use its Active ability. A sturdy body that pulls the hits.",
       "picture": "A smug teenager in a gaming chair, trollface on his hoodie, typing 'u mad bro?' while a wall of furious replies piles up on his screen.",

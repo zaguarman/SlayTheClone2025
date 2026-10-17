@@ -56,7 +56,7 @@ MonoBehaviour:
         side: 0
         atMost: 0
         effect: 0
-        charges: 1
+        charges: 2
         timing: 0
         pick: 0
         moveEarlier: 0

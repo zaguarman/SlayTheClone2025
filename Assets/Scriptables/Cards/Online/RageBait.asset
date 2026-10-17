@@ -46,7 +46,7 @@ MonoBehaviour:
       modifyHealth: 1
       modifySpeed: 0
       statusEffectToApply: 1
-      statusDuration: 2
+      statusDuration: 3
       statusPotency: 2
       cleanse: 0
       purge: 0

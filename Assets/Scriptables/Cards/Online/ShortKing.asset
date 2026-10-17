@@ -76,7 +76,7 @@ MonoBehaviour:
     books to take a selfie at arm's length, the profile on his phone screen reading
     6 FT.
   attack: 2
-  health: 2
+  health: 3
   speed: 3
   turnsUntilOperative: 0
   movement: 1

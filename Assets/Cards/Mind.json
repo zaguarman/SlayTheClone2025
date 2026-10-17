@@ -75,7 +75,7 @@
       "picture": "A sleeper floating above their bed in pyjamas, calmly picking cards out of a swirling dreamscape of melting clocks and staircases.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
-          { "action": "SendFor", "value": 3, "target": "Player" }
+          { "action": "SendFor", "value": 4, "target": "Player" }
         ] }
       ]
     },
@@ -86,7 +86,7 @@
       "picture": "A man in a business suit sprinting downhill, legs a cartoon blur, a gale of motivational posters (HUSTLE, NEVER STOP) blowing at his back, the edge of a cliff just ahead.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
-          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "days": 3, "attackStat": false, "healthStat": false, "speedStat": true }
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "attackStat": false, "healthStat": false, "speedStat": true }
         ] }
       ]
     },
@@ -97,7 +97,7 @@
       "picture": "A WWII bomber back on the runway, riddled with red dots of bullet holes in the famous diagram's pattern, its smug pilot on the wing giving a thumbs-up with one eyebrow singed off.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
-          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "Survivor", "days": 1 }
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "Survivor", "days": 2 }
         ] }
       ]
     },
@@ -231,7 +231,7 @@
       ]
     },
     {
-      "name": "Socrates", "type": "creature", "attack": 1, "health": 6, "speed": 1, "deploy": 1,
+      "name": "Socrates", "type": "creature", "attack": 1, "health": 6, "speed": 1, "deploy": 0,
       "flavor": "I know that I know nothing. You, apparently, know even less.",
       "notes": "A tank that asks questions: each Dawn the enemy creature facing it is Revealed for the Day (the Socratic method: its plans show). No damage, which Mind can't deal; it just stands there, hard to kill, and makes the creature in front of it explain itself.",
       "picture": "Socrates in a white toga, bald with a big beard, cornering a sweating man in a business suit against a marble column with one raised finger, a huge question mark in his speech bubble, a cup of hemlock waiting on a pedestal behind.",
@@ -271,7 +271,7 @@
       "picture": "A man frozen mid-sentence with a finger raised, a glowing lightbulb above his head stuck behind a pause icon, everyone at the dinner table waiting.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
-          { "action": "Draw", "value": 1, "target": "Player" }
+          { "action": "Draw", "value": 2, "target": "Player" }
         ] }
       ]
     },

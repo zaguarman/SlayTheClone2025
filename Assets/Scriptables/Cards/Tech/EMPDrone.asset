@@ -39,7 +39,7 @@ MonoBehaviour:
   artDescription: A quadcopter drone hovering over the battlefield emitting concentric
     rings of static, every creature below holding a phone with no bars, their glowing
     ability icons flickering out one by one.
-  attack: 1
+  attack: 2
   health: 4
   speed: 2
   turnsUntilOperative: 0

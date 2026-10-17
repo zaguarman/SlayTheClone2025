@@ -1580,6 +1580,9 @@ sections below stay as the two halves of it: the culture itself, and the interne
 		Statecraft
 			Politburo (the user, 2026-10-17: the party's inner council. A creature that acts for the whole back row, or a Policy that
 				decides every vote: Statecraft; Order & Paperwork's hold-the-line deck)
+			Cult of Personality (the user, 2026-10-17: the leader as the state. A creature the whole row leans on: your other creatures
+				get +1 Attack while it stands and lose 1 when it dies, or a Policy that makes one creature the only legal target. Statecraft;
+				Myth if the leader is a prophet)
 			Absolute Power Corrupts Absolutely
 			Affidavit
 			Alea Iacta Est

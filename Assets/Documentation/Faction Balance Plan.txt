@@ -199,3 +199,21 @@ Hard 208 to Medium 277, unchanged. The study's CardScores.json is the tier list 
 Next: the decks rebuilt from these numbers (Tools/propose_decks.py, commit a317128f: every deck keeps its strategy and gets
 its subfactions' best cards for it; Deck Proposals.txt shows the swaps), measured next as study-2026-10-17f; then Hard
 rebuilt from Medium's core (AI Design.txt). Shadow Ops. and Mind get the next buffs: their decks were the ones most rebuilt.
+
+14. THE DECKS REBUILT FROM THE NUMBERS (2026-10-17, study-2026-10-17f, commit a317128f)
+Every deck rewritten by Tools/propose_decks.py (Deck Proposals.txt: before and after). Games are faster (13 Days a game from
+20: the decks hold their subfactions' best cards). Strategies: Aggro 60% (from 37%: the Aggro decks got the beaters that
+had been spread about), Swarm 55%, Control 53%, Engine 51%, Midrange 50%, Combo 22% (from 33%: Prosperity Gospel 27%,
+Panopticon 17%, Threat Model 20%). Decks: Order & Paperwork 97%, Military-Industrial Complex 87%, Underdogs 85%; at the
+bottom Panopticon 17%, Mind Games 18%, Influencer Economy 18%. Factions: Establishment 59%, Digital Society 50%,
+Enlightenment 38%, Capital 37%. Subfactions: Statecraft 80%, Offline 78%, Myth 56%, Utopia 55%, Corporate 52%, Shadow Ops.
+42%, Online 22%, Tech 22%, Mind 20%. At card level the meta knobs show: a creature that deploys 1 or 2 wins 55% of its games,
+one ready at once 44%; Armor 75%, Summon 62%, Healing 57%. Prophecy fell to 46% (Clickbait now one of its five).
+The levels run with these decks: Medium 296 - Hard 204; then Hard rebuilt on Medium's greedy core (AI Design.txt): Hard 251 -
+Medium 249.
+Next: the three bottom subfactions buffed, no nerfs (the rule: up to the top): Online's small bodies +1 Health or Attack
+(Short King, Digital Nomad, Catfish, Content Creator, NPC, Influencer, U Mad Bro?), its spells a point more (Social
+Panopticon's Heat 2, Doomscrolling top 5 for Doom 2, Rage Bait 3 Days, Its A Trap 3); Tech's drones +1 (Bomber Drone 3/3,
+EMP Drone 2/4), Meatproxy and Threat Hunter ready at once, Technical Debt 4/6, the Watchdogs with 2 charges (Antivirus,
+Man-in-the-Middle), Pair Programming's +1/+1 for good, Web Scraping draws 1 too; Mind's Socrates ready at once, Momentum for
+good, Hold That Thought draws 2, Lucid Dreaming top 4, Survivorship Bias 2 Days. Measured as study-2026-10-17g.
