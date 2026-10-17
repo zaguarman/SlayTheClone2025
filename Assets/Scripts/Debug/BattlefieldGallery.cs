@@ -6,7 +6,7 @@ using static Zeitgeist.Enums;
 namespace Zeitgeist {
     /// <summary>
     /// The battlefields set out to judge the <see cref="BattlefieldTuning"/> sliders: shots of the boards empty, full, half
-    /// full, and seen from the other seat (F8), one at a time; Back and Next step through them (UI > Battlefield Gallery).
+    /// full, and seen from the other seat (S), one at a time; Back and Next step through them (UI > Battlefield Gallery).
     /// It fills both rows with plain creatures: use a game you don't mind losing.
     /// </summary>
     public class BattlefieldGallery : MonoBehaviour {
@@ -15,7 +15,7 @@ namespace Zeitgeist {
 
         private static readonly (string Name, int Yours, int Theirs, bool OtherSeat, bool Deploying)[] Shots = {
             ("Both rows full", 5, 5, false, false), ("Both rows empty", 0, 0, false, false), ("Your row full, theirs empty", 5, 0, false, false),
-            ("The Vanguards and Flanks only", 3, 3, false, false), ("Both rows full, from the other seat (F8)", 5, 5, true, false),
+            ("The Vanguards and Flanks only", 3, 3, false, false), ("Both rows full, from the other seat (S)", 5, 5, true, false),
             ("Still deploying, all but the Vanguards", 5, 5, false, true)
         };
 

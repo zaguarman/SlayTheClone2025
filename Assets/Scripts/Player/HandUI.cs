@@ -54,7 +54,7 @@ namespace Zeitgeist {
         public Transform DiscardPile { get; set; }
         private readonly Dictionary<CardController, Sequence> slides = new Dictionary<CardController, Sequence>();
 
-        // The hand at the bottom of the screen: the screen's player's, the one you play from (player 2's after switching sides, F8)
+        // The hand at the bottom of the screen: the screen's player's, the one you play from (player 2's after switching sides, S)
         public bool IsYourHand => Player == null || Player.IsPlayer1 == FogOfWar.PlaysAsPlayer1;
         private float CardScale => IsYourHand ? YourHandScale : 1f;
 
@@ -441,7 +441,7 @@ namespace Zeitgeist {
                 lifted = true;
                 UITheme.Lift(gameObject, UITheme.HandsLayer);
             }
-            RefreshVisibility(); // Fog of War switched (F9), the seats (F8), or the tuning's button
+            RefreshVisibility(); // Fog of War switched (V), the seats (S), or the tuning's button
             UpdateDropGlow();
             RefreshComboGlow();
             RaiseNearPointer();

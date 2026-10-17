@@ -156,6 +156,7 @@ namespace Zeitgeist {
             LogTag tags,
             [CallerFilePath] string sourceFilePath = "") {
             if (MuteInfo) return;
+            GameLog.Note(LogType.Log, message, tags); // The log a player can hand over
             instance?.LogWithType(LogType.Log, message, tags, sourceFilePath);
         }
 
@@ -164,6 +165,7 @@ namespace Zeitgeist {
             object message,
             LogTag tags,
             [CallerFilePath] string sourceFilePath = "") {
+            GameLog.Note(LogType.Warning, message, tags);
             if (instance != null) instance.LogWithType(LogType.Warning, message, tags, sourceFilePath);
             else Debug.LogWarning($"[{tags}] {message}");
         }
@@ -173,6 +175,7 @@ namespace Zeitgeist {
             object message,
             LogTag tags,
             [CallerFilePath] string sourceFilePath = "") {
+            GameLog.Note(LogType.Error, message, tags);
             if (instance != null) instance.LogWithType(LogType.Error, message, tags, sourceFilePath);
             else Debug.LogError($"[{tags}] {message}");
         }

@@ -25,7 +25,7 @@ namespace Zeitgeist {
         /// <summary>For the Hard AI, the way it plays.</summary>
         public static AIStyle AIStyle { get; set; } = AIStyle.Balanced;
         public static AIEntrant AIPlayer => new AIEntrant(AILevel, AIStyle);
-        // A seat's own level, once switched in the game (F6, F7); otherwise the match's
+        // A seat's own level, once switched in the game (1, 2); otherwise the match's
         private static readonly System.Collections.Generic.Dictionary<AISeats, AILevel> seatLevels = new System.Collections.Generic.Dictionary<AISeats, AILevel>();
         /// <summary>How well the AI plays this seat: its own level if one was picked in the game, the match's otherwise.</summary>
         public static AILevel LevelOf(AISeats seat) => seatLevels.TryGetValue(seat, out var level) ? level : AILevel;

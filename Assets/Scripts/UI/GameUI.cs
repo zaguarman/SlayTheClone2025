@@ -230,11 +230,13 @@ namespace Zeitgeist {
         /// <summary>The note under the End Turn button: the debug switches' state, the seats the AI plays, and the keyboard shortcuts.</summary>
         /// Every line reads the same way: the key, then what it switches and how it's set now.
         public string ShortcutsText =>
-            Shortcut(FogOfWar.ToggleKey.ToString(), $"Fog of War: {(FogOfWar.Enabled ? "On" : "Off")}") + "\n" +
-            Shortcut(FogOfWar.SwitchSidesKey.ToString(), $"Playing as: Player {(FogOfWar.PlaysAsPlayer1 ? 1 : 2)}") + "\n" +
-            Shortcut(AIController.Player1Key.ToString(), $"AI Player 1: {AIController.SeatText(AISeats.Player1)}") + "\n" +
-            Shortcut(AIController.Player2Key.ToString(), $"AI Player 2: {AIController.SeatText(AISeats.Player2)}") + "\n" +
+            Shortcut(KeyName(FogOfWar.ToggleKey), $"Fog of War: {(FogOfWar.Enabled ? "On" : "Off")}") + "\n" +
+            Shortcut(KeyName(FogOfWar.SwitchSidesKey), $"Playing as: Player {(FogOfWar.PlaysAsPlayer1 ? 1 : 2)}") + "\n" +
+            Shortcut(KeyName(AIController.Player1Key), $"AI Player 1: {AIController.SeatText(AISeats.Player1)}") + "\n" +
+            Shortcut(KeyName(AIController.Player2Key), $"AI Player 2: {AIController.SeatText(AISeats.Player2)}") + "\n" +
             $"<size=85%>{Shortcut("Esc", "Menu")}    {Shortcut("Shift + drag", "Use an ability")}\n{Shortcut("Right-drag", "Attack your own")}</size>";
+
+        private static string KeyName(UnityEngine.InputSystem.Key key) => key.ToString().Replace("Digit", "");
 
         private static string Shortcut(string key, string what) => $"<color=#B8B0A0>{key}</color>  {what}";
 

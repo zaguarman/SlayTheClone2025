@@ -7,11 +7,11 @@ namespace Zeitgeist {
     /// Plugs the <see cref="AIPlanner"/> into a running game. At the start of each Day it plans the Day of every seat the AI
     /// plays (<see cref="MatchSetup.AI"/>), as chosen (<see cref="MatchSetup.AIPlayer"/>: a level, and for Hard a style), so its plans are on the table before you make yours (GDD 3.6: the AI plans first).
     /// When it plays both seats it also ends the turn, after a pause so its plans can be watched. Which seats it plays can
-    /// change at any time (<see cref="CycleSeat"/>: F6 for Player 1, F7 for Player 2, each press Off, Easy, Medium, Hard,
+    /// change at any time (<see cref="CycleSeat"/>: 1 for Player 1, 2 for Player 2, each press Off, Easy, Medium, Hard,
     /// Very Hard, Off again); it stops when the combat ends.
     /// </summary>
     public class AIController : MonoBehaviour {
-        public const UnityEngine.InputSystem.Key Player1Key = UnityEngine.InputSystem.Key.F6, Player2Key = UnityEngine.InputSystem.Key.F7;
+        public const UnityEngine.InputSystem.Key Player1Key = UnityEngine.InputSystem.Key.Digit1, Player2Key = UnityEngine.InputSystem.Key.Digit2; // 1 and 2 (the user, 2026-10-17: the browser takes the F keys)
 
         /// <summary>Real seconds between the AI planning a Day and ending it, when it plays both seats.</summary>
         public static float TurnPause = 1f;
@@ -70,8 +70,8 @@ namespace Zeitgeist {
         }
 
         /// <summary>
-        /// The next AI for this seat (the user: a key each, F6 and F7): Off, Easy, Medium, Hard, Very Hard, then Off again. The
-        /// screen stays on the side it shows: the switch moves no one round the table (F8 does).
+        /// The next AI for this seat (the user: a key each, 1 and 2): Off, Easy, Medium, Hard, Very Hard, then Off again. The
+        /// screen stays on the side it shows: the switch moves no one round the table (S does).
         /// </summary>
         public static void CycleSeat(AISeats seat) {
             bool on = (MatchSetup.AI & seat) != 0;

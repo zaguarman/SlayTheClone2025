@@ -12,7 +12,7 @@ namespace Zeitgeist {
     /// card stays, pauses, and steps back and forth; it loops until stopped. The mouse wheel turns it back and on, anywhere
     /// over the game, as over the card in play (the window's Turn buttons too).
     /// It fills both rows with plain creatures and tucks cards from both decks under them (see <see cref="Set"/>); the
-    /// enemy's spells among them are on their way, so they show their backs while Fog of War is on (F9, or the window's
+    /// enemy's spells among them are on their way, so they show their backs while Fog of War is on (V, or the window's
     /// switch, turns them over as the wheel shows them).
     /// It changes the game it runs on: use a game you don't mind losing.
     /// </summary>
@@ -309,7 +309,7 @@ namespace Zeitgeist {
                 if (GUILayout.Button("< Turn back")) gallery.Turn(-1);
                 if (GUILayout.Button("Turn on >")) gallery.Turn(1);
             }
-            if (GUILayout.Button($"Fog of War: {(FogOfWar.Enabled ? "On" : "Off")} (F9)")) FogOfWar.Toggle();
+            if (GUILayout.Button($"Fog of War: {(FogOfWar.Enabled ? "On" : "Off")} (V)")) FogOfWar.Toggle();
             if (GUILayout.Button("Stop")) RouletteGallery.Stop();
             UnityEditor.EditorGUILayout.HelpBox("Pause on a shot, then move the sliders in UI > Roulette Tuning: the wheel redraws as they change. Scroll the mouse wheel over the game to turn it back and on, as in play. " +
                 "The enemy's spells show their backs while the fog is on.", UnityEditor.MessageType.None);

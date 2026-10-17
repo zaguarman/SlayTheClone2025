@@ -4,7 +4,7 @@ using static Zeitgeist.DebugLogger;
 
 namespace Zeitgeist {
     // Wires the deck and discard buttons to the DeckViewUI panel; at most one view is open. The other side's deck and
-    // discard pile have buttons of their own, shown only while Fog of War is off (F9)
+    // discard pile have buttons of their own, shown only while Fog of War is off (V)
     public class DeckViewController : UIComponent {
         private enum OpenView { None, Deck, Discard, EnemyDeck, EnemyDiscard }
 
@@ -55,7 +55,7 @@ namespace Zeitgeist {
 
         public void ToggleEnemyDiscardView() => ToggleView(OpenView.EnemyDiscard);
 
-        // Fog of War hides the other side's piles; switching sides (F8) changes whose piles are whose
+        // Fog of War hides the other side's piles; switching sides (S) changes whose piles are whose
         private void OnFogOfWarChanged() {
             if (openView != OpenView.None) {
                 SetOpenView(OpenView.None);
@@ -160,7 +160,7 @@ namespace Zeitgeist {
                 return false;
             }
 
-            // The screen's player: player 1 unless the sides were switched (F8)
+            // The screen's player: player 1 unless the sides were switched (S)
             var player = FogOfWar.ViewerOf(GameManager?.Player1);
             if (enemy) player = player?.Opponent;
             if (player == null) {

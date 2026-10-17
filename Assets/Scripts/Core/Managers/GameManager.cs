@@ -157,6 +157,7 @@ namespace Zeitgeist {
 
         public void Initialize(IGameMediator mediator, List<CardData> player1Cards, List<CardData> player2Cards, TurnManager turnManager, IModifierFactory modifierFactory,
             string player2Name = MatchSetup.DefaultOpponentName) {
+            GameLog.Clear(); // The log a player can hand over starts with the game
             if (IsInitialized) {
                 LogWarning("GameManager Initialize called but already initialized.", LogTag.Initialization);
                 return;

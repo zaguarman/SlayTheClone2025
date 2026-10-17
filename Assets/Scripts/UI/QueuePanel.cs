@@ -9,7 +9,7 @@ namespace Zeitgeist {
     /// <summary>
     /// The Queue button and the panel it opens: the actions waiting to resolve, in order, as the screen's player sees them
     /// (see <see cref="QueueView"/>, Fog of War included). Each action is an item, edged in its side's color, with an icon for
-    /// what it is; hovering one tells more about it, and the board shows that action's arrows alone. It follows the queue as it changes, and the fog switch (F9). Clicking
+    /// what it is; hovering one tells more about it, and the board shows that action's arrows alone. It follows the queue as it changes, and the fog switch (V). Clicking
     /// anywhere else closes it.
     /// One list runs through every Day (the user): each under its title ("Day 2"), with what watched over it (Watchdogs,
     /// traps), oldest first, as the screen knows it now (what played out, or a Reveal showed, is no longer ???). It opens on

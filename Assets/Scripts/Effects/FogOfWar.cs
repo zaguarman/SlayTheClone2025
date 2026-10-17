@@ -141,13 +141,13 @@ namespace Zeitgeist {
     /// <summary>
     /// What the screen shows: one player's view (player 1, the side you play, unless switched). The rules know everything
     /// (<see cref="Intel"/>); the screen only shows what that player knows, and only their cards can be used. The other
-    /// side's hand shows card backs. For debugging: Debug > Fog of War (F9 in play) shows everything and lets you use both
-    /// sides' cards (hot-seat); Debug > Play As Player 2 (F8) switches whose view it is, and whose side sits at the bottom of
+    /// side's hand shows card backs. For debugging: Debug > Fog of War (V in play) shows everything and lets you use both
+    /// sides' cards (hot-seat); Debug > Play As Player 2 (S) switches whose view it is, and whose side sits at the bottom of
     /// the table (see <see cref="BoardSkin.PutAtBottom"/>). Neither changes the rules.
     /// </summary>
     public static class FogOfWar {
-        public const UnityEngine.InputSystem.Key ToggleKey = UnityEngine.InputSystem.Key.F9;
-        public const UnityEngine.InputSystem.Key SwitchSidesKey = UnityEngine.InputSystem.Key.F8;
+        public const UnityEngine.InputSystem.Key ToggleKey = UnityEngine.InputSystem.Key.V; // V for vision, S for the seat (the user, 2026-10-17: the browser takes the F keys)
+        public const UnityEngine.InputSystem.Key SwitchSidesKey = UnityEngine.InputSystem.Key.S;
 
         private static bool playsAsPlayer1 = true;
 

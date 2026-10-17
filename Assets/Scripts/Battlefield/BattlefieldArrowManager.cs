@@ -433,7 +433,7 @@ namespace Zeitgeist {
             }
         }
 
-        // Whose the arrows are, as the screen sees it (it changes when the sides are switched, F8)
+        // Whose the arrows are, as the screen sees it (it changes when the sides are switched, S)
         private bool IsOurs => owner.IsPlayer1 == FogOfWar.PlaysAsPlayer1;
         private Color AttackColor => IsOurs ? OurAttackColor : TheirAttackColor;
         private Color DamageColor => IsOurs ? OurDamageColor : TheirDamageColor;

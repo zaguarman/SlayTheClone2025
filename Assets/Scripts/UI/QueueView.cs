@@ -10,7 +10,7 @@ namespace Zeitgeist {
     /// plans, unknown creatures, the spells it plays from its hand and its hidden traps and Watchdogs show as "???". What the
     /// viewer has seen since shows for what it is: an action a Reveal (or a Watchdog) showed them, and on a past Day's queue,
     /// whatever played out in front of them; only secrets stay secret (a Kill Order, a hidden trap, a Watchdog's condition).
-    /// With the fog switched off for debugging (F9) everything shows.
+    /// With the fog switched off for debugging (V) everything shows.
     /// </summary>
     public static class QueueView {
         private const string OursColor = "#8FE3A8";

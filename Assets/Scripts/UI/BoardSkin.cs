@@ -109,7 +109,7 @@ namespace Zeitgeist {
         }
 
         /// <summary>
-        /// The screen's player sits at the bottom of the table: switching sides (Debug > Play As Player 2, F8) swaps the
+        /// The screen's player sits at the bottom of the table: switching sides (Debug > Play As Player 2, S) swaps the
         /// two halves, mats, hands, plaques and table colors included.
         /// </summary>
         public void PutAtBottom(bool player1) {

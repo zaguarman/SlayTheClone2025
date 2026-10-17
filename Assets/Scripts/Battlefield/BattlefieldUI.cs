@@ -182,7 +182,7 @@ namespace Zeitgeist {
         }
 
         /// <summary>
-        /// Lays the formation out again for the side of the table this mat is on now (the sides were switched, F8):
+        /// Lays the formation out again for the side of the table this mat is on now (the sides were switched, S):
         /// the slots, their markers and every chevron drawn on the mat (fill, trims, a spell's glow) face the middle.
         /// </summary>
         public void Relayout() {
