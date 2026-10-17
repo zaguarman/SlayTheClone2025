@@ -14,41 +14,73 @@ RULES
   2026-10-14: no more pixel art for now. The cards use the vector (SVG) art again; the pixel pictures already made are
     kept (Assets/Art/PixelCards, ArtArchive/RetroDiffusion) but not assigned.
 
+TO SUPERVISE
+
+  298 cards whose art direction Claude decided alone: no note from the user and no sign-off yet. Once
+  the user has checked one, its approval goes into SUPERVISED in Tools/art_briefs.py (or their changes into USER_NOTES).
+
+  Corporate (46): Overtime, Peace the Frontier, Casino, Headhunter, Counterfeit, Private Equity, Shell Company, Golden Parachute, Work Shift Rotation, Unpaid Intern, Inhuman Resources, Micromanager, Multilevel Marketing Seller, Day Trader, Pluriemployed Hustler, Satoshi Nakamoto, Multimillionaire Philanthropist, Charles Ponzi, Margin Call, Mass Layoffs, Team Building Exercise, Dead Cat Bounce, Business Operating Expenses, Taxpayer Funds Venture Capital Profits, Tax-Exempt Corruption, Solidarity Towards The Small Businessman, Inheritance, NDA, Inflation, Escape Goat, Laissez-Faire, The Invisible Hand, C-Suite, Venture Capital, Corporate Bailouts, Flash Crash, Just in Time, Hedonic Treadmillionaire, Moral Bankruptcy, Usury, Middle Manager, Big Four, Bloomberg Terminal, Internal Protocol: Quota Crusher Mindset, Smartwatch, High-Frequency Trading Scam
+  Statecraft (29): Supply Depot, Presidential Pardon, Congruent Use of Force, Weapons of Mass Distraction, King Emeritus, Spite-Elected President, Police Officer Productivity Target, Internal Revenue Service, Mercenaries, Man o' War, Ministry for Equality, Protocol Enforcers, Demagogue, Red Tape, Preemptive Strike, Martial Law, Kakistocracy, Mutually Assured Destruction, Panem Et Circenses, Diplomat, Raised Security Level, Lost Landmine, Ceasefire, Violence Monopoly, Border Crossing, Peace Force, Security Guard, Si Vis Pacem, Para Bellum, Exoskeleton
+  Zeitgeist (32): Drug Smuggler, Not on My Watch, One for the Road, Chain Smoker, Karen, Boomer, Hipster, Underdog, Hikikomori, Reality TV Star, Scam Artist, Football Hooligans, Antihero, Bodybuilder, Plot Armor, YOLO, Toxic Positivity, Delivery Cyclist, Zeitgeist, Rush Hour, No Glove, No Love, Listen Kid, Ol' Reliable, Weaponized Incompetence, Absentee Parents, The Friends We Made Along the Way, Spite Voter, Fidget Spinner, Camper Van, Lost Generation, Universal Basic Income, Calm Your Tits
+  Digital Society (16): Its Been 84 Years..., Good Boi, Crypto "Entrepreneur", Digital Nomad, NPC, Chronically Online, Conspiracy Theorist, Clickbait, Cancelled, Social Panopticon, Short King, Content Creator, Thirst Trap, Selfie Esteem, Influencer, U Mad Bro?
+  Shadow Ops. (54): Cleaner, Political Decoy, Mole, Signal Jammer, Deep Cover, Human Intelligence, Wet Work, Perfectly Timed Camera Malfunction, Smoke And Mirrors, Eavesdrop, Tapped Communications, Whistleblower, Involuntary Free Polonium Giveaway, Humanitarian Trafficking Action, Dead Man's Switch, Fell Out of a Window, Coup d'État, Operation Paperclip, False Flag Operation, Never Let Them Know Your Next Move, Frame Job, Devil's Breath, He Didn't Kill Himself, Extraction, Witness Protection Program, Death By "Natural Causes", Asset Recruitment, If I Told You, I'd Have to Kill You, Lone Gunman, Glomar Response, Sabotage, Ghost Army, Inflatable Tank, Social Engineering, Bilderberg Membership, Dead Drop, The Golden Gun, Die Another Day, Licence to Kill, Shaken, Not Stirred, GoldenEye, Supply Chain Attack, Femme Fatale, Exploding Pen, Drug Pigeon, Embassy, Secret Anthrax Laboratory, Tracking Beacon, Arsonist, Counter-Surveillance, Compromised Agent, Polonium Umbrella, Nonchalant Agent, Q Branch
+  Tech (16): Web Scraping, DDOS Attack, End-to-End Encryption, SysAdmin, Meatproxy As A Service, Ransomware Attack, Man-in-the-Middle, Technical Debt, Threat Hunter, Ctrl + Z, Pair Programming, Suspicious USB Stick in the Parking Lot, Code Review, Bomber Drone, Hovercraft, Ctrl + Y
+  Myth (40): Taqiyya, Memento Mori, Martyr, Exorcism, Mummy, Omniscient Space-Time Bending Bearded Wizard, Cultist, Phoenix, Excess of Bread and Wine, Sacrificial Ritual, Reincarnation, Holy War, The Great Flood, Lance Of Longinus, Necronomicon, The Wicker Man, Thoughts and Prayers, Religious Instrumentalization, Deus Vult, Curse Of Hubris, Zealot, Vampire, Living Dead, Buddy Christ, Pope, The Lobster Professor, Amen, Pyramids, Horsemen Of Apocalypse, God's Grace, The Omen, Grim Reaper, Blessing in Disguise, Die by the Sword, Mithril, Here Be Dragons, Gracias Jesús, Heretic, Ambrosia, Publicly Funded Faith Schools
+  Mind (19): Lucid Dreaming, Momentum, Survivorship Bias, Yesn't, Cyberpsychosis, Reflect, Mimetic Theory, Pessimist, Introvert, Roko's Basilisk, Imposter Syndrome, Ship of Theseus, Socrates, Maslow's Pyramid, Legerdemain, Hold That Thought, Projection, Psychiatrists, Hyperbole
+  Utopia (38): Geomagnetic Reversal, Research Lab, Clone, Hypermetamorphosis, Extremophile, Philosophy PhD, Mathematician, Quantum Physicist, Perpetual Motion Machine, Genetically Modified Organism, Pioneer, Vaccine, Climate Change, Overpopulation, Black Hole, Stasis Field, Absolute Zero, Splitting The Atom, Gene Editing, Cold Fusion, Antimatter, Biohacking, Blood Transfusion, Evolution Theory, Mutation, Exponential Growth, Scientific Method, Chimera, Resurrected T-Rex, Longevity Hub, Femtosecond Laser, Quark, Seasteading, Ankylorhiza, White Dwarf, Biohacker, Prion Disease, Nanobots
+  Potion (8): Nicotine, Stimulant Drug, Superglue, Soylent, Flamethrower, Eject Button, Stealth Suit, Creatine
+
 
 CORPORATE
 
 Overtime (spell)
     An office worker at a desk late at night, surrounded by empty coffee cups and energy drink cans, typing furiously with smoke rising from the keyboard, eyes bloodshot and wide open, a wall clock showing 3 a.m. and a calendar with every weekend crossed out.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Peace the Frontier (spell)
     Two tech executives in hoodies at a congressional hearing table, one tearfully holding up a sign reading REGULATE US (ONLY), the other quietly sliding a rulebook titled BARRIERS TO ENTRY across to a smiling senator, a burning pile of cash under the table.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Casino (spell)
     A caricature of Donald Trump in a dark suit and an overlong red tie, his blond hair swept over, grinning and throwing a fistful of casino chips in the air, in front of his gaudy gold-and-purple casino with onion domes and a giant neon sign, a red BANKRUPT stamp across the sign.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Headhunter (spell)
     A slick recruiter in a sharp suit reeling in a startled employee from a rival's office tower with a fishing rod baited with a stock-options contract.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Counterfeit (creature)
     A knockoff superhero in a cheap costume with a misspelled logo on the chest, flexing proudly in front of a mirror that shows a real muscled hero.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Private Equity (creature)
     A vampire banker in a pinstripe suit sucking gold coins out of a little family shop through a long straw.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Shell Company (creature)
     A street hustler playing the shell game with three walnut shells, each stamped with a different tax haven's flag, a gold coin under one.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Golden Parachute (creature)
     A grinning CEO floating down on a golden parachute stitched from banknotes, a briefcase overflowing with cash in hand, while the company tower he leaves behind burns and the staff watch from the windows.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Work Shift Rotation (creature)
     Two warehouse workers at the clocking-in machine: the exhausted one hands his hi-vis vest, still warm, to the fresh one.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Unpaid Intern (creature)
     (from the drawing) A tray of coffees for everyone but them
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Inhuman Resources (creature)
     (from the drawing) A stack of pink slips and the stamp that approves them
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Micromanager (creature)
     (from the drawing) Magnifying glass over every little thing
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Multilevel Marketing Seller (creature)
     (from the drawing) The pyramid of recruits behind the seller
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Day Trader (creature)
     A sweating trader in a headset, worried, under three wall screens of stock charts, two up and one crashing; office towers behind.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Pluriemployed Hustler (creature)
     A delivery worker in a teal cap running past (speed lines) with a delivery box, a row of five rating stars above him; office towers behind.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Satoshi Nakamoto (creature)
     A figure in a grey hoodie whose face is only a swirl of fog with a question mark in it, sitting cross-legged on a mountain of gold coins, a laptop glowing on his knees and a price chart behind him shooting straight up.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Unicorn (creature)
     A white unicorn startup with a gold horn and a rainbow mane, standing on fire, a red chart line falling behind it; office towers behind.
     USER: 2026-10-14 (pixel art): rework the mane and the chart's downturn arrow behind; the fire layer on top of the unicorn, so it looks like it's on fire.
@@ -56,145 +88,204 @@ Unicorn (creature)
     USER: 2026-10-14: then: that short fire in front of the unicorn.
 Multimillionaire Philanthropist (creature)
     (from the drawing) A giant ceremonial cheque, mostly tax deduction
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Fat Tony (creature)
     A mobster in a fedora, dark shirt and red tie, smirking with a smoking cigar; office towers behind.
     USER: Keep it as it is (a historical figure).
 Charles Ponzi (creature)
     A smiling little man in a suit beside a pyramid of champagne glasses, the top one overflowing with gold coins; office towers behind.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Margin Call (spell)
     (from the drawing) An old desk phone that won't stop ringing
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Hostile Takeover (spell)
     A grey shark in a red tie swimming through the office towers, jaws open, a red chart line falling behind it.
     USER: 2026-10-14 (pixel art): the mouth a smile instead of an open box; the dorsal fin swept back, not a pyramid.
 Mass Layoffs (spell)
     A cardboard box of desk belongings (a plant, a mug) on its way to the exit door, a red chart line falling; office towers behind.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Team Building Exercise (spell)
     Three glum coworkers in party hats under bunting; office towers behind.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Dead Cat Bounce (spell)
     (from the drawing) The cat, mid-bounce, not enjoying it
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Business Expense (spell)
     A CEO in a full three-piece suit, briefcase still in hand, being walked into a jail cell by a guard, while he hands the guard a receipt stamped BUSINESS EXPENSE.
     USER: A guy who looks like a CEO, in a full suit, going to jail.
 Business Operating Expenses (spell)
     A smiling executive in an orange jumpsuit with a silk tie, checking into a cushy white-collar prison camp with a tennis court and a golf green, an assistant wheeling his luggage behind him; a sign over the gate reads COST OF DOING BUSINESS.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Taxpayer Funds Venture Capital Profits (spell)
     (from the drawing) The public pays in, one coin at a time ---------------------------------------------------------------- Statecraft cards
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Cleaning Robot (creature)
     A smart-home robot vacuum in the style of a Google Nest (a soft fabric puck with four coloured light dots: blue, red, yellow, green), its single camera eye glowing, sucking up a family's photos, letters and diary from the living-room floor while a beam uploads a floor plan of the house to a cloud. A pop-up on it reads "Free cleaning. You're the product."
     USER: 2026-10-14 (pixel art): after the pool-cleaning robot in Love, Death & Robots (the user's still): flat shading, a white angular hull at the water line of a cyan-tiled pool at night, a round disc head on an arm.
     USER: 2026-10-14: make it like a Google Nest instead, more Google-themed: they take your data, and having one at home is handing it over for free.
 Tax-Exempt Corruption (spell)
     A megachurch whose cross is a giant gold dollar sign, a private jet parked by the door and a big red TAX EXEMPT stamp across the sky.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Solidarity Towards The Small Businessman (spell)
     A fan-subscription website called ONLYFUNDS: the board-game tycoon (top hat, white moustache) poses in a pink bathrobe on a live webcam, a SUBSCRIBE button and a pile of tips beside him, while tired workers in hi-vis vests and scrubs send him their coins.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Inheritance (spell)
     Grandma at peace in an open coffin, hands folded on lilies, while her grandson in his best suit grins over her, fanning out the banknotes from her will.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 NDA (spell)
     A smiling corporate lawyer holding out a gold pen to a nervous employee whose mouth is closed with a big brass zipper, a towering stack of contracts between them stamped CONFIDENTIAL.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Inflation (spell)
     A chocolate bar in its old-size wrapper, the bar inside visibly half as big, and a supermarket price tag re-stickered three times, each price higher.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Escape Goat (spell)
     The escape goat: a white goat scrambling over a wooden fence, front legs over the top rail, looking back in a sweat.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Laissez-Faire (spell)
     A boxing referee lounging in a deck chair in the corner of the ring, reading the business pages, whistle unused, while a giant in a top hat sits on a heap of flattened small boxers and pockets their belts.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 The Invisible Hand (creature)
     An empty white glove floating over a busy market stall, nobody inside it, quietly lifting coins out of the shoppers' pockets and dropping them into a fat banker's top hat.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 C-Suite (creature)
     A champagne tower of glasses: five executives in suits at the top glass, toasting, the champagne overflowing past them down the tiers, until a line of workers at the bottom catch the last drips in paper cups.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Venture Capital (spell)
     A man in a fleece vest pouring a bucket of gold coins into a lanky startup founder's head through a funnel, the founder growing taller and more delusional.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Corporate Bailouts (spell)
     A sinking cruise ship branded MEGABANK being lifted out of the sea by a giant hand made of taxpayers' wallets, the executives on deck popping champagne.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Flash Crash (spell)
     A stock chart dropping off a cliff into a canyon, tiny traders in suits falling with it, a trading robot at the top shrugging.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Just in Time (spell)
     A delivery van screeching up to a factory door exactly as the last box on the assembly line runs out, a manager holding a stopwatch at 0:00.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Hedonic Treadmillionaire (creature)
     A billionaire in a gold tracksuit running on a treadmill that is itself on a yacht on a bigger yacht, sweating, his smile not moving.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Moral Bankruptcy (spell)
     A banker stamping BANKRUPT across a smiling worker's portrait, the worker's chair already being carried away by movers.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Usury (spell)
     A loan shark in a pinstripe suit feeding coins into a piggy bank swollen to the size of a house, a tiny debtor pinned under its trotter.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Middle Manager (creature)
     A middle manager carrying a cardboard box of desk things out of the office, a 'Synergy' mug on top, already on the phone to get rehired as a consultant.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Big Four (creature)
     Four identical accountants in grey suits shoulder to shoulder at a long table, the shredder behind them overflowing, a fifth chair empty with a name card reading 'Arthur Andersen'.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Bloomberg Terminal (creature)
     A black two-screen trading terminal with its keyboard of colored keys, every chart spiking green, a trader's sweaty finger hovering over the yellow BUY key.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Internal Protocol: Quota Crusher Mindset (spell)
     A motivational poster over a cubicle farm, a lone runner on a mountain top under the words QUOTA CRUSHER, the workers below asleep on their keyboards.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Smartwatch (spell)
     A sleek smartwatch on a sweating wrist, its screen flashing 'Stand up! Productivity -3%', a subscription renewal notice sliding in underneath.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 High-Frequency Trading Scam (spell)
     A server rack in a basement next to the stock exchange, cables running under the street, a trader's face reflected in a screen of numbers moving too fast to read.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
 STATECRAFT
 
 Supply Depot (spell)
     A huge military warehouse with endless shelves of crates, a forklift carrying a soldier in a crate labelled REINFORCEMENTS, a clerk stamping a form at the front desk.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Golden Dome (creature)
     A shimmering golden dome of light over one fat senator on a deckchair, while missiles rain on the rest of the city outside it.
     USER: 2026-10-14 (pixel art): redo it; Netanyahu as the man standing there (the user's reference photo: silver hair swept back, dark suit, white shirt, red tie, an Israeli flag pin, a smirk).
     USER: 2026-10-14: no flag pin.
 Presidential Pardon (spell)
     A smiling president signing a giant pardon with a huge flourish for a creature in an orange jumpsuit still holding a smoking gun.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Congruent Use of Force (creature)
     A soldier firing a huge gatling gun at a single mosquito, the whole street behind it riddled with holes.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Weapons of Mass Distraction (spell)
     A giant public screen holds a crowd: on one half a blocky-game YouTuber screams at his pickaxe, on the other a grinning giveaway YouTuber in a hoodie waves a giant FREE check. Behind it, soldiers quietly shuffle the enemy's tents around.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 King Emeritus (creature)
     (from the drawing) The yacht he kept
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Spite-Elected President (creature)
     A shouting blond president at a podium with a gold star, an American flag behind him; sunburst.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Police Officer Productivity Target (creature)
     (from the drawing) The quota: tally marks, each a person
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Internal Revenue Service (creature)
     A tax collector in a top hat and round glasses beside a money bag and gold coins; sunburst.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Mercenaries (creature)
     A soldier in a helmet and sunglasses carrying a rifle, running (speed lines), gold coins at his feet; sunburst.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Man o' War (creature)
     A three-masted wooden warship with white sails and a row of gun ports on the sea; sunburst.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Ministry for Equality (creature)
     (from the drawing) Barbed wire along the roof
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Supreme Court (creature)
     A white columned courthouse with a judge's gavel beside it; sunburst.
     USER: 2026-10-14 (pixel art): no gavel.
 Protocol Enforcers (creature)
     Two bodyguards in black suits and dark glasses with earpieces behind a gold velvet rope; sunburst.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Demagogue (creature)
     A grinning man in red shouting through a megaphone, sound waves spreading; sunburst.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Red Tape (spell)
     A soldier at a deployment checkpoint wrapped head to toe in red tape, while a bored clerk behind the window stamps "FORM 27-B MISSING" and a take-a-number display reads "Now serving: 0001. Yours: 9847".
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Preemptive Strike (spell)
     A general in a war room proudly pointing at a map where a missile hits a quiet village labelled "Possible Future Threat", a MISSION ACCOMPLISHED banner behind him and an intelligence report on the table: "Source: trust me bro".
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Martial Law (spell)
     A barred jail window under a crescent moon at night, searchlights sweeping.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Kakistocracy (spell)
     (from the drawing) A golden throne, and the least qualified occupant available
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Mutually Assured Destruction (spell)
     A mushroom cloud on an orange sky, two missiles flying toward each other from opposite corners.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Panem Et Circenses (spell)
     (from the drawing) The arena in the back, free bread in front ---------------------------------------------------------------- Zeitgeist cards
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Diplomat (creature)
     A young heir lounging in a leather chair at a summit table, feet up, a gold name plate reading "AMBASSADOR (BY BIRTH)". Behind him, a wall of portraits of his father and grandfather in the very same chair.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Raised Security Level (spell)
     A bureaucrat solemnly flipping a color-coded threat sign from yellow to orange, while one guard in comically oversized armor blocks a door.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Lost Landmine (spell)
     A rusty landmine half-buried in a children's sandbox, next to a faded government sign: "AREA CLEARED. PROBABLY. - Ministry of Defence, 1998".
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Ceasefire (spell)
     Two generals shaking hands for the cameras in front of a CEASEFIRE banner, each hiding a grenade behind his back.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Violence Monopoly (spell)
     The board-game tycoon (top hat, white moustache, tailcoat) as the police: a badge on his chest, a baton raised in his white glove, glaring straight at you from beside the GO TO JAIL corner.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Border Crossing (spell)
     A border checkpoint at night: a striped barrier, a bored officer in a booth stamping passports, a queue of strange creatures waiting under the floodlights, a 'Welcome' sign half fallen off.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Peace Force (creature)
     A line of blue-helmeted peacekeepers behind riot shields, the front one shoving his shield into a protester's face, a banner reading 'PEACE' behind them.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Security Guard (creature)
     An airport security guard snapping on a blue latex glove with a grin, a traveler in socks with arms raised in the body scanner, a bin of confiscated water bottles overflowing behind.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Si Vis Pacem, Para Bellum (spell)
     A Roman general signing a peace treaty with one hand while the other points at a row of catapults being built behind the tent.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Exoskeleton (spell)
     A soldier in a powered military exoskeleton standing guard at a checkpoint, an extension cord trailing from his back to a wall socket in the guard booth.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
 ZEITGEIST
 
@@ -203,36 +294,52 @@ Multipass (spell)
     USER: 2026-10-14: after the film still (The Fifth Element).
 Drug Smuggler (creature)
     A sunburnt backpacker with dreadlocks grinning at an airport security gate, his enormous backpack bulging with cards poking out of every zip.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Not on My Watch (creature)
     A fierce grandma in a crossing-guard vest holding up a stop sign, nervous creatures huddled behind her in a blanket fort.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 One for the Road (spell)
     A pub regular raising two pints at once under a CLOSING TIME sign, the barman already putting chairs on tables.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Chain Smoker (creature)
     A man chained by the neck to a giant cigarette pack like a dog on a leash, and happy about it: grinning, a cigarette in his mouth, a cloud of smoke around his head. The pack is a classic red-and-white one (a red chevron lid over a white body, a small gold crest, "FILTER CIGARETTES" on the red band), no brand name.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Karen (creature)
     (from the drawing) The finger, pointed at the manager's office
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Boomer (creature)
     An angry old man with white hair and glasses shaking his fist; a vaporwave sunset and grid behind him, a cloud.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Hipster (creature)
     A bearded man in a beanie and round glasses with a takeaway coffee; vaporwave sunset and grid.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Underdog (creature)
     A sad brown puppy with a bandage on its head; vaporwave sunset and grid.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Hikikomori (creature)
     A pale recluse in headphones lit by the glow of a tablet; vaporwave sunset and grid.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Reality TV Star (creature)
     A woman in sunglasses and a pink top under a spotlight and sparkles, faceless grey extras around her; vaporwave sunset and grid.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Scam Artist (creature)
     (from the drawing) The course: a book about selling books
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Football Hooligans (creature)
     Three shouting fans in green with scarves, a flare burning behind them; vaporwave sunset and grid.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Antihero (creature)
     A scowling figure in a dark hood with a cigarette; vaporwave sunset and grid.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Bodybuilder (creature)
     A grinning bodybuilder in a headband lifting a barbell overhead, an energy drink can with a lightning bolt beside him; vaporwave sunset and grid.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Plot Armor (creature)
     A close-up of a chest: two hands hold an open jacket wide, Superman style, showing a steel breastplate stamped PLOT.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 YOLO (spell)
     A shirtless guy mid-backflip off a garage roof toward a tiny inflatable pool, filming himself with a selfie stick, while his friends below are already dialing for an ambulance.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 This Is Fine (spell)
     The meme dog in a little bowler hat at a table with his coffee, the room on fire around him, saying THIS IS FINE.
     USER: 2026-10-14 (pixel art): no chair post (the 'log') behind the dog.
@@ -244,17 +351,22 @@ Russian Roulette (spell)
     USER: 2026-10-14 (pixel art): the skull centred in its slice.
 Toxic Positivity (spell)
     A huge yellow smiley face with a crack running through it and a sticking plaster on its cheek; vaporwave background.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Mental Health Day (spell)
     A smiling politician cuts the ribbon on a MENTAL HEALTH DAY banner in front of a boarded-up mental health clinic (CLOSED: BUDGET CUTS). The only help on offer: a reiki-and-ayurveda lady in crystals and a shawl waving burning sage over an exhausted office worker, a price list beside her (AURA CLEANSE 90 EUROS).
     USER: 2026-10-14: it criticises how superficially the topic is treated: a nice day to have, but zero measures from the government to tackle mental health problems; and to rub salt in the wound, the only people backing it are cringe mystic, shamanic, ayurveda- and reiki-loving Karens.
 Delivery Cyclist (creature)
     A rider with a huge square thermal backpack, mid-hop over a gridlocked row of cars, phone strapped to the handlebars showing a 1-star rating.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Zeitgeist (spell)
     A huge friendly ghost made of hashtags and likes floating over a crowd whose faces are lit blue by their phones.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Rush Hour (spell)
     Gridlocked traffic at dusk, every car honking, while a snail with a briefcase glides past in the empty bus lane.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 No Glove, No Love (spell)
     A woman wagging her index finger: no, no. In her other hand, a little foil packet held up: this first.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 We Are Not The Same (spell)
     The meme: two identical masked heroes in red suits with web lines, pointing at each other in a dim warehouse.
     USER: The Spider-Man meme, pointing at each other.
@@ -263,33 +375,46 @@ Generational Trauma (spell)
     USER: The meme of the woman holding something above water in a swimming pool with a skeleton at the bottom, with the generations: the one before the boomers holds the boomers above water, the next generations drowned underwater.
 Listen Kid (creature)
     An old man on a porch rocking chair pointing his cane at a terrified teenager, a speech bubble filled with tiny drawings of horses, rotary phones and a nickel.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Ol' Reliable (spell)
     A worn-out frying pan hanging alone on a kitchen wall with a halo around it, a dented shape of a burglar's head in its bottom.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Weaponized Incompetence (spell)
     A man holding a plate he has 'washed' that is still covered in food, looking helpless, while his partner behind him quietly takes over the whole sink.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Absentee Parents (creature)
     A family portrait on a mantelpiece with two parent-shaped holes cut out of it, a postcard from Ibiza tucked into the frame.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 The Friends We Made Along the Way (spell)
     A ragtag group of adventurers around a campfire laughing, an empty treasure chest behind them, a map with the X scribbled out.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Spite Voter (creature)
     A grumpy man in a voting booth gleefully ticking the box of a clown candidate, a 'Don't Blame Me' badge pinned to his cardigan.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Fidget Spinner (creature)
     A giant fidget spinner whirling on a school desk, sparks flying off its bearings, a crowd of kids staring at it hypnotized, a teacher's 'Confiscated' box in the corner.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Camper Van (creature)
     A painted hippie camper van speeding away from a dented mailbox, a dreamcatcher swinging from the mirror, the couple inside filming the getaway for their followers.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Lost Generation (creature)
     Tired millennials in graduation gowns sitting on the steps of a closed bank, their diplomas folded into paper boats floating down the gutter.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Universal Basic Income (spell)
     A long line of citizens at an ATM spitting out identical small banknotes, a politician in the background tearing his hair out, a man in the line buying a lottery ticket with his.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Calm Your Tits (spell)
     A man at a family barbecue telling his furious aunt to calm down, everyone around them freezing mid-bite, the aunt's face going from red to purple.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
 DIGITAL SOCIETY
 
 Its Been 84 Years... (creature)
     A very old lady in a cardigan wheeled in on a hospital bed through a doorway, a tiny party hat on, a wall clock behind her covered in cobwebs, a dusty birthday cake on the table with 84 candles burnt down to stubs.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Good Boi (creature)
     A fluffy shiba dog in a tiny knight's helmet holding up a pot lid as a shield, standing in front of a crying smaller creature, a dog biscuit tucked behind its ear.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Console Memory Card (spell)
     A chunky black console memory card, 8 MB MEMORY CARD on its label, with a goldfish in a tiny bowl taped on top for the console's memory, a glowing save icon floating out of the card.
     USER: 2026-10-15: after the meme of the PS2 8 MB memory card: the save data lives on the card because the console has the memory of a goldfish.
@@ -304,8 +429,10 @@ Doomscrolling (spell)
     USER: 2026-10-14: the redo was worse: keep the earlier one (the dome over wide cheeks).
 Crypto "Entrepreneur" (creature)
     A guy in sunglasses and a hoodie on top of a human pyramid of recruits, a glowing coin passed down from hand to hand.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Digital Nomad (creature)
     A Tuareg nomad in a white turban and face veil, sitting cross-legged on a sand dune, typing on a laptop on his knees.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Keyboard Warrior (creature)
     A heavyset warrior in a stained hoodie and a cape, holding a mechanical keyboard over his head like a greatsword, a gaming headset for a helmet and energy drinks hanging from his belt.
     USER: 2026-10-14 (pixel art): like Rambo but fat, holding the keyboard as if it were a sword.
@@ -325,8 +452,10 @@ Its A Trap (spell)
     USER: Homer and the free boat: the trap where they want to get him to the police office to give him a fine.
 NPC (creature)
     A crowd of identical grey, featureless NPC Wojak faces, every speech bubble repeating the same sentence, one of them proudly holding a "Think For Yourself" sign.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Chronically Online (creature)
     A pale figure in a dark room lit only by three monitors, a cork board of red strings and printed memes behind them, an energy-drink pyramid on the desk.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Catfish (creature)
     A cat and a goldfish in love: the cat presses its face to the fishbowl, the fish kisses the glass back, hearts all around.
     USER: A cat and a fish loving each other.
@@ -334,34 +463,46 @@ Catfish (creature)
     USER: 2026-10-14: no round fin blob on top of the fish.
 Conspiracy Theorist (creature)
     A man in a tinfoil hat pointing at a cork board of photos joined by red string, the biggest photo a pigeon labelled DRONE.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Clickbait (spell)
     A video thumbnail: a man with a hugely shocked face, a big red arrow and a red circle around absolutely nothing.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Cancelled (spell)
     A man at a podium facing a crowd that holds torches, pitchforks and phones up to film him.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Meta Group Chat (creature)
     A messenger group chat in the familiar green-and-beige look: THE JURY (47 members), gavels and skulls with blue read ticks under a blurry photo of one guy, while the guy himself sweats alone outside the phone.
     USER: Redo it with a WhatsApp-like feel.
 Social Panopticon (spell)
     A real panopticon seen from inside: a ring of barred cells on two floors around a central watchtower with a single recording eye, every inmate lit by their own phone.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Short King (creature)
     A short man wearing a paper crown standing on a stack of phone books to take a selfie at arm's length, the profile on his phone screen reading 6 FT.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Content Creator (creature)
     A streamer in a headset under a ring light screaming at the camera with a shocked face and a giant red arrow pointing at nothing, the thumbnail on the monitor behind showing the same face, 100K in gold letters.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Thirst Trap (creature)
     A steel bear trap open on a beach towel, a ring light and a phone on a tripod set up in front of it, the phone screen filling with hearts, and a glass of water standing beside it.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Selfie Esteem (spell)
     A girl holding a selfie stick at arm's length, the phone screen showing a perfect filtered face while the real one is crying, a ring light glowing.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Influencer (creature)
     An influencer posing in front of a melting glacier with a branded water bottle, an assistant holding a reflector, the caption 'so grateful' on the phone.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 U Mad Bro? (creature)
     A smug teenager in a gaming chair, trollface on his hoodie, typing 'u mad bro?' while a wall of furious replies piles up on his screen.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
 SHADOW OPS.
 
 Cleaner (creature)
     A calm man in a cleaning company jumpsuit, a mop in one hand and a silenced pistol in the other, two neat holes in a target behind him.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Political Decoy (creature)
     Two identical politicians in matching suits: one waves from a balcony, the other ducks behind the curtain.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Burn Notice (spell)
     The Banksy auction stunt: a spy's portrait, painted in the style of Girl with Balloon, has just sold at auction, and the canvas is sliding down through a shredder hidden in its gilded frame, the strips stamped BURN NOTICE. In the audience, the spy himself watches his face being shredded.
     USER: A Banksy painting shredding itself.
@@ -370,72 +511,103 @@ Counter-Intelligence (spell)
     USER: Like the first Counter-Strike cover, but instead of weapons they have thick glasses and calculators aimed at each other.
 Mole (creature)
     A mild office clerk in a cardigan and lanyard at his desk, a mole's snout and claws poking out of his sleeves, a tunnel opening under his chair that leads to a foreign embassy's flag.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Signal Jammer (creature)
     An agent in a black suit with a backpack bristling with antennas, standing in a busy street where everyone stares in horror at phones showing "No Service".
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Deep Cover (creature)
     Two men facing each other in front of a mirror, each peeling off a latex mask of the other's face.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Sleeper Agent (creature)
     A suburban dad mowing his lawn in a polo shirt, an earpiece coiled behind his ear, while his shadow on the grass wears a trench coat and holds a sniper rifle.
     USER: 2026-10-14 (pixel art): Agent Smith from The Matrix (the user's still) asleep on a table: drawn as the Matrix-agent look (dark suit, slicked hair, slim black shades, coiled earpiece), falling green code behind.
 Human Intelligence (spell)
     Two spies on a park bench back to back, one reading a newspaper with eye holes cut in it, the other slipping a card into his coat pocket behind the paper, pigeons watching.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Wet Work (creature)
     A hitman in a dripping raincoat under a black umbrella in the rain, pressing a red TERMINATED stamp onto a personnel file with a photo clipped to it.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Perfectly Timed Camera Malfunction (spell)
     A security monitor showing static and SIGNAL LOST at 02:13, while at the edge of the frame a gloved hand pulls the camera's cable out of the wall.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Smoke And Mirrors (spell)
     A stage magician in a tuxedo vanishing a tank behind a cloud of smoke, while a row of mirrors shows a dozen identical tanks to a baffled general.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Eavesdrop (spell)
     A spy in the next diner booth pressing a drinking glass to the partition, a tower of empty glasses beside him and a waitress refilling his coffee without looking.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Tapped Communications (spell)
     Split in two by a lightning bolt: on one side a man chatting happily on his phone, on the other side of the call a blinking server.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Whistleblower (creature)
     A man in a hoodie blowing a sports whistle, classified documents spilling out of every pocket.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Involuntary Free Polonium Giveaway (spell)
     A gentleman in a bowler hat at a bus stop, the tip of his black umbrella dripping glowing green drops that sizzle on the pavement.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Control Room (creature)
     A dark room with a wall of surveillance monitors, two operators asleep in their chairs with headsets on, cold coffee.
     USER: Delete the guy floating in the control room.
 Humanitarian Trafficking Action (spell)
     On a dusty airstrip, a crate stencilled MEDICINE with its lid slid open on rifles: the aid official waves at the camera flashes while, behind the crate, a man in sunglasses counts the cash.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Dead Man's Switch (creature)
     A sweating man in a cheap hotel room, his thumb pressed down on a big red button wired to his wrist, a briefcase of documents and dynamite at his feet, a DO NOT DISTURB sign on the door.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Fell Out of a Window (spell)
     A grand apartment window flung open, curtains billowing over onion domes in the snow, a tiny man in a suit falling past outside, while a man in a tracksuit inside calmly closes the window.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Coup d'État (spell)
     A general in a peaked cap and mirrored sunglasses settling into the presidential chair, still warm, while two soldiers swap the president's portrait on the wall for his own; tanks through the window.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Operation Paperclip (spell)
     A giant paperclip hooking a bespectacled scientist in a lab coat by the collar and lifting him from one flag onto another, rocket blueprints fluttering out of his pockets.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 False Flag Operation (spell)
     A soldier in an enemy uniform two sizes too small, its flag sewn on upside down, setting fire to his own side's outpost while a film crew records it and a general reads an outrage speech from a card.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Never Let Them Know Your Next Move (spell)
     A row of agents in identical grey suits passing their pistols, knives and grenades down the line to one man at the end, who disappears under a mountain of weapons with only his sunglasses showing.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Frame Job (spell)
     A smiling agent pressing a sleeping man's thumb onto a smoking gun with tweezers, a police lineup board behind them already labelled with the sleeper's name.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Devil's Breath (spell)
     A woman blowing a puff of glittering white powder off her palm into a businessman's face; dazed and smiling, he hands her his watch, his wallet and the keys to an armored car.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 He Didn't Kill Himself (spell)
     A sheet pulled over a body on a morgue gurney, but the toes sticking out wear flip-flops with a fresh tan line, and the toe tag is a postcard from a tropical island.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Extraction (spell)
     A black helicopter at night hoisting an agent off a rooftop on a rope ladder, searchlights sweeping, his trench coat flapping and a briefcase handcuffed to his wrist.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Witness Protection Program (spell)
     A man in a terrible fake moustache and a Hawaiian shirt mowing a lawn in a quiet cul-de-sac, his old mugshot pinned to a corkboard behind the window, a federal agent in a parked car pretending to read a newspaper.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Death By "Natural Causes" (spell)
     A coroner signing a death certificate marked NATURAL CAUSES with a flourish, while on the gurney beside him a tiny dart with a red feather sticks out of the dead man's neck.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Asset Recruitment (spell)
     A handler in a dim bar sliding a thick envelope and a photograph across the table to a nervous soldier; the photo shows the soldier with a woman who isn't his wife.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 If I Told You, I'd Have to Kill You (creature)
     A spy in a dark suit leaning in at a cocktail party to whisper into an eager journalist's ear, while under the table his other hand quietly screws a silencer onto a pistol.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Lone Gunman (creature)
     A bewildered young man in a cheap suit shoved in front of flashing press cameras, holding a rifle he has clearly never seen before, a LONE GUNMAN placard hung round his neck, while two men in dark suits and hats slip away behind a picket fence on a grassy knoll.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Glomar Response (spell)
     A press officer at a podium with a perfectly blank face, every line on his teleprompter blacked out with thick redaction bars, reporters raising their hands in vain.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Sabotage (spell)
     A tank that has just fired, its barrel peeled back like a banana and the crew blackened and blinking, while a saboteur in coveralls tiptoes away with an empty sack marked SUGAR - FOR THE FUEL TANK.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Ghost Army (spell)
     Two soldiers carrying a full-size rubber tank over their heads like a canoe across a muddy field at dawn, a third pumping up another with a bicycle pump, while an enemy spotter plane circles above.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Inflatable Tank (creature)
     A rubber tank half-deflated on a field, its barrel drooping, a soldier patching a hole with a bicycle repair kit.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Sherman Tank (creature)
     A heavy tank rolling out of the morning fog, cannon level, mud spraying from its tracks.
     USER: 2026-10-14 (pixel art): smoke behind the tank.
@@ -444,59 +616,82 @@ HAARP (spell)
     USER: 2026-10-14: an underground installation with a device like a strong laser pointed at an immense hole in the ground, toward the Earth's center (an earthquake card).
 Social Engineering (spell)
     A smiling man in a hi-vis vest with a clipboard and a fake lanyard holding a door open for a whole office of employees, each one handing him their badge and password on a sticky note as they pass.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Bilderberg Membership (spell)
     A candlelit dining hall in an alpine hotel, a long table of old men in dinner jackets trading sealed envelopes across the silverware, a doorman outside the window turning away the press.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Dead Drop (spell)
     A park bench in autumn, a man in a trench coat feeding pigeons while sliding a hollowed-out brick behind him with his heel, another man on the next bench reading an upside-down newspaper.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 The Golden Gun (spell)
     A gold pistol pieced together from a cigarette case, a lighter, a cufflink and a fountain pen, lying on black velvet beside a single golden bullet engraved with a name.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Die Another Day (spell)
     A spy in a torn tuxedo surfing a towering wave on a car door past a collapsing ice palace, checking his wristwatch.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Licence to Kill (spell)
     A civil servant in sleeve garters at a cluttered desk stamping a laminated LICENCE TO KILL card with a smirking agent's passport photo, a tray of forms marked 00 beside him.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Shaken, Not Stirred (spell)
     A bartender shaking a cocktail shaker while explosions rock the casino behind him, an agent in a tuxedo calmly waiting at the bar for his martini, not a hair out of place.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 GoldenEye (spell)
     A satellite dish shaped like a golden eye in orbit firing a ripple of light at a city at night; below, every window goes dark at once and a man's toaster pops out smoking.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Supply Chain Attack (spell)
     A cheerful delivery driver unloading crates of identical routers at a ministry's loading dock, each box with a tiny skull sticker under the barcode, while a line of bureaucrats in grey suits signs for them.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Hollowed-Out Volcano Lair (spell)
     A cutaway of a volcano with a sleek steel base inside: a monorail, a rocket on its launch pad, henchmen in matching jumpsuits, and at the top a bald man in a grey tunic stroking a white cat on a throne behind armored glass.
     USER: 2026-10-14 (pixel art): like the You Only Live Twice set (the user's still): inside the crater, the round opening to the sky, a helicopter, the rocket in its gantry, the helipad, the world map, the control room, the crew in their jumpsuits and white helmets.
 Femme Fatale (creature)
     A glamorous woman in a black evening gown smiling over her cocktail at a casino table, while the red-faced general in the chair beside her is squeezed between her crossed legs, his medals popping off.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 MK Ultra Test Subject (creature)
     Ted Kaczynski as the young Harvard math prodigy, before the woods: clean-cut, short neat hair, white shirt and narrow tie, strapped into a 1950s lab chair with electrodes taped to his temples, a blackboard of equations behind him and a psychologist with a clipboard in the corner.
     USER: Make it look like the Unabomber before going into the woods.
 Exploding Pen (spell)
     A fountain pen lying on a desk with its cap off and a lit fuse curling out of the nib, a spy's hand sliding it across to a villain who is already reaching for it.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Drug Pigeon (creature)
     A pigeon in tiny aviator goggles flying over a prison wall, a little backpack strapped to its chest bulging with white packets, a guard in the watchtower looking the other way.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Embassy (creature)
     A grand embassy building with a flag over the door, a man in a trench coat climbing in through a back window while the ambassador smiles for photographers on the front steps.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Secret Anthrax Laboratory (spell)
     An abandoned concrete lab on a cracked dry seabed, rusty ships stranded in the sand around it, a lone scientist in a gas mask locking the door and pocketing the key.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Tracking Beacon (spell)
     A tiny blinking red device stuck to the back of a henchman's collar, a map on a laptop screen in the background showing his dot moving through the city.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Arsonist (creature)
     A man in a suit holding a briefcase and a lit match in front of a failing shop, a fire insurance policy sticking out of his breast pocket.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Counter-Surveillance (spell)
     A spy in a dark room watching a wall of monitors, every screen showing another spy watching him back, one of them waving.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Compromised Agent (creature)
     A spy in a trench coat mobbed by paparazzi in a train station, while behind her three other agents slip away unnoticed in the confusion.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Polonium Umbrella (spell)
     A gentleman in a bowler hat at a London bus stop pressing the tip of his black umbrella into a stranger's calf, a faint green glow at the tip, the stranger reading his newspaper.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Nonchalant Agent (creature)
     An agent in a tuxedo leaning on a casino bar sipping a martini without looking, his free hand already flicking a pistol from his sleeve at a henchman who has only half drawn.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Q Branch (spell)
     An old quartermaster in a lab coat demonstrating an exploding briefcase to a bored agent, a test dummy in the background missing its head.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
 TECH
 
 Web Scraping (spell)
     A cat scratching at a laptop screen, claw marks tearing the web page open and spilling out cards and data.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 DDOS Attack (spell)
     A server rack melting under an avalanche of tiny envelope icons, smart fridges and toasters in the background, each with a red glowing eye.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Antivirus (spell)
     A panda in shining knight's armor, an antivirus logo on its shield, blocking a glowing spell scroll at a castle gate, while the castle walls behind it are plastered with its own pop-ups: "RENEW NOW - 60% OFF".
     USER: Put a panda on it.
@@ -509,16 +704,22 @@ Legacy Code (creature)
     USER: 2026-10-14: no cobweb (it read as a wifi signal) and no duct tape on the computer.
 End-to-End Encryption (spell)
     Two carrier pigeons passing a sealed envelope covered in padlocks, while a government agent below swings a butterfly net and waves a "Backdoor Request" form.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 SysAdmin (creature)
     A bearded sysadmin in socks and sandals yanking the power cable out of a smoking server rack, a coffee mug in his other hand.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Meatproxy As A Service (creature)
     A raw steak sitting at a desk, copy-pasting text from one window to another on a computer screen, a price tag on the monitor: $9.99/MONTH.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Ransomware Attack (spell)
     A computer screen with a grinning skull and a padlock demanding 1 BTC, while a grandma cries into her knitting.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Man-in-the-Middle (spell)
     A man squeezed on a park bench between two lovers, holding both of their phones and reading their texts.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Technical Debt (creature)
     A laptop held together with duct tape and a TODO sticky note, beside an empty, cracked piggy bank, the dashed outlines of the missing banknotes floating above.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Scope Creep (creature)
     A Gantt chart on an office whiteboard whose bars have outgrown it: they run off the board, across the wall and out of the window, past the DEADLINE line drawn in red, while a smiling manager sticks on one more note: "+1 small feature".
     USER: 2026-10-14: a Gantt chart instead of the creep with the spyglass.
@@ -528,58 +729,79 @@ Sex Clanker (creature)
     USER: 2026-10-14: that picture (the knight on the heart-shaped bed) is Sex Clanker's own now, named after it; keep it.
 Threat Hunter (creature)
     A security analyst in a headlamp crawling on hands and knees through a tunnel of server cables with a magnifying glass, following a trail of glowing red footprints to a tiny hooded hacker hiding behind a rack.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Ctrl + Z (spell)
     A huge curved UNDO arrow pulling a startled knight backwards off a battlefield into a playing card held up by a hand, the keys CTRL and Z glowing on a keyboard below.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Pair Programming (spell)
     Two developers squeezed at one tiny desk sharing a single keyboard: one types with a coffee in his other hand, the other leans over his shoulder pointing at a bug on the screen, a timesheet pinned between them billing 16 hours.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Suspicious USB Stick in the Parking Lot (creature)
     A lone USB stick lying on the asphalt of an empty parking lot under a streetlight, labelled SALARIES 2026 in marker, an employee in a lanyard bending down to pick it up, a nuclear plant's cooling tower behind the fence.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Code Review (spell)
     Two developers at a desk, one pointing at a screen full of red warning markers, the other shrugging and clicking 'Approve' with a coffee in hand.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Bomber Drone (creature)
     A quadcopter drone with a delivery company's logo dropping a small bomb on a tank and zipping away, a 5-star rating popping up on its operator's phone below.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Hovercraft (spell)
     A sleek hovercraft gliding over a minefield, every mine underneath it blinking red and doing nothing, a deminer watching with his mouth open.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Ctrl + Y (spell)
     A keyboard with the Y key worn down to a nub, a hand mashing Ctrl + Y while the same explosion repeats on the screen behind it.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
 MYTH
 
 Taqiyya (creature)
     A serene robed figure bowing slightly and offering an ornate gift box tied with a gold ribbon, both hands extended in welcome; on the wall behind, the box's shadow is a coiled snake.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Omen Reading (spell)
     A robed augur reading the entrails of a goat on a stone altar by candlelight, squinting at a calendar pinned to the wall, an assistant taking notes.
     USER: The reader more centered at the table, his body showing.
 Memento Mori (spell)
     A skull on an office desk beside an hourglass, and a wall calendar with three days crossed out in red.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Martyr (creature)
     A long-haired, bearded Jesus-like figure in white robes, arms outstretched, a price sticker on his halo. An online-store banner beside him reads "Salvation: Add to Cart (ships in 3 days)".
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 The Holy Grail (spell)
     A gilded chalice on a velvet cushion behind museum glass. A queue of knights in dented armor stretches out the door, each holding a numbered ticket, and a gift shop by the exit sells plastic replicas at 3 for 2.
     USER: Remove the pin.
 Exorcism (spell)
     A priest in full vestments holding a crucifix over a teenager on a bed, whose smartphone floats above them, glowing red, demonic notification bubbles pouring out of it.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Mummy (creature)
     A museum mummy shaking hands with a smiling tourist, its bandages unravelling and winding up the tourist's arm, a "Please Do Not Touch" sign knocked to the floor.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Omniscient Space-Time Bending Bearded Wizard (creature)
     An old bearded man on a cloud in a bathrobe and slippers, lazily pointing a TV remote at a tiny spinning universe.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Cultist (creature)
     A hooded cultist holding a THE END IS NEAR sign in one hand and a pumpkin spice latte in the other.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Phoenix (creature)
     A flaming bird rising from the smoking ashes of a burnt toaster, wings spread wide.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Excess of Bread and Wine (spell)
     The Last Supper as a frat party: the apostles playing beer pong along the long table while Jesus refills everyone's cups from a jug.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Monkey Hand (spell)
     A shriveled, mummified monkey's paw held up in a purple room, like the cursed paw of the old horror story: long knobbly grey-green fingers with pointed nails, a tuft of black fur at the wrist. Three fingers still up, one already curled into the palm: three wishes left.
     USER: 2026-10-14 (pixel art): remake it after the user's reference, the monkey's paw scene from a cartoon: in a bazaar, a man in a red fez holding the shrivelled paw up at a cringing old merchant in a grey turban (drawn as our own characters, not the cartoon's).
 Sacrificial Ritual (spell)
     Hooded figures chanting around a chalk pentagram, offering a rubber chicken on the altar.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Reincarnation (creature)
     The Buddhist wheel of rebirth glowing in a temple: a pink worm on the left, a happy brown dog on the right, a dashed arrow arching from the worm's life to the dog's, a lotus between them.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Holy War (spell)
     Two armies of medieval knights charging each other across a field, both under identical banners with the same golden cross, a bewildered angel in the clouds above holding a scorecard.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 The Great Flood (spell)
     A wooden ark riding a huge wave, the animals two by two waving from the deck, while a line of enemy soldiers on a hilltop holds umbrellas as the water reaches their chins.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Mox Nox (spell)
     An old sundial in a ruined cloister at dusk, the shadow of its gnomon falling across the Latin words MOX NOX carved in the stone, a black candle burning beside it.
     USER: 2026-10-14: some cards are just Latin words the user finds interesting; they don't need a joke.
@@ -588,18 +810,25 @@ Holy Hand Grenade of Antioch (spell)
     USER: 2026-10-14 (pixel art): no pin; the priest holds up two fingers, not three.
 Lance Of Longinus (spell)
     An ancient iron spearhead on a long wooden shaft, glowing faintly, pinned through a spy's trench coat to a brick wall, the spy wriggling out of the sleeves.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Necronomicon (spell)
     A heavy book bound in stitched leather with a screaming face on its cover, lying open on a stone altar, a hooded figure reading from it while a shadowy hand rises out of the pages.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 The Wicker Man (spell)
     A giant wicker figure burning on a cliff at sunset, villagers in animal masks dancing around it and singing, a small policeman in uniform visible inside its chest.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Thoughts and Prayers (spell)
     A politician at a podium covered in microphones, eyes closed and hands pressed together in prayer, while behind him an aide quietly shreds a stack of papers labelled REFORM.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Religious Instrumentalization (spell)
     A politician in a suit posing for cameras in front of a church, holding a bible upside down over his head, while a confused small creature from the other side shuffles over to stand behind him.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Deus Vult (spell)
     A crusader in a bucket helmet and white tabard with a red cross shouting with a raised sword, a meme caption bar at the bottom of the picture.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Curse Of Hubris (spell)
     Icarus with melting wax wings falling past a mountain top, a crowd of Greek gods on a cloud filming him on their phones.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Genesis (spell)
     A huge bearded hand reaching out of the clouds and pointing at the ground, where two small creatures pop out of the earth blinking, a sun switching on above them like a lamp.
     USER: Like the reference picture the user gave.
@@ -611,10 +840,13 @@ Templar Knight (creature)
     USER: 2026-10-14 (pixel art): holding a shield with the cross; the treasure one cohesive pile, no coins flying about.
 Zealot (creature)
     A wild-eyed hermit in sackcloth with a long beard, waving a burning torch and a hand-painted REPENT sign on a busy city sidewalk.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Vampire (creature)
     A pale aristocrat in a cape at a blood-donation clinic, sipping from a sleeping gym bro's arm through a bendy straw, the bro's bicep visibly deflating like a balloon.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Living Dead (creature)
     A grey zombie in a business suit climbing out of a cemetery grave with its briefcase, a sunrise behind the tombstones.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 The Chosen One (creature)
     Jesus in white robes and sandals with a halo, firing two golden submachine guns akimbo, doves scattering; nothing behind him but the temple light, he steals the show.
     USER: 2026-10-14: delete the ball of fire; let Jesus with guns steal the show.
@@ -626,67 +858,94 @@ Black Knight (creature)
     USER: 2026-10-14 (pixel art): no speech bubble; like the older picture, with King Arthur and Patsy there; the forest has no water.
 Buddy Christ (creature)
     A smiling plastic Jesus statue winking and giving a big thumbs up and a finger point, on a church lawn next to a sign reading CATHOLICISM: WOW!
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Pope (creature)
     The Pope waving from a glass-domed popemobile, sprinkling holy water from a garden hose over a crowd of creatures.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 The Lobster Professor (creature)
     A gaunt professor in a three-piece suit lecturing tearfully at a lectern, pointing at a projected slide of a lobster sitting on a throne, the audience taking notes, a messy bedroom visible through a door behind him.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Amen (spell)
     A choir of robed monks in a stone chapel snapping a giant hymn book shut with a thunderclap, every candle in the room blowing out at once, a single wisp of smoke curling up from each.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Pyramids (creature)
     The three pyramids of Giza at golden sunset, the biggest one's capstone glowing with a holy light that rains down on two tiny knights standing beside it, a bored camel in the foreground.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Horsemen Of Apocalypse (creature)
     Four horsemen galloping out of storm clouds, War, Famine, Pestilence and Death, one of them checking a smartphone map, a lightning bolt behind.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 God's Grace (spell)
     A battered knight at 0 Health, a red health bar empty above his head, held upright by a beam of light from parted clouds, two cherubs propping him up by the armpits, a choir of angels singing behind.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Phoenix Feather (spell)
     Only the feather, watercolour on paper: red at the quill through orange to a yellow heart, its barbs licking out like flames, a glowing eye near the top, the tip burning out lilac, sparks all round.
     USER: 2026-10-14: only the feather, in the colors of the reference (a watercolor feather: red at the quill, orange and yellow, flame-like barbs, a glowing eye near the top, the tip burning lilac).
 The Omen (creature)
     A small boy in a neat suit on a tricycle in a long mansion hallway, staring straight at the viewer, a black dog sitting beside him and a 666 birthmark peeking from his hairline.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Grim Reaper (creature)
     The Grim Reaper in his black hood waiting in a hospital corridor, checking his watch, a number ticket in his bony hand, a sign above him reading NOW SERVING 42.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Blessing in Disguise (spell)
     A man sitting in a crashed car in a ditch, a halo of light around him, an angel in the back seat handing him a winning lottery ticket.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Die by the Sword (spell)
     A knight run through by his own sword which bounced back off a mirror, a smug monk holding the mirror.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Mithril (spell)
     A silver chain-mail shirt glittering on a velvet cushion in a dwarven forge, a tiny hobbit trying it on and a dragon peering in through the window.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Here Be Dragons (creature)
     An old parchment sea map ending in a ragged edge, beyond it a big dragon drawn in green ASCII characters on a black terminal screen, breathing fire made of # signs.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Gracias Jesús (spell)
     Jesus in a straw hat carrying two big baskets of vegetables in from the fields at sunset, a family at the farmhouse table clapping.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Heretic (creature)
     A heretic tied to a stake on a pile of firewood, laughing, swinging a broken chain at the inquisitors as the first flames catch, a placard reading 'The Earth is round' nailed above him.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Ambrosia (spell)
     A golden bowl of glowing honey on an Olympus banquet table, Zeus in sunglasses dipping a finger in, the jar's label reading 'Organic, Artisanal, Divine'.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Publicly Funded Faith Schools (spell)
     A classroom of kids in uniforms praying over their exam papers instead of writing, a nun at the front under a 'Funded by your taxes' banner hung over the crucifix.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
 MIND
 
 Lucid Dreaming (spell)
     A sleeper floating above their bed in pyjamas, calmly picking cards out of a swirling dreamscape of melting clocks and staircases.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Momentum (spell)
     A man in a business suit sprinting downhill, legs a cartoon blur, a gale of motivational posters (HUSTLE, NEVER STOP) blowing at his back, the edge of a cliff just ahead.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Survivorship Bias (spell)
     A WWII bomber back on the runway, riddled with red dots of bullet holes in the famous diagram's pattern, its smug pilot on the wing giving a thumbs-up with one eyebrow singed off.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Yesn't (spell)
     A man calmly sipping tea while a fireball hits him, drawn twice over itself like a double exposure: in one he is burnt to a crisp, in the other untouched, a thought bubble above him reading YES / NO with both boxes ticked.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Cyberpsychosis (spell)
     A man in a hoodie with glowing cables plugged into the back of his skull, eyes spinning with notification badges, screaming at a phone that screams back, sparks flying from his chrome arm.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Reflect (spell)
     A woman in front of a tall mirror, her reflection wearing a different man's bandages, halo and storm cloud: in the room he stands beside her with exactly those, and now she has them too.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Mimetic Theory (spell)
     Two people facing each other in identical poses, one of them slowly turning into the other's mirror image.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Pessimist (creature)
     A man in a raincoat under his own tiny raincloud on a sunny beach, frowning at a winning lottery ticket.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Introvert (creature)
     A person in big headphones reading in a blanket fort while a loud party rages around them, the partygoers' shouted invitations bouncing off the blankets.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Schrodinger's Cat (creature)
     A cat sitting in an open cardboard box, its left half fluffy and alive, its right half a skeleton, both halves unimpressed.
     USER: 2026-10-14 (pixel art): no 50% printed on the box.
 Roko's Basilisk (creature)
     A big green snake in headphones typing on a laptop, a sticky note on the screen reading NAUGHTY LIST.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Trolley Problem (spell)
     The trolley problem from above: a lever, a trolley and a split track, with one bored man on a track scrolling his phone.
     USER: 2026-10-14 (pixel art): like the classic drawing (the user's reference): side on, the trolley, the track splitting, a man at the lever, one person tied on one branch and five on the other.
@@ -696,54 +955,74 @@ Red Herring (spell)
     USER: 2026-10-14 (pixel art): no suit and no fin pulling at it; keep the hat, centred on the head.
 Imposter Syndrome (spell)
     A little space crewmate in a spacesuit and visor sitting at an office desk under a SENIOR ENGINEER name plate, sweating.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Ship of Theseus (creature)
     Every plank replaced until nothing's left: the ship is only a dotted outline on the water, and Theseus in his crested helmet scratches his head on the shore, wondering where his ship went.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Socrates (creature)
     Socrates in a white toga, bald with a big beard, cornering a sweating man in a business suit against a marble column with one raised finger, a huge question mark in his speech bubble, a cup of hemlock waiting on a pedestal behind.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Maslow's Pyramid (spell)
     Maslow's pyramid as a great stone pyramid in layers, tiny people at the bottom fighting over bread and water, one man meditating smugly alone at the glowing top, and a WiFi symbol carved into a new layer under the base.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Legerdemain (spell)
     A magician's white-gloved hands doing the cups-and-ball trick on a velvet table, but under the cups are tiny soldiers being shuffled around, one cup lifted to show the soldier is gone.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Hold That Thought (spell)
     A man frozen mid-sentence with a finger raised, a glowing lightbulb above his head stuck behind a pause icon, everyone at the dinner table waiting.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Projection (spell)
     A man on a therapist's couch pointing at her, a film projector behind him throwing his own dark shadow-monster onto the wall behind her chair.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Psychiatrists (creature)
     Two psychiatrists in armchairs taking notes while a patient on the couch has his emotional baggage (suitcases labelled 'Mom', 'Ex', 'Work') taken away one by one.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Hyperbole (spell)
     A man telling a story at a bar with his arms spread wider and wider, the fish he's describing growing from a sardine to a whale in thought bubbles behind him.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
 UTOPIA
 
 Geomagnetic Reversal (spell)
     A globe with its magnetic field lines flipping over, the N and S labels swapping places mid-air, a scientist staring at a compass whose needle spins wildly, and a flock of birds flying in confused loops.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Research Lab (spell)
     A gleaming laboratory with scientists in white coats pulling glowing cards out of test tubes and a centrifuge, a grant deadline clock ticking on the wall.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Clone (creature)
     Dolly the sheep in a lab coat and goggles proudly presenting a row of identical sheep behind her.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Hypermetamorphosis (creature)
     Left to right: a caterpillar, a cocoon, and a hatched office worker in a tie with butterfly wings, briefcase in hand, dead inside.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Extremophile (creature)
     A chubby tardigrade lounging in a pool of lava in sunglasses, a tiny cocktail in its claw.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Philosophy PhD (creature)
     A graduate in cap and gown flipping burgers at a fast-food grill, the diploma pinned up next to the menu.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Mathematician (creature)
     The confused math lady meme: a woman squinting while equations, triangles and integrals float around her head.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Quantum Physicist (creature)
     A physicist split down the middle, one half of him see-through, holding two coffees and checking two watches.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Perpetual Motion Machine (creature)
     A hamster running in a wheel that powers a fan, which blows on the hamster, which keeps running.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Particle Accelerator (creature)
     A huge ring-shaped tunnel seen from above, a tiny scientist on a bicycle racing around it after a glowing dot.
     USER: 2026-10-14 (pixel art): after the user's photo of the LHC tunnel: the blue magnet pipe running off down the curved tunnel, steel interconnects, cables, someone lying under it working, a white line on the floor.
 Genetically Modified Organism (creature)
     A ripe tomato with huge bodybuilder arms, flexing, a NON-GMO sticker peeling off its skin.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Surveillance Giraffe (creature)
     A giraffe whose neck runs out of the top of the picture and comes back in from the top further along, its head hanging upside down, peeking.
     USER: 2026-10-14 (pixel art): keep its shape; no blobs sticking out of it; no camera (the white thing) on its head.
     USER: 2026-10-14: just absurd, and that's fine: nice to have a giraffe around. No faction cue needed.
 Pioneer (creature)
     An astronaut planting a flag on a red desert next to a sign: FOR RENT $9999.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Placebo (spell)
     A sugar pill the size of a melon labelled MIRACLE on a spoonful of sugar, and a skinny man next to it flexing a non-existent bicep, very proud.
     USER: Put a spoon of sugar.
@@ -751,80 +1030,115 @@ Placebo (spell)
     USER: 2026-10-14: more contrast between the spoon and the sugar; the end of the handle out of sight at this angle.
 Vaccine (spell)
     A syringe with a tiny Wi-Fi antenna on its plunger and full signal bars above it.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Climate Change (spell)
     A polar bear standing on a single ice cube floating in a cocktail glass, a paper umbrella beside it.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Overpopulation (spell)
     A tiny Earth with people crammed all over it like a full elevator, one man balancing on top on one foot.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Black Hole (spell)
     A swirling black hole sucking in a cow, a sofa, a single sock and a tax form.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Stasis Field (spell)
     A man frozen mid-sneeze inside a giant block of green jelly, the droplets hanging in the air.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Absolute Zero (spell)
     A man frozen solid at his desk holding a frozen cup of coffee, the thermostat on the wall reading -273.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Splitting The Atom (spell)
     A lumberjack in a flannel shirt splitting a glowing atom on a tree stump with an axe, a mushroom cloud rising behind him.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Gene Editing (spell)
     A pair of scissors cutting a DNA double helix, a strip of tape sticking a unicorn horn onto it.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Cold Fusion (creature)
     A tabletop fusion reactor glowing white-hot in a jar on a garage workbench, the warning gauge in the red, two engineers in sunglasses giving a thumbs-up.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Antimatter (creature)
     A tiny shimmering particle in a magnetic bottle, its mirror image annihilating the lab bench around it, a physicist ducking behind a clipboard.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Biohacking (spell)
     A shirtless tech bro in a garage strapped to car batteries, LED implants glowing under his skin, a smoothie in one hand and a soldering iron in the other.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Blood Transfusion (spell)
     An old billionaire in a recliner hooked up to an IV bag labelled TEEN, reading the stock prices, his skin looking twenty years younger.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Evolution Theory (spell)
     Darwin in a lab coat at a chalkboard, the classic march of progress drawn on it from ape to man to a huge muscled lab-grown superman, and a tiny weak creature at the start of the line being crossed out.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Mutation (spell)
     A lab rat in a cage flexing three muscular arms, a scientist taking notes and quietly sliding a fourth arm onto the clipboard.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Exponential Growth (spell)
     A petri dish overflowing onto the lab bench, the colony spilling over the edge and climbing up the wall, a scientist backing away holding the lid.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Scientific Method (creature)
     A scientist in goggles carefully pouring a glowing liquid into a beaker on a bench crowded with labelled flasks, a whiteboard behind her reading HYPOTHESIS → EXPERIMENT → GRANT.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Frankenstein (creature)
     A towering stitched-together monster sitting up on a lab table under a lightning bolt, bolts in its neck smoking, the mad scientist cheering with both arms up.
     USER: 2026-10-14 (pixel art): it was missing the monster's legs.
 Chimera (creature)
     A lion with a goat's head sprouting from its back and a snake for a tail, all three wearing hospital ID wristbands, in a lab enclosure with a sticky note: DO NOT FEED AFTER MIDNIGHT.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Resurrected T-Rex (creature)
     A T-Rex skeleton half covered in new flesh breaking out of a museum display, the DNA sequencer that brought it back still beeping, a guide pointing at the exit.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Longevity Hub (creature)
     A gleaming white clinic in the desert where billionaires lie in pods drinking smoothies through tubes, a young intern on a treadmill in the corner wired to them by a blood line.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Femtosecond Laser (spell)
     A laser beam the thickness of a hair slicing a falling apple into perfect quarters in mid-air, a physicist in safety goggles timing it with a stopwatch.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Quark (creature)
     Three tiny glowing particles in colored hats bouncing on a trampoline inside an atom, one of them flipping off the edge with a grin.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Seasteading (spell)
     A floating hexagonal platform city in the middle of the ocean, tech-bros sunbathing on the deck while one corner quietly sinks and a lone lifeguard chair stands empty.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Ankylorhiza (creature)
     A huge prehistoric whale with a crocodile's teeth bursting out of a lab aquarium tank, water and glass everywhere, a scientist in a lab coat clutching a sign reading DE-EXTINCTION: PHASE 1.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 White Dwarf (creature)
     A small, very white man in a turtleneck standing in space, glowing faintly, the planets around him bending toward him, unbothered.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Biohacker (creature)
     A shirtless tech bro in an ice bath full of glowing green sludge, sensors taped all over his chest, his smartwatch showing 'biological age: 19'.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Prion Disease (spell)
     A cow in a lab coat staring blankly into a microscope while its own brain, full of holes like Swiss cheese, floats in a jar beside it.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Nanobots (spell)
     A swarm of glittering nanobots stitching a robot's torn arm back together, a few of them on a tiny picket line holding 'Fair Wages' signs.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
 POTION
 
 Nicotine (spell)
     A crumpled pack of cigarettes on a café table, one lit in the ashtray, a ribbon of smoke curling into a question mark.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Stimulant Drug (spell)
     A pill organizer with every compartment full of the same blue pill, a student's desk behind it buried in energy drink cans at 4 a.m.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Superglue (spell)
     A tube of superglue squeezed over a cracked vase, two fingers already stuck to it.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Soylent (spell)
     A beige bottle of meal-replacement drink on an empty dining table, a lonely fork beside it.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Flamethrower (spell)
     A flamethrower with a novelty-store price tag, a jet of fire roaring out of it across a garden barbecue.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Eject Button (spell)
     A big red button under a flip-up cover on a cockpit panel, a pilot's seat already rocketing out of the frame.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Stealth Suit (spell)
     An empty mannequin in a shop window wearing a suit you can only see by its outline, the price tag floating in mid-air.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Creatine (spell)
     A giant tub of white powder with a flexing cartoon bicep on its label, a scoop sticking out of it.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
 IDEAS NOT YET CARDS (Brainstorm List)
 

@@ -149,6 +149,12 @@ DRAWN_BRIEFS = {
     "Toxic Positivity": "A huge yellow smiley face with a crack running through it and a sticking plaster on its cheek; vaporwave background.",
 }
 
+# Cards whose art the user has looked at and approved as it is, with no note of their own (dated, in their words). A card with
+# neither a USER note nor an entry here had its art direction decided by Claude alone: the doc marks it TO SUPERVISE
+# (the user, 2026-10-17: "i want to keep track to ensure i personally supervised all of them").
+SUPERVISED = {
+}
+
 # Ideas not yet cards, with the art the user asked for
 USER_NOTES_BRAINSTORM = {
     "Conspiracies That Turned Out to Be True": ["2026-10-14: the conspiracy guy pointing at a wall of papers joined by red "
@@ -230,7 +236,18 @@ def main():
              "drawing comments in generate_card_art.py; the user's notes live in that script. Rerun it after any card or art",
              "change.", "", "RULES", ""] + [f"  {rule}" for rule in ART_RULES] + [""]
     missing = 0
-    for faction, cards in cards_by_faction(source):
+    factions = cards_by_faction(source)
+    unchecked = [(faction, name) for faction, cards in factions for name, _, _ in cards
+                 if name not in USER_NOTES and name not in SUPERVISED]
+    lines += ["TO SUPERVISE", "",
+              f"  {len(unchecked)} cards whose art direction Claude decided alone: no note from the user and no sign-off yet. Once",
+              "  the user has checked one, its approval goes into SUPERVISED in Tools/art_briefs.py (or their changes into USER_NOTES).", ""]
+    for faction, _ in factions:
+        names = [name for f, name in unchecked if f == faction]
+        if names:
+            lines.append(f"  {faction} ({len(names)}): " + ", ".join(names))
+    lines.append("")
+    for faction, cards in factions:
         lines += ["", faction.upper(), ""]
         for name, kind, brief in cards:
             if brief is None:
@@ -242,13 +259,17 @@ def main():
             lines.append(f"    {brief}")
             for note in USER_NOTES.get(name, []):
                 lines.append(f"    USER: {note}")
+            if name in SUPERVISED:
+                lines.append(f"    SUPERVISED: {SUPERVISED[name]}")
+            elif name not in USER_NOTES:
+                lines.append("    TO SUPERVISE: Claude's own art direction, not checked by the user yet")
     lines += ["", "IDEAS NOT YET CARDS (Brainstorm List)", ""]
     for name, notes in USER_NOTES_BRAINSTORM.items():
         lines.append(name)
         for note in notes:
             lines.append(f"    USER: {note}")
     open(OUT, "w", encoding="utf-8", newline="\r\n").write("\n".join(lines) + "\n")
-    print(f"Wrote {OUT}; {missing} card(s) without a brief")
+    print(f"Wrote {OUT}; {missing} card(s) without a brief, {len(unchecked)} to supervise")
 
 
 if __name__ == "__main__":
