@@ -44,9 +44,9 @@ MonoBehaviour:
       modifyAttack: 1
       modifyHealth: 1
       modifySpeed: 0
-      statusEffectToApply: 21
-      statusDuration: 4
-      statusPotency: 1
+      statusEffectToApply: 1
+      statusDuration: 3
+      statusPotency: 3
       cleanse: 0
       purge: 0
       slotEffect: 0
@@ -68,8 +68,7 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'Toxic 1 for 4 Days on target creature: 1, then 2, 3 and 4 damage,
-    10 in all. Slow removal that grows.'
+  designNotes: 'Burn 3 for 3 Days on target creature: 9 damage in all. Slow removal.'
   artDescription: A cow in a lab coat staring blankly into a microscope while its
     own brain, full of holes like Swiss cheese, floats in a jar beside it.
   defaultTargetType: 4

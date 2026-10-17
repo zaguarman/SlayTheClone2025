@@ -44,9 +44,9 @@ MonoBehaviour:
       modifyAttack: 1
       modifyHealth: 1
       modifySpeed: 0
-      statusEffectToApply: 21
+      statusEffectToApply: 1
       statusDuration: 3
-      statusPotency: 2
+      statusPotency: 3
       cleanse: 0
       purge: 0
       slotEffect: 0
@@ -68,8 +68,8 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'Toxic 2 for 3 Days on target creature: 2, then 3, then 4 damage.
-    Plain, slow removal with a spy''s flair (the Markov umbrella).'
+  designNotes: 'Burn 3 for 3 Days on target creature: 9 damage in all. Plain, slow
+    removal with a spy''s flair (the Markov umbrella).'
   artDescription: A gentleman in a bowler hat at a London bus stop pressing the tip
     of his black umbrella into a stranger's calf, a faint green glow at the tip,
     the stranger reading his newspaper.

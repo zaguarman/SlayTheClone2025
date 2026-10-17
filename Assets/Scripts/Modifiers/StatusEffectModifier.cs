@@ -40,9 +40,6 @@ namespace SlayTheClone {
             Log($"StatusEffectModifier '{Name}' created: Type={EffectType}, Duration={DurationInTurns}, Potency={Potency}, AppliedTurn={TurnApplied}", LogTag.Effects);
         }
 
-        /// <summary>Toxic: after each Dusk it acts, it deals 1 more the next time.</summary>
-        public void Grow() => Potency++;
-
         /// <summary>The Dusks it has left, today's included (what its icon shows); 0 for a persistent one.</summary>
         public int DusksLeft(int today) => IsPersistent ? 0 : Math.Max(1, TurnApplied + DurationInTurns - (CountsTheDayItLands ? 1 : 0) - today + 1);
 

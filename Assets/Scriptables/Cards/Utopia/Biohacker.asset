@@ -44,9 +44,9 @@ MonoBehaviour:
       modifyAttack: 1
       modifyHealth: 1
       modifySpeed: 0
-      statusEffectToApply: 21
+      statusEffectToApply: 1
       statusDuration: 3
-      statusPotency: 1
+      statusPotency: 2
       cleanse: 0
       purge: 0
       slotEffect: 0
@@ -68,9 +68,9 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'Hormesis (Poison Heal): Burn and Toxic heal it instead of hurting
-    it. Its Arrival makes it Toxic 1 for 3 Days, so it heals 1, 2, then 3. Utopia''s
-    self-harm becomes fuel.'
+  designNotes: 'Hormesis (Poison Heal): Burn heals it instead of hurting it. Its
+    Arrival gives it Burn 2 for 3 Days, so it heals 2 each Dusk. Utopia''s self-harm
+    becomes fuel.'
   artDescription: 'A shirtless tech bro in an ice bath full of glowing green sludge,
     sensors taped all over his chest, his smartwatch showing ''biological age: 19''.'
   attack: 3

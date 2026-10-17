@@ -276,9 +276,9 @@ The Meta Picks (the user, 2026-10-16: from the Pokémon and Slay the Spire repor
 Hormesis
     Inspired by: Poison Heal (Gliscor). On Biohacker (Utopia).
     Type: Passive
-    Description: "Burn and Toxic heal it instead of hurting it."
+    Description: "Burn heals it instead of hurting it."
     Notes: Each Dusk the damage the status would deal heals it instead (up to its maximum Health). Utopia burns its own
-           creatures: this gives that cost an owner who wants it. Biohacker makes itself Toxic on arrival.
+           creatures: this gives that cost an owner who wants it. Biohacker burns itself on arrival (Burn 2 for 3 Days).
     Answers: Statuses that aren't damage; plain damage; a Cleanse (yours) takes its fuel away.
 
 Martyrdom

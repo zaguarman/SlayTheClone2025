@@ -30,7 +30,7 @@ namespace SlayTheClone {
 
     /// <summary>
     /// "One better number", the one rule Ripening and card upgrades share: a damage, heal, Armor, draw or stat change of 1 more
-    /// (a stat cut of 1 more), a Burn, Toxic, Blessed or Heat of 1 more stack. Other parts (stuns, Days, destroys) stay.
+    /// (a stat cut of 1 more), a Burn, Blessed or Heat of 1 more stack. Other parts (stuns, Days, destroys) stay.
     /// </summary>
     public static class Numbers {
         public static bool CanRaise(EffectAction action) => action.actionType switch {

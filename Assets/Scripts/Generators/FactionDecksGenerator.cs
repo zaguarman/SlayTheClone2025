@@ -455,7 +455,7 @@ namespace SlayTheClone {
                 Requiring(Act(ActionType.Destroy, 3, TargetType.EnemyCreatures, TargetModifier.None), TargetRequisite.AttackAtMost))
                 .Picture("A banker stamping BANKRUPT across a smiling worker's portrait, the worker's chair already being carried away by movers."),
             // The meta picks (the user, 2026-10-16: "implement all of your ideas", from the Pokémon and Slay the Spire report):
-            // Ripening, Laid Off, Toxic and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
+            // Ripening, Laid Off, Toxic (merged into Burn since) and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
             // Policies, Shield Bash, Strip Search, On Trend. Names from the Brainstorm List
             Spell("Usury", TargetType.Enemy,
                 "Interest on the interest on the interest. Compounded daily, forgiven never.",
@@ -627,7 +627,7 @@ namespace SlayTheClone {
                 .NotInStarterDeck()
                 .Picture("The board-game tycoon (top hat, white moustache, tailcoat) as the police: a badge on his chest, a baton raised in his white glove, glaring straight at you from beside the GO TO JAIL corner."),
             // The meta picks (the user, 2026-10-16: "implement all of your ideas", from the Pokémon and Slay the Spire report):
-            // Ripening, Laid Off, Toxic and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
+            // Ripening, Laid Off, Toxic (merged into Burn since) and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
             // Policies, Shield Bash, Strip Search, On Trend. Names from the Brainstorm List
             Spell("Border Crossing", TargetType.Enemy,
                 "Papers. Purpose of visit. Papers again.",
@@ -827,7 +827,7 @@ namespace SlayTheClone {
                 Buff(1, TargetType.FriendlyCreatures, attack: true, health: false, Each), Buff(2, TargetType.FriendlyCreatures, attack: false, health: true, Each))
                 .Picture("A ragtag group of adventurers around a campfire laughing, an empty treasure chest behind them, a map with the X scribbled out."),
             // The meta picks (the user, 2026-10-16: "implement all of your ideas", from the Pokémon and Slay the Spire report):
-            // Ripening, Laid Off, Toxic and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
+            // Ripening, Laid Off, Toxic (merged into Burn since) and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
             // Policies, Shield Bash, Strip Search, On Trend. Names from the Brainstorm List
             Creature("Spite Voter", 3, 3, speed: 2, deploy: 0,
                 "Didn't like either of them. Voted for the worst one, out of principle.",
@@ -984,7 +984,7 @@ namespace SlayTheClone {
                 .NotInStarterDeck()
                 .Picture("A steel bear trap open on a beach towel, a ring light and a phone on a tripod set up in front of it, the phone screen filling with hearts, and a glass of water standing beside it."),
             // The meta picks (the user, 2026-10-16: "implement all of your ideas", from the Pokémon and Slay the Spire report):
-            // Ripening, Laid Off, Toxic and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
+            // Ripening, Laid Off, Toxic (merged into Burn since) and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
             // Policies, Shield Bash, Strip Search, On Trend. Names from the Brainstorm List
             Spell("Selfie Esteem", TargetType.FriendlyCreatures,
                 "Forty takes. One filter. Zero self-worth.",
@@ -1350,7 +1350,7 @@ namespace SlayTheClone {
                 CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Attack, side = WatchdogSide.Enemy, effect = WatchdogEffect.Backfire, charges = 1 }, TargetType.Enemy))
                 .Picture("A spy in a dark room watching a wall of monitors, every screen showing another spy watching him back, one of them waving."),
             // The meta picks (the user, 2026-10-16: "implement all of your ideas", from the Pokémon and Slay the Spire report):
-            // Ripening, Laid Off, Toxic and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
+            // Ripening, Laid Off, Toxic (merged into Burn since) and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
             // Policies, Shield Bash, Strip Search, On Trend. Names from the Brainstorm List
             Creature("Compromised Agent", 2, 2, speed: 2, deploy: 0,
                 "Her cover's blown. Her friends' covers aren't. Yet.",
@@ -1359,8 +1359,8 @@ namespace SlayTheClone {
                 .Picture("A spy in a trench coat mobbed by paparazzi in a train station, while behind her three other agents slip away unnoticed in the confusion."),
             Spell("Polonium Umbrella", TargetType.EnemyCreatures,
                 "A quick jab at a bus stop. A slow week in hospital.",
-                "Toxic 2 for 3 Days on target creature: 2, then 3, then 4 damage. Plain, slow removal with a spy's flair (the Markov umbrella).",
-                Status(StatusEffectType.Toxic, 3, TargetType.EnemyCreatures, potency: 2))
+                "Burn 3 for 3 Days on target creature: 9 damage in all. Plain, slow removal with a spy's flair (the Markov umbrella).",
+                Status(StatusEffectType.Burned, 3, TargetType.EnemyCreatures, potency: 3))
                 .Picture("A gentleman in a bowler hat at a London bus stop pressing the tip of his black umbrella into a stranger's calf, a faint green glow at the tip, the stranger reading his newspaper."),
             Creature("Nonchalant Agent", 3, 2, speed: 1, deploy: 0,
                 "Never draws first. Never draws second either.",
@@ -1472,7 +1472,7 @@ namespace SlayTheClone {
                 .NotInStarterDeck()
                 .Picture("A lone USB stick lying on the asphalt of an empty parking lot under a streetlight, labelled SALARIES 2026 in marker, an employee in a lanyard bending down to pick it up, a nuclear plant's cooling tower behind the fence."),
             // The meta picks (the user, 2026-10-16: "implement all of your ideas", from the Pokémon and Slay the Spire report):
-            // Ripening, Laid Off, Toxic and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
+            // Ripening, Laid Off, Toxic (merged into Burn since) and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
             // Policies, Shield Bash, Strip Search, On Trend. Names from the Brainstorm List
             Spell("Code Review", TargetType.Player,
                 "LGTM. (Didn't read it.)",
@@ -1788,7 +1788,7 @@ namespace SlayTheClone {
                 Heal(3, TargetType.Player), Draw(2))
                 .Picture("Jesus in a straw hat carrying two big baskets of vegetables in from the fields at sunset, a family at the farmhouse table clapping."),
             // The meta picks (the user, 2026-10-16: "implement all of your ideas", from the Pokémon and Slay the Spire report):
-            // Ripening, Laid Off, Toxic and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
+            // Ripening, Laid Off, Toxic (merged into Burn since) and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
             // Policies, Shield Bash, Strip Search, On Trend. Names from the Brainstorm List
             Creature("Heretic", 3, 5, speed: 2, deploy: 0,
                 "Said the Earth was round. Got the stake. Said it louder.",
@@ -1918,7 +1918,7 @@ namespace SlayTheClone {
                 .NotInStarterDeck()
                 .Picture("A magician's white-gloved hands doing the cups-and-ball trick on a velvet table, but under the cups are tiny soldiers being shuffled around, one cup lifted to show the soldier is gone."),
             // The meta picks (the user, 2026-10-16: "implement all of your ideas", from the Pokémon and Slay the Spire report):
-            // Ripening, Laid Off, Toxic and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
+            // Ripening, Laid Off, Toxic (merged into Burn since) and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
             // Policies, Shield Bash, Strip Search, On Trend. Names from the Brainstorm List
             Spell("Hold That Thought", TargetType.Player,
                 "It'll be brilliant. Later. Much later.",
@@ -2179,18 +2179,18 @@ namespace SlayTheClone {
                 .With(CreatureAbility.Unbothered)
                 .Picture("A small, very white man in a turtleneck standing in space, glowing faintly, the planets around him bending toward him, unbothered."),
             // The meta picks (the user, 2026-10-16: "implement all of your ideas", from the Pokémon and Slay the Spire report):
-            // Ripening, Laid Off, Toxic and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
+            // Ripening, Laid Off, Toxic (merged into Burn since) and the statuses that help their owner, Grudge, side hazards, Sucker Punch, Hit and Run,
             // Policies, Shield Bash, Strip Search, On Trend. Names from the Brainstorm List
             Creature("Biohacker", 3, 4, speed: 1, deploy: 0,
                 "Microdoses, cold plunges, and a chip in his hand that opens the fridge.",
-                "Hormesis (Poison Heal): Burn and Toxic heal it instead of hurting it. Its Arrival makes it Toxic 1 for 3 Days, so it heals 1, 2, then 3. Utopia's self-harm becomes fuel.",
-                On(EffectTrigger.OnPlay, Status(StatusEffectType.Toxic, 3, TargetType.Self, potency: 1)))
+                "Hormesis (Poison Heal): Burn heals it instead of hurting it. Its Arrival gives it Burn 2 for 3 Days, so it heals 2 each Dusk. Utopia's self-harm becomes fuel.",
+                On(EffectTrigger.OnPlay, Status(StatusEffectType.Burned, 3, TargetType.Self, potency: 2)))
                 .With(CreatureAbility.Hormesis)
                 .Picture("A shirtless tech bro in an ice bath full of glowing green sludge, sensors taped all over his chest, his smartwatch showing 'biological age: 19'."),
             Spell("Prion Disease", TargetType.EnemyCreatures,
                 "Misfolded, contagious, and in no hurry.",
-                "Toxic 1 for 4 Days on target creature: 1, then 2, 3 and 4 damage, 10 in all. Slow removal that grows.",
-                Status(StatusEffectType.Toxic, 4, TargetType.EnemyCreatures, potency: 1))
+                "Burn 3 for 3 Days on target creature: 9 damage in all. Slow removal.",
+                Status(StatusEffectType.Burned, 3, TargetType.EnemyCreatures, potency: 3))
                 .Picture("A cow in a lab coat staring blankly into a microscope while its own brain, full of holes like Swiss cheese, floats in a jar beside it."),
             // The next picks (the user, 2026-10-16): Gear (held items), Provoked (Taunt), Combo (chaining spells)
             Spell("Nanobots", TargetType.FriendlyCreatures,

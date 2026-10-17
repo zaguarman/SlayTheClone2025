@@ -659,7 +659,8 @@ Rooted (the user, 2026-10-16)
     Cleansable: Yes
 
 
-Toxic (the user, 2026-10-16)
+Toxic (the user, 2026-10-16; merged into Burn, the user, 2026-10-17: two damage-over-time statuses were one too many.
+       Its cards use a flat Burn with the same total now: Polonium Umbrella and Prion Disease Burn 3 for 3, Biohacker Burn 2 for 3)
     Faction: Utopia (Prion Disease, Biohacker), Shadow Ops. (Polonium Umbrella)
     Inspired by: Pokémon's Toxic (bad poison) and Slay the Spire's Poison
     Type: Damage Over Time, growing

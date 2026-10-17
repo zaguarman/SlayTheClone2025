@@ -283,9 +283,9 @@ namespace SlayTheClone {
                 var modifiers = activeModifiers[targetId];
 
                 // Burn ticks at every Dusk it is active, from the Day after it was applied (Status Timing), including its last.
-                // Toxic too, then grows by 1. Hormesis (Utopia's biohackers): what doesn't kill it heals it instead
+                // Hormesis (Utopia's biohackers): what doesn't kill it heals it instead
                 foreach (var burn in modifiers.OfType<StatusEffectModifier>()
-                             .Where(s => s.EffectType is StatusEffectType.Burned or StatusEffectType.Toxic && s.Potency > 0 && s.ActsAtDuskOf(endedTurnNumber)).ToList()) {
+                             .Where(s => s.EffectType == StatusEffectType.Burned && s.Potency > 0 && s.ActsAtDuskOf(endedTurnNumber)).ToList()) {
                     if (Abilities.Has(creature, CreatureAbility.Hormesis)) {
                         Log($"{creature.Name}'s Hormesis: its {burn.EffectType} heals it for {burn.Potency}", LogTag.Effects | LogTag.Turns);
                         actionsQueue.AddAction(new HealCreatureAction(creature, burn.Potency));
@@ -294,7 +294,6 @@ namespace SlayTheClone {
                         Log($"{creature.Name} burns for {burn.Potency} (StatusEffect '{burn.Name}')", LogTag.Effects | LogTag.Turns);
                         actionsQueue.AddAction(new DamageCreatureAction(creature, burn.Potency, creature) { Source = OriginOf(creature, burn) });
                     }
-                    if (burn.EffectType == StatusEffectType.Toxic) burn.Grow();
                 }
 
                 // Remove expired modifiers; RemoveModifier recalculates stats and notifies when needed

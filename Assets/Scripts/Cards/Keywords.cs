@@ -100,7 +100,6 @@ namespace SlayTheClone {
             Add("Exhausted", "Can't act, its ability is off and it's [Exposed]. Its planned action is cancelled. Lasts the rest of the [Day] and all of the next.");
             Add("Burned", "Burn X: takes X damage at each [Dusk] for the [Days] shown, starting the Dusk after it lands.");
             Add("Provoked", "Provoked X: for the rest of the [Day] it lands and the next X [Days], its attacks go to the creature facing it (or that player, when the slot is empty) whatever it aimed at, and it can't use its Active ability.");
-            Add("Toxic", "Toxic X: like [Burned|Burn], it takes X damage at each [Dusk] for the [Days] shown, starting the Dusk after it lands; but it grows: each time, the next one is 1 more (2, then 3, then 4...).");
             Add("Doomed", "Doom X (no number: 1): dies in X [Days], with a last attack ([Last Rites]). Meanwhile it gets +1 Attack each [Dawn] and no other status can land on it, except [Borrowed Time]: on Borrowed Time when the sentence is carried out, it survives that too.");
             Add("Last Rites", "A [Doomed] creature's final attack on the slot opposite it, even if it can't act.");
             Add("Blessed", "Bless X (no number: 1): the next X statuses that would land on it are stopped, good or bad. Each stack also saves it once from being [Destroy|destroyed] by a spell or an ability (a Sacrifice isn't stopped).");

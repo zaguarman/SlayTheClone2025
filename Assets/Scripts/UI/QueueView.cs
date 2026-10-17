@@ -264,7 +264,6 @@ namespace SlayTheClone {
         private static string StatusIcon(StatusEffectType status) => status switch {
             StatusEffectType.Exhausted => EffectIcons.Paralyze,
             StatusEffectType.Burned => EffectIcons.Burn,
-            StatusEffectType.Toxic => EffectIcons.Burn,
             StatusEffectType.Provoked => EffectIcons.Attack,
             StatusEffectType.Doomed => EffectIcons.Doom,
             StatusEffectType.Blessed => EffectIcons.Bless,

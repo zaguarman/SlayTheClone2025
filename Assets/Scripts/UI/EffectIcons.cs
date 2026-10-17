@@ -45,7 +45,6 @@ namespace SlayTheClone {
             switch (status) {
                 case StatusEffectType.Exhausted: return Paralyze;
                 case StatusEffectType.Burned: return Burn;
-                case StatusEffectType.Toxic: return Burn;
                 case StatusEffectType.Provoked: return Attack;
                 case StatusEffectType.Doomed: return Doom;
                 case StatusEffectType.Blessed: return Bless;

@@ -77,7 +77,7 @@ namespace SlayTheClone {
             Rooted,        // It can't move, and nothing can move or swap it (a building going up: Ministry for Equality)
             Burnout,       // When it runs out, the creature is destroyed (Overtime: it lasts through the first Day it's ready)
             Shielded,      // Takes no combat damage, for its Days counting the one it lands (the user: a creature's, not a slot's)
-            Toxic,         // Like Burned, but it grows: each Dusk it deals its potency, then the potency goes up by 1
+            Toxic,         // Merged into Burned (the user, 2026-10-17): no card uses it; kept so the numbers after it stay put
             Provoked       // Taunt and Follow Me: its attacks go to the creature facing it, and it can't use its Active ability
         }
 

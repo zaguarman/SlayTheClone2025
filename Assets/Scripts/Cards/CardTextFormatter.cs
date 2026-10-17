@@ -484,7 +484,6 @@ namespace SlayTheClone {
                 case StatusEffectType.Exhausted: return $"{Keywords.Link("Exhausted", "exhaust")} {target}";
                 case StatusEffectType.Burned: return $"{Keywords.Link("Burned", $"Burn {potency}")}{DaysTag(days)} on {target}";
                 case StatusEffectType.Provoked: return $"{Keywords.Link("Provoked", "Provoke" + Count(days))} on {target}";
-                case StatusEffectType.Toxic: return $"{Keywords.Link("Toxic", $"Toxic {potency}")}{DaysTag(days)} on {target}";
                 case StatusEffectType.Doomed: return $"{Keywords.Link("Doomed", "Doom" + Count(days))} on {target}";
                 case StatusEffectType.Blessed: return $"{Keywords.Link("Blessed", "Bless" + Count(potency))} on {target}";
                 case StatusEffectType.HeatSignature: return $"{Keywords.Link("Heat Signature", "Heat Signature" + Count(potency))} on {target}";

@@ -123,7 +123,7 @@ namespace SlayTheClone {
             CreatureAbility.HeProtec => "when a summon replaces it, it stays through the attacks and takes the Day's hits; the newcomer arrives after them",
             CreatureAbility.Irreplaceable => "no summon can replace it: its slot stays its own until it leaves",
             CreatureAbility.Turncoat => "no summon can replace it, and nobody can order it to attack: it strikes its own side, on its own",
-            CreatureAbility.Hormesis => "Burn and Toxic heal it instead of hurting it",
+            CreatureAbility.Hormesis => "Burn heals it instead of hurting it",
             CreatureAbility.Martyrdom => "while Doomed, everything it deals is doubled",
             CreatureAbility.Grudge => $"+1 Attack for each friendly creature that died this combat (up to +{GrudgeMost})",
             CreatureAbility.SuckerPunch => "its attack on a creature goes before every other, but only if that creature planned an attack; otherwise it holds back",

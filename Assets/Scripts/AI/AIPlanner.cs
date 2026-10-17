@@ -889,16 +889,15 @@ namespace SlayTheClone {
 
         private static readonly StatusEffectType[] HarmfulStatuses = {
             StatusEffectType.Burned, StatusEffectType.Exhausted, StatusEffectType.Doomed, StatusEffectType.HeatSignature,
-            StatusEffectType.Revealed, StatusEffectType.Cooldown, StatusEffectType.Toxic
+            StatusEffectType.Revealed, StatusEffectType.Cooldown
         };
 
         private float StatusGoodness(EffectAction action, SeenCreature creature) {
             int days = System.Math.Max(1, action.statusDuration);
             return action.statusEffectToApply switch {
                 // Hormesis: what would burn it heals it
-                StatusEffectType.Burned or StatusEffectType.Toxic when creature.Ability == CreatureAbility.Hormesis => BurnTotal(action, days) * 0.5f,
+                StatusEffectType.Burned when creature.Ability == CreatureAbility.Hormesis => BurnTotal(action, days) * 0.5f,
                 StatusEffectType.Burned => -BurnTotal(action, days),
-                StatusEffectType.Toxic => -BurnTotal(action, days),
                 // Martyrdom: Doomed doubles what it deals until it dies
                 StatusEffectType.Doomed when creature.Ability == CreatureAbility.Martyrdom && creature.Ours => AttackOf(creature) * 1.5f - creature.Worth / 4f,
                 StatusEffectType.Exhausted => creature.Operative && !IsStunned(creature) ? -(AttackOf(creature) + 1) : -0.5f,
@@ -936,11 +935,8 @@ namespace SlayTheClone {
             };
         }
 
-        // What a Burn deals over its Days; a Toxic one grows by 1 each Dusk
-        private static float BurnTotal(EffectAction action, int days) {
-            int potency = System.Math.Max(1, action.statusPotency);
-            return action.statusEffectToApply == StatusEffectType.Toxic ? potency * days + days * (days - 1) / 2f : potency * days;
-        }
+        // What a Burn deals over its Days
+        private static float BurnTotal(EffectAction action, int days) => System.Math.Max(1, action.statusPotency) * days;
 
         // Hard: help for one of ours is worth what it saves: the whole creature if it would otherwise die next Day
         private float Protection(SeenCreature ours, ActionType type, int amount) {

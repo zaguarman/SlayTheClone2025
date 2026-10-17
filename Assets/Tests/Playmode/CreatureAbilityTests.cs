@@ -439,17 +439,17 @@ namespace SlayTheClone.Tests {
             game.Attack(heretic, p2.Battlefield[3]);
             Assert.AreEqual(24, punchbag.Health, "3 Attack, doubled");
 
-            // Toxic grows by 1 each Dusk; Hormesis heals from it instead
+            // Hormesis heals from Burn instead of taking it
             var hacker = With(CreatureAbility.Hormesis, p1, 4, attack: 0, health: 10);
             var poisoned = With(CreatureAbility.None, p2, 4, attack: 0, health: 10);
             game.Run(TargetedActions.Damage(hacker, 5));
-            game.Run(new ApplyStatusEffectAction(hacker, StatusEffectType.Toxic, 3, 1));
-            game.Run(new ApplyStatusEffectAction(poisoned, StatusEffectType.Toxic, 3, 1));
+            game.Run(new ApplyStatusEffectAction(hacker, StatusEffectType.Burned, 3, 1));
+            game.Run(new ApplyStatusEffectAction(poisoned, StatusEffectType.Burned, 3, 1));
             game.StartTurn(); // It skips the Dusk of the Day it lands
             game.StartTurn();
             Assert.AreEqual((6, 9), (hacker.Health, poisoned.Health), "1 at the first Dusk...");
             game.StartTurn();
-            Assert.AreEqual((8, 7), (hacker.Health, poisoned.Health), "...2 at the next");
+            Assert.AreEqual((7, 8), (hacker.Health, poisoned.Health), "...and 1 again at the next");
 
             // The next picks (2026-10-16). Gear: a second ability while it stays (Recoil as a Life Orb)
             Fresh();
