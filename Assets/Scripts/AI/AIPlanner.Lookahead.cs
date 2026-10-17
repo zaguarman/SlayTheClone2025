@@ -40,14 +40,14 @@ namespace Zeitgeist {
         #endregion
 
         #region Where a creature goes
-        // Hard: what landing in this slot is worth to the creature beyond the slot's own effect: the Flanks' +1 Attack and Speed,
-        // the Vanguard's Armor, a slot it will reach something from once ready (or nothing: a cannon in the wrong row), cover while
-        // it deploys from attackers that would kill it there, and a lane closed when they could run us down
+        // Hard: what landing in this slot is worth to the creature beyond the slot's own effect: the Flanks' +1 Speed (their +1
+        // Attack went 2026-10-17), the Vanguard's Armor, a slot it will reach something from once ready (or nothing: a cannon in the
+        // wrong row), cover while it deploys from attackers that would kill it there, and a lane closed when they could run us down
         private float FormationValue(ICreature creature, SeenSlot slot) {
             bool artillery = creature.Ability == CreatureAbility.Artillery;
             bool hits = creature.Attack > 0;
             float value = Formation.PositionOf(slot.Index) switch {
-                Formation.Position.Flanks => hits ? 1.5f * Style.Board : 0.5f,
+                Formation.Position.Flanks => hits ? (0.8f + 0.7f * Formation.FlankAttack) * Style.Board : 0.5f,
                 Formation.Position.Vanguard => 0.8f * Style.Protection,
                 _ => 0f
             };

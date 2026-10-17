@@ -272,13 +272,13 @@ You use Intelligence to figure out and deal with threats from enemy Faction grou
 2.4 The Battlefield
 
 • Layout (the user, 2026-10-15): each side has 5 slots in a formation, as in a real war: the Vanguard alone in front (the
-  wall that takes the melee), the two Flanks behind it (the shooters: +1 Attack and +1 Speed), and Headquarters at the back
+  wall that takes the melee), the two Flanks behind it (the shooters: +1 Speed; the +1 Attack went 2026-10-17, the meta turned towards planning), and Headquarters at the back
   (the important people, hard to reach). Ours is a Λ, the enemy's a V, Vanguards facing at the middle of the table. A slot
   faces the one in the same column across the table. A step goes from the Vanguard to either Flank, Flank to Flank, a Flank
   to the Headquarters slot behind it, and Headquarters to Headquarters: "beside" means a step away. (Formation.cs)
   Reach: the distance of an attack is how deep each slot sits (Vanguard 0, Flanks 1, Headquarters 2), added, plus 1. The
   slot decides: the Vanguard melees (1, their Vanguard); the Flanks and Headquarters shoot (2-3); Artillery, a keyword,
-  shoots exactly 4. Bonuses: Vanguard +1 Armor each Dawn (at most 2), Flanks +1 Attack/Speed, Headquarters none.
+  shoots exactly 4. Bonuses: Vanguard +1 Armor each Dawn (at most 2), Flanks +1 Speed (their +1 Attack went 2026-10-17), Headquarters none.
   Reach and bonuses built 2026-10-17 (the user): the reach is checked when the attack is planned (the drag shows which
   enemy slots are in reach, a drop elsewhere says why not; the AI aims only where it reaches); moved by the enemy before
   the attack resolves, the creature still hits where it aimed. Artillery is a creature ability. The Flanks' +1/+1 is part

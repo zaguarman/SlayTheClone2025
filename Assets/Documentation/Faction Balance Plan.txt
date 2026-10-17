@@ -163,3 +163,14 @@ Digital Society 68%, Enlightenment 49%, Establishment 45%, Capital 44%; by strat
 Engine 36%, Aggro 32%, Combo 30%. The cards one by one (shuffled): Establishment 51%, Enlightenment 49%, Digital Society 47%,
 Capital 46%. What each faction has, lacks and should add is in Faction Gaps.txt. Next: the decks rebuilt from
 ShuffledScores.json and CardScores.json (the user's "redo all decks"), then one more measure.
+
+
+11. THE META TURNED: HEALTH 30, BEATERS DEPLOY 1 (2026-10-17, study-2026-10-17c, the user: "nerf aggression and buff planning")
+Open Questions 47's first two knobs: a fight starts at 30 Health, and the 17 creatures with 4+ Attack and Deployment Time 0
+deploy 1. Measured at once (levels 1500 games, balance 7900): Hard still loses to Medium, 291 to 201 (290 to 210 before).
+Strategies: Swarm 81% (74% before), Midrange 66% (74%), Control 54% (57%), Engine 39% (36%), Aggro 35% (32%), Combo 30%
+(30%). So the two knobs did not touch aggression much and did not help planning: they took the big bodies off Midrange (the
+planning strategy that was winning) and gave the longer games to the Swarm, whose cheap 0-deploy creatures are untouched
+(Terminally Online 97%, from 84%). Decks: Terminally Online 97%, Military-Industrial Complex 91%, Order & Paperwork 90%;
+at the bottom Hustle Culture 5%, Frankenstein 15%, Mind Games 19%, Threat Model 23%. By faction: Digital Society 64%,
+Establishment 50%, Capital 47%, Enlightenment 42%. Next, as agreed: the Flanks' +1 Attack to 0 (knob 3), measured the same way.

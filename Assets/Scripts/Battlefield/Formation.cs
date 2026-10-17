@@ -31,7 +31,7 @@ namespace Zeitgeist {
         // The slots' bonuses (the user, 2026-10-15; built 2026-10-17): the Vanguard puts on Armor each Dawn, up to this much;
         // the Flanks shoot, +1 Attack and +1 Speed while a creature stands there; Headquarters has none (being hard to reach is its guard)
         public const int VanguardArmorCap = 2;
-        public const int FlankAttack = 1;
+        public const int FlankAttack = 0; // The user, 2026-10-17 (Open Questions 47, knob 3): the Flanks keep their Speed and reach, not the +1 Attack that rewarded a stack of hitters
         public const int FlankSpeed = 1;
 
         // Which slots are one step from each slot
