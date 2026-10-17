@@ -5,6 +5,24 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+48. Online and Mind stay at the bottom after a plain buff (2026-10-17, study-2026-10-17g)
+    • Where it stands: Online wins 21% of its deck games, Mind 22%, after +1 Health on Online's small bodies and a Day more on
+      Mind's slow spells did nothing (Tech, buffed the same way, went 22% to 55%: its buffs made two creatures ready at once and
+      gave the Watchdogs a second charge, i.e. tempo and reach, not points).
+    • Why Online: every creature is a 0-deploy body of 2 or 3 points, which the meta knobs now punish (ready-at-once creatures
+      win 44% of their games, deploy-1-or-2 ones 55%), and its payoffs were cut this evening (Clickbait a Prophecy, Dogpile one
+      target). The swarm is the faction's character; making its bodies bigger makes it Offline.
+    • Why Mind: 9 creatures for two decks of 16 creature slots, so both decks run the same nine, and 22 spells that read the
+      board (Reveal, swap, copy, cleanse) rather than change it; its Control decks hold the line but never close.
+    • Options for Online: (a) the payoff spells back up in another shape: Dogpile 3 to a target and 1 to its neighbours, Rage
+      Bait's Burn 3; (b) a swarm payoff creature: one that gets +1 Attack for each other friendly creature (the user's backlog
+      has names); (c) its small bodies at 2 deploy 0 but Speed 3 across the board, so the swarm strikes first.
+    • Options for Mind: (a) 4 to 6 new creatures from the backlog's Mind names, mid bodies with planning abilities (a Prophecy
+      creature, a Watchdog creature); (b) its spells changed to act: Reality Check and Tabula Rasa also deal 1 to what they
+      cleanse, Mimetic Theory copies the best stats on the board to a friend.
+    • Recommendation: Online (a) and Mind (a), one study for both. (a) keeps each faction's character; the measured lesson of
+      the night is that reach and tempo move the numbers and points don't.
+
 47. The meta: nerf aggression, buff planning (the user, 2026-10-17)
     • Where it stands: the balance report has Midrange and Swarm at 74% and Aggro at 32%, so brute aggro already loses; what
       wins is the board, and the plain "strongest first, kill the most" Medium AI beats the planning Hard AI 290 to 210

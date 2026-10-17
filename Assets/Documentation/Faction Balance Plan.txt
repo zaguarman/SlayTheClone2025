@@ -217,3 +217,15 @@ Panopticon's Heat 2, Doomscrolling top 5 for Doom 2, Rage Bait 3 Days, Its A Tra
 EMP Drone 2/4), Meatproxy and Threat Hunter ready at once, Technical Debt 4/6, the Watchdogs with 2 charges (Antivirus,
 Man-in-the-Middle), Pair Programming's +1/+1 for good, Web Scraping draws 1 too; Mind's Socrates ready at once, Momentum for
 good, Hold That Thought draws 2, Lucid Dreaming top 4, Survivorship Bias 2 Days. Measured as study-2026-10-17g.
+
+15. THE BOTTOM THREE BUFFED, MEASURED (2026-10-17, study-2026-10-17g, commit b7a1accc)
+Tech rose from 22% to 55% (Threat Model 20% to 57%, Move Fast and Break Things 24% to 53%): the two creatures made ready at
+once and the Watchdogs' second charge did it. Online stayed at 21% (Terminally Online 24%, Influencer Economy 18%) and Mind at
+22% (Mind Games 22%, All in Your Head 23%): a Health point on seven small bodies and a Day more on five slow spells changed
+nothing. Strategies: Midrange 58%, Aggro 57%, Swarm 52%, Control 52%, Engine 45%, Combo 30%. Subfactions: Offline 79%,
+Statecraft 72%, Tech 55%, Utopia 50%, Myth 48%, Shadow Ops. 44%, Corporate 43%, Mind 22%, Online 21%. 12 Days a game.
+What the numbers say about the two left behind: Online is all 0-deploy 2-to-3-point bodies, the kind that wins 44% of its
+games in this meta (a creature that deploys 1 or 2 wins 55%); its payoffs (Clickbait, Dogpile) were just cut. Mind has 9
+creatures to fill 16 creature slots in two decks and 22 spells that read the board rather than change it. Neither is fixed by
+a point: Open Questions 48 lays out the choices (Online's payoff spells back up a notch in another shape, Mind more
+creatures from the backlog). Next after the user's call; meanwhile the web build (Builds/WebGL) carries all of tonight.
