@@ -601,7 +601,7 @@ namespace Zeitgeist {
                 return;
             }
             // A hand card back down in the fan takes its explanations with it: none are left floating over the hand
-            if (previewIsCard && !InWindow(activeCard) && !StillRaised(activeCard)) { HideShown(); return; }
+            if (previewIsCard && activeCard.GetComponentInParent<HandUI>() != null && !StillRaised(activeCard)) { HideShown(); return; } // A board card is its own preview too, since 2026-10-17
             Vector2 pointer = GameInput.PointerPosition;
             if (GameInput.ClickedThisFrame && ClickAt(pointer)) return;
             TrackKeywords(pointer);

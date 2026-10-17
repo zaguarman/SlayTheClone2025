@@ -420,9 +420,9 @@ namespace Zeitgeist.Tests {
                 // Going on from one enlarged card to the next is quicker
                 yield return queued == wolf ? SceneGame.PreviewShows() : new WaitForSecondsRealtime(Tooltip.SwitchDelay + 0.05f);
                 var preview = SceneGame.HoverPreview();
-                Assert.IsNotNull(preview, $"Hovering {queued.Name}'s ghost should show it enlarged");
-                Assert.AreSame(queued, preview.GetLinkedCardInstance(), $"The preview over {slot} shows another card");
-                Assert.Greater(preview.transform.localScale.x, 1f, "The preview should be enlarged");
+                Assert.IsNotNull(preview, $"Hovering {queued.Name}'s ghost should show its explanations");
+                Assert.AreSame(queued, preview.GetLinkedCardInstance(), $"The card explained over {slot} is another card");
+                Assert.AreSame(game.GhostIn(slot), preview, "No enlarged copy (the user, 2026-10-17): the ghost itself is what's explained");
                 if (queued == wolf) { // The ghost replacing a creature is drawn raised, mostly outside its slot
                     Assert.IsTrue(hits.Any(h => h.gameObject.TryGetComponent(out BattlefieldSlot view) && view.Model == slot),
                         $"A card dropped on {queued.Name}'s ghost must still find {slot}");
