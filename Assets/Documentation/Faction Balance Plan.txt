@@ -174,3 +174,15 @@ planning strategy that was winning) and gave the longer games to the Swarm, whos
 (Terminally Online 97%, from 84%). Decks: Terminally Online 97%, Military-Industrial Complex 91%, Order & Paperwork 90%;
 at the bottom Hustle Culture 5%, Frankenstein 15%, Mind Games 19%, Threat Model 23%. By faction: Digital Society 64%,
 Establishment 50%, Capital 47%, Enlightenment 42%. Next, as agreed: the Flanks' +1 Attack to 0 (knob 3), measured the same way.
+
+
+12. KNOB 3: THE FLANKS WITHOUT THEIR +1 ATTACK (2026-10-17, study-2026-10-17d)
+With Health 30 and the beaters at Deployment Time 1 kept: Hard still loses to Medium, 278 to 207. Strategies: Swarm 81%,
+Midrange 67%, Control 51%, Engine 41%, Aggro 34%, Combo 33%. Decks: Military-Industrial Complex 97%, Order & Paperwork
+94%, Terminally Online 90%; at the bottom Hustle Culture 6%, Mind Games 15%, Frankenstein 17%. By faction: Digital Society
+62%, Capital 51%, Establishment 48%, Enlightenment 43%. The three knobs together moved the strategies by a few points and
+the AI not at all: the game's tempo isn't what keeps planning from paying. What does, by the numbers: the Swarm's cheap
+0-deploy creatures and their payoffs (Clickbait 40 damage a game, Dogpile 28), and the Hard AI's own choices (AI Design.txt).
+Next, in this order: the Swarm's numbers and the Engine, Combo and Control payoffs in the card files (the rebalance the user
+asked for, to reward planning), then the decks rebuilt from the scores, then Hard rebuilt from Medium's core, each step
+measured with Tools/ai_reports.ps1. The three knobs stay for now; they're one line each to undo.
