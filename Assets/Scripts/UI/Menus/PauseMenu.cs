@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// In-game pause overlay toggled with Escape. Freezes the game via Time.timeScale.
     /// </summary>

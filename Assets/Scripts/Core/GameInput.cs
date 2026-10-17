@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// What the player does with the mouse and keyboard, read from the Input System package. Scripts ask here rather than
     /// the input API, so the API lives in one place. With no mouse or keyboard (a test runner) nothing reads as pressed.
@@ -46,6 +46,7 @@ namespace SlayTheClone {
         }
 
         public static bool KeyPressed(Key key) => Keyboard.current != null && Keyboard.current[key].wasPressedThisFrame;
+        public static bool KeyHeld(Key key) => Keyboard.current != null && Keyboard.current[key].isPressed;
 
         /// <summary>A mouse button held down (a drag going on).</summary>
         public static bool ButtonHeld => Mouse.current != null && (Mouse.current.leftButton.isPressed || Mouse.current.rightButton.isPressed);

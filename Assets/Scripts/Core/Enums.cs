@@ -1,11 +1,11 @@
-namespace SlayTheClone {
+namespace Zeitgeist {
     using System; // Add this for Flags attribute
 
     public class Enums {
         // Card/Effect Enums
         public enum CardType { Creature, Spell, Enchantment }
         // The nine factions of the 'Faction Compendium'; None for cards made before factions existed
-        public enum Faction { None, Myth, Statecraft, ShadowOps, Corporate, Tech, DigitalSociety, Zeitgeist, Mind, Utopia }
+        public enum Faction { None, Myth, Statecraft, ShadowOps, Corporate, Tech, DigitalSociety, PopCulture, Mind, Utopia } // DigitalSociety merged into PopCulture (was Zeitgeist; the user, 2026-10-17): kept so the numbers after it stay put
         public enum EffectType { Immediate, Triggered, Continuous, Timed, Status }
         public enum EffectTrigger { OnPlay, OnDeath, OnDamage, StartOfTurn, EndOfTurn, ActionAttempted, OnAboutToDie, OnRevealed, OnReplaced,
             OnDiscarded } // OnDiscarded: Laid Off, given up from the hand (the Dawn discard, a discard cost) // New triggers go last: cards store them as numbers

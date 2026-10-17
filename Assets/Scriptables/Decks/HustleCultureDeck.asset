@@ -12,32 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: HustleCultureDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Corporate + Zeitgeist - Hustle Culture
+  deckName: Corporate + Pop Culture - Hustle Culture
   cards:
   - {fileID: 11400000, guid: 92d6ac95799443142af22521de974f5c, type: 2}
   - {fileID: 11400000, guid: 92d6ac95799443142af22521de974f5c, type: 2}
   - {fileID: 11400000, guid: 108e3bbbe82e4fa4ba1f68a09783759f, type: 2}
   - {fileID: 11400000, guid: 108e3bbbe82e4fa4ba1f68a09783759f, type: 2}
-  - {fileID: 11400000, guid: 31609dab42e77df4f80649743431c21a, type: 2}
-  - {fileID: 11400000, guid: 31609dab42e77df4f80649743431c21a, type: 2}
-  - {fileID: 11400000, guid: e9645c92222d14c4d91f3b92d4663bc9, type: 2}
-  - {fileID: 11400000, guid: e9645c92222d14c4d91f3b92d4663bc9, type: 2}
-  - {fileID: 11400000, guid: fce7a5f6eb6a25342804e4e2e1b082a9, type: 2}
-  - {fileID: 11400000, guid: fce7a5f6eb6a25342804e4e2e1b082a9, type: 2}
-  - {fileID: 11400000, guid: b6365f6bccdabc24693f4f591c0cecbb, type: 2}
-  - {fileID: 11400000, guid: b6365f6bccdabc24693f4f591c0cecbb, type: 2}
+  - {fileID: 11400000, guid: 9b4570bf79aa0334382937e4d10b9597, type: 2}
+  - {fileID: 11400000, guid: 9b4570bf79aa0334382937e4d10b9597, type: 2}
+  - {fileID: 11400000, guid: ef48b590c421e8c44a13dd294147182b, type: 2}
+  - {fileID: 11400000, guid: ef48b590c421e8c44a13dd294147182b, type: 2}
+  - {fileID: 11400000, guid: 958cc07697c5a4441bfc9f1b8affdb10, type: 2}
+  - {fileID: 11400000, guid: 958cc07697c5a4441bfc9f1b8affdb10, type: 2}
+  - {fileID: 11400000, guid: 02533c1aba1396c44afbca1c4992d469, type: 2}
+  - {fileID: 11400000, guid: 02533c1aba1396c44afbca1c4992d469, type: 2}
   - {fileID: 11400000, guid: fbcd0812c94c18d40a893a334a3bbcb9, type: 2}
   - {fileID: 11400000, guid: fbcd0812c94c18d40a893a334a3bbcb9, type: 2}
-  - {fileID: 11400000, guid: 87790aac015e49d44a145d5838081313, type: 2}
-  - {fileID: 11400000, guid: 87790aac015e49d44a145d5838081313, type: 2}
-  - {fileID: 11400000, guid: 3b440b18a4ffb974a8ceb55af253254f, type: 2}
-  - {fileID: 11400000, guid: 3b440b18a4ffb974a8ceb55af253254f, type: 2}
+  - {fileID: 11400000, guid: 024fc54db5efae34a949d0ed421d88b2, type: 2}
+  - {fileID: 11400000, guid: 024fc54db5efae34a949d0ed421d88b2, type: 2}
+  - {fileID: 11400000, guid: 822f82c834152ff449d6d660c3f2d302, type: 2}
+  - {fileID: 11400000, guid: 822f82c834152ff449d6d660c3f2d302, type: 2}
   - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
   - {fileID: 11400000, guid: 7d105c28366d378419af9c4518980f70, type: 2}
   - {fileID: 11400000, guid: 5b80a160ef1f9244a9069b5128e1df3a, type: 2}
   - {fileID: 11400000, guid: 5b80a160ef1f9244a9069b5128e1df3a, type: 2}
   - {fileID: 11400000, guid: 4d1b91992e3fa194f99ad5471cea7860, type: 2}
   - {fileID: 11400000, guid: 6da251ed4f0f0e1448dedb752e3e8a1a, type: 2}
-  lastUpdated: 2026-10-16T16:23:25.5212598Z
+  lastUpdated: 2026-10-17T14:17:55.2187722Z
   strategy: Aggro
   focus: 0

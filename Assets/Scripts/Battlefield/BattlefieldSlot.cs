@@ -2,9 +2,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// On-screen view of one <see cref="BoardSlot"/>: shows the card of the creature the rules placed there
     /// and takes pointer input. Rules never touch it; <see cref="BattlefieldUI"/> keeps it in sync with the model.

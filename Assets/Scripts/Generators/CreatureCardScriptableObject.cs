@@ -1,7 +1,7 @@
 using UnityEngine;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class CreatureCardScriptableObject : CardDataScriptableObject {
         public int attack;
         public int health;

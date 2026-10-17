@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     // Represents a modifier that changes a creature's stats
     public class StatModifier : BaseModifier {
         public ModifiableStat StatToModify { get; }

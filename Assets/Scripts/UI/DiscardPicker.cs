@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// A chosen discard cost on screen: when the player at the screen plays a card that's paid with cards picked by hand
     /// (Headhunter, NDA, Dead Drop), the cards it could take are shown and picked one at a time; once all are picked they pay

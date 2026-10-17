@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public static class CardFactory {
         public static ICard CreateCard(CardData cardData) {
             if (cardData == null) return null;

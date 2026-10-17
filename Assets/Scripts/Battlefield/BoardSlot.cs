@@ -1,4 +1,4 @@
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// One position on a player's battlefield, as the game rules see it. Plain C#: the on-screen
     /// <see cref="BattlefieldSlot"/> is a view bound to one of these.

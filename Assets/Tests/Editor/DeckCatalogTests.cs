@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using UnityEditor;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// What the main menu offers: decks of one faction or a pair of them (one deck each), built by the deck builder's rules,
     /// and one opponent bringing each deck.
@@ -29,13 +29,14 @@ namespace SlayTheClone.Tests {
                 CollectionAssert.DoesNotContain(deckFactions, Faction.None, $"{deck.GetDeckName()} has cards without a faction");
                 return string.Join(" + ", deckFactions.OrderBy(f => f));
             }).ToList();
-            CollectionAssert.IsSubsetOf(Enum.GetValues(typeof(Faction)).Cast<Faction>().Where(f => f != Faction.None).Select(f => f.ToString()).ToList(), factions,
+            CollectionAssert.IsSubsetOf(Enum.GetValues(typeof(Faction)).Cast<Faction>().Where(f => f != Faction.None && f != Faction.DigitalSociety).Select(f => f.ToString()).ToList(), factions, // Digital Society merged into Pop Culture (2026-10-17)
                 "Every faction has a deck of its own");
             CollectionAssert.AllItemsAreUnique(catalog.Decks.Select(d => d.GetDeckName()).ToList(), "Every deck has its own name (a faction can have more than one: Shadow Ops. - Black Budget)");
 
             foreach (var offered in catalog.Decks) {
                 string name = offered.GetDeckName();
                 Assert.That(offered.Cards.Count, Is.InRange(PlayerDecks.MinDeckSize, PlayerDecks.MaxDeckSize), $"{name} has {offered.Cards.Count} cards");
+                Assert.LessOrEqual(offered.Cards.Count, 48, $"{name} has {offered.Cards.Count} cards: a starter deck past 48 plays thin (the user, 2026-10-17)");
                 Assert.IsTrue(offered.Cards.Any(c => c is CreatureCardScriptableObject), $"{name} has no creatures");
                 Assert.IsTrue(offered.Cards.Any(c => c is SpellCardScriptableObject), $"{name} has no spells");
             }

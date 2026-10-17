@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: AntiVaxxer
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 9e7dc7d3-67c7-4689-855e-d0201aaaa54b
+  cardName: Anti-Vaxxer
+  description: I've done my own research. It was a video.
+  cardType: 0
+  faction: 7
+  artwork: {fileID: 3286163911610860551, guid: 4e1a2063309513741bbbd1207c6eef72, type: 3}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  combo: 0
+  setUpBy: []
+  effects: []
+  designNotes: 'Do Your Own Research: healing damages it instead. Hand it a cure
+    and it takes the hit; the enemy''s healing on it hurts it too.'
+  artDescription: A woman in a SPIRITUAL NOT MEDICAL t-shirt slapping a syringe out
+    of a doctor's hand, a crystal pendant swinging, while a tiny cartoon virus on
+    her shoulder gives a thumbs up.
+  attack: 3
+  health: 5
+  speed: 2
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 66
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

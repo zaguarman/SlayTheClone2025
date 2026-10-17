@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class MoveCreatureActionExecutor : ActionExecutor<MoveCreatureAction> {
         protected override void ExecuteAction(MoveCreatureAction moveAction, ActionExecutionContext context) {
             var creature = moveAction.GetCreature();
@@ -18,7 +18,7 @@ namespace SlayTheClone {
             // The creature moves from wherever it is now: something earlier this turn may have moved it.
             // Blocked on the way, it stops at the furthest empty slot it can still reach (GDD 2.4)
             var fromSlot = creature.Slot;
-            var outcome = MovementRules.Resolve(creature, toSlot, moveAction.Kind);
+            var outcome = MovementRules.Resolve(creature, toSlot, moveAction.Kind, context.ModifierManager);
             if (outcome.End == null || outcome.End == fromSlot) {
                 Log($"Executor: {creature.Name} can't move toward {toSlot}", LogTag.Actions | LogTag.Creatures);
                 return;

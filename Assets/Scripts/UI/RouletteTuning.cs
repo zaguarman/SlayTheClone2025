@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Every measurement of the card roulette, as sliders: the wheel of cards that turns when you scroll over a creature with
     /// cards tucked under it (see <see cref="Tooltip"/>). Select it with UI > Roulette Tuning and drag them while the game
@@ -119,7 +119,7 @@ namespace SlayTheClone {
         }
 
 #if UNITY_EDITOR
-        private const string RememberedKey = "SlayTheClone.RouletteTuning.Remembered";
+        private const string RememberedKey = "Zeitgeist.RouletteTuning.Remembered";
 
         /// <summary>A snapshot of the sliders, kept in the editor's settings: a set to come back to after experimenting.</summary>
         public void Remember() => UnityEditor.EditorPrefs.SetString(RememberedKey, JsonUtility.ToJson(this));

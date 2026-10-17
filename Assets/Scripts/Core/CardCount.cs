@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// All of a player's cards, wherever they are: deck, hand, discard pile, on the way back to the hand, on the board (a Gift
     /// or a stolen creature on the other side is still its owner's), off the board for now (gone dark), spent (Single Use) and in force (Policy). The total never

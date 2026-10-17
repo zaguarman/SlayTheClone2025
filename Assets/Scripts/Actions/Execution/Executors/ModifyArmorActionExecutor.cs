@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class ModifyArmorActionExecutor : ActionExecutor<ModifyArmorAction> {
         protected override void ExecuteAction(ModifyArmorAction armorAction, ActionExecutionContext context) {
             var targetCreature = armorAction.GetTargetCreature();

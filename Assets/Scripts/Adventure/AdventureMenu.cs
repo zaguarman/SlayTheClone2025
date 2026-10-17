@@ -4,10 +4,10 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static SlayTheClone.Enums;
-using static SlayTheClone.MenuWidgets;
+using static Zeitgeist.Enums;
+using static Zeitgeist.MenuWidgets;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Adventure, from the title screen. With no run under way it asks for your faction, its coins side by side; Embark
     /// starts a run with that faction's starter deck, small and plain (see <see cref="AdventureDecks"/>). Then the map (see
@@ -423,7 +423,7 @@ namespace SlayTheClone {
         // The relics and potions you carry, under the map's status
         private void AddKit(Transform side) {
             string relics = AdventureRun.Relics.Count == 0 ? "<color=#C9C0AE>none yet</color>"
-                : string.Join("\n", AdventureRun.Relics.Select(r => $"<b>{SlayTheClone.Relics.NameOf(r)}</b> <size=85%><color=#C9C0AE>{SlayTheClone.Relics.Describe(r)}</color></size>"));
+                : string.Join("\n", AdventureRun.Relics.Select(r => $"<b>{Zeitgeist.Relics.NameOf(r)}</b> <size=85%><color=#C9C0AE>{Zeitgeist.Relics.Describe(r)}</color></size>"));
             string potions = AdventureRun.Potions.Count == 0 ? "<color=#C9C0AE>none</color>" : string.Join(", ", AdventureRun.Potions.Select(p => p.cardName));
             var kit = AddText(side, $"Relics:\n{relics}\nPotions ({AdventureRun.Potions.Count}/{AdventureRun.MaxPotions}): {potions}", 20, TextColor, FontStyles.Normal,
                 height: 60 + 30 * Math.Max(1, AdventureRun.Relics.Count));

@@ -1,0 +1,24 @@
+# Line endings (the user, 2026-10-17): text files are stored with LF and checked out as CRLF on Windows, so commits stop
+# warning about every file. Run `git add --renormalize .` once after changing this file.
+* text=auto eol=crlf
+*.cs text eol=crlf
+*.txt text eol=crlf
+*.json text eol=crlf
+*.md text eol=crlf
+*.py text eol=lf
+*.ps1 text eol=crlf
+*.svg text eol=lf
+*.asset text eol=lf
+*.unity text eol=lf
+*.prefab text eol=lf
+*.meta text eol=lf
+*.asmdef text eol=lf
+*.png binary
+*.jpg binary
+*.ttf binary
+*.otf binary
+*.wav binary
+*.mp3 binary
+*.ogg binary
+*.fbx binary
+*.dll binary

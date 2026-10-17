@@ -6,12 +6,12 @@ using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The browser (WebGL) build (the user, 2026-10-17: "build the game to run in the browser", to try the changes while the
     /// editor is busy or before a long AI run). Tools/web_build.ps1 runs it from a separate copy of the project (a git
     /// worktree), in a Unity without a window, so the editor in use stays free:
-    ///   Unity -batchmode -quit -projectPath <copy> -buildTarget WebGL -executeMethod SlayTheClone.WebBuild.Build -out <folder>
+    ///   Unity -batchmode -quit -projectPath <copy> -buildTarget WebGL -executeMethod Zeitgeist.WebBuild.Build -out <folder>
     /// Uncompressed, so any static file server can serve it (Tools/web_build.ps1 starts one).
     /// </summary>
     public static class WebBuild {

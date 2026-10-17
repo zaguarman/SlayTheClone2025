@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// One game, as the telemetry keeps it (see <see cref="GameRecorder"/>): who played what, how it went Day by Day, how it
     /// ended, and what each card did. A plain serializable object, written as one JSON line (JsonUtility), the same shape

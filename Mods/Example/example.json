@@ -1,0 +1,49 @@
+{
+  "mod": "Example Mod",
+  "author": "Zeitgeist",
+  "cards": [
+    {
+      "name": "Office Printer",
+      "type": "creature",
+      "faction": "Corporate",
+      "flavor": "Out of toner. Out of patience. Out of warranty.",
+      "notes": "An example creature: a wall that bites back. Arrival: 1 damage to the creature facing it.",
+      "attack": 1,
+      "health": 7,
+      "speed": 1,
+      "deploy": 0,
+      "ability": "Litigious",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [ { "action": "Damage", "value": 1, "target": "EnemyCreatures", "modifier": "Opposite" } ] }
+      ]
+    },
+    {
+      "name": "Reply All",
+      "type": "spell",
+      "faction": "Corporate",
+      "flavor": "To whom it may concern: everyone.",
+      "notes": "An example spell: 1 damage to every enemy creature, and you draw a card.",
+      "target": "Enemy",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 1, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets" },
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    }
+  ],
+  "decks": [
+    {
+      "name": "Example - Paper Jam",
+      "opponent": "The Office Manager",
+      "tagline": "Have you tried turning it off and on again?",
+      "strategy": "Control",
+      "cards": [
+        "Office Printer", "Office Printer", "Reply All", "Reply All",
+        "Legal Department", "Legal Department", "Teflon Don", "Teflon Don", "Fat Tony", "Fat Tony",
+        "Cleaning Robot", "Cleaning Robot", "Day Trader", "Micromanager", "Charles Ponzi",
+        "Margin Call", "Margin Call", "Hostile Takeover", "Hostile Takeover", "Inflation"
+      ]
+    }
+  ]
+}

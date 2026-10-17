@@ -1,7 +1,7 @@
 using System.Linq;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public static class SummonFromDeckEffect {
         /// <summary>
         /// Takes up to <paramref name="count"/> random creatures out of the player's draw pile

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// A card shown enlarged beside the pointer while something naming it is hovered: a card's name in the keyword glossary,
     /// a row of the deck builder's deck. It floats over the menu, never laid out in it, and the pointer goes through it.

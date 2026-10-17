@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using static SlayTheClone.Enums;
-using static SlayTheClone.MenuWidgets;
+using static Zeitgeist.Enums;
+using static Zeitgeist.MenuWidgets;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The card gallery, opened from the title screen: every card on offer, faction by faction (or all of them at once), shown
     /// as the printed cards; creatures first, then spells. The cards are big enough to read as they are: hovered, one shows

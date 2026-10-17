@@ -12,6 +12,8 @@ import os
 
 W, H = 352, 200  # Matches the card art box aspect ratio (144 x 82)
 OUT_DIR = os.path.join(os.path.dirname(__file__), "..", "Assets", "Art", "Cards")
+# Zeitgeist and Digital Society are one faction, Pop Culture (the user, 2026-10-17): their drawings keep their themes here and share a folder
+THEME_FOLDER = {"Zeitgeist": "PopCulture", "DigitalSociety": "PopCulture"}
 # Pixel art is paused (2026-10-14): every card shows its vector art again. Set USE_PIXEL_ART to True to go back: a card
 # with pixel art (Tools/pixel_art.py) then shows that instead, and its vector art is written to the archive, outside Assets
 USE_PIXEL_ART = False
@@ -10672,7 +10674,7 @@ def main():
     for theme, cards in CARDS.items():
         for name, draw in cards.items():
             replaced = USE_PIXEL_ART and os.path.exists(os.path.join(PIXEL_DIR, f"{name}.png"))
-            folder = os.path.normpath(os.path.join(ARCHIVE_DIR if replaced else OUT_DIR, theme))
+            folder = os.path.normpath(os.path.join(ARCHIVE_DIR if replaced else OUT_DIR, THEME_FOLDER.get(theme, theme)))
             os.makedirs(folder, exist_ok=True)
             with open(os.path.join(folder, f"{name}.svg"), "w", encoding="utf-8", newline="\n") as f:
                 f.write(draw())

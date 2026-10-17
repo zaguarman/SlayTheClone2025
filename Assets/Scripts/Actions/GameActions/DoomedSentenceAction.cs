@@ -1,4 +1,4 @@
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Doomed's last stack is gone: Last Rites, then the creature is destroyed. Both happen right away, as part of this
     /// action, and nothing can save it (Status Effects Compendium, Doomed).

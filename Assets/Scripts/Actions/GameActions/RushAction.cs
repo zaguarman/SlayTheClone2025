@@ -1,7 +1,7 @@
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Overtime (the user, 2026-10-16): a creature still deploying is rushed in, its Deployment Time cut by up to this many
     /// Days, and pays for it with Burnout: it's destroyed at the Dusk of the first Day it's ready, so it gets that one Day to

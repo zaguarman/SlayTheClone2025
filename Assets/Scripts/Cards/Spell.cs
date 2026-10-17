@@ -1,7 +1,7 @@
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class Spell : Card {
         public TargetType DefaultTargetType { get; }
         /// <summary>Ripening: the Dawns it has ripened in the hand (its numbers are this much higher); 0 for a fresh copy.</summary>

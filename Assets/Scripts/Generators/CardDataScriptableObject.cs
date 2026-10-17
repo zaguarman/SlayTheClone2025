@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     // Base card scriptable object
     public abstract class CardDataScriptableObject : ScriptableObject {
         public string cardId;

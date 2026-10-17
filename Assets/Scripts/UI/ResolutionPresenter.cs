@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Plays visual feedback for every resolved action on a screen overlay: attacks, spells, damage,
     /// healing, armor, buffs, statuses, deaths and life lost by players. Each feedback "beat" holds the
@@ -21,7 +22,8 @@ namespace SlayTheClone {
         private const float SpellLeavesHandBeat = 0.5f;
         private const float HitBeat = 0.55f;
         private const float StatusBeat = 0.65f;
-        private const float DeathBeat = 0.65f;
+        private const float DeathBeat = 0.85f; // A kill gets a moment
+        private const float StatBeat = 0.3f;   // Buffs and Armor go by quicker than hits (pace by importance)
         private const float PlayerBeat = 0.75f;
 
         // Labels that land on the same target in quick succession are stacked instead of overlapping
@@ -134,11 +136,41 @@ namespace SlayTheClone {
             DOTween.Kill(this);
         }
 
-        public IEnumerator WaitUntilIdle() {
-            while (Time.time < busyUntil) yield return null;
+        /// <summary>
+        /// Playback speed (the user, 2026-10-17: pacing): 1, 2 or 4, cycled with F and kept between sessions; every beat is that
+        /// much shorter. Space held skips the beats altogether.
+        /// </summary>
+        public static float Speed { get; private set; } = 1f;
+        private const string SpeedKey = "PlaybackSpeed";
+        private static bool speedLoaded;
+
+        public static void CycleSpeed() {
+            Speed = Speed >= 4f ? 1f : Speed * 2f;
+            PlayerPrefs.SetFloat(SpeedKey, Speed);
+            PlayerPrefs.Save();
         }
 
-        private void Hold(float seconds) => busyUntil = Mathf.Max(busyUntil, Time.time + seconds);
+        public IEnumerator WaitUntilIdle() {
+            while (Time.time < busyUntil) {
+                if (GameInput.KeyHeld(Key.Space)) busyUntil = Time.time; // Skip: the next action at once
+                yield return null;
+            }
+        }
+
+        private void Hold(float seconds) => busyUntil = Mathf.Max(busyUntil, Time.time + seconds / Speed);
+
+        // Bigger hits land harder (the user: impact): the board panels shake
+        private void ShakeTable(float strength) {
+            foreach (var board in table.Battlefields) {
+                if (board != null) board.transform.DOShakePosition(0.25f, strength, 14, 90f, false, true).SetTarget(this);
+            }
+        }
+
+        private void ShowSpeed() {
+            var label = CreateLabel($"Playback x{Speed:0}", Color.white, 40f);
+            label.rectTransform.anchoredPosition = new Vector2(0f, overlay.rect.height * 0.3f);
+            DOTween.Sequence().SetTarget(this).AppendInterval(0.6f).Append(FadeLabel(label, 0f, 0.3f)).OnComplete(() => Destroy(label.gameObject));
+        }
 
         #region Action beats
         private void OnActionExecuting(IGameAction action) {
@@ -311,6 +343,14 @@ namespace SlayTheClone {
 
         // The Day is over: whatever is still on the stage leaves too
         private void Update() {
+            if (!speedLoaded) {
+                speedLoaded = true;
+                Speed = Mathf.Clamp(PlayerPrefs.GetFloat(SpeedKey, 1f), 1f, 4f);
+            }
+            if (GameInput.KeyPressed(Key.F)) {
+                CycleSpeed();
+                ShowSpeed();
+            }
             if (staged != null && !(gameManager?.TurnManager?.IsResolving ?? false)) ReleaseStaged();
         }
         #endregion
@@ -325,10 +365,13 @@ namespace SlayTheClone {
             var card = FindCard(creature);
             if (card == null) return;
 
+            float heft = Mathf.Clamp01(damage / 6f); // Bigger hits land harder: a wider shake, a squash, a bigger number, a longer beat
             FlashCard(card, DamageColor);
-            card.transform.DOPunchPosition(new Vector3(10f, 0f, 0f), 0.3f, 12, 0.6f).SetTarget(this);
-            ShowOnCard(card, $"-{damage}{EffectIcons.Tag(EffectIcons.Damage)}", DamageColor);
-            Hold(HitBeat);
+            card.transform.DOPunchPosition(new Vector3(10f + 14f * heft, 0f, 0f), 0.3f, 12, 0.6f).SetTarget(this);
+            card.transform.DOPunchScale(new Vector3(0.08f, -0.12f, 0f) * (1f + heft), 0.25f, 8, 0.5f).SetTarget(this);
+            ShowOnCard(card, $"-{damage}{EffectIcons.Tag(EffectIcons.Damage)}", DamageColor, 46f + 26f * heft);
+            if (damage >= 5) ShakeTable(8f + 8f * heft);
+            Hold(HitBeat + 0.2f * heft);
         }
 
         private void OnCreatureHealed(ICreature creature, int amount) {
@@ -354,7 +397,7 @@ namespace SlayTheClone {
             string sign = change > 0 ? "+" : "";
             ShowOnCard(card, $"{sign}{change}{EffectIcons.Tag(EffectIcons.Armor)}", ArmorColor);
             if (change > 0) FlashCard(card, ArmorColor);
-            Hold(HitBeat);
+            Hold(StatBeat);
         }
 
         private void OnCreatureStatsChanged(ICreature creature) {
@@ -369,7 +412,7 @@ namespace SlayTheClone {
             bool shown = ShowStatChange(card, current.Attack - previous.Attack, EffectIcons.Sword)
                 | ShowStatChange(card, current.MaxHealth - previous.MaxHealth, EffectIcons.Heart)
                 | ShowStatChange(card, current.Speed - previous.Speed, EffectIcons.Speed);
-            if (shown) Hold(HitBeat);
+            if (shown) Hold(StatBeat);
         }
 
         private bool ShowStatChange(CardController card, int change, string icon) {
@@ -399,6 +442,7 @@ namespace SlayTheClone {
             var card = FindCard(creature);
             if (card == null) return;
 
+            card.transform.DOPunchScale(Vector3.one * 0.18f, 0.3f, 8, 0.5f).SetTarget(this);
             PopIcon(card.transform, EffectIcons.Death, 130f);
             Hold(DeathBeat);
         }
@@ -407,6 +451,7 @@ namespace SlayTheClone {
         #region Player beats
         private void OnPlayerDamaged(IPlayer player, int damage) {
             MarkAffected(player);
+            if (damage >= 4) ShakeTable(6f + damage);
             ShowPlayerChange(player, $"-{damage}{EffectIcons.Tag(EffectIcons.Heart)}", DamageColor);
         }
 

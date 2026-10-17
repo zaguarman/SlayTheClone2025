@@ -3,7 +3,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Debug > Telemetry: the settings (made if missing), the folder where the games are kept, sending what waits now, and
     /// how much waits. See <see cref="Telemetry"/>.

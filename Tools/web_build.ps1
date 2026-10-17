@@ -3,7 +3,7 @@ The browser build, made from a separate copy of the project so the Unity editor 
 
   1. Mirrors Assets, Packages and ProjectSettings (uncommitted changes included) into ..\SlayTheClone2025-WebBuild.
      The copy keeps its own Library: the first build imports everything (slow), later ones only what changed.
-  2. Builds it for WebGL with a Unity that has no window (SlayTheClone.WebBuild.Build), into Builds\WebGL here.
+  2. Builds it for WebGL with a Unity that has no window (Zeitgeist.WebBuild.Build), into Builds\WebGL here.
   3. With -Serve, serves Builds\WebGL at http://localhost:<Port> (Ctrl+C stops it). -ServeOnly serves without building.
 
 Usage (PowerShell, from the project folder):
@@ -37,11 +37,11 @@ if (-not $ServeOnly) {
     # First run: the define URP's Compatibility Mode needs to build (see WebBuild.Prepare); the build run compiles with it
     $prepare = Start-Process -FilePath $unity -Wait -PassThru -NoNewWindow -ArgumentList @(
         "-batchmode", "-quit", "-projectPath", "`"$copy`"", "-buildTarget", "WebGL",
-        "-executeMethod", "SlayTheClone.WebBuild.Prepare", "-logFile", "`"$log`"")
+        "-executeMethod", "Zeitgeist.WebBuild.Prepare", "-logFile", "`"$log`"")
     if ($prepare.ExitCode -ne 0) { throw "Preparing the copy failed (exit code $($prepare.ExitCode)): see $log" }
     $process = Start-Process -FilePath $unity -Wait -PassThru -NoNewWindow -ArgumentList @(
         "-batchmode", "-quit", "-projectPath", "`"$copy`"", "-buildTarget", "WebGL",
-        "-executeMethod", "SlayTheClone.WebBuild.Build", "-out", "`"$output`"", "-logFile", "`"$log`"")
+        "-executeMethod", "Zeitgeist.WebBuild.Build", "-out", "`"$output`"", "-logFile", "`"$log`"")
     $minutes = [math]::Round(((Get-Date) - $started).TotalMinutes, 1)
     if ($process.ExitCode -ne 0) { throw "The build failed after $minutes minutes (exit code $($process.ExitCode)): see $log" }
     Write-Host "Built in $minutes minutes: $output"

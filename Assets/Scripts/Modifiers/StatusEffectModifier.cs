@@ -1,8 +1,8 @@
 using System;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     // Represents status effects like Burned, Exhausted, etc.
     // Status Timing (GDD 5.2): every status skips the Day it's applied. Applied on Day X for N Days, it first acts at the
     // Dusk of Day X+1 and ends at the Dusk of Day X+N, so there's always a full Day to see it and react.

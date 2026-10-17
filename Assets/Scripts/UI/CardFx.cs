@@ -3,7 +3,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The little flourishes cards make when they leave the hand, in the spirit of Slay the Spire: a discarded card fades
     /// away into a glowing dart that streaks into the discard pile, leaving a trail; a cast card bursts in a ring of light.

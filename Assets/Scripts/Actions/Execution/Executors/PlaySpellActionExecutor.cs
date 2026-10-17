@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class PlaySpellActionExecutor : ActionExecutor<PlaySpellAction> {
         protected override void ExecuteAction(PlaySpellAction spellAction, ActionExecutionContext context) {
             var spell = spellAction.GetSpell();

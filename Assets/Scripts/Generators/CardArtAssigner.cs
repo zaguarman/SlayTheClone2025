@@ -4,7 +4,7 @@ using Unity.VectorGraphics.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Links every card asset to its illustration by matching file name:
     /// Assets/Scriptables/Cards/&lt;Theme&gt;/&lt;Card&gt;.asset  ->  Assets/Art/Cards/&lt;Theme&gt;/&lt;Card&gt;.svg (Tools/generate_card_art.py)

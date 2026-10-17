@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// What happened while actions resolved, in order: every action the queue ran and everything the game announced.
     /// Lets tests check that something happened once, in the right order, or not at all.

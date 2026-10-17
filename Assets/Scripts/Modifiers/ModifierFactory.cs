@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public interface IModifierFactory {
         // Creates a permanent stat modifier
         IModifier CreateStatModifier(string name, string description, ModifiableStat stat, ModifierCalculationType calcType, int value);

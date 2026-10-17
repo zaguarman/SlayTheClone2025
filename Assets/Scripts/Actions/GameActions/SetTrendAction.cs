@@ -1,8 +1,8 @@
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>Makes a Trend the one trending for some Days (0: until another replaces it), replacing the current one.</summary>
     public class SetTrendAction : IGameAction {
         public Trend Trend { get; }

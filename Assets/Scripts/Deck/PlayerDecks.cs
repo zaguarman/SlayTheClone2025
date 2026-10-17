@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The decks the player makes in the deck builder, mixing any cards on offer. They're kept between sessions in a file
     /// in the player's data folder, each card by its id (and its name, in case the id changed). A deck has

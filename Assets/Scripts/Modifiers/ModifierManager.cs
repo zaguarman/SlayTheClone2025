@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class ModifierManager : IModifierManager {
         #region Fields & Properties
         private readonly IGameMediator mediator;
@@ -20,7 +20,6 @@ namespace SlayTheClone {
 
         #region Constructor
         public ModifierManager(IGameMediator mediator, IModifierFactory factory) {
-            MovementRules.IsRooted = creature => HasStatusEffect(creature, StatusEffectType.Rooted) || Abilities.IsPinned(creature); // Or a Clingy Ex faces it // The game in play's
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             modifierFactory = factory ?? throw new ArgumentNullException(nameof(factory));
 

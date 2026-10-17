@@ -1,4 +1,4 @@
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Builds the damage or heal action that matches a target's kind: a creature or a player.
     /// Returns null for targets that can't take damage or healing.

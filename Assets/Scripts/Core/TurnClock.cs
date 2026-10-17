@@ -1,4 +1,4 @@
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>The current turn number, as the rules see it (timed modifiers count turns from it).</summary>
     public interface ITurnClock {
         int TurnNumber { get; }

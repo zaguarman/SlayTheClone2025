@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     [CreateAssetMenu(fileName = "DebugLoggerSettings", menuName = "Debug/Logger Settings")]
     public class DebugLoggerSettings : ScriptableObject {
         [SerializeField] private List<TagSettings> tagSettings = new List<TagSettings>();

@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Red Tape (GDD 3.2): adds Days to the Deployment Time of a creature still deploying: it waits that much longer. A
     /// creature already deployed isn't sent back (the user, 2026-10-15): nothing happens to it.

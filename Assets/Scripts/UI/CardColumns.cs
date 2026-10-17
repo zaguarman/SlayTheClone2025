@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Fills the width a grid of cards has with a set number of columns, each card as big as that allows, at its own
     /// proportions, so the cards are legible at a glance instead of small ones lost in empty space. Each cell holds one card

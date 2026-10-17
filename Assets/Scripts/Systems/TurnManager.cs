@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The turn flow on screen: ending a turn runs the <see cref="TurnFlow"/> a frame at a time, playing each action back
     /// through the presenter. Built by GameManager with exactly the systems it drives.

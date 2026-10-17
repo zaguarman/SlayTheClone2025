@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Context object passed to executors, providing necessary services
     /// </summary>

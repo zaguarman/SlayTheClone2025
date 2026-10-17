@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 using Object = UnityEngine.Object;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// Card definitions made up for a test, destroyed with it. Effects are built with <see cref="Effect"/> and <see cref="Status"/>.
     /// </summary>

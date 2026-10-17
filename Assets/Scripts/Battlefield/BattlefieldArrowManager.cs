@@ -4,9 +4,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Draws one board's battle arrows (see <see cref="ArrowIndicator"/>): its player's planned attacks and pending damage,
     /// the moves of its row (where each creature ends up), plus the arrow that follows a creature being dragged.

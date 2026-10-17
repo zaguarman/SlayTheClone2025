@@ -7,9 +7,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The adventure on autopilot (the user, 2026-10-16: "an automated run tool with a speed changer to analyze the runs
     /// personally"). It plays a whole run on screen, as you would: the map's rooms, the rewards, the shops, the events and

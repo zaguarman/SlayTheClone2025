@@ -1,7 +1,7 @@
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>Puts a Slot Effect on a slot, replacing the one there. Static: it stays with the slot, not the creature in it.</summary>
     public class PlaceSlotEffectAction : IGameAction, ISourcedAction {
         /// <summary>The card that placed it (shown when a trap it laid goes off).</summary>

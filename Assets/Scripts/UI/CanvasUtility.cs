@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public static class CanvasUtility {
         /// <summary>
         /// The camera that renders the root canvas of <paramref name="element"/>, or null for a screen-space overlay canvas

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     [System.Serializable]
     public class ContainerSettings {
         [Header("Layout")]

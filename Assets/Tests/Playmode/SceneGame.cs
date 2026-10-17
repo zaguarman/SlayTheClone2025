@@ -9,10 +9,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 using Object = UnityEngine.Object;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// The real game scene, started the way a player gets it, for tests that drive the whole game: rules, turn flow,
     /// resolution playback and the views. Time runs faster, frames aren't capped and plain logs are muted, so the playback

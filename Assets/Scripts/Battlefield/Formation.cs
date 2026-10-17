@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The shape of a side's five slots (the user, 2026-10-15), as in a real war: the Vanguard alone in front (the wall that
     /// takes the melee), the two Flanks behind it (the shooters), and Headquarters at the back (the important people, hard to

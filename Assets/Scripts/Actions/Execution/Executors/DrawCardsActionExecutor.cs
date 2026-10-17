@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class DrawCardsActionExecutor : ActionExecutor<DrawCardsAction> {
         protected override void ExecuteAction(DrawCardsAction drawAction, ActionExecutionContext context) {
             var player = drawAction.GetPlayer();

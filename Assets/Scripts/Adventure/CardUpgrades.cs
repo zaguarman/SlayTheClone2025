@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Card upgrades (Slay the Spire's, the user 2026-10-16): at a rest site (and some events) a card of your deck is swapped
     /// for its "+" version, one better number. A creature gets +1 Attack and +1 Health; a spell, 1 more on each of its

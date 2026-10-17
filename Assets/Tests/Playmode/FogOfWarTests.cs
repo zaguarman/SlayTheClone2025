@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// Fog of War (GDD 2.5): what each side can see of the other's plans, hidden Slot Effects and Watchdogs, how Reveal and
     /// Revealed lift it, and how Watchdogs are blind to Concealed actions and ignore Encrypted ones. Switching the fog off

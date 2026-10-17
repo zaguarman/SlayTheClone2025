@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Borrowed Time ends (Die Another Day, the user 2026-10-16): at the Dusk of the Day it landed, once the Dusk's other
     /// actions are done. A creature at 0 Health is brought back to 1 and lives on; the status goes.

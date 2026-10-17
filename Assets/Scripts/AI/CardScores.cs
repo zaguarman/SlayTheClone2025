@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Every card's score in the latest AI balance study, as a tier (the user, 2026-10-17: filter the deck builder by Tier S, A,
     /// B, C, D "depending on the scores we have on the latest balancing runs"). The study writes them to

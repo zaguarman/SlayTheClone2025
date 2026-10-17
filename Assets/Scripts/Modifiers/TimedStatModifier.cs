@@ -1,7 +1,7 @@
 using System;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     // Represents a modifier that changes a creature's stats for a limited number of turns
     public class TimedStatModifier : StatModifier, ITimedModifier {
         public int DurationInTurns { get; private set; }

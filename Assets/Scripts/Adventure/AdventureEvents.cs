@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// What happens in an adventure's ? rooms (the user, 2026-10-16): an event, Slay the Spire style. A short scene and two
     /// or three choices; each one changes your Health, your EuroYuans or your deck, sometimes on a coin toss, and says what

@@ -5,7 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     public static class TestCategories {
         /// <summary>Tests of bugs that are known and not fixed yet: they fail until the bug is fixed.</summary>
         public const string KnownBug = "KnownBug";

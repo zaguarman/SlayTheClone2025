@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// A way to play for the Hard AI: how much it cares for each thing a card or an attack can do, against the others. The
     /// same planner with other weights goes face, controls the board, goes wide, hexes, turtles, spies or draws. 1 is the

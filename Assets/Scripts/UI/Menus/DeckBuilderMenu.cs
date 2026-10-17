@@ -3,10 +3,10 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static SlayTheClone.Enums;
-using static SlayTheClone.MenuWidgets;
+using static Zeitgeist.Enums;
+using static Zeitgeist.MenuWidgets;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The deck builder, opened from the title screen: your own decks, mixing any cards on offer (see <see cref="PlayerDecks"/>).
     /// On the left, your decks and New deck (which asks for its name at once), then the starter decks: open one to see its

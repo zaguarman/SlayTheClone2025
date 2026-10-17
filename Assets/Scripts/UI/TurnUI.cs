@@ -1,8 +1,8 @@
 using TMPro;
 using UnityEngine;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class TurnUI : UIComponent {
         [SerializeField] private TextMeshProUGUI turnText;
         private ITurnManager turnManager;

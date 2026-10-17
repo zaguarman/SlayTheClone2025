@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public abstract class CardContainer : UIComponent, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
         [SerializeField] protected ContainerSettings settings = new ContainerSettings();
         [SerializeField] protected bool acceptPlayer1Cards = true;

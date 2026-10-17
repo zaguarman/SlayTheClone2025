@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class PlayCardAction : IGameAction {
         private readonly ICard card;
         private readonly IPlayer owner;

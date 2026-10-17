@@ -12,28 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: DigitalSocietyDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Digital Society - Terminally Online
+  deckName: Pop Culture - Terminally Online
   cards:
-  - {fileID: 11400000, guid: 6dbc9d723fcaca744a265578375c3bcf, type: 2}
-  - {fileID: 11400000, guid: 6dbc9d723fcaca744a265578375c3bcf, type: 2}
-  - {fileID: 11400000, guid: a3b8c4ef47bae384d9867c7ac238e6a0, type: 2}
-  - {fileID: 11400000, guid: a3b8c4ef47bae384d9867c7ac238e6a0, type: 2}
-  - {fileID: 11400000, guid: 06d1730616bedb14bb00672f9cb6b1d0, type: 2}
-  - {fileID: 11400000, guid: 06d1730616bedb14bb00672f9cb6b1d0, type: 2}
-  - {fileID: 11400000, guid: 912bd0399cfd4844bacd0bdc6b342835, type: 2}
-  - {fileID: 11400000, guid: 912bd0399cfd4844bacd0bdc6b342835, type: 2}
-  - {fileID: 11400000, guid: fed2e051033dfec46808dfe59f733838, type: 2}
-  - {fileID: 11400000, guid: fed2e051033dfec46808dfe59f733838, type: 2}
-  - {fileID: 11400000, guid: 3f4f451c39d6daf4ea88007aa445281f, type: 2}
-  - {fileID: 11400000, guid: 3f4f451c39d6daf4ea88007aa445281f, type: 2}
-  - {fileID: 11400000, guid: fa76cfa50b9c9554eb816a4ce6f336a0, type: 2}
-  - {fileID: 11400000, guid: fa76cfa50b9c9554eb816a4ce6f336a0, type: 2}
-  - {fileID: 11400000, guid: eb78815adfb01f74daff1cbe042de925, type: 2}
-  - {fileID: 11400000, guid: eb78815adfb01f74daff1cbe042de925, type: 2}
-  - {fileID: 11400000, guid: b3d7fcfd7bb472d45ac0258083a97e24, type: 2}
-  - {fileID: 11400000, guid: de3adc60108efa04d920eaf39638a8ce, type: 2}
-  - {fileID: 11400000, guid: f2bf5369176d5fe43a56d06b7024f483, type: 2}
-  - {fileID: 11400000, guid: 41454336b8e16764d8897793b981ba6d, type: 2}
-  lastUpdated: 2026-10-14T11:17:52.9878478Z
+  - {fileID: 11400000, guid: ed6ce3e62ea574f439d28aa08cbc3175, type: 2}
+  - {fileID: 11400000, guid: ed6ce3e62ea574f439d28aa08cbc3175, type: 2}
+  - {fileID: 11400000, guid: bf805e91aaedf414aa5daad37038b1df, type: 2}
+  - {fileID: 11400000, guid: bf805e91aaedf414aa5daad37038b1df, type: 2}
+  - {fileID: 11400000, guid: 4110b2e9c48b7c647ad50b0da4aac2e1, type: 2}
+  - {fileID: 11400000, guid: 4110b2e9c48b7c647ad50b0da4aac2e1, type: 2}
+  - {fileID: 11400000, guid: 6d20c6c95200ec9458fb7249d816e5a8, type: 2}
+  - {fileID: 11400000, guid: 6d20c6c95200ec9458fb7249d816e5a8, type: 2}
+  - {fileID: 11400000, guid: 08ab3b63101b70e479279bc7dfd9943c, type: 2}
+  - {fileID: 11400000, guid: 08ab3b63101b70e479279bc7dfd9943c, type: 2}
+  - {fileID: 11400000, guid: 72d889c75d81a174b9f5b4284f478f9d, type: 2}
+  - {fileID: 11400000, guid: 72d889c75d81a174b9f5b4284f478f9d, type: 2}
+  - {fileID: 11400000, guid: 9647b2cdb2399ba4b932fbec10283879, type: 2}
+  - {fileID: 11400000, guid: 9647b2cdb2399ba4b932fbec10283879, type: 2}
+  - {fileID: 11400000, guid: 6e40f2c5ee002444685f395995da3303, type: 2}
+  - {fileID: 11400000, guid: 6e40f2c5ee002444685f395995da3303, type: 2}
+  - {fileID: 11400000, guid: f7730cc39efc66e439c94707b100bc7f, type: 2}
+  - {fileID: 11400000, guid: 6559f470c062bd94caeb4f75e0441938, type: 2}
+  - {fileID: 11400000, guid: 2b1d92e3b3d74bf4199c45f5b081fd0b, type: 2}
+  - {fileID: 11400000, guid: d402514b947314147883c34feabe6416, type: 2}
+  lastUpdated: 2026-10-17T14:17:55.2151600Z
   strategy: Swarm
   focus: 2

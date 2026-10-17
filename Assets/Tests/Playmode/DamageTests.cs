@@ -2,10 +2,10 @@ using System.Collections;
 using System.Linq;
 using NUnit.Framework;
 using UnityEngine.TestTools;
-using static SlayTheClone.Enums;
-using static SlayTheClone.Tests.TestCards;
+using static Zeitgeist.Enums;
+using static Zeitgeist.Tests.TestCards;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// Damage and healing land once, on the right target, in the right amount, and never go past their limits.
     /// Runs the real rules without the scene (see <see cref="TestGame"/>).

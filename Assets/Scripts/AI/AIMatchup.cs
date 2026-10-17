@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public static partial class AITournament {
         /// <summary>
         /// One deck against a faction's decks, for tuning a faction: each pairing played in both seats at each level, the

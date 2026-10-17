@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The card roulette turning on its own, to judge the <see cref="RouletteTuning"/> sliders: a creature with cards tucked
     /// under it shows its enlarged preview, and the wheel turns through its stack, one card at a time, round to the creature
@@ -240,7 +240,7 @@ namespace SlayTheClone {
 #if UNITY_EDITOR
     /// <summary>The gallery's controls (UI > Roulette Gallery): which sets, how long each card stays, pause, turn by hand, back, next.</summary>
     public class RouletteGalleryWindow : UnityEditor.EditorWindow {
-        private const string Prefs = "SlayTheClone.RouletteGallery.";
+        private const string Prefs = "Zeitgeist.RouletteGallery.";
 
         // Opening it starts it: Play is pressed if needed, and it begins once the game is up
         [UnityEditor.MenuItem("UI/Roulette Gallery")]

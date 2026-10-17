@@ -1,6 +1,6 @@
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class SpellData : CardData {
         public TargetType defaultTargetType;
 

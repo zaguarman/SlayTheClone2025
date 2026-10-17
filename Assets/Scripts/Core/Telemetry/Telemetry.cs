@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The telemetry's settings (Resources/TelemetrySettings, Debug > Telemetry > Settings): whether games are recorded, and
     /// where they're sent. Recording is local: every game is saved as a JSON line in the telemetry folder. Sending is off

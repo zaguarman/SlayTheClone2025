@@ -1,7 +1,7 @@
 using System.Linq;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class DiscardHandActionExecutor : ActionExecutor<DiscardHandAction> {
         protected override void ExecuteAction(DiscardHandAction discardAction, ActionExecutionContext context) {
             var player = discardAction.GetPlayer();

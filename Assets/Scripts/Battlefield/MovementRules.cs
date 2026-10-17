@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>Where a move ends up on the board as it is now: the mover's slot, and the creature it pushes or swaps with, if any.</summary>
     public readonly struct MoveOutcome {
         public BoardSlot End { get; }        // Where the mover ends up; its own slot if it can't move at all
@@ -52,8 +52,12 @@ namespace SlayTheClone {
     /// A Rooted creature neither moves nor is moved.
     /// </summary>
     public static class MovementRules {
-        /// <summary>Whether a creature is Rooted: it can't be moved or swapped. Set by the game's modifiers (no status: never).</summary>
-        public static Func<ICreature, bool> IsRooted = _ => false;
+        /// <summary>
+        /// Whether a creature is Rooted: it can't be moved or swapped. The Rooted status, or a Clingy Ex facing it. Read from the
+        /// game's own modifiers (null: no status): the AI's games run side by side, so nothing static (the user, 2026-10-17).
+        /// </summary>
+        public static bool IsRooted(ICreature creature, IModifierManager modifiers) =>
+            creature != null && ((modifiers?.HasStatusEffect(creature, StatusEffectType.Rooted) ?? false) || Abilities.IsPinned(creature));
 
         // A move worked out on a row of occupants (index = slot), so it can run on the board or on a copy of it
         private readonly struct RowOutcome {
@@ -99,18 +103,18 @@ namespace SlayTheClone {
         /// Where the move would end up if it resolved now. Blocked on the way, the creature stops at the furthest empty slot
         /// it can still reach toward its destination (GDD 2.4 Blocked Before It Resolves); if there's none, it stays put.
         /// </summary>
-        public static MoveOutcome Resolve(ICreature creature, BoardSlot to, MoveKind kind) {
+        public static MoveOutcome Resolve(ICreature creature, BoardSlot to, MoveKind kind, IModifierManager modifiers = null) {
             var from = creature?.Slot;
             if (from == null || to == null || to == from || to.Owner != from.Owner) return new MoveOutcome(from, to == from);
 
             var row = from.Owner.Battlefield;
-            var outcome = Resolve(Occupants(row), from.Index, to.Index, kind, SwapsAnywhere(creature));
+            var outcome = Resolve(Occupants(row), from.Index, to.Index, kind, SwapsAnywhere(creature), modifiers);
             return new MoveOutcome(row[outcome.End], outcome.Reaches,
                 outcome.PartnerEnd >= 0 ? to.OccupyingCreature : null,
                 outcome.PartnerEnd >= 0 ? row[outcome.PartnerEnd] : null);
         }
 
-        private static RowOutcome Resolve(ICreature[] row, int from, int to, MoveKind kind, bool swapsAnywhere) {
+        private static RowOutcome Resolve(ICreature[] row, int from, int to, MoveKind kind, bool swapsAnywhere, IModifierManager modifiers) {
             bool occupied = row[to] != null;
             var reachable = Reachable(row, from, overCreatures: kind == MoveKind.Leapfrog);
             switch (kind) {
@@ -118,7 +122,7 @@ namespace SlayTheClone {
                     // In melee range (a step away), or anywhere with the Swap keyword, over the creatures between; a Rooted
                     // one can't be swapped. With nobody there any more, it walks there like any move
                     if (!occupied) return reachable.Contains(to) || swapsAnywhere ? new RowOutcome(to, true) : Closest(row, from, to, reachable);
-                    if ((swapsAnywhere || Formation.AreNeighbours(from, to)) && !IsRooted(row[to])) return new RowOutcome(to, true, from);
+                    if ((swapsAnywhere || Formation.AreNeighbours(from, to)) && !IsRooted(row[to], modifiers)) return new RowOutcome(to, true, from);
                     return Closest(row, from, to, reachable);
 
                 default: // Walk along empty slots; Leapfrog to any empty slot, over creatures
@@ -193,7 +197,7 @@ namespace SlayTheClone {
         /// Plays the row's planned moves out on a copy of the board, in the order the game would resolve them, to show
         /// the final formation while planning. A move that doesn't reach its destination is blocked.
         /// </summary>
-        public static FormationPreview Preview(IReadOnlyList<BoardSlot> row, IEnumerable<PlannedMove> plannedMoves) {
+        public static FormationPreview Preview(IReadOnlyList<BoardSlot> row, IEnumerable<PlannedMove> plannedMoves, IModifierManager modifiers = null) {
             var occupants = Occupants(row);
             int IndexOf(ICreature creature) => System.Array.IndexOf(occupants, creature);
 
@@ -203,7 +207,7 @@ namespace SlayTheClone {
                 var leaving = new HashSet<ICreature>(pending.Select(m => m.Creature));
                 RowOutcome OutcomeOf(PlannedMove m) => m.To.Index == IndexOf(m.Creature)
                     ? new RowOutcome(m.To.Index, true)
-                    : Resolve(occupants, IndexOf(m.Creature), m.To.Index, m.Kind, SwapsAnywhere(m.Creature));
+                    : Resolve(occupants, IndexOf(m.Creature), m.To.Index, m.Kind, SwapsAnywhere(m.Creature), modifiers);
                 bool Works(PlannedMove m) {
                     var outcome = OutcomeOf(m);
                     var partner = outcome.PartnerEnd >= 0 ? occupants[m.To.Index] : null;
@@ -242,7 +246,7 @@ namespace SlayTheClone {
             moves.Add(new PlannedMove(creature, to, kind)); // A new plan replaces the creature's old one, and is planned last
             bool blocked = Preview(creature.Slot.Owner.Battlefield, moves).Blocked.Contains(creature);
             string hint = !blocked ? null
-                : kind == MoveKind.Swap && to.OccupyingCreature != null && IsRooted(to.OccupyingCreature) ? "Rooted: it can't be moved"
+                : kind == MoveKind.Swap && to.OccupyingCreature != null && IsRooted(to.OccupyingCreature, queue?.Modifiers) ? "Rooted: it can't be moved"
                 : kind switch {
                     MoveKind.Walk => "needs Leapfrog",
                     MoveKind.Swap => "too far: needs Swap",

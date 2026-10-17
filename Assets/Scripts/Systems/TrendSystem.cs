@@ -1,9 +1,9 @@
 using System.Linq;
 using UnityEngine.Events;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The Trend (GDD 4.2 Trends): what the world is into right now, one rule for the whole board, set by a card for some
     /// Days until another Trend replaces it. Zeitgeist's signature: the mood of the times changes the rules for everyone.

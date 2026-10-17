@@ -1,7 +1,7 @@
 using System.Linq;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class BattlefieldCombatActionExecutor : ActionExecutor<BattlefieldCombatAction> {
         protected override void ExecuteAction(BattlefieldCombatAction combatAction, ActionExecutionContext context) {
             var attacker = combatAction.GetAttacker();
@@ -186,7 +186,7 @@ namespace SlayTheClone {
         private static bool Dodge(ICreature dodger, ActionExecutionContext context) {
             var from = dodger.Slot;
             var row = from?.Owner?.Battlefield;
-            if (row == null || dodger.Owner == null || MovementRules.IsRooted(dodger)) return false;
+            if (row == null || dodger.Owner == null || MovementRules.IsRooted(dodger, context.ModifierManager)) return false;
             string key = $"{dodger.CopyId}#dodge#{context.TurnClock.TurnNumber}";
             if (dodger.Owner.UsedOncePerCombat.Contains(key)) return false;
             var to = Formation.Neighbours(from.Index).Where(i => i < row.Count).Select(i => row[i]).FirstOrDefault(s => !s.IsOccupied())

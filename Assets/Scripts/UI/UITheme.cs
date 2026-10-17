@@ -3,9 +3,9 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The game's look in one place: a midnight-navy table with brass trim, drawn in flat colors and crisp lines
     /// (no blurs or glows). Colors, the procedurally drawn sprites every panel uses (so the project needs no UI
@@ -62,7 +62,7 @@ namespace SlayTheClone {
         public static Color FactionColor(Faction faction) => faction switch {
             Faction.Corporate => Hex(0x3FBF8F),     // Money green
             Faction.Statecraft => Hex(0xD9483B),    // Propaganda red
-            Faction.Zeitgeist => Hex(0xD95DD0),     // Vaporwave magenta
+            Faction.PopCulture => Hex(0xD95DD0),    // Vaporwave magenta
             Faction.Myth => Hex(0xC9A23D),
             Faction.ShadowOps => Hex(0x7C8A99),
             Faction.Tech => Hex(0x3DA9D6),
@@ -86,7 +86,7 @@ namespace SlayTheClone {
             Faction.ShadowOps => "?",       // What it plans shows as ???
             Faction.Tech => "λ",            // Code
             Faction.DigitalSociety => "@",  // Your handle
-            Faction.Zeitgeist => "☺",       // The mood of the times
+            Faction.PopCulture => "☺",      // The mood of the times
             Faction.Mind => "Ψ",            // Psyche
             Faction.Utopia => "∞",          // Endless progress
             _ => "~"

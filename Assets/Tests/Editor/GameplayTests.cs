@@ -4,9 +4,9 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// An overview of how the game plays, one test per area: cards moving between zones, combat, and the board.
     /// Each runs the real rules headless (see <see cref="TestGame"/>); actions are queued, then resolved like an end of turn.

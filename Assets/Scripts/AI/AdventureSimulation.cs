@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Adventures played by the AI (the user, 2026-10-16: "run adventures with different factions and tell me which have more
     /// problems"). Each run starts with its faction's starter deck and 60 Health and walks the map at random along the paths;

@@ -1,6 +1,6 @@
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// A condition on a battlefield slot ('Slot Effects Compendium'). It isn't a status: it stays with the slot, not the
     /// creature. Whoever applied it controls it. Hidden ones are secret from the other side until they trigger.

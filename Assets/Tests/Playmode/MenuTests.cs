@@ -8,10 +8,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using UnityEngine.UI;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 using Object = UnityEngine.Object;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// The main menu as a player uses it: Play opens the match setup, where you pick your deck, an opponent and their deck,
     /// and Start begins a game with exactly that; Cards opens the card gallery, Decks the deck builder, Keywords the keyword

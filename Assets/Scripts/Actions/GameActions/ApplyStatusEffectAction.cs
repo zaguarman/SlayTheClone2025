@@ -1,7 +1,7 @@
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class ApplyStatusEffectAction : IGameAction {
         private readonly ICreature targetCreature;
         private readonly StatusEffectType statusType;

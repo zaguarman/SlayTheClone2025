@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class BattlefieldCombatHandler : IBattlefieldCombatHandler {
         private readonly IActionsQueue actionsQueue;
         private readonly IModifierManager modifierManager;

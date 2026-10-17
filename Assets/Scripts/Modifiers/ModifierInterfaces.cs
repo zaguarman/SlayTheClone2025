@@ -1,6 +1,6 @@
 using System;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     // Enum to define how a stat modifier calculates its effect
     public enum ModifierCalculationType {
         Flat,       // Adds a flat value (e.g., +5 Attack)

@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class DoomedSentenceActionExecutor : ActionExecutor<DoomedSentenceAction> {
         protected override void ExecuteAction(DoomedSentenceAction sentence, ActionExecutionContext context) {
             var creature = sentence.GetCreature();

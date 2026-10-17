@@ -1,9 +1,9 @@
 using System.Linq;
 using NUnit.Framework;
-using static SlayTheClone.Enums;
-using static SlayTheClone.Tests.TestCards;
+using static Zeitgeist.Enums;
+using static Zeitgeist.Tests.TestCards;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// The order a Day resolves in (GDD 3.7): layer by layer (moves, summons, spells, then abilities and attacks),
     /// and inside a layer by Speed, then the tie-breakers. Runs the real rules without the scene (see <see cref="TestGame"/>).

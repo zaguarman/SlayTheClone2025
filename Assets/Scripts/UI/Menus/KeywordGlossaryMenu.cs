@@ -4,10 +4,11 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using static SlayTheClone.MenuWidgets;
+using static Zeitgeist.MenuWidgets;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The keyword glossary, opened from the title screen: every keyword by section on the left; the chosen one's explanation
     /// on the right, whose keywords can be clicked to read theirs, and the cards that print it (worked out from the cards
@@ -81,6 +82,17 @@ namespace SlayTheClone {
             if (listed.Count == 0) return;
             int at = listed.IndexOf(Shown);
             ShowKeyword(listed[((at < 0 ? 0 : at + step) % listed.Count + listed.Count) % listed.Count]);
+        }
+
+        /// <summary>The section after (or before) the open one, round the end, showing its first keyword.</summary>
+        public void OpenNextSection(int step) {
+            var sections = Keywords.Groups;
+            if (sections.Count == 0) return;
+            int at = OpenSection != null ? sections.IndexOf(OpenSection) : -1;
+            string next = sections[((at < 0 ? 0 : at + step) % sections.Count + sections.Count) % sections.Count];
+            var first = order.FirstOrDefault(k => Keywords.Get(k).Group == next);
+            if (first != null) ShowKeyword(first);
+            Open(next);
         }
 
         /// <summary>Opens the section (closing the one open) and, unless told otherwise, scrolls its header to the top.</summary>
@@ -162,6 +174,18 @@ namespace SlayTheClone {
         protected override void Update() {
             base.Update();
             if (!IsOpen || usedBy == null) return;
+            // The keyboard and the wheel (the user, 2026-10-17): Up and Down walk the keywords listed, Left and Right the sections,
+            // the wheel over the entry turns its pages; typing in the search takes the keys
+            if (filter == null || !filter.isFocused) {
+                if (GameInput.KeyPressed(Key.DownArrow)) ShowNext(1);
+                else if (GameInput.KeyPressed(Key.UpArrow)) ShowNext(-1);
+                else if (GameInput.KeyPressed(Key.RightArrow) || GameInput.KeyPressed(Key.PageDown)) OpenNextSection(1);
+                else if (GameInput.KeyPressed(Key.LeftArrow) || GameInput.KeyPressed(Key.PageUp)) OpenNextSection(-1);
+            }
+            float wheel = GameInput.WheelNotches;
+            if (wheel != 0f && title != null && RectTransformUtility.RectangleContainsScreenPoint((RectTransform)title.transform.parent, GameInput.PointerPosition, null)) {
+                ShowNext(wheel < 0f ? 1 : -1);
+            }
             int link = TMP_TextUtilities.FindIntersectingLink(usedBy, GameInput.PointerPosition, null);
             string id = link >= 0 ? usedBy.textInfo.linkInfo[link].GetLinkID() : null;
             string name = id != null && id.StartsWith(CardLink) ? id.Substring(CardLink.Length) : null;

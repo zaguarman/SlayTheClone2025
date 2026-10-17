@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Scrolls a ScrollRect with the mouse wheel whenever the pointer is over it, whatever is under the pointer inside it
     /// (buttons, cards). It reads the wheel itself, so it works however the input events are routed; the ScrollRect's own

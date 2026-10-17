@@ -1,0 +1,70 @@
+MODDING (2026-10-17)
+
+The game loads cards and decks from JSON files outside the project and offers them beside its own: in the deck list, the
+card gallery, the glossary's "On cards", and as opponents. No build, no editor: write a file, start the game.
+
+WHERE
+  • Mods/ next to the project folder (in the editor and a desktop build). The game ships Mods/Example/example.json as a model.
+  • Mods/ under the game's data folder (Application.persistentDataPath: on Windows,
+    %USERPROFILE%\AppData\LocalLow\<Company>\Zeitgeist\Mods).
+  Every .json file in those folders (and their subfolders) is a mod file. Pictures are PNG or JPG files beside it.
+  The browser build has no file system, so mods are for the editor and desktop builds.
+
+THE FILE
+  {
+    "mod": "My Mod",                      the mod's name: it prefixes its cards' ids and names the opponent of its decks
+    "author": "me",
+    "cards": [ ... ],
+    "decks": [ ... ]
+  }
+
+A CARD
+  {
+    "name": "Office Printer",
+    "type": "creature",                   creature or spell
+    "faction": "Corporate",               Corporate, Statecraft, PopCulture, Myth, ShadowOps, Tech, Mind, Utopia (None for neutral)
+    "flavor": "Out of toner.",            the line under the picture
+    "notes": "What it's for",             design notes, not printed
+    "art": "office_printer.png",          a picture beside the file; 352 x 200 reads best; none shows the faction's frame alone
+    "attack": 1, "health": 7, "speed": 1, "deploy": 0,          a creature's numbers; deploy is its Deployment Time
+    "ability": "Litigious",               a creature's ability by its code name: the glossary's name without spaces
+                                          (HunkerDown, BombDisposal, NextQuestion, SuckerPunch for Backstab...)
+    "movement": "Leapfrog",               Leapfrog or Swap
+    "gift": false,                        a creature played into an empty enemy slot
+    "target": "EnemyCreatures",           a spell's aim: Player, Enemy, AllCreatures, FriendlyCreatures, EnemyCreatures
+    "singleUse": false, "discard": 0, "sacrifice": 0, "prophecy": 0,   the costs and Prophecy N
+    "effects": [ { "trigger": "OnPlay", "actions": [ ... ] } ]
+  }
+  Triggers: OnPlay (a creature's Arrival, a spell's cast), OnDeath, OnDamage, StartOfTurn, EndOfTurn, OnRevealed, OnReplaced,
+  OnDiscarded. A spell's effects are OnPlay.
+
+AN ACTION
+  { "action": "Damage", "value": 2, "target": "EnemyCreatures", "modifier": "Opposite" }
+  action:    Damage, Heal, Draw, Summon, Armor, Stun, ModifyStat, ApplyStatus, Cleanse, PlaceSlotEffect, CleanseSlot,
+             DelayDeployment, Reveal, SetTrend, Destroy, Push, Pull, Shuffle, Spin, SwapPositions, CopyStats, SwapStats,
+             TradeStats, Mimic, DoubleDown, SplitPain, SwapAbilities, GrantAbility, Seal, ReturnToHand, Vanish...
+             (the names in Enums.ActionType)
+  target:    Player (you), Enemy (the enemy player), AllCreatures, FriendlyCreatures, EnemyCreatures, Self
+  modifier:  None, Opposite (the creature facing it), WithAdjacent, AllSameTypeTargets (every one), Random, Strongest,
+             Beside, AlliesOfTarget, DroppedSide; several with |
+  ApplyStatus: "status": "Burned", "days": 2, "potency": 1   (Exhausted, Blessed, Rooted, Doomed, Looping, Stalled, Leeched...)
+  ModifyStat:  "value": 2, "attackStat": true, "healthStat": false, "days": 0 (0: until it leaves play)
+  PlaceSlotEffect: "slotEffect": "Landmine", "value": 3, "days": 0
+  SetTrend:    "trend": "RushHour", "days": 3
+  GrantAbility: "ability": "Berserk"
+  requires:    a requisite on the target: Revealed, Deploying, Online (a Pop Culture creature)...
+
+A DECK
+  { "name": "Example - Paper Jam", "opponent": "The Office Manager", "tagline": "...", "strategy": "Control",
+    "cards": [ "Office Printer", "Office Printer", "Reply All", "Fat Tony", ... ] }
+  Card names are the mod's own or any of the game's, so a mod can be a deck list alone. 20 to 60 cards. A mod card with a
+  game card's name takes its place in the mod's decks.
+
+WHAT GOES WRONG
+  A name the game doesn't know (an action, a status, a faction) is reported in the console as a warning and a fallback is
+  used; a card with no name is skipped; a deck short of 20 cards isn't offered. The card's printed text is built from its
+  actions by the game, like every other card's, so what you read on the card is what it does.
+
+NOT YET
+  New factions, abilities or statuses (those need code), pictures in SVG, mods in the browser build, mod cards in the
+  adventure's rewards.

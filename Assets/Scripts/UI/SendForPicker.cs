@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Send For on screen: when the player at the screen plays a card that sends for one (Multipass, Omen Reading...), the
     /// deck window opens on what it can fetch; clicking one picks it (see <see cref="IPlayer.SendForPicks"/>). It can't be

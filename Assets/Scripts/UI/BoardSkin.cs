@@ -1,9 +1,9 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Dresses the game scene as a card table (see <see cref="UITheme"/>): a patterned table whose two halves take
     /// their owners' faction colors, a brass rule between them, each side's mat and slot markers, a plaque per player

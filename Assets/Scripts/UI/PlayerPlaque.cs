@@ -2,9 +2,9 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// A player's nameplate, Pokémon style: faction emblem, name, an HP bar that drains green to yellow to red,
     /// the health numbers (the scene's health text, which <see cref="PlayerUI"/> keeps up to date), and how many

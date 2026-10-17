@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Keeps this rect centred on another one, whatever the layout does to it: the world behind the title ZEITGEIST (the user,
     /// 2026-10-17) sits out of the title screen's layout and follows the title as the menu builds around it.

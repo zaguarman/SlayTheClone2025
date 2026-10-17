@@ -4,10 +4,10 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.MenuWidgets;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.MenuWidgets;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The screen between the title and the game: pick your deck and the opponent you face, who brings their own deck, and
     /// who plays: you against the AI, both players on this screen (hot seat), or the AI against itself.

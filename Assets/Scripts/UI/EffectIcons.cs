@@ -1,6 +1,6 @@
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Names of the icons in the effect icon sprite asset (Assets/Art/Icons/EffectIcons.asset, TMP's default sprite asset),
     /// so any TextMeshPro text can show them inline. Built by Cards > Build Effect Icons.

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public interface ITarget {
         string TargetId { get; }
         bool IsValidTarget();

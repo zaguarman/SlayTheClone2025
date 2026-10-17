@@ -1,8 +1,8 @@
 using System;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The game's event hub (see <see cref="IGameMediator"/>). A plain object created by the bootstrap, so it lives
     /// exactly as long as the game that holds it.

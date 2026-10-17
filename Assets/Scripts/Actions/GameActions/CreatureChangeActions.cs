@@ -1,8 +1,8 @@
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Effects that change one creature after another, or a creature's place: copying stats (Wannabe), stealing stat raises
     /// (Credit Grab), swapping places (Shell Game) and gaining an ability. Any card can carry them: a creature's ability or
@@ -185,7 +185,7 @@ namespace SlayTheClone {
             var row = from.Owner.Battlefield;
             var to = row[Formation.Partner(from.Index)];
             var partner = to.OccupyingCreature;
-            if (MovementRules.IsRooted(from.OccupyingCreature) || MovementRules.IsRooted(to.OccupyingCreature)) return; // Rooted: nothing moves it
+            if (MovementRules.IsRooted(from.OccupyingCreature, context.ModifierManager) || MovementRules.IsRooted(to.OccupyingCreature, context.ModifierManager)) return; // Rooted: nothing moves it
             BoardSlot.Swap(from, to);
             Log($"{creature.Name} trades places with {partner?.Name ?? "an empty slot"}", LogTag.Effects | LogTag.Creatures);
             NotifyBattlefieldsChanged(context, from.Owner, from.Owner);

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Builds the printed text of a card from its data, in the style of Magic: The Gathering and Slay the Spire:
     /// a line of keywords first (movement, ability, and keyword abilities like Counterattack or Decay 1 for effects that
@@ -23,7 +23,8 @@ namespace SlayTheClone {
         public static string FactionName(Faction faction) {
             switch (faction) {
                 case Faction.ShadowOps: return "Shadow Ops.";
-                case Faction.DigitalSociety: return "Digital Society";
+                case Faction.DigitalSociety: return "Digital Society"; // Merged into Pop Culture (2026-10-17)
+                case Faction.PopCulture: return "Pop Culture";
                 default: return faction.ToString();
             }
         }
@@ -432,7 +433,7 @@ namespace SlayTheClone {
             TargetRequisite.Outnumbered => " if you have more creatures than its side",
             TargetRequisite.AttackAtMost => $" with {action.value} Attack or less",
             TargetRequisite.Deploying => $" if it's still deploying ({Keywords.Link("Deployment Time")})",
-            TargetRequisite.Online => " if it's Digital Society",
+            TargetRequisite.Online => " if it's Pop Culture",
             TargetRequisite.OutsideHeadquarters => " outside Headquarters",
             _ => ""
         };

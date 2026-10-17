@@ -1,4 +1,4 @@
-namespace SlayTheClone {
+namespace Zeitgeist {
     public interface IEntity : ITarget {
         string Name { get; }
     }

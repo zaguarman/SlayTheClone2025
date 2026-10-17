@@ -71,7 +71,7 @@ class Store:
 
 def make_handler(store, key):
     class Handler(BaseHTTPRequestHandler):
-        server_version = "SlayTheCloneTelemetry/1"
+        server_version = "ZeitgeistTelemetry/1"
 
         def _reply(self, status, payload):
             body = json.dumps(payload).encode("utf-8")
@@ -123,7 +123,7 @@ def make_handler(store, key):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="SlayTheClone telemetry collector")
+    parser = argparse.ArgumentParser(description="Zeitgeist telemetry collector")
     parser.add_argument("--host", default="127.0.0.1", help="the address to listen on (0.0.0.0 for every one)")
     parser.add_argument("--port", type=int, default=8787)
     parser.add_argument("--out", default=os.path.join(os.path.dirname(__file__), "..", "TelemetryData"), help="where the records are kept")

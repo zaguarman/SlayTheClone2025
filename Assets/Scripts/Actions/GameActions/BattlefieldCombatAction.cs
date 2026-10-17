@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class BattlefieldCombatAction : IGameAction {
         private readonly ICreature attacker;
         private readonly BoardSlot targetSlot;

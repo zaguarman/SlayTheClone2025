@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>An adventure's relics (Slay the Spire's): kept for the whole run, each one rule that's always on. New ones go last.</summary>
     public enum Relic {
         None,

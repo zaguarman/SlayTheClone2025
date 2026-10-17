@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The game's playback speed while it plays in the editor (UI > Playback): slow the Day down to watch what resolves, or
     /// speed it up to get through turns. It sets the time scale, so everything timed by the game follows it; the pause menu

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// What Slot Effects do (GDD 2.4 Slot Effects, 'Slot Effects Compendium'). Triggered ones are environment actions:
     /// they resolve as soon as they're queued, before anything else (GDD 3.7). "1 Trigger" ones are removed the moment their

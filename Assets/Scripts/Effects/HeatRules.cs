@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Heat Signature ('Status Effects Compendium'): every effect with a randomly chosen target goes to the creature with the
     /// most Heat among those it can affect; random damage and redirected attacks to the one with the most Heat on either

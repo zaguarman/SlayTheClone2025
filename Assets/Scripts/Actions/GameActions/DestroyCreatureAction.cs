@@ -1,4 +1,4 @@
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The last step of the Creature Death Sequence (GDD 3.9): unless something saved it, the creature is destroyed,
     /// goes to its owner's discard pile, and its OnDied effects are queued.

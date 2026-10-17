@@ -1,8 +1,8 @@
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Mimic (the user, 2026-10-17, Pokémon's Ditto: Monkey See, Monkey Do): a fresh copy of the target creature, from its
     /// card, appears in the slot facing it on the caster's side. Whatever stands there is replaced (discarded, as any summon

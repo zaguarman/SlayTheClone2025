@@ -4,10 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Events;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>The layers every resolution pass goes through, in this order (GDD 3.7 Resolution Order).</summary>
     // LateArrivals: summons that replace a creature only once the attacks are over (Sorry I'm Late, He Protec)
     public enum ResolutionLayer { Movement, Summon, Spell, AbilityAndAttack, LateArrivals }
@@ -394,7 +394,7 @@ namespace SlayTheClone {
                 .Where(c => c != null && executionContext.ModifierManager.CanAct(c)).ToHashSet();
 
             bool Works(Entry entry) => !(entry.Action is MoveCreatureAction move)
-                || MovementRules.WorksNow(MovementRules.Resolve(move.GetCreature(), move.GetToSlot(), move.Kind), leaving);
+                || MovementRules.WorksNow(MovementRules.Resolve(move.GetCreature(), move.GetToSlot(), move.Kind, Modifiers), leaving);
             return moves.FirstOrDefault(Works) ?? moves.First();
         }
 

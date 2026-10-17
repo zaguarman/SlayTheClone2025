@@ -120,7 +120,7 @@ Dusk (End of Day)
 
 Encrypted (Counter-Intelligence)
     • What it is: Protection for a creature's actions. Watchdogs ignore actions from an Encrypted creature, and no charge is spent.
-    • Who uses it: the factions that run on computers: Shadow Ops., Digital Society, Corporate, Statecraft and Zeitgeist. A good status: a Cleanse leaves it, a Purge removes it.
+    • Who uses it: the factions that run on computers: Shadow Ops., Pop Culture, Corporate and Statecraft. A good status: a Cleanse leaves it, a Purge removes it.
 
 • Fixed Targeting / Fixed: (Targeting Keyword Prefix):
     • What it is: Aims an effect at whatever creature is in a chosen slot when the action resolves. The default for effects aimed at an enemy slot.
@@ -355,7 +355,7 @@ All creature and spell cards come from one big shared pool, and abilities work t
 
 3.1 Factions
 
-Every card belongs to exactly one faction: Shadow Ops., Statecraft, Myth, Corporate, Digital Society, Zeitgeist, Mind, Tech, or Utopia.
+Every card belongs to exactly one faction: Shadow Ops., Statecraft, Myth, Corporate, Pop Culture, Mind, Tech, or Utopia. (Pop Culture is Zeitgeist and Digital Society as one, since 2026-10-17: the name Zeitgeist is the game's.)
 You can (and should!) mix cards from different factions when building your deck, similar to color combinations in Magic: The Gathering. Faction themes, mechanics and matchups are described in the 'Faction Compendium'.
 • Deck Builder (until runs exist): the main menu's Decks screen makes decks from any cards on offer, mixing factions freely: 20 to 40 cards, at most 2 copies of each. The starter decks are listed there too, to look at and copy as a start. Decks are saved as they change. Once complete, the match setup offers a deck to either side, next to the starter decks. The Card Gallery shows the cards faction by faction.
 
@@ -387,7 +387,7 @@ Digital Society · virality & the mob
     Pays with: exposure (its own creatures gain Revealed or Heat Signature)
     Can't: have big creatures, Heavy, or Persistent Stat Modifications
 
-Zeitgeist · moods of modern life
+Pop Culture · moods of modern life, online and off (was Zeitgeist and Digital Society)
     Pays with: self-harm (damage or statuses on its own creatures)
     Can't: use Intelligence
 

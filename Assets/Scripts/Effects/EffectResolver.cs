@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The one interpreter of card effects. Creatures (when a trigger fires), spells (when played) and attacks
     /// (chain and spread add-ons) all turn their <see cref="EffectAction"/>s into queued game actions here,
@@ -413,7 +413,7 @@ namespace SlayTheClone {
             TargetRequisite.Outnumbered => creature?.Owner?.Opponent != null && CreatureCount(creature.Owner) < CreatureCount(creature.Owner.Opponent),
             TargetRequisite.AttackAtMost => creature != null && creature.Attack <= value,
             TargetRequisite.Deploying => creature != null && !creature.IsOperative,
-            TargetRequisite.Online => creature?.SourceData?.faction == Faction.DigitalSociety,
+            TargetRequisite.Online => creature?.SourceData?.faction == Faction.PopCulture,
             TargetRequisite.OutsideHeadquarters => creature?.Slot != null && Formation.PositionOf(creature.Slot.Index) != Formation.Position.Headquarters,
             _ => true
         };

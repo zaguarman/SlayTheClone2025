@@ -1,9 +1,9 @@
 using System.Linq;
 using NUnit.Framework;
-using static SlayTheClone.Enums;
-using static SlayTheClone.Tests.TestCards;
+using static Zeitgeist.Enums;
+using static Zeitgeist.Tests.TestCards;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// The board: one intent per creature a Day, and what attacks, spells and effects hit.
     /// Runs the real rules without the scene (see <see cref="TestGame"/>).
@@ -59,7 +59,7 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual(Player.StartingHealth - 3, p2.Health, "...or that side's player on an empty slot");
             // An effect that requires its target to be of a faction: Cyberpsychosis hits Digital Society harder
             var trollData = game.Creature("Troll", 0, 10);
-            trollData.faction = Faction.DigitalSociety;
+            trollData.faction = Faction.PopCulture;
             var troll = game.Summon(p2, trollData, 2);
             var psycho = game.Spell("Psycho", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.EnemyCreatures));
             psycho.effects[0].actions.Add(new EffectAction { actionType = ActionType.Damage, value = 3, targetType = TargetType.EnemyCreatures, requires = TargetRequisite.Online });

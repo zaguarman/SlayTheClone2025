@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The table between the two hands: both battlefields and the river between them. A card that plays on either side
     /// alike (a Trend, or a spell that does something to both sides) can be dropped anywhere here, not only on a

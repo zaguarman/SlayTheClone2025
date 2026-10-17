@@ -2,10 +2,10 @@ using System.Collections;
 using System.Linq;
 using NUnit.Framework;
 using UnityEngine.TestTools;
-using static SlayTheClone.Enums;
-using static SlayTheClone.Tests.TestCards;
+using static Zeitgeist.Enums;
+using static Zeitgeist.Tests.TestCards;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// Each ability trigger fires when it should, exactly once, and never when it shouldn't.
     /// Runs the real rules without the scene (see <see cref="TestGame"/>); turn tests use the real turn flow.

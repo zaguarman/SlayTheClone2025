@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>Activates a Watchdog when it resolves (GDD 3.11: Watchdogs are created through the queue).</summary>
     public class CreateWatchdogAction : IGameAction {
         public WatchdogSpec Spec { get; }

@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class HealCreatureAction : IGameAction, ISourcedAction {
         public ICard Source { get; set; }
         private readonly ICreature target;

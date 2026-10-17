@@ -1,6 +1,6 @@
 {
     "name": "Tests",
-    "rootNamespace": "SlayTheClone.Tests",
+    "rootNamespace": "Zeitgeist.Tests",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",

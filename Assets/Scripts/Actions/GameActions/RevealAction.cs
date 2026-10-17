@@ -1,7 +1,7 @@
 using System.Linq;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Reveal (GDD 2.5 Scan): a one-time look at hidden information, for the player who cast it. Aimed at a slot it shows the
     /// slot's hidden Slot Effect, the creature there (what it is, for good, and what it plans this Day) and what is being

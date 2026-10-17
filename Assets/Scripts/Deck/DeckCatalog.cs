@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// What the main menu offers: the decks you can play and the opponents you can face, each with the deck they bring.
     /// The opponent's deck can still be swapped for any deck in the list.
@@ -30,8 +30,17 @@ namespace SlayTheClone {
 
         public CardController CardPrefab => cardPrefab;
 
-        public IReadOnlyList<DeckScriptableObject> Decks => decks.Where(d => d != null).ToList();
-        public IReadOnlyList<Opponent> Opponents => opponents.Where(o => o != null && o.deck != null).ToList();
+        // Mods (the user, 2026-10-17): decks and opponents loaded from files when the menu opens, never saved in the asset
+        [NonSerialized] private readonly List<DeckScriptableObject> modDecks = new List<DeckScriptableObject>();
+        [NonSerialized] private readonly List<Opponent> modOpponents = new List<Opponent>();
+
+        public void AddMod(IEnumerable<DeckScriptableObject> moddedDecks, IEnumerable<Opponent> moddedOpponents) {
+            modDecks.AddRange(moddedDecks.Where(d => d != null));
+            modOpponents.AddRange(moddedOpponents.Where(o => o?.deck != null));
+        }
+
+        public IReadOnlyList<DeckScriptableObject> Decks => decks.Where(d => d != null).Concat(modDecks).ToList();
+        public IReadOnlyList<Opponent> Opponents => opponents.Where(o => o != null && o.deck != null).Concat(modOpponents).ToList();
         public IReadOnlyList<DeckScriptableObject> TestDecks => testDecks.Where(d => d != null).ToList();
         /// <summary>Everything a player can pick: the faction decks, then the test decks.</summary>
         public IReadOnlyList<DeckScriptableObject> AllDecks => Decks.Concat(TestDecks).ToList();

@@ -3,10 +3,10 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static SlayTheClone.Enums;
-using static SlayTheClone.MenuWidgets;
+using static Zeitgeist.Enums;
+using static Zeitgeist.MenuWidgets;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// A panel of printed cards in a scrolling grid, with a title above them: the card gallery's and the deck builder's.
     /// The cards fill the width in a set number of columns, as big as that allows (see <see cref="CardColumns"/>). Hover a

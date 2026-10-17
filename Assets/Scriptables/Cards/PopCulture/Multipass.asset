@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Name: Multipass
+  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
+  cardId: 11925f3f-8689-4e58-a248-dc3a518efd6f
+  cardName: Multipass
+  description: Leeloo Dallas. Multipass.
+  cardType: 1
+  faction: 7
+  artwork: {fileID: 3286163911610860551, guid: 621b4c04285979d4596b299afd904d04, type: 3}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  combo: 0
+  setUpBy: []
+  effects:
+  - effectType: 1
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 32
+      value: 0
+      targetType: 0
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      onlyIfTargetDies: 0
+      decoy: {fileID: 0}
+  designNotes: 'Zeitgeist''s logistics, a film everyone quotes: send for any card
+    from your deck; it joins your next hand. Was Multi Passport, the Shadow Ops.
+    creature (its Ambush went to Femme Fatale).'
+  artDescription: 'The Multipass shown to the camera, as in the film: on the left
+    the cab driver with buzzed fair hair and stubble, an orange shirt under a dark
+    vest; on the right the young woman with the bright orange bob and fringe, in
+    a white top with orange suspenders, holding the Multipass up beside her face;
+    a dim, crowded hall behind them.'
+  defaultTargetType: 0

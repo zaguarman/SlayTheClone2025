@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// What each card did in AI games, for balance: how often it was played and by whom, what it dealt (damage to the other
     /// player and their creatures, kills), and how the games where it was played ended. Damage and kills are credited to the

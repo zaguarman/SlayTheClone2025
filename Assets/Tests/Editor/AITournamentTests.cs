@@ -1,7 +1,7 @@
 using System.Linq;
 using NUnit.Framework;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// The AI tournaments (Debug > AI Tournament, AI Style Tournament), run on demand: they take a minute or two each, so
     /// they aren't part of the suite. Each writes its report; the games must break no rule and log no error.

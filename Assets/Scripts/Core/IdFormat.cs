@@ -1,4 +1,4 @@
-namespace SlayTheClone {
+namespace Zeitgeist {
     public static class IdFormat {
         private const int ShortLength = 8;
 

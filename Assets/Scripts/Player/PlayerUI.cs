@@ -1,7 +1,7 @@
 using TMPro;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class PlayerUI : UIComponent {
         private TextMeshProUGUI healthText;
 

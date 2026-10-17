@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>An AI that can take a seat: a level, and for Hard and Very Hard a style.</summary>
     public readonly struct AIEntrant {
         public readonly AILevel Level;

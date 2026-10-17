@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class PlaySpellAction : IGameAction {
         private readonly Spell spell;
         private readonly IPlayer owner;

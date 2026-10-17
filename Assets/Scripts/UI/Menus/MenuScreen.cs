@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// A screen opened from the title screen in its place (the card gallery, the deck builder, the keyword glossary). It's
     /// built anew each time it opens and thrown away when it closes, so it always opens as new: on its first entry,

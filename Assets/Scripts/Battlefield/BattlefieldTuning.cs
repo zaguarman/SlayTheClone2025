@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The battlefields' size, form and position, as sliders (the user): select it with UI > Battlefield Tuning and drag
     /// them while the game plays; both mats, their slots and the chevron round them redraw as they change. Kept in
@@ -149,7 +149,7 @@ namespace SlayTheClone {
         }
 
 #if UNITY_EDITOR
-        private const string RememberedKey = "SlayTheClone.BattlefieldTuning.Remembered";
+        private const string RememberedKey = "Zeitgeist.BattlefieldTuning.Remembered";
 
         /// <summary>A snapshot of the sliders, kept in the editor's settings: a set to come back to after experimenting.</summary>
         public void Remember() => UnityEditor.EditorPrefs.SetString(RememberedKey, JsonUtility.ToJson(this));

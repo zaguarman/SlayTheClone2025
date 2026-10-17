@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using UnityEngine.TestTools;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// Cards move between deck, hand, board and discard pile without being lost, duplicated or left in two places:
     /// dealing, drawing, discarding, reshuffling, casting, dying and summoning from the deck.

@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The balance study's summary (the user, 2026-10-16: "assess what strategies, combination of abilities and cards are
     /// bringing the most and are the most winning ones"), from the deck-against-deck games: factions (their one-faction

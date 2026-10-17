@@ -1,8 +1,8 @@
 using TMPro;
 using UnityEngine.UI;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     // Wires the deck and discard buttons to the DeckViewUI panel; at most one view is open. The other side's deck and
     // discard pile have buttons of their own, shown only while Fog of War is off (F9)
     public class DeckViewController : UIComponent {

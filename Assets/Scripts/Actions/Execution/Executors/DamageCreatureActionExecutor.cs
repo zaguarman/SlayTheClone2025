@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class DamageCreatureActionExecutor : ActionExecutor<DamageCreatureAction> {
         protected override void ExecuteAction(DamageCreatureAction damageAction, ActionExecutionContext context) {
             var targetCreature = damageAction.GetTarget();

@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 using Object = UnityEngine.Object;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// The game's rules wired together with no scene and no UI, the same way GameManager builds them:
     /// two players with their boards and decks, the action queue, combat and modifiers. Tests queue actions and
@@ -113,7 +113,7 @@ namespace SlayTheClone.Tests {
         }
 
         /// <summary>
-        /// Play mode only: ends the turn with the real <see cref="SlayTheClone.TurnManager"/>, which resolves what was queued and
+        /// Play mode only: ends the turn with the real <see cref="Zeitgeist.TurnManager"/>, which resolves what was queued and
         /// end-of-turn effects, discards and redraws both hands, then runs start-of-turn effects. Plain decks are dealt if none were set.
         /// </summary>
         public IEnumerator EndTurn() {

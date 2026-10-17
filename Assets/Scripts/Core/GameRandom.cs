@@ -1,4 +1,4 @@
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The game's single source of randomness: deck shuffles, random targets, chain directions and random summons.
     /// Resetting it with the same seed replays the same game, given the same moves. Each thread has its own, so games

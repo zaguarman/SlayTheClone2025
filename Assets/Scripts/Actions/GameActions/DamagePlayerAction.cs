@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class DamagePlayerAction : IGameAction, ISourcedAction {
         /// <summary>The card whose effect deals it, for the stats.</summary>
         public ICard Source { get; set; }

@@ -1,4 +1,7 @@
 Card Game Factions Overview
+
+(2026-10-17: the game is called Zeitgeist; the Zeitgeist and Digital Society factions are one faction now, Pop Culture. Their
+sections below stay as the two halves of it: the culture itself, and the internet's.)
 	Neutral Resources
 		Tools & Objects
 			Arisaka Rifle
@@ -1765,6 +1768,7 @@ Card Game Factions Overview
 			Afterburner (added 2026-10-17, no faction given)
 			Homeostasis (added 2026-10-17, no faction given)
 			Laser Eyes (added 2026-10-17, no faction given)
+			The Roads Have Eyes (added 2026-10-17): Flock cameras and surveillance in general; Shadow Ops. or Statecraft
 		Mechanic ideas
 			Cards that come back to the hand when a condition is met
 			More tempo-altering effects (2026-10-14): some that raise your creatures' Speed, others that cut Deployment Time
@@ -1777,6 +1781,12 @@ Card Game Factions Overview
 				its slot first (pairs with the Maneuvers). Names: Mind "Boring Lecture", Utopia "Peer Review".
 			Trick Room flavours (2026-10-17): Rush Hour is the Trend; Slow Thinking, The Last Shall Be First, Seniority Priority, Due
 				Process and Buffering set it (cards). The user kept it from Utopia, Digital Society and Shadow Ops.
+			Queenly Majesty (2026-10-17, Pokémon, the user: a good idea for the future, kept in the backburner): Backstab (priority) doesn't
+				work against its side.
+			Rollout (2026-10-17, Pokémon, the user: interesting if sparse, one card): +2 Attack each Day it attacks the same slot in a row,
+				reset when it changes; pairs with Fixated and Groundhog Day.
+			Not taken (2026-10-17, the user): Bide (boring), Innards Out (the flat damage back of Litigious covers it), Emergency Exit (no
+				deck it combos into).
 			Destiny Bond (2026-10-17): Mutually Assured Destruction, Insurance Policy and Hostage Situation are cards; Blood Pact (the two
 				facing creatures bound: when either dies, so does the other) and Scorched Earth Policy (when it dies to an enemy, every
 				enemy creature takes 2) are still ideas.

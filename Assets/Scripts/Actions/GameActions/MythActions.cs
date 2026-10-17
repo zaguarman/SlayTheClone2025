@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Revive (Myth): a creature that died rises again at the next Dawn, its card taken back from the discard pile: to the
     /// slot where it fell if it's free, else the first free one on its side, with its full Health. It rises ready (no

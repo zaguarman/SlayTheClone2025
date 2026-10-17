@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// AI against AI, with no screen: whole combats played by the real rules (a GameSession and its TurnFlow, as in a game)
     /// as fast as they run, many at once, one a CPU thread (see <see cref="Workers"/>). <see cref="RunLevels"/> pits the levels against each other, <see cref="RunStyles"/> the Hard styles

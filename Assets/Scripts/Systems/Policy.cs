@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Policy (the user, 2026-10-16, from Slay the Spire's Powers): a spell that becomes a rule of your side. It happens when
     /// played, then stays in force: at each Dawn after, it happens again, for the rest of the combat. It never goes to the

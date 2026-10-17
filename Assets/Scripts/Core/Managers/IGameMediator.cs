@@ -1,7 +1,7 @@
 using System;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The game's event hub: rules code announces what happened through the Notify methods, and views listen to the
     /// matching events (subscribe with +=, unsubscribe with -=). A card that only cares about its own creature listens

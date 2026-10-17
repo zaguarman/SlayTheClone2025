@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Send For (every faction has one, each its own way: Shadow Ops.' logistics, Myth's rituals, Tech's scraping...): a card
     /// from your deck joins your next hand, so a plan can be lined up for the Day it needs it. The player picks it when the

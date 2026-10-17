@@ -1,8 +1,8 @@
 using System.Linq;
 using NUnit.Framework;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// Creatures walk, trade places, Leapfrog and Swap in their formation as GDD 2.4 describes (the shape is
     /// <see cref="Formation"/>: 0 the Vanguard, 1 and 2 the Flanks, 3 and 4 Headquarters; a step goes Vanguard-Flank,

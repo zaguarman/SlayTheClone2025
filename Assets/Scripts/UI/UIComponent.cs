@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Base class for UI components that can be initialized with dependencies.
     /// </summary>

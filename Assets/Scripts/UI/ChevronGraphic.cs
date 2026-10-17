@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// A battlefield mat in the formation's shape (the user, 2026-10-15): a chevron band hugging the five slots, a Λ on the
     /// bottom side and a V on the top one, instead of a rectangle around them. Filled, or only its outline (a stroke this

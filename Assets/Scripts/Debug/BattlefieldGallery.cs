@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The battlefields set out to judge the <see cref="BattlefieldTuning"/> sliders: shots of the boards empty, full, half
     /// full, and seen from the other seat (F8), one at a time; Back and Next step through them (UI > Battlefield Gallery).

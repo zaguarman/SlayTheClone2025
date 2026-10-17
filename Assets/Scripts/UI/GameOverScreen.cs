@@ -3,9 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The end of a combat: when a player falls to 0 Health the game stops (no more turns, see <see cref="TurnFlow"/>) and
     /// this screen covers the table, saying who won as the screen's player sees it, with Play Again (the same match) and

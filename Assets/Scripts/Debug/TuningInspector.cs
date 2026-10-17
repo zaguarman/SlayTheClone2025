@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The tuning assets' sliders (<see cref="ArrowTuning"/>, <see cref="RouletteTuning"/>), each with its own reset button
     /// beside it (the user): back to the value it shipped with, that one only. The button is greyed out while the value is
@@ -11,7 +11,7 @@ namespace SlayTheClone {
     public static class TuningInspector {
         private const float ButtonWidth = 24f;
 
-        private const string HintsKey = "SlayTheClone.TuningInspector.Hints";
+        private const string HintsKey = "Zeitgeist.TuningInspector.Hints";
 
         public static void DrawWithResets(SerializedObject tuning, Object originals) {
             var shipped = new SerializedObject(originals);

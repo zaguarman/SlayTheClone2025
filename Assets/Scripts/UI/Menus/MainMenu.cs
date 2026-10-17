@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Title screen: Play opens the match setup (decks and opponent), which then loads the game scene; Adventure opens a
     /// run across a map of fights (see <see cref="AdventureMenu"/>), and comes back to it after each one; Cards opens the card
@@ -24,6 +24,7 @@ namespace SlayTheClone {
         private void Awake() {
             // Make sure a previous pause doesn't leave the game frozen
             Time.timeScale = 1f;
+            if (matchSetup != null) Mods.LoadInto(matchSetup.Catalog); // Mods: cards and decks from files, offered like the game's own
             AddMenuButtons();
 
             if (playButton != null) playButton.onClick.AddListener(Play);

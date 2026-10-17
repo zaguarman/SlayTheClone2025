@@ -1,4 +1,4 @@
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class SummonCreatureAction : IGameAction {
         private readonly ICreature creature;
         private readonly IPlayer owner;

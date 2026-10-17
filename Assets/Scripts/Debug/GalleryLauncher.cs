@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Starts a gallery (<see cref="ArrowGallery"/>, <see cref="RouletteGallery"/>) on its own (the user): presses Play if the
     /// editor isn't playing, waits until the game is fully up (its players dealt, the table built), then runs it. The wait
@@ -12,8 +12,8 @@ namespace SlayTheClone {
     [InitializeOnLoad]
     public static class GalleryLauncher {
         public const string Arrows = "Arrow Gallery", Roulette = "Roulette Gallery", Battlefields = "Battlefield Gallery";
-        private const string PendingKey = "SlayTheClone.GalleryPending";
-        private const string SinceKey = "SlayTheClone.GalleryPendingSince";
+        private const string PendingKey = "Zeitgeist.GalleryPending";
+        private const string SinceKey = "Zeitgeist.GalleryPendingSince";
         private const double GiveUpSeconds = 30.0;
         private const float SettleSeconds = 0.5f; // Once the game is up: its first frames, the hands dealt
 

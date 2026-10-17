@@ -1,9 +1,9 @@
 using System.Linq;
 using NUnit.Framework;
-using static SlayTheClone.Enums;
-using static SlayTheClone.Tests.TestCards;
+using static Zeitgeist.Enums;
+using static Zeitgeist.Tests.TestCards;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// Creature abilities ('Abilities Compendium'): one per creature, switched off (not removed) while abilities are
     /// disabled, and the stat-change Resolution Order (bypass, block, reflect, transform, apply, react).
@@ -780,7 +780,7 @@ namespace SlayTheClone.Tests {
             Fresh();
             With(CreatureAbility.Clingy, p1, 0);
             var clung = With(CreatureAbility.None, p2, 0);
-            Assert.IsTrue(MovementRules.IsRooted(clung), "Faced by a Clingy Ex, it's as good as Rooted");
+            Assert.IsTrue(MovementRules.IsRooted(clung, game.ModifierManager), "Faced by a Clingy Ex, it's as good as Rooted");
             Assert.IsFalse(game.ModifierManager.CanMove(clung));
 
             // Empathy (Synchronize): an enemy status lands on its sender too

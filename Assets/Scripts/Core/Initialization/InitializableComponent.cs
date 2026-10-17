@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public abstract class InitializableComponent : MonoBehaviour {
         public bool IsInitialized { get; protected set; }
 

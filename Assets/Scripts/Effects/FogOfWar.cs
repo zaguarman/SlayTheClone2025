@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Who can see what (GDD 2.5 Fog of War & Intelligence). Your own side has no fog. Of the other side you see its planned
     /// actions, except the Concealed Actions of a creature that is Concealed or Undercover (and not Revealed); you don't see
@@ -163,7 +163,7 @@ namespace SlayTheClone {
         }
 
         public static void SwitchSides() => PlaysAsPlayer1 = !PlaysAsPlayer1;
-        private const string PrefKey = "SlayTheClone.FogOfWar";
+        private const string PrefKey = "Zeitgeist.FogOfWar";
 
         private static bool? enabled;
 

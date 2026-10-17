@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The decks of an adventure (the user, 2026-10-15). You start, as in Slay the Spire, with a small plain deck of your
     /// faction: simple creatures and simple spells, no big strategy. The enemies get worse cards early and better ones as

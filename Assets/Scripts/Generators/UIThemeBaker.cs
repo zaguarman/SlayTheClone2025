@@ -7,7 +7,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Makes the <see cref="UITheme"/> show in the editor, without playing: bakes the theme's sprites and heading material
     /// into Resources/UITheme as assets, restyles the card prefab, then styles the scenes the way the game does when it

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
 [assembly: InternalsVisibleTo("Tests")]
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public interface ICreature : ICard {
         int Attack { get; }
         int Health { get; }

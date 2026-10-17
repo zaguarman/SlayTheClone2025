@@ -1,8 +1,8 @@
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// What happens when a status would land on a creature ('Status Effects Compendium'): Doomed blocks it, Blessed negates it
     /// and loses a stack, Doomed wipes the others, re-stunning refreshes Exhausted, and a status that stops the creature

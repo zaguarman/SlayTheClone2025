@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>Which seats the AI plays (see <see cref="AIController"/>); the others are played on this screen.</summary>
     [System.Flags]
     public enum AISeats { None = 0, Player1 = 1, Player2 = 2, Both = Player1 | Player2 }

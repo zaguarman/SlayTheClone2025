@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Debug > AI Tournament: the AI levels play each other with every faction deck; Debug > AI Style Tournament: the Hard
     /// styles do (see <see cref="AITournament"/>). The results, and the problems the games ran into, go to

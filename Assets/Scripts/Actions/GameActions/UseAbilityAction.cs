@@ -1,7 +1,7 @@
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// A creature uses its Active ability as its intent for the Day, instead of attacking or moving (GDD 3.6: one intent a Day).
     /// Aimed at a slot like an attack: it lands on whatever creature is there when it resolves, in the Ability and Attack layer.

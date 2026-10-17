@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public interface IPlayer : IEntity {
         bool IsPlayer1 { get; } // Property to identify if this is Player 1
         IPlayer Opponent { get; set; }
@@ -212,7 +212,7 @@ namespace SlayTheClone {
         public void ReturnToHand(ICard card) {
             if (card == null) return;
             RemoveFromBattlefield(card);
-            var copy = SlayTheClone.Deck.FreshCopy(card);
+            var copy = Zeitgeist.Deck.FreshCopy(card);
             ComingBack.Add(copy);
             Log($"{card.Name} is on its way back to {Name}'s hand", LogTag.Cards);
         }

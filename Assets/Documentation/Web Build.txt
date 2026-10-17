@@ -6,7 +6,7 @@ The game runs in the browser (WebGL), built from a separate copy of the project 
 • Build and play:  .\Tools\web_build.ps1 -Serve   (PowerShell, from the project folder), then open http://localhost:8080.
   Play only (no new build):  .\Tools\web_build.ps1 -ServeOnly
 • It mirrors Assets, Packages and ProjectSettings (uncommitted changes included) into ..\SlayTheClone2025-WebBuild and builds
-  there with a Unity that has no window (SlayTheClone.WebBuild.Build), into Builds\WebGL (git ignores it). The copy keeps its
+  there with a Unity that has no window (Zeitgeist.WebBuild.Build), into Builds\WebGL (git ignores it). The copy keeps its
   own Library: the first build imported everything; later ones take a few minutes (the first full one: 6.5 minutes, 75 MB).
 • The project uses URP's Compatibility Mode (Render Graph off); Unity 6.3 only builds it with URP_COMPATIBILITY_MODE defined,
   so a first run (WebBuild.Prepare) sets that define in the copy. The project itself is untouched.

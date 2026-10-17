@@ -1,8 +1,8 @@
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// An Intelligence asset that watches the action queue (GDD 3.11 Watchdogs). It isn't a creature and never attacks: when
     /// an action matches its condition it nullifies, redirects, reorders or reveals it, using a charge.

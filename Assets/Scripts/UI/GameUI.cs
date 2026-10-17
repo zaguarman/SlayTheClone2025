@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class GameUI : MonoBehaviour {
         public bool IsInitialized { get; private set; }
 

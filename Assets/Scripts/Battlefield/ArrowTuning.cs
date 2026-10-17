@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Every measurement of the battle arrows (see <see cref="ArrowIndicator"/>), as sliders: select it with UI > Arrow
     /// Tuning and drag them while the game plays, the arrows on the table redraw as they change. Kept in
@@ -177,7 +177,7 @@ namespace SlayTheClone {
         }
 
 #if UNITY_EDITOR
-        private const string RememberedKey = "SlayTheClone.ArrowTuning.Remembered";
+        private const string RememberedKey = "Zeitgeist.ArrowTuning.Remembered";
 
         /// <summary>A snapshot of the sliders, kept in the editor's settings: a set to come back to after experimenting.</summary>
         public void Remember() => UnityEditor.EditorPrefs.SetString(RememberedKey, JsonUtility.ToJson(this));

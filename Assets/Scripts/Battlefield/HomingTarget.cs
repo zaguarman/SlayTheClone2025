@@ -1,4 +1,4 @@
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// An effect locked onto one creature (GDD 4.6, Homing): it follows the creature as it moves. A spell aimed at one of
     /// your own creatures homes on it, since there's no fog of war on your own side (see <see cref="EffectResolver.AimAt"/>).

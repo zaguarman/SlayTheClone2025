@@ -3,9 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The scene's references (see <see cref="IGameReferences"/>). Found and initialized by GameBootstrap.
     /// </summary>

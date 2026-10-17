@@ -1,9 +1,9 @@
 using TMPro;
 using UnityEngine.UI;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The Trend banner in the middle of the table: what's trending, until when, and what it does. It's hidden while
     /// nothing is. Trends come from cards, so the old button that changed the weather by hand is hidden.

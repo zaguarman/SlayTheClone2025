@@ -1,8 +1,8 @@
 using System.Collections;
 using UnityEngine;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class GameBootstrap : MonoBehaviour {
         private bool hasInitialized = false;
 

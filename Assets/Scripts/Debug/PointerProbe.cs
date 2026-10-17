@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Logs every click in the game (the user's unresponsive slots): what's on top under the pointer, the slot and card it
     /// falls in, and whether it reached them or something else took it, with a running count of the clicks that went

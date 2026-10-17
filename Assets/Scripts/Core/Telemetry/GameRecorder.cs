@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Records one game for the telemetry (the user, 2026-10-16: "a logger that saves data from all games played"): it
     /// watches the game's session from its opening hands to its end, then saves a <see cref="GameRecord"/> (see

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Ascension (the user, 2026-10-16, from Slay the Spire): harder runs, unlocked one level at a time by beating the boss
     /// at the level below, for each faction on its own. Each level keeps the ones below it:

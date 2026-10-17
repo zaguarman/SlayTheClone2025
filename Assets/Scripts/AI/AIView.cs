@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// A creature as one side sees it. Its own creatures it knows in full. Of the other side's it knows what their cards show:
     /// a creature it knows (Fog of War, GDD 2.5) shows its stats, ability, statuses and card text; one it doesn't is a card

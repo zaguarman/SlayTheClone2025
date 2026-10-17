@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The battle arrows from every slot to every slot, one side aiming (the other side is the mirror), shown one after the
     /// other to judge the <see cref="ArrowTuning"/> sliders. UI > Arrow Gallery plays them back while the game plays: the
@@ -241,7 +241,7 @@ namespace SlayTheClone {
     /// The gallery's controls (UI > Arrow Gallery): which sets, how long each shot stays, pause, back, next.
     /// </summary>
     public class ArrowGalleryWindow : UnityEditor.EditorWindow {
-        private const string Prefs = "SlayTheClone.ArrowGallery.";
+        private const string Prefs = "Zeitgeist.ArrowGallery.";
 
         // Opening it starts it: Play is pressed if needed, and it begins once the game is up
         [UnityEditor.MenuItem("UI/Arrow Gallery")]

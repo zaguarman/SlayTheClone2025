@@ -1,4 +1,4 @@
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The lethal check of the Creature Death Sequence (GDD 3.9): a creature at 0 Health is marked for destruction,
     /// its other pending actions are cancelled, and its OnAboutToDie effects get a chance to save it.

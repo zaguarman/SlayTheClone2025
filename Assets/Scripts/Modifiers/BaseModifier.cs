@@ -1,7 +1,7 @@
 using System;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     // Common base for modifiers: identity, name and the default "affects nothing" answers
     public abstract class BaseModifier : IModifier {
         public Guid Id { get; } = Guid.NewGuid();

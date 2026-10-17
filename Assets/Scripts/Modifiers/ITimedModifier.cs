@@ -1,4 +1,4 @@
-namespace SlayTheClone {
+namespace Zeitgeist {
     // Interface for modifiers that have a duration and can expire
     public interface ITimedModifier : IModifier {
         int DurationInTurns { get; }

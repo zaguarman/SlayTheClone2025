@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using static SlayTheClone.Enums;
-using static SlayTheClone.Tests.TestCards;
+using static Zeitgeist.Enums;
+using static Zeitgeist.Tests.TestCards;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// Slot Effects (GDD 2.4, 'Slot Effects Compendium'): one per slot, they stay with the slot, triggered ones resolve before
     /// anything else (environment actions, GDD 3.7), and "1 Trigger" ones are used up. Runs the real rules without the scene.

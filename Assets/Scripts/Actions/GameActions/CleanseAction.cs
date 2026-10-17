@@ -1,7 +1,7 @@
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Removes a creature's statuses, its Temporary Stat Modifications, or both (GDD Cleanse). A Cleanse only removes the bad
     /// ones (harmful statuses, stat decreases); a Purge removes good and bad alike. Persistent Stat Modifications stay.

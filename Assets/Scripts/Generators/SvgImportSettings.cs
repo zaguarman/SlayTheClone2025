@@ -4,7 +4,7 @@ using Unity.VectorGraphics.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Configures how an SVG file is rasterized on import, keeping its full viewBox.
     /// Settings are written through the importer's serialized fields: its C# property setters are not persisted.

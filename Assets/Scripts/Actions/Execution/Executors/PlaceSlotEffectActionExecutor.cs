@@ -1,6 +1,6 @@
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class PlaceSlotEffectActionExecutor : ActionExecutor<PlaceSlotEffectAction> {
         protected override void ExecuteAction(PlaceSlotEffectAction place, ActionExecutionContext context) {
             if (place.GetSlot() == null || place.GetEffectType() == SlotEffectType.None) return;

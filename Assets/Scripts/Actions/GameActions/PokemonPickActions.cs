@@ -1,7 +1,7 @@
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Double Down (the user, 2026-10-17, Belly Drum: 3rd Parallel Job): the creature loses half its Health and its Attack
     /// doubles. Its Health is set, not damaged (nothing answers it); it never goes below 1. The Attack is a lasting change, as

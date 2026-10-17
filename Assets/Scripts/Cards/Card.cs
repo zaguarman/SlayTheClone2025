@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public interface ICard : IEntity {
         string CardId { get; } // Its definition's: the same for every copy
         /// <summary>This copy of the card, the same through reshuffles (a reshuffled card is made again): what's once per combat is per copy.</summary>

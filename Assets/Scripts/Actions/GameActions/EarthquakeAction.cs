@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// An Earthquake (HAARP): it starts at a random slot, either side, and zigzags out across the whole board, crossing to the
     /// other side at each step, one slot along: a hit in every column, the sides taking turns. Each hit deals the same damage to

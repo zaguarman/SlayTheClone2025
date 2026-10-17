@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The pieces the menu screens are built from (match setup, card gallery, deck builder, keyword glossary), in the game's theme (see
     /// <see cref="UITheme"/>). Every screen has the same frame: a title, columns that take the space left, and a footer.

@@ -112,7 +112,7 @@ def report(records):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="SlayTheClone telemetry report")
+    parser = argparse.ArgumentParser(description="Zeitgeist telemetry report")
     parser.add_argument("folders", nargs="*", default=[os.path.join(os.path.dirname(__file__), "..", "TelemetryData")])
     parser.add_argument("--mode", help="match, adventure, autopilot or simulation")
     parser.add_argument("--since", help="only games started on or after this date (YYYY-MM-DD)")

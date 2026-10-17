@@ -1,8 +1,8 @@
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Laid Off (the user, 2026-10-16, from Slay the Spire's discard cards): what a card does when it's given up from the
     /// hand, its <see cref="EffectTrigger.OnDiscarded"/> effects. Creatures leave the hand at every Dawn now (only 3 come a

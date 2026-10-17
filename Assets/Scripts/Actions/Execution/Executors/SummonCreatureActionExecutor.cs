@@ -1,7 +1,7 @@
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class SummonCreatureActionExecutor : ActionExecutor<SummonCreatureAction> {
         protected override void ExecuteAction(SummonCreatureAction summonAction, ActionExecutionContext context) {
             var creature = summonAction.GetCreature();

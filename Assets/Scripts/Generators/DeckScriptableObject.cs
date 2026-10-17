@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class DeckScriptableObject : ScriptableObject {
         /// <summary>The deck's own name, without its faction prefix: "Corporate - Shareholder Value" is "Shareholder Value".</summary>
         public static string ShortName(string deckName) {
@@ -80,6 +80,7 @@ namespace SlayTheClone {
 
         // Only PlayerDecks changes a deck: changing an asset's in play mode would change the asset itself
         internal void SetName(string name) => deckName = this.name = name;
+        internal void SetStrategy(string value) => strategy = value ?? ""; // A mod's deck says how it means to win
         internal void SetCards(IEnumerable<CardDataScriptableObject> list) => cards = list.Where(c => c != null).ToList();
     }
 }

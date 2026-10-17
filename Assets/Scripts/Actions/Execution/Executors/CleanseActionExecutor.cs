@@ -1,8 +1,8 @@
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class CleanseActionExecutor : ActionExecutor<CleanseAction> {
         protected override void ExecuteAction(CleanseAction cleanse, ActionExecutionContext context) {
             var creature = cleanse.GetTargetCreature();

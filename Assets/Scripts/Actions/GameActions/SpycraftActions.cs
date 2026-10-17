@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// A creature changes sides (GDD 5.4 Changing Sides): Coup d'État, Operation Paperclip, Brainwashed running out. Its new
     /// controller takes it; its owner never changes, so its card still goes back to them when it leaves play.

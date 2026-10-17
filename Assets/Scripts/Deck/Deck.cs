@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public interface IDeck {
         int CardsRemaining { get; }
         void Initialize(List<CardData> cardDataList);

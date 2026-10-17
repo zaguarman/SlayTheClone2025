@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The turn flow, without a scene: ending a turn resolves what both sides planned and end-of-turn effects, discards
     /// and redraws hands, then runs start-of-turn effects. <see cref="TurnManager"/> runs it on screen, a frame at a time,

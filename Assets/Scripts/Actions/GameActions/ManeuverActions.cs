@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Maneuvers (the user, 2026-10-17): spells that only move creatures around the board, in three flavours by whose
     /// creatures they move. Ambivalent: either side's, to reorganise yours or disrupt theirs. Disruption: only the enemy's.
@@ -112,7 +112,7 @@ namespace SlayTheClone {
         protected override void ExecuteAction(SpinAction spin, ActionExecutionContext context) {
             var row = spin.Side?.Battlefield;
             if (row == null || row.Count < 3) return;
-            var ring = Maneuvers.SpinRing.Select(i => row[i]).Where(s => !MovementRules.IsRooted(s.OccupyingCreature)).ToList();
+            var ring = Maneuvers.SpinRing.Select(i => row[i]).Where(s => !MovementRules.IsRooted(s.OccupyingCreature, context.ModifierManager)).ToList();
             if (ring.Count < 2 || ring.All(s => s.OccupyingCreature == null)) return;
             var before = ring.ToDictionary(s => s, s => s.OccupyingCreature);
             var moving = ring.Select(s => s.Clear()).ToList();
@@ -141,7 +141,7 @@ namespace SlayTheClone {
                 return;
             }
             var to = row[index.Value];
-            if (MovementRules.IsRooted(creature) || MovementRules.IsRooted(to.OccupyingCreature)) return; // Rooted: nothing moves it
+            if (MovementRules.IsRooted(creature, context.ModifierManager) || MovementRules.IsRooted(to.OccupyingCreature, context.ModifierManager)) return; // Rooted: nothing moves it
             Log($"{creature.Name} is {(push.Forward ? "pulled forward" : "pushed back")} to slot {to.Index}" +
                 (to.OccupyingCreature != null ? $", trading places with {to.OccupyingCreature.Name}" : ""), LogTag.Effects | LogTag.Creatures);
             Maneuvers.Trade(from, to, context);
@@ -154,7 +154,7 @@ namespace SlayTheClone {
             var side = shuffle.Side;
             if (side?.Battlefield == null) return;
             // The slots in play: every one but a Rooted creature's, which stays put
-            var slots = side.Battlefield.Where(s => s.OccupyingCreature is not { IsDead: true } && !MovementRules.IsRooted(s.OccupyingCreature)).ToList();
+            var slots = side.Battlefield.Where(s => s.OccupyingCreature is not { IsDead: true } && !MovementRules.IsRooted(s.OccupyingCreature, context.ModifierManager)).ToList();
             var before = slots.ToDictionary(s => s, s => s.OccupyingCreature);
             var creatures = slots.Select(s => s.Clear()).ToList();
             for (int i = creatures.Count - 1; i > 0; i--) { // Fisher-Yates, with the game's seed

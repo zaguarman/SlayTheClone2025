@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The adventure under way: the faction and deck you chose, the map, the rooms you've walked through and the one you're
     /// in. It lives across scenes: a fight loads the game scene, and winning it brings you back to the map, a room further.
@@ -49,7 +49,7 @@ namespace SlayTheClone {
             _ => 30
         };
         /// <summary>A price at the shop: a quarter off with the Credit Card.</summary>
-        public static int Discounted(int price) => Relics.Contains(Relic.CreditCard) ? Mathf.RoundToInt(price * SlayTheClone.Relics.CreditDiscount) : price;
+        public static int Discounted(int price) => Relics.Contains(Relic.CreditCard) ? Mathf.RoundToInt(price * Zeitgeist.Relics.CreditDiscount) : price;
 
         public const int MaxPotions = 3, PotionPrice = 12, ShopPotions = 2, PotionDropPercent = 40; // Slay the Spire's: 3 slots, a 40% drop
         public const int RestHeal = 20, TreasureMoney = 20;
@@ -134,9 +134,9 @@ namespace SlayTheClone {
         /// An enemy's Health, in stages of <see cref="FightsPerStage"/> fights (the user): the first ones 5, the next 10, then
         /// 15...; an elite a stage higher; the boss 60.
         /// </summary>
-        public static int EnemyHealth(RoomType type, int fightsWon, int ascension = 0) => type == RoomType.Boss ? SlayTheClone.Ascension.BossHealthAt(ascension)
+        public static int EnemyHealth(RoomType type, int fightsWon, int ascension = 0) => type == RoomType.Boss ? Zeitgeist.Ascension.BossHealthAt(ascension)
             : Mathf.Min(BossHealth - HealthStep, HealthStep * (fightsWon / FightsPerStage + 1
-                + (type == RoomType.Elite ? 1 + SlayTheClone.Ascension.EliteStages(ascension) : 0)));
+                + (type == RoomType.Elite ? 1 + Zeitgeist.Ascension.EliteStages(ascension) : 0)));
 
         public const int RelicPrice = 35; // A relic at a shop
         /// <summary>The faction the boss plays, known from the start (the map shows it, Slay the Spire's boss icon).</summary>
@@ -155,8 +155,8 @@ namespace SlayTheClone {
             Active = true;
             Faction = faction;
             Deck = deck;
-            Ascension = Mathf.Clamp(ascension, 0, SlayTheClone.Ascension.Max);
-            Health = SlayTheClone.Ascension.StartHealth(Ascension);
+            Ascension = Mathf.Clamp(ascension, 0, Zeitgeist.Ascension.Max);
+            Health = Zeitgeist.Ascension.StartHealth(Ascension);
             Map = AdventureMap.Generate(seed);
             // The boss: a faction other than yours, among those in the pool, decided now and shown on the map
             var rivals = Pool.Select(c => c.faction).Where(f => f != Faction.None && f != faction).Distinct().OrderBy(f => f).ToList();
@@ -243,7 +243,7 @@ namespace SlayTheClone {
 
         /// <summary>A relic you don't have yet, at random; None when you have them all.</summary>
         public static Relic GainRelic(System.Random random) {
-            var left = SlayTheClone.Relics.All.Where(r => !Relics.Contains(r)).ToList();
+            var left = Zeitgeist.Relics.All.Where(r => !Relics.Contains(r)).ToList();
             if (left.Count == 0) return Relic.None;
             var relic = left[random.Next(left.Count)];
             Relics.Add(relic);
@@ -315,7 +315,7 @@ namespace SlayTheClone {
             foreach (var potion in PotionPool.OrderBy(_ => random.Next()).Take(ShopPotions))
                 Shop.Add(new ShopOffer { Card = potion, Price = Discounted(PotionPrice) });
             // And one relic you don't have yet, dearer (Slay the Spire's shops sell relics too)
-            var forSale = SlayTheClone.Relics.All.Where(r => !Relics.Contains(r)).ToList();
+            var forSale = Zeitgeist.Relics.All.Where(r => !Relics.Contains(r)).ToList();
             if (forSale.Count > 0) Shop.Add(new ShopOffer { Relic = forSale[random.Next(forSale.Count)], Price = Discounted(RelicPrice) });
         }
 
@@ -359,23 +359,23 @@ namespace SlayTheClone {
         public static void WinFight(int? healthLeft = null) {
             if (Fighting == null) return;
             if (healthLeft.HasValue) Health = Mathf.Max(1, healthLeft.Value);
-            if (Relics.Contains(Relic.FirstAidKit)) Health += SlayTheClone.Relics.FirstAidHeal;
+            if (Relics.Contains(Relic.FirstAidKit)) Health += Zeitgeist.Relics.FirstAidHeal;
             var room = Fighting;
             Fighting = null;
             Arrive(room);
             Earned = room.Type == RoomType.Elite ? ElitePurse : room.Type == RoomType.Boss ? 0 : FightPurse;
-            if (Earned > 0 && Relics.Contains(Relic.DoubleHeadedCoin)) Earned += SlayTheClone.Relics.CoinPay;
+            if (Earned > 0 && Relics.Contains(Relic.DoubleHeadedCoin)) Earned += Zeitgeist.Relics.CoinPay;
             EuroYuans += Earned;
             Found.Clear();
             if (room.Type == RoomType.Boss) {
                 Won = true;
-                if (SlayTheClone.Ascension.UnlockAfterWin(Faction, Ascension)) AscensionUnlocked = Ascension + 1;
+                if (Zeitgeist.Ascension.UnlockAfterWin(Faction, Ascension)) AscensionUnlocked = Ascension + 1;
                 return;
             }
             Rewards.Clear();
             var random = new System.Random(Map.Seed * 17 + room.Row * 5 + room.Column);
             // An elite drops a relic; any fight may drop a potion (Slay the Spire's 40%)
-            if (room.Type == RoomType.Elite && GainRelic(random) is var relic && relic != Relic.None) Found.Add($"Relic: {SlayTheClone.Relics.Line(relic)}");
+            if (room.Type == RoomType.Elite && GainRelic(random) is var relic && relic != Relic.None) Found.Add($"Relic: {Zeitgeist.Relics.Line(relic)}");
             if (PotionPool.Count > 0 && random.Next(100) < PotionDropPercent) {
                 var potion = PotionPool[random.Next(PotionPool.Count)];
                 Found.Add(AddPotion(potion) ? $"Potion: <b>{potion.cardName}</b>" : $"A potion ({potion.cardName}), but your belt is full");

@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class ModifyArmorAction : IGameAction {
         private readonly ICreature targetCreature;
         private readonly int amount; // Positive to add armor, negative to remove

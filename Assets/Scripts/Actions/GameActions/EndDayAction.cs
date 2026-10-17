@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Amen (the user, 2026-10-16): the Day ends here. Every other action still in the queue is discarded, both sides': the
     /// cards played for them go to their owners' discard piles, and the plans are gone. Dusk comes as on any Day.

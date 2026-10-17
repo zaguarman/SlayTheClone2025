@@ -3,7 +3,7 @@ using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// A battle arrow in the style of an old campaign map: a broad translucent band with a crisp darker edge, a swallowtail
     /// at its tail and a barbed head, fading in from where it starts so its direction reads at a glance.

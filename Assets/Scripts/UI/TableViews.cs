@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Both sides of the table as the UI shows them, for views that work across sides:
     /// the resolution playback, arrows that point at enemy slots and arrows from queued spells in the hand.

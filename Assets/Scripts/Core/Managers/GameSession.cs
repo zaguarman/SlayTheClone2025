@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// One game's rules, built without a scene: the two players and their decks, and every rules system, each handed only
     /// what it uses. <see cref="GameManager"/> builds one for the game on screen; games without a screen (the AI tournament)

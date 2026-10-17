@@ -3,9 +3,9 @@ using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class HandUI : CardContainer, ICanvasRaycastFilter {
         private const float CastStagger = 0.2f;
 

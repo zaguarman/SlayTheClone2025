@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Combo (the user, 2026-10-16, from Slay the Spire's Finisher and Pokémon's Stored Power): a spell that grows with the
     /// others its player plays the same Day. When it resolves, its numbers go up by 1 (see <see cref="Numbers"/>) for each

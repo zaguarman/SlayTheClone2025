@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Ripening (the user, 2026-10-16, from Slay the Spire's Retain cards that grow): a spell kept in the hand gets better.
     /// At each Dawn discard, every Ripening spell still in the hand ripens once: its numbers go up by 1, up to

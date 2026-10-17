@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// The action queue as one player sees it (the Queue panel, see <see cref="QueuePanel"/>): what will happen, in the order it
     /// resolves, grouped by layer (GDD 3.7), with who does what to whom. Fog of War applies (GDD 2.5): the other side's Concealed

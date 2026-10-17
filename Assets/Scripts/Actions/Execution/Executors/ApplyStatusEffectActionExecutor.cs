@@ -1,7 +1,7 @@
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class ApplyStatusEffectActionExecutor : ActionExecutor<ApplyStatusEffectAction> {
         protected override void ExecuteAction(ApplyStatusEffectAction statusAction, ActionExecutionContext context) {
             var targetCreature = statusAction.GetTargetCreature();

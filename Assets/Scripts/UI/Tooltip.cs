@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Manages a single reusable card tooltip for the game: an enlarged copy of the hovered card, its active effects, and the
     /// explanations of its keywords, opened by hovering them and chained from keyword to keyword.

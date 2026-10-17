@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using static SlayTheClone.Enums;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone.Tests {
+namespace Zeitgeist.Tests {
     /// <summary>
     /// Watchdogs (GDD 3.11): created through the queue, they nullify, redirect, reorder or reveal matching actions, On Watch
     /// (just before each action) or at the Briefing (once a Day, from the Day they're created). Each changed action uses

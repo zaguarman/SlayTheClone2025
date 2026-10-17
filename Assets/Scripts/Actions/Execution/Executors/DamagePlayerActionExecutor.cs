@@ -1,6 +1,6 @@
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     public class DamagePlayerActionExecutor : ActionExecutor<DamagePlayerAction> {
         protected override void ExecuteAction(DamagePlayerAction damagePlayerAction, ActionExecutionContext context) {
             var targetPlayer = damagePlayerAction.GetTargetPlayer();

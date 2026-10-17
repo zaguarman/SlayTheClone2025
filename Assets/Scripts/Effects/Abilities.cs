@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static SlayTheClone.DebugLogger;
-using static SlayTheClone.Enums;
+using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Creature abilities ('Abilities Compendium'): when one is switched on, Zero-Day's bypass, and the stat-change pipeline
     /// (bypass, block, reflect, transform, apply, react). Each rule that an ability changes asks here.

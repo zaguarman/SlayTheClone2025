@@ -12,36 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57cdea666bbe27d40a9b7bcb7d504f0b, type: 3}
   m_Name: DigitalSocietyMidrangeDeck
   m_EditorClassIdentifier: Scripts::SlayTheClone.DeckScriptableObject
-  deckName: Digital Society - Influencer Economy
+  deckName: Pop Culture - Influencer Economy
   cards:
-  - {fileID: 11400000, guid: 56611a2d00e62bf428c0bfb506bb52d8, type: 2}
-  - {fileID: 11400000, guid: 56611a2d00e62bf428c0bfb506bb52d8, type: 2}
-  - {fileID: 11400000, guid: 4c8f0774af0a3074e955916c896343e0, type: 2}
-  - {fileID: 11400000, guid: 4c8f0774af0a3074e955916c896343e0, type: 2}
-  - {fileID: 11400000, guid: 9ae363bc20379664cb956e3407e46b43, type: 2}
-  - {fileID: 11400000, guid: 9ae363bc20379664cb956e3407e46b43, type: 2}
-  - {fileID: 11400000, guid: 183a9e51095f19c419ae927f0d8b8008, type: 2}
-  - {fileID: 11400000, guid: 183a9e51095f19c419ae927f0d8b8008, type: 2}
-  - {fileID: 11400000, guid: d7c80cec3755e7247bd5ef0e7f98f04b, type: 2}
-  - {fileID: 11400000, guid: d7c80cec3755e7247bd5ef0e7f98f04b, type: 2}
-  - {fileID: 11400000, guid: 285720a054817f2418d931d4c35ecb17, type: 2}
-  - {fileID: 11400000, guid: 285720a054817f2418d931d4c35ecb17, type: 2}
-  - {fileID: 11400000, guid: fa76cfa50b9c9554eb816a4ce6f336a0, type: 2}
-  - {fileID: 11400000, guid: fa76cfa50b9c9554eb816a4ce6f336a0, type: 2}
-  - {fileID: 11400000, guid: de3adc60108efa04d920eaf39638a8ce, type: 2}
-  - {fileID: 11400000, guid: de3adc60108efa04d920eaf39638a8ce, type: 2}
-  - {fileID: 11400000, guid: f2bf5369176d5fe43a56d06b7024f483, type: 2}
-  - {fileID: 11400000, guid: f2bf5369176d5fe43a56d06b7024f483, type: 2}
-  - {fileID: 11400000, guid: e86409097920347469c5cbf73aa57869, type: 2}
-  - {fileID: 11400000, guid: a3b8c4ef47bae384d9867c7ac238e6a0, type: 2}
-  - {fileID: 11400000, guid: a3b8c4ef47bae384d9867c7ac238e6a0, type: 2}
-  - {fileID: 11400000, guid: 837d1ac84fa4db3498299301e25df320, type: 2}
-  - {fileID: 11400000, guid: a34ff6d49331a0946acf398d4f80392b, type: 2}
-  - {fileID: 11400000, guid: a34ff6d49331a0946acf398d4f80392b, type: 2}
-  - {fileID: 11400000, guid: af46f1548e0def14c9d83c4652eef318, type: 2}
-  - {fileID: 11400000, guid: af46f1548e0def14c9d83c4652eef318, type: 2}
-  - {fileID: 11400000, guid: c150678a5245a3142b126cd99a2d83c2, type: 2}
-  - {fileID: 11400000, guid: c150678a5245a3142b126cd99a2d83c2, type: 2}
-  lastUpdated: 2026-10-16T21:51:18.4938794Z
+  - {fileID: 11400000, guid: ac11e6092f0f5754695df24113320dc7, type: 2}
+  - {fileID: 11400000, guid: ac11e6092f0f5754695df24113320dc7, type: 2}
+  - {fileID: 11400000, guid: d442d62f909529e4ea15b5fa4847d138, type: 2}
+  - {fileID: 11400000, guid: d442d62f909529e4ea15b5fa4847d138, type: 2}
+  - {fileID: 11400000, guid: a9ceb02a818d514488680ccb253bc352, type: 2}
+  - {fileID: 11400000, guid: a9ceb02a818d514488680ccb253bc352, type: 2}
+  - {fileID: 11400000, guid: 8f9ccbf49634b3c48b37dc94c013cb9a, type: 2}
+  - {fileID: 11400000, guid: 8f9ccbf49634b3c48b37dc94c013cb9a, type: 2}
+  - {fileID: 11400000, guid: 70add0ece25639e40a05c50b94963a41, type: 2}
+  - {fileID: 11400000, guid: 70add0ece25639e40a05c50b94963a41, type: 2}
+  - {fileID: 11400000, guid: 54ba5287a7b3b184894c02fc4bbc5cc4, type: 2}
+  - {fileID: 11400000, guid: 54ba5287a7b3b184894c02fc4bbc5cc4, type: 2}
+  - {fileID: 11400000, guid: 9647b2cdb2399ba4b932fbec10283879, type: 2}
+  - {fileID: 11400000, guid: 9647b2cdb2399ba4b932fbec10283879, type: 2}
+  - {fileID: 11400000, guid: 6559f470c062bd94caeb4f75e0441938, type: 2}
+  - {fileID: 11400000, guid: 6559f470c062bd94caeb4f75e0441938, type: 2}
+  - {fileID: 11400000, guid: 2b1d92e3b3d74bf4199c45f5b081fd0b, type: 2}
+  - {fileID: 11400000, guid: 2b1d92e3b3d74bf4199c45f5b081fd0b, type: 2}
+  - {fileID: 11400000, guid: 7deb5f30f84beca4385335dc3b6b41c6, type: 2}
+  - {fileID: 11400000, guid: bf805e91aaedf414aa5daad37038b1df, type: 2}
+  - {fileID: 11400000, guid: bf805e91aaedf414aa5daad37038b1df, type: 2}
+  - {fileID: 11400000, guid: 2bee8d866a3da0c40af866ee21f9dfe1, type: 2}
+  - {fileID: 11400000, guid: 65839571c5fe4fd439e0e0e24ac78102, type: 2}
+  - {fileID: 11400000, guid: 65839571c5fe4fd439e0e0e24ac78102, type: 2}
+  - {fileID: 11400000, guid: 5be6dbd6303813c46abc6a95c8b68050, type: 2}
+  - {fileID: 11400000, guid: 5be6dbd6303813c46abc6a95c8b68050, type: 2}
+  - {fileID: 11400000, guid: 2dcf4b75e65be464888784aabe969b56, type: 2}
+  - {fileID: 11400000, guid: 2dcf4b75e65be464888784aabe969b56, type: 2}
+  lastUpdated: 2026-10-17T14:17:55.2156806Z
   strategy: Midrange
   focus: 0

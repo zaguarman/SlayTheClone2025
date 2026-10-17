@@ -3,7 +3,7 @@ using UnityEditor;
 #endif
 using UnityEngine;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     [System.Serializable]
     public class TriStateField {
         public enum State {

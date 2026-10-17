@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>What a room on the adventure map holds. For now only the fights do something; the rest are walked through.</summary>
     public enum RoomType { Fight, Elite, Unknown, Rest, Shop, Treasure, Boss }
 

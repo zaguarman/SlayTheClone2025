@@ -1,7 +1,7 @@
 using UnityEngine;
-using static SlayTheClone.DebugLogger;
+using static Zeitgeist.DebugLogger;
 
-namespace SlayTheClone {
+namespace Zeitgeist {
     /// <summary>
     /// Makes card faces. Holds what every face needs: the card prefab and the running game.
     /// Built once at startup and handed to the views that show cards (hands, boards, the deck view, resolution playback).
