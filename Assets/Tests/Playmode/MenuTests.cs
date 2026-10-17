@@ -374,6 +374,20 @@ namespace Zeitgeist.Tests {
             Assert.IsFalse(AdventureRun.Active, "...then ends the run");
             Assert.AreEqual(0, AdventureRun.EuroYuans, "...and its money goes with it");
             MatchSetup.Clear();
+
+            // The tutorial run (the user, 2026-10-17): a fixed map and faction, no opening event, the first fight next
+            bool tutorialDoneBefore = Tutorial.Done;
+            Tutorial.Begin(catalog.AllCards, catalog.Potions);
+            Assert.IsTrue(Tutorial.Active && AdventureRun.Active && AdventureRun.Map.Seed == Tutorial.Seed && AdventureRun.Umbrella == Tutorial.Faction, "The tutorial is a run on its fixed seed and faction");
+            Assert.IsFalse(AdventureRun.InEvent, "...with no Orientation Day in the way");
+            Assert.IsTrue(AdventureRun.Reachable().All(n => n.Row == 0) && AdventureRun.Reachable().Count > 0, "...the first row open");
+            Tutorial.FightEnded(won: true);
+            Assert.IsTrue(Tutorial.ShowsUnlocks, "Winning the tutored fight earns the unlocks screen");
+            Tutorial.End();
+            Assert.IsTrue(Tutorial.Done && !Tutorial.Active, "...and the tutorial is remembered as done");
+            if (!tutorialDoneBefore) Tutorial.Forget(); // The player's own memory of it stays as it was
+            AdventureRun.Clear();
+            MatchSetup.Clear();
         }
 
         [UnityTest]

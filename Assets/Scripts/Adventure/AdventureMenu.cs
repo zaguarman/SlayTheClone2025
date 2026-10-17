@@ -82,6 +82,7 @@ namespace Zeitgeist {
         private bool abandonArmed;
 
         protected override GameObject Build() => !AdventureRun.Active ? BuildFactions()
+            : Tutorial.ShowsUnlocks ? BuildUnlocks()
             : ViewingDeck ? BuildDeck()
             : AdventureRun.InShop ? (Removing ? BuildRemoval() : BuildShop())
             : AdventureRun.InEvent ? (AdventureRun.Upgrading ? BuildUpgrade() : BuildEvent())
@@ -155,6 +156,33 @@ namespace Zeitgeist {
             Show();
         }
 
+        public const string TutorialButtonName = "TutorialButton", UnlocksContinueButtonName = "UnlocksContinueButton";
+
+        /// <summary>The tutorial run (see <see cref="Tutorial"/>): it starts and walks straight into the first fight, tutor on screen.</summary>
+        public void StartTutorial() {
+            Tutorial.Begin(Catalog.AllCards, Catalog.Potions);
+            Chosen = Tutorial.Faction;
+            var first = AdventureRun.Map.Row(0).First();
+            if (AdventureRun.Enter(first, Catalog.AllCards)) {
+                SetUpFight(first);
+                StartGame?.Invoke();
+            }
+            else Show();
+        }
+
+        // The tutored fight won: the cards it "unlocked", for looks (every card stays available while the game is tested)
+        private GameObject BuildUnlocks() {
+            var screen = AddScreen(transform, "AdventurePanel", "Tutorial complete");
+            var grid = new CardGrid(screen.columns, Catalog.CardPrefab, 3);
+            grid.Title.text = "You unlocked these cards  <size=70%><color=#C9C0AE>they join the cards on offer in every mode</color></size>";
+            var unlocked = Tutorial.Unlocks.Select(name => Catalog.AllCards.FirstOrDefault(c => c.cardName == name)).Where(c => c != null).ToList();
+            grid.Show(unlocked, (face, _) => face.ShowsItself = true);
+            var footer = AddFooter(screen.panel.transform);
+            var go = AddButton(footer, UnlocksContinueButtonName, "<b>On with the run</b>", 360, () => { Tutorial.End(); Show(); });
+            UITheme.StyleButton(go, UITheme.ButtonKind.Primary);
+            return screen.panel;
+        }
+
         /// <summary>Starts a run with the chosen faction's starter deck, on a new map, and shows it.</summary>
         public void Embark() {
             if (Chosen == null || !Factions.Contains(Chosen.Value)) return;
@@ -196,6 +224,8 @@ namespace Zeitgeist {
             UITheme.StyleButton(embark, UITheme.ButtonKind.Primary);
             AddButton(footer, AutoplayButtonName, "Autoplay", 260, Autoplay);
             ascensionButton = AddButton(footer, AscensionButtonName, "Ascension", 300, CycleAscension);
+            // The first run (the user, 2026-10-17): a fixed map and faction, a tutor over the first fight, unlocks for looks at its end
+            AddButton(footer, TutorialButtonName, Tutorial.Done ? "Tutorial again" : "<b>Tutorial</b>", 260, StartTutorial);
             return screen.panel;
         }
         #endregion
