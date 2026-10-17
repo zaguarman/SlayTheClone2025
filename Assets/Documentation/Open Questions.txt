@@ -28,6 +28,11 @@ STILL OPEN
       Mercenaries, Technical Debt; in the card files). Measured right after (Faction Balance Plan 11): Hard still lost to Medium,
       Swarm rose to 81% and Midrange fell to 66%: the knobs took the bodies off the planning decks and fed the swarm. Knob 3
       turned the same evening: the Flanks' +1 Attack is gone (Formation.FlankAttack 0). Measured next.
+    • Measured (Faction Balance Plan 12): the Flanks' Attack moved nothing (Swarm 81%, Hard 278 to 207). The tempo knobs were
+      not what kept planning from paying; the Swarm's engine was. Clickbait became a Prophecy 1 and Dogpile a single-target 3
+      (Faction Balance Plan 13): Swarm 62%, Control and Engine up a few points, Terminally Online 61% from 90%, Hard still
+      loses to Medium (208 to 277). Next: the decks rebuilt from the scores (done, commit a317128f, measured next), then Hard
+      rebuilt from Medium's greedy core; the three knobs stay.
 
 46. Liminal Space and the creatures with 0 Attack (2026-10-17)
     • What the shuffled tournament's audit saw: "Perpetual Motion Machine 4/0 is still alive on the board". Liminal Space trades

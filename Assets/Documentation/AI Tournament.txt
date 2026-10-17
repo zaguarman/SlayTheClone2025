@@ -4,21 +4,21 @@ Each deck against itself, each pairing, both seats. 1500 games, called off after
 Ranking: share of all its games won (draws count as not won)
   Medium             67% of 1000
   Hard               58% of 1000  Weighs everything the same: the plain Hard AI.
-  Easy               24% of 1000
+  Easy               23% of 1000
 
 Head to head: the row's wins - the column's wins
                           Easy      Medium        Hard
-  Easy                       -   111 - 388   125 - 374
-  Medium             388 - 111           -   278 - 207
-  Hard               374 - 125   207 - 278           -
+  Easy                       -   104 - 395   129 - 370
+  Medium             395 - 104           -   277 - 208
+  Hard               370 - 129   208 - 277           -
 
-Seats: Player 1 won 755, Player 2 won 728, 17 draws; 20,8 Days on average
+Seats: Player 1 won 759, Player 2 won 724, 17 draws; 20,4 Days on average
 
 By deck: which AI won the most with it
   Capital - Shareholder Value: Hard 88%, Medium 58%, Easy 5%
   Establishment - Order & Paperwork: Medium 83%, Hard 65%, Easy 3%
   Digital Society - Moods of Modern Life: Medium 55%, Hard 55%, Easy 35%
-  Digital Society - Terminally Online: Hard 83%, Medium 68%, Easy 0%
+  Digital Society - Terminally Online: Medium 78%, Hard 68%, Easy 5%
   Enlightenment - Results May Vary: Hard 70%, Medium 65%, Easy 15%
   Establishment - Licence to Kill: Medium 63%, Hard 53%, Easy 35%
   Capital - Move Fast and Break Things: Medium 80%, Hard 63%, Easy 8%
@@ -28,17 +28,17 @@ By deck: which AI won the most with it
   Establishment - Shock and Awe: Medium 83%, Hard 65%, Easy 3%
   Digital Society - Underdogs: Medium 80%, Hard 58%, Easy 13%
   Enlightenment - Lab Grown: Medium 75%, Hard 63%, Easy 13%
-  Digital Society - Influencer Economy: Medium 90%, Hard 58%, Easy 3%
+  Digital Society - Influencer Economy: Medium 90%, Hard 60%, Easy 0%
   Establishment - Black Budget: Medium 80%, Easy 35%, Hard 35%
   Capital - Threat Model: Medium 68%, Hard 60%, Easy 23%
   Establishment - Blessed Martyrs: Medium 73%, Hard 50%, Easy 28%
   Enlightenment - Mind Games: Medium 80%, Hard 38%, Easy 33%
   Establishment + Capital - Prosperity Gospel: Easy 93%, Hard 58%, Medium 0%
-  Digital Society + Establishment - Panopticon: Medium 78%, Hard 65%, Easy 8%
+  Digital Society + Establishment - Panopticon: Medium 75%, Hard 73%, Easy 3%
   Capital + Digital Society - Hustle Culture: Hard 80%, Medium 70%, Easy 0%
   Establishment + Capital - Military-Industrial Complex: Easy 45%, Medium 35%, Hard 35%
   Enlightenment + Establishment - Frankenstein: Easy 83%, Hard 35%, Medium 33%
-  Capital + Digital Society - The Algorithm: Hard 68%, Medium 60%, Easy 23%
+  Capital + Digital Society - The Algorithm: Medium 68%, Hard 65%, Easy 18%
   Establishment + Enlightenment - Psyop: Medium 90%, Hard 38%, Easy 20%
 
 PROBLEMS: 1 kinds

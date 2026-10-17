@@ -304,7 +304,7 @@ namespace Zeitgeist {
                 groups[section] = group;
                 foreach (var entry in entries) {
                     string key = entry.Key;
-                    var button = AddButton(group.transform, KeywordButton + key, starters.Contains(key) ? entry.Title + " <color=#B8B0A0>★</color>" : entry.Title, -1, () => ShowKeyword(key));
+                    var button = AddButton(group.transform, KeywordButton + key, starters.Contains(key) ? entry.Title + " <color=#B8B0A0>♦</color>" : entry.Title, -1, () => ShowKeyword(key));
                     button.GetComponent<LayoutElement>().preferredHeight = 40;
                     var text = button.GetComponentInChildren<TextMeshProUGUI>();
                     text.fontSize = 21;

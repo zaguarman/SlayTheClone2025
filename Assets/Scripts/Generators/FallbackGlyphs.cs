@@ -10,7 +10,7 @@ namespace Zeitgeist {
     /// "fix these font emojis missing"); CardDataTests checks every coin glyph is drawable.
     /// </summary>
     public static class FallbackGlyphs {
-        public const string Glyphs = "Ψλ→∞☺ΩΦ★";
+        public const string Glyphs = "Ψλ→∞☺ΩΦ♦";
         private const string AssetPath = "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset";
         private const string SourceFont = "Assets/TextMesh Pro/Fonts/LiberationSans.ttf";
 

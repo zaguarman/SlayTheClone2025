@@ -186,3 +186,16 @@ the AI not at all: the game's tempo isn't what keeps planning from paying. What 
 Next, in this order: the Swarm's numbers and the Engine, Combo and Control payoffs in the card files (the rebalance the user
 asked for, to reward planning), then the decks rebuilt from the scores, then Hard rebuilt from Medium's core, each step
 measured with Tools/ai_reports.ps1. The three knobs stay for now; they're one line each to undo.
+
+13. THE SWARM CUT: CLICKBAIT A PROPHECY, DOGPILE A SINGLE TARGET (2026-10-17, study-2026-10-17e, commit a725ec96)
+Clickbait became a Prophecy 1 (2 damage to every enemy creature next Dawn, so the enemy sees it coming for a Day) and Dogpile
+3 damage to one creature (it was 2 to a target and its neighbours). Strategies, deck against deck: Midrange 67%, Swarm 62%
+(from 81%), Control 55% (from 51%), Engine 45% (from 41%), Aggro 37%, Combo 33%. Terminally Online fell from 90% to 61%;
+Underdogs holds the Swarm at 74%. Clickbait still deals 58 a game (from 65: the AI plays it just as often, a Day later) and
+Dogpile 20 (from 47). The factions: Capital 56%, Digital Society 55%, Establishment 50%, Enlightenment 48%; the thin
+subfactions are Shadow Ops. (31%: Licence to Kill 37%, Black Budget 24%) and Mind (36%: Mind Games 16%). The planning
+mechanics pay when measured: Armor 77%, Take control 73%, Prophecy 69%, Slot effect 62%. The levels run (same seeds):
+Hard 208 to Medium 277, unchanged. The study's CardScores.json is the tier list the user asked redone.
+Next: the decks rebuilt from these numbers (Tools/propose_decks.py, commit a317128f: every deck keeps its strategy and gets
+its subfactions' best cards for it; Deck Proposals.txt shows the swaps), measured next as study-2026-10-17f; then Hard
+rebuilt from Medium's core (AI Design.txt). Shadow Ops. and Mind get the next buffs: their decks were the ones most rebuilt.
