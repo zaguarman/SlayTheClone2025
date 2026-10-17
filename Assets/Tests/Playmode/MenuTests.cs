@@ -71,6 +71,17 @@ namespace Zeitgeist.Tests {
                 Assert.AreEqual("S", gallery.ShownTier);
                 Assert.IsTrue(Shown(gallery).All(name => CardScores.TierOf(name) == "S"), "Tier S shows only the S cards of the faction shown");
                 Assert.IsTrue(gallery.ShownCards.All(c => c.ShowsItself), "Hovered, a gallery card shows no enlarged copy");
+                // Its keywords explain themselves on the card itself (the user, 2026-10-17), the first after a longer look
+                yield return null; // The grid lays the tier's cards out
+                var readable = gallery.ShownCards.First(c => { c.RulesText.ForceMeshUpdate(); return c.RulesText.textInfo.linkCount > 0; });
+                string key = readable.RulesText.textInfo.linkInfo.Take(readable.RulesText.textInfo.linkCount).Select(l => l.GetLinkID()).First(Keywords.Exists);
+                SceneGame.Hover(readable);
+                yield return new WaitForSecondsRealtime(Tooltip.WindowDelay + 0.1f);
+                var tooltip = Tooltip.Existing;
+                Assert.AreSame(readable, tooltip.Preview, "The card shown is the card itself, not a copy");
+                Assert.IsTrue(tooltip.TrackKeywords(SceneGame.KeywordPoint(readable.RulesText, key)), $"The pointer on {key} is on the card");
+                CollectionAssert.AreEqual(new[] { key }, tooltip.OpenKeywords, "Hovering a keyword on it explains it");
+                tooltip.HideTooltip();
                 Click(GalleryButton(gallery, CardGalleryMenu.TierTab + "Any"));
                 Assert.IsNull(gallery.ShownTier);
             }
