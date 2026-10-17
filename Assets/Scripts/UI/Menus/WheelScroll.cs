@@ -10,6 +10,8 @@ namespace Zeitgeist {
     [RequireComponent(typeof(ScrollRect))]
     public class WheelScroll : MonoBehaviour {
         public float PixelsPerNotch = 90f;
+        /// <summary>Where over the list the wheel scrolls it (the glossary: its right edge; elsewhere the wheel walks the entries). Null: anywhere.</summary>
+        public System.Func<Vector2, bool> ScrollsAt;
         private ScrollRect scroll;
 
         public static WheelScroll AddTo(ScrollRect scrollRect) {
@@ -26,6 +28,7 @@ namespace Zeitgeist {
             var canvas = GetComponentInParent<Canvas>();
             var eventCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.worldCamera : null;
             if (!RectTransformUtility.RectangleContainsScreenPoint(area, GameInput.PointerPosition, eventCamera)) return;
+            if (ScrollsAt != null && !ScrollsAt(GameInput.PointerPosition)) return;
             ScrollBy(notches);
         }
 

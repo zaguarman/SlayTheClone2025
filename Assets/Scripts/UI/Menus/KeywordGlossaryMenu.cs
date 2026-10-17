@@ -84,17 +84,6 @@ namespace Zeitgeist {
             ShowKeyword(listed[((at < 0 ? 0 : at + step) % listed.Count + listed.Count) % listed.Count]);
         }
 
-        /// <summary>The section after (or before) the open one, round the end, showing its first keyword.</summary>
-        public void OpenNextSection(int step) {
-            var sections = Keywords.Groups;
-            if (sections.Count == 0) return;
-            int at = OpenSection != null ? sections.IndexOf(OpenSection) : -1;
-            string next = sections[((at < 0 ? 0 : at + step) % sections.Count + sections.Count) % sections.Count];
-            var first = order.FirstOrDefault(k => Keywords.Get(k).Group == next);
-            if (first != null) ShowKeyword(first);
-            Open(next);
-        }
-
         /// <summary>Opens the section (closing the one open) and, unless told otherwise, scrolls its header to the top.</summary>
         public void Open(string section, bool scrollToIt = true) {
             if (!groups.ContainsKey(section)) return;
@@ -174,18 +163,18 @@ namespace Zeitgeist {
         protected override void Update() {
             base.Update();
             if (!IsOpen || usedBy == null) return;
-            // The keyboard and the wheel (the user, 2026-10-17): Up and Down walk the keywords listed, Left and Right the sections,
-            // the wheel over the entry turns its pages; typing in the search takes the keys
+            // The keyboard and the wheel (the user, 2026-10-17): Up and Down walk the keywords listed (Left and Right did the sections,
+            // "weird and very confusing", gone); the wheel over the list walks them too, and over the entry turns its pages; on the
+            // list's right edge (its last tenth) the wheel scrolls the list itself. Typing in the search takes the keys
             if (filter == null || !filter.isFocused) {
                 if (GameInput.KeyPressed(Key.DownArrow)) ShowNext(1);
                 else if (GameInput.KeyPressed(Key.UpArrow)) ShowNext(-1);
-                else if (GameInput.KeyPressed(Key.RightArrow) || GameInput.KeyPressed(Key.PageDown)) OpenNextSection(1);
-                else if (GameInput.KeyPressed(Key.LeftArrow) || GameInput.KeyPressed(Key.PageUp)) OpenNextSection(-1);
             }
             float wheel = GameInput.WheelNotches;
-            if (wheel != 0f && title != null && RectTransformUtility.RectangleContainsScreenPoint((RectTransform)title.transform.parent, GameInput.PointerPosition, null)) {
-                ShowNext(wheel < 0f ? 1 : -1);
-            }
+            var pointer = GameInput.PointerPosition;
+            bool overEntry = title != null && RectTransformUtility.RectangleContainsScreenPoint((RectTransform)title.transform.parent, pointer, null);
+            bool overList = list != null && RectTransformUtility.RectangleContainsScreenPoint(list.viewport, pointer, null) && !OnScrollEdge(pointer);
+            if (wheel != 0f && (overEntry || overList)) ShowNext(wheel < 0f ? 1 : -1);
             int link = TMP_TextUtilities.FindIntersectingLink(usedBy, GameInput.PointerPosition, null);
             string id = link >= 0 ? usedBy.textInfo.linkInfo[link].GetLinkID() : null;
             string name = id != null && id.StartsWith(CardLink) ? id.Substring(CardLink.Length) : null;
@@ -314,8 +303,16 @@ namespace Zeitgeist {
             scroll.content = contentRect;
             scroll.horizontal = false;
             scroll.movementType = ScrollRect.MovementType.Clamped;
-            WheelScroll.AddTo(scroll);
+            WheelScroll.AddTo(scroll).ScrollsAt = OnScrollEdge; // Only the list's right edge scrolls it; elsewhere the wheel walks the keywords
             list = scroll;
+        }
+
+        /// <summary>The pointer is on the list's right edge, its last tenth: where the wheel scrolls the list rather than walk the keywords.</summary>
+        public bool OnScrollEdge(Vector2 pointer) {
+            if (list == null || list.viewport == null) return false;
+            var viewport = list.viewport;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(viewport, pointer, null, out var local)) return false;
+            return (local.x - viewport.rect.xMin) / viewport.rect.width >= 0.9f;
         }
 
         // The chosen keyword: its name, its explanation (links click through), and the cards that print it
