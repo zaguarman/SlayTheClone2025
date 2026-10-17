@@ -90,6 +90,15 @@ namespace Zeitgeist {
             text.AppendLine("  then of the two-faction decks they're part of");
             var single = decks.Where(d => DeckCatalog.FactionsOf(d).Count == 1).ToList();
             var pairs = decks.Where(d => DeckCatalog.FactionsOf(d).Count == 2).ToList();
+            // The four factions (2026-10-17): a deck of one of them, whatever its subfactions, and the decks of two
+            var ofOne = decks.Where(d => DeckCatalog.UmbrellasOf(d).Count == 1).ToList();
+            var ofTwo = decks.Where(d => DeckCatalog.UmbrellasOf(d).Count == 2).ToList();
+            foreach (var umbrella in ofOne.GroupBy(d => DeckCatalog.UmbrellasOf(d)[0]).OrderByDescending(g => g.Average(d => shares[d.GetDeckName()]))) {
+                var withOthers = ofTwo.Where(d => DeckCatalog.UmbrellasOf(d).Contains(umbrella.Key)).ToList();
+                string paired = withOthers.Count == 0 ? "-" : $"{withOthers.Average(d => shares[d.GetDeckName()]):0%}";
+                text.AppendLine($"    {Umbrellas.Name(umbrella.Key),-16} {umbrella.Average(d => shares[d.GetDeckName()]),4:0%}   ({umbrella.Count()} decks);  in pairs {paired}");
+            }
+            text.AppendLine("  Subfactions:");
             foreach (var faction in single.GroupBy(DeckCatalog.FactionOf).OrderByDescending(g => g.Average(d => shares[d.GetDeckName()]))) {
                 var withOthers = pairs.Where(d => DeckCatalog.FactionsOf(d).Contains(faction.Key)).ToList();
                 string own = string.Join(", ", faction.OrderByDescending(d => shares[d.GetDeckName()]).Select(d => $"{d.Strategy} {shares[d.GetDeckName()]:0%}"));

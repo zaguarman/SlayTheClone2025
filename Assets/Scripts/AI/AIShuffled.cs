@@ -223,9 +223,19 @@ namespace Zeitgeist {
             text.AppendLine();
 
             // 4. Factions and pairs
-            text.AppendLine("4. FACTIONS: the potential of each faction's cards, and of the pairs");
+            text.AppendLine("4. FACTIONS: the potential of each faction's cards (the four, then their subfactions), and of the pairs");
             text.AppendLine($"    {"Faction",-15} {"Cards",5} {"Played",6} {"Win%",5} {"Impact/g",9}   Strongest roles (its cards' win share)   Weakest");
-            foreach (var faction in usable.Select(c => c.faction).Distinct().OrderBy(f => CardTextFormatter.FactionName(f))) {
+            // The four factions (2026-10-17): a card belongs to one through its subfaction
+            foreach (var umbrella in Umbrellas.All) {
+                var mine = played.Where(c => Umbrellas.Of(c.Faction) == umbrella).ToList();
+                var roleShares = mine.SelectMany(c => roleOf[c.Name].Select(r => (r, c.WinRate))).GroupBy(x => x.r).Where(g => g.Count() >= 2)
+                    .Select(g => (role: g.Key, share: g.Average(x => x.WinRate), n: g.Count())).OrderByDescending(x => x.share).ToList();
+                string best = string.Join(", ", roleShares.Take(2).Select(x => $"{RoleShort(x.role)} {x.share:0%}"));
+                string worst = string.Join(", ", roleShares.Skip(System.Math.Max(0, roleShares.Count - 2)).Select(x => $"{RoleShort(x.role)} {x.share:0%}"));
+                text.AppendLine($"    {Umbrellas.Name(umbrella),-15} {usable.Count(c => Umbrellas.Of(c.faction) == umbrella),5} {mine.Count,6} {(mine.Count == 0 ? 0 : mine.Average(c => c.WinRate)),5:0%} {(mine.Count == 0 ? 0 : mine.Average(c => c.ImpactPerGame)),9:0.0}   {best,-34} {worst}");
+            }
+            text.AppendLine("    Subfactions:");
+            foreach (var faction in usable.Select(c => c.faction).Distinct().OrderBy(Umbrellas.Order)) {
                 var mine = played.Where(c => c.Faction == faction).ToList();
                 var roleShares = mine.SelectMany(c => roleOf[c.Name].Select(r => (r, c.WinRate))).GroupBy(x => x.r).Where(g => g.Count() >= 2)
                     .Select(g => (role: g.Key, share: g.Average(x => x.WinRate), n: g.Count())).OrderByDescending(x => x.share).ToList();
@@ -241,23 +251,28 @@ namespace Zeitgeist {
             text.AppendLine();
 
             // 5. What each faction's pool holds, by role, against the pool's average: what it lacks
-            text.AppendLine("5. WHAT EACH FACTION LACKS: its share of each role against the whole pool's (- below, + above, in points)");
+            text.AppendLine("5. WHAT EACH FACTION LACKS: its share of each role against the whole pool's (- below, + above, in points); the four factions first, then the subfactions");
             var coreRoles = new[] { "Accelerator (draw, send for, rush)", "Support (heal, armor, cleanse)", "Support (buffs)", "Logistics (moves, returns)", "Removal", "Board damage",
                 "Face damage", "Debuff", "Set-up (slots, Trends, Watchdogs)", "Set-up (Prophecy)", "Intel", "Swarm (summons)", "Trickery (copies, steals, trades)", "Wall (6+ Health)", "Beater (4+ Attack)", "Ability creature" };
             float PoolShare(IEnumerable<CardDataScriptableObject> cards, string role) {
                 var list = cards.ToList();
                 return list.Count == 0 ? 0 : list.Count(c => roleOf[c.cardName].Contains(role)) / (float)list.Count;
             }
-            text.AppendLine($"    {"Role",-36} " + string.Join(" ", usable.Select(c => c.faction).Where(f => f != Faction.None).Distinct().OrderBy(f => CardTextFormatter.FactionName(f)).Select(f => $"{Abbrev(f),6}")));
-            var factionList = usable.Select(c => c.faction).Where(f => f != Faction.None).Distinct().OrderBy(f => CardTextFormatter.FactionName(f)).ToList();
+            var factionList = usable.Select(c => c.faction).Where(f => f != Faction.None).Distinct().OrderBy(Umbrellas.Order).ToList();
+            text.AppendLine($"    {"Role",-36} " + string.Join(" ", Umbrellas.All.Select(u => $"{Abbrev(u),6}")) + "  | " + string.Join(" ", factionList.Select(f => $"{Abbrev(f),6}")));
             foreach (var role in coreRoles) {
                 float all = PoolShare(usable, role);
-                text.AppendLine($"    {role,-36} " + string.Join(" ", factionList.Select(f => $"{(PoolShare(usable.Where(c => c.faction == f), role) - all) * 100,+6:0;-0;0}")));
+                text.AppendLine($"    {role,-36} " + string.Join(" ", Umbrellas.All.Select(u => $"{(PoolShare(usable.Where(c => Umbrellas.Of(c.faction) == u), role) - all) * 100,+6:0;-0;0}"))
+                    + "  | " + string.Join(" ", factionList.Select(f => $"{(PoolShare(usable.Where(c => c.faction == f), role) - all) * 100,+6:0;-0;0}")));
             }
-            text.AppendLine("    (Abbreviations: " + string.Join(", ", factionList.Select(f => $"{Abbrev(f)} {CardTextFormatter.FactionName(f)}")) + ")");
+            text.AppendLine("    (Abbreviations: " + string.Join(", ", Umbrellas.All.Select(u => $"{Abbrev(u)} {Umbrellas.Name(u)}")) + "; " + string.Join(", ", factionList.Select(f => $"{Abbrev(f)} {CardTextFormatter.FactionName(f)}")) + ")");
             text.AppendLine();
             return text.ToString();
         }
+
+        private static string Abbrev(Umbrella umbrella) => umbrella switch {
+            Umbrella.Establishment => "Establ", Umbrella.Capital => "Capitl", Umbrella.Enlightenment => "Enligh", Umbrella.DigitalSociety => "DigSoc", _ => "None"
+        };
 
         private static string RoleShort(string role) => role.Contains(" (") ? role.Substring(0, role.IndexOf(" (")) : role;
 

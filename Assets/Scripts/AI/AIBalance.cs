@@ -483,7 +483,11 @@ namespace Zeitgeist {
                                 $"opened {c.OpenedDamage / g:0.0}, draws {c.Draws / g:0.0}, sent for {c.SentFor / g:0.0}, denied {c.Denied / g:0.0}, healed {c.Healed / g:0.0}");
             }
             text.AppendLine();
-            text.AppendLine("  By faction: average edge of its cards (cards with 60+ edge games)");
+            text.AppendLine("  By faction: average edge of its cards (cards with 60+ edge games); the four factions, then the subfactions");
+            foreach (var umbrella in withEdge.GroupBy(c => Umbrellas.Of(c.Faction)).OrderByDescending(g => g.Average(c => c.Edge))) {
+                var best = umbrella.OrderByDescending(c => c.Edge).First();
+                text.AppendLine($"    {Umbrellas.Name(umbrella.Key),-15} {umbrella.Average(c => c.Edge):0%}   best {best.Name} ({best.Edge:0%})");
+            }
             foreach (var faction in withEdge.GroupBy(c => c.Faction).OrderByDescending(g => g.Average(c => c.Edge))) {
                 var best = faction.OrderByDescending(c => c.Edge).First();
                 text.AppendLine($"    {CardTextFormatter.FactionName(faction.Key),-15} {faction.Average(c => c.Edge):0%}   best {best.Name} ({best.Edge:0%})");
