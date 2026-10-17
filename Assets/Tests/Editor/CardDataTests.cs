@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using UnityEditor;
@@ -40,6 +41,32 @@ namespace Zeitgeist.Tests {
             }
 
             Assert.IsEmpty(problems, "Card effects that can't work:\n" + string.Join("\n", problems));
+
+            // Every definition in the generator is one card, once (the user, 2026-10-17: three names were defined twice and the
+            // later card overwrote the earlier's file), and every asset comes from a definition
+            string generator = File.ReadAllText(Path.Combine(Application.dataPath, "Scripts", "Generators", "FactionDecksGenerator.cs"));
+            generator = System.Text.RegularExpressions.Regex.Replace(generator, @"#region Shelved.*?#endregion", "", System.Text.RegularExpressions.RegexOptions.Singleline); // Kept out of the game on purpose
+            var defined = System.Text.RegularExpressions.Regex.Matches(generator, @"(?:Creature|Spell)\(""((?:[^""\\]|\\.)+)""").Cast<System.Text.RegularExpressions.Match>()
+                .Select(m => m.Groups[1].Value.Replace("\\\"", "\"")).ToList();
+            CollectionAssert.IsEmpty(defined.GroupBy(n => n).Where(g => g.Count() > 1).Select(g => g.Key).ToList(), "Cards defined twice in the generator");
+            var names = assets.Select(a => a.cardName).ToList();
+            Assert.IsTrue(defined.Count == names.Count && !defined.Except(names).Any() && !names.Except(defined).Any(),
+                $"The card assets are the generator's definitions, one each (regenerate: Cards > Generate Faction Decks). Defined but no asset: {string.Join(", ", defined.Except(names))}. Asset but not defined: {string.Join(", ", names.Except(defined))}");
+
+            // A card with effects or an ability says what they do: flavour alone (the user: Curfew read as a blank spell) is a formatter gap
+            var mute = new List<string>();
+            foreach (var asset in assets) {
+                var data = asset.ToCardData();
+                try {
+                    bool doesSomething = data.effects.Any(e => e.actions.Count > 0) || (data as CreatureData)?.ability != CreatureAbility.None;
+                    if (doesSomething && string.IsNullOrWhiteSpace(Keywords.Plain(CardTextFormatter.GetRulesText(data))))
+                        mute.Add($"{data.cardName}: {string.Join(", ", data.effects.SelectMany(e => e.actions).Select(a => a.actionType.ToString()))}");
+                }
+                finally {
+                    Object.DestroyImmediate(data);
+                }
+            }
+            CollectionAssert.IsEmpty(mute, "Cards that do something but print no rules text");
 
             // Every keyword printed on a card, or mentioned in another keyword's explanation, has an explanation
             // ...and the text says each thing once: the same effect on groups that make up a bigger one reads as that group

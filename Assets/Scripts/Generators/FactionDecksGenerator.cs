@@ -2872,6 +2872,12 @@ namespace Zeitgeist {
             CreateFolderIfNeeded(CardsRoot, faction.ToString());
             CreateFolderIfNeeded("Assets/Scriptables", "Decks");
 
+            // A name defined twice (the user, 2026-10-17): the second card would overwrite the first's file in silence, as
+            // Blood Transfusion, Thoughts and Prayers and Mutually Assured Destruction did for a day. Nothing is written.
+            var twice = cards.GroupBy(c => c.Name).Where(g => g.Count() > 1).Select(g => $"{g.Key} ({faction}, twice)")
+                .Concat(cards.Where(c => written.ContainsKey(c.Name)).Select(c => $"{c.Name} ({faction}, and {written[c.Name].faction} already)")).ToList();
+            if (twice.Count > 0) throw new System.InvalidOperationException($"Cards defined twice, rename one of each: {string.Join("; ", twice)}");
+
             var deckCards = new List<CardDataScriptableObject>();
             var all = new List<CardDataScriptableObject>();
             // Fake faces first, then tokens, so the cards that point at them find them written

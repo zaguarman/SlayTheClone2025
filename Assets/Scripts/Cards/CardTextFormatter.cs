@@ -536,7 +536,8 @@ namespace Zeitgeist {
                 case StatusEffectType.Leeched: return $"{Keywords.Link("Leeched", $"Leech {potency}")}{DaysTag(days)} on {target}";
                 case StatusEffectType.MutuallyAssured: return $"{Keywords.Link("Mutually Assured")}{DaysTag(days)} on {target}: the creature that kills it dies too";
                 case StatusEffectType.Survivor: return $"{Keywords.Link("Survivor")} on {target}";
-                default: return null;
+                case StatusEffectType.Rooted: return $"{Keywords.Link("Rooted")}{DaysTag(days)} on {target}"; // Curfew (the user, 2026-10-17: it printed flavour alone)
+                default: return null; // CardDataTests lists any card that does something and prints nothing
             }
         }
 
