@@ -186,6 +186,7 @@ namespace SlayTheClone.Tests {
             Assert.AreNotEqual(yours, AdventureRun.BossFaction, "...and isn't yours");
             Click(GalleryButton(adventure, AdventureMenu.EventChoiceButton + 0));
             Assert.AreEqual(1, AdventureRun.Relics.Count, "The company perk: a relic");
+            AdventureRun.Relics.Clear(); // A random one: the Health, pay and pack checks below count without it
             Click(GalleryButton(adventure, AdventureMenu.EventOnButtonName));
             var map = AdventureRun.Map;
             Assert.IsTrue(map.Row(0).All(n => n.Type == RoomType.Fight) && map.Row(AdventureMap.TreasureRow).All(n => n.Type == RoomType.Treasure)

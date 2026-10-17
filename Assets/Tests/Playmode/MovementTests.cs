@@ -1,3 +1,4 @@
+using System.Linq;
 using NUnit.Framework;
 using static SlayTheClone.Enums;
 
@@ -40,7 +41,7 @@ namespace SlayTheClone.Tests {
             Assert.AreSame(p1.Battlefield[slot], creature.Slot, message ?? $"{creature.Name} should be in slot {slot}");
 
         [Test]
-        public void Moves_Walk_SwapInMelee_Leapfrog_Swap_WhileDeploying_ButNotRooted() {
+        public void Moves_Walk_SwapInMelee_Leapfrog_Swap_WhileDeploying_ButNotRooted_AndManeuvers() {
             var walker = Place("Walker", 3);
             var wall = Place("Wall", 1);
             Plan(walker, 4);
@@ -103,6 +104,31 @@ namespace SlayTheClone.Tests {
             game.Resolve();
             AssertAt(swapper, 4, "Swap trades places with a friendly creature at any distance, over the ones between");
             AssertAt(frog, 0, "Being swapped isn't the partner's own movement: it works even if it can't act");
+
+            // Maneuvers (the user, 2026-10-17): Push a step back, Pull a step forward, trading places with whoever is there;
+            // Shuffle mixes a whole side. A Rooted creature stays put
+            Fresh();
+            var front = Place("Front", 0);
+            var flank = Place("Flank", 1);
+            game.Run(new PushAction(front, forward: false));
+            AssertAt(front, 2, "Pushed back, the Vanguard goes to the empty Flank");
+            game.Run(new PushAction(flank, forward: false));
+            AssertAt(flank, 3, "A Flank goes to the Headquarters slot behind it");
+            game.Run(new PushAction(flank, forward: false));
+            AssertAt(flank, 3, "Headquarters can't go further back");
+            game.Run(new PushAction(flank, forward: true));
+            AssertAt(flank, 1, "Pulled forward: Headquarters to the Flank in front of it");
+            var back = Place("Back", 4);
+            game.Run(new PushAction(back, forward: true));
+            AssertAt(back, 2, "Into an occupied slot...");
+            AssertAt(front, 4, "...the two trade places");
+            game.Run(new ApplyStatusEffectAction(back, StatusEffectType.Rooted, 2, 0));
+            game.Run(new PushAction(back, forward: true));
+            AssertAt(back, 2, "Rooted: not moved");
+            game.Run(new ShuffleAction(p1));
+            AssertAt(back, 2, "A shuffle leaves a Rooted creature where it is");
+            Assert.IsTrue(new[] { front, flank }.All(c => c.Slot?.Owner == p1 && c.Slot.OccupyingCreature == c), "...and every other one lands in a slot of its side");
+            Assert.AreEqual(3, p1.Battlefield.Count(s => s.IsOccupied()), "Nobody lost or doubled");
         }
 
         [Test]

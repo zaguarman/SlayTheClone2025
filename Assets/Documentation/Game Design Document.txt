@@ -997,6 +997,25 @@ From Pokémon's Stealth Rock: a Slot Effect placed on every slot of a side.
   after it (spells resolve in random order). Cards: Ctrl + Y (Tech), Hyperbole (Mind), High-Frequency Trading Scam (Corporate).
 
 
+5.11 Maneuvers (2026-10-17)
+
+A card type (the user): spells that only move creatures around the board, shown as "Maneuver" on the type line, with their
+flavour as their first keyword:
+• Ambivalent: either side's creatures, to reorganise yours or disrupt theirs.
+• Disruption: only the enemy's: chaos in their formation.
+• Logistics: only yours.
+The moves: Push (a step back: the Vanguard to a Flank, an empty one if it can, a Flank to the Headquarters slot behind it),
+Pull (a step forward: a Headquarters slot to the Flank in front of it, a Flank to the Vanguard), Swap (with its partner:
+Flank with Flank, Headquarters with Headquarters, the Vanguard with the left Flank) and Shuffle (every creature on a side
+changes slots at random). Into an occupied slot, the two trade places. Nobody chose to move, so none is a move: a Rooted
+creature isn't moved (and stays put in a Shuffle), and Slot Effects see the creatures leave and enter. Spells resolve
+before attacks, so a Maneuver changes where that Day's attacks land.
+Cards: Domino Effect (Push, Ambivalent) and Controlled Chaos (Shuffle the side it's played on, Ambivalent), Mind; Tourist
+Trap (Pull, Disruption), Zeitgeist; Mass Emigration (Shuffle the enemy side, Disruption), Statecraft; Valet (Swap,
+Logistics), Corporate; Heimlich Maneuver (Push, Logistics), Utopia. Push was archived on 2026-10-16 as a creature move
+(Archived/Push.txt); it comes back here only as a Maneuver.
+
+
 6. DESIGN PHILOSOPHY & BALANCING
 
 6.1 Tone

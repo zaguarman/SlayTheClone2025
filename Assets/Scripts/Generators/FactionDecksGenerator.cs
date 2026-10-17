@@ -58,11 +58,9 @@ namespace SlayTheClone {
 
         // The cards being worked on now, to test in a match: two of each, filled up to 20 with their faction's best deck. It's
         // first in the menus. Change it with the work
-        // Here (the user, 2026-10-16): the meta picks' cards (Ripening, Laid Off, Grudge, side hazards, Shield Bash, Strip
-        // Search, On Trend with Rush Hour to switch it on, Hit and Run, Martyrdom, Hormesis, Sucker Punch, Projection); a test deck may mix them
-        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Corporate, new[] {
-            "Usury", "Middle Manager", "Big Four", "Border Crossing", "Peace Force", "Security Guard", "Spite Voter",
-            "Fidget Spinner", "Camper Van", "Heretic", "Biohacker", "Nonchalant Agent", "Projection", "Code Review", "Rush Hour" });
+        // Here (the user, 2026-10-17): the Maneuvers (Ambivalent, Disruption, Logistics) and the decoy Red Herring
+        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Mind, new[] {
+            "Red Herring", "Domino Effect", "Controlled Chaos", "Tourist Trap", "Mass Emigration", "Valet", "Heimlich Maneuver" });
         private static string WorkbenchName => Workbench.Cards.Length <= 3 ? $"Workbench - {string.Join(", ", Workbench.Cards)}" : "Workbench - New Cards";
 
         // The decks being worked on now, the most important first: the menus list them right after the Workbench, in this
@@ -491,6 +489,14 @@ namespace SlayTheClone {
                 Draw(1))
                 .Combo()
                 .Picture("A server rack in a basement next to the stock exchange, cables running under the street, a trader's face reflected in a screen of numbers moving too fast to read."),
+            // Maneuvers (the user, 2026-10-17): spells that only move creatures, in three flavours by whose: Ambivalent (either
+            // side's), Disruption (the enemy's), Logistics (yours). Push and Pull: a step back or forward; Swap: with its partner;
+            // Shuffle: a whole side at random. Names from the Brainstorm List
+            Spell("Valet", TargetType.FriendlyCreatures,
+                "Premium parking, billed monthly. Your car has been moved for your convenience.",
+                "Logistics Maneuver: target friendly creature trades places with its partner in the formation (Flank with Flank, Headquarters with Headquarters, the Vanguard with the left Flank). A megacorp's valet subscription, moving your pieces.",
+                SwapPositions(TargetType.FriendlyCreatures))
+                .Picture("A valet in a gold-trimmed uniform with a megacorp logo swapping two parked cars with a forklift, under a sign reading PREMIUM PARKING - SUBSCRIBERS ONLY."),
         };
         #endregion
 
@@ -646,6 +652,14 @@ namespace SlayTheClone {
                 Armor(1, TargetType.FriendlyCreatures, Each))
                 .Policy()
                 .Picture("A Roman general signing a peace treaty with one hand while the other points at a row of catapults being built behind the tent."),
+            // Maneuvers (the user, 2026-10-17): spells that only move creatures, in three flavours by whose: Ambivalent (either
+            // side's), Disruption (the enemy's), Logistics (yours). Push and Pull: a step back or forward; Swap: with its partner;
+            // Shuffle: a whole side at random. Names from the Brainstorm List
+            Spell("Mass Emigration", TargetType.Enemy,
+                "The best and brightest left. The rest are rearranging the furniture.",
+                "Disruption Maneuver: every enemy creature changes slots at random. Their formation scattered: the Vanguard may end up at the back, Headquarters in front.",
+                Act(ActionType.Shuffle, 0, TargetType.Enemy, TargetModifier.None))
+                .Picture("A crowd with suitcases running in every direction at once past a signpost pointing every way, while a minister at a podium announces that the economy has never been stronger."),
         };
         #endregion
 
@@ -850,6 +864,14 @@ namespace SlayTheClone {
                 "Provoke 2 (Taunt, Follow Me) on target creature: for the rest of this Day and the next 2, it attacks the creature facing it and can't use its Active ability; and you draw a card next Day. Put a wall in front of it.",
                 Status(StatusEffectType.Provoked, 2, TargetType.EnemyCreatures), Draw(1))
                 .Picture("A man at a family barbecue telling his furious aunt to calm down, everyone around them freezing mid-bite, the aunt's face going from red to purple."),
+            // Maneuvers (the user, 2026-10-17): spells that only move creatures, in three flavours by whose: Ambivalent (either
+            // side's), Disruption (the enemy's), Logistics (yours). Push and Pull: a step back or forward; Swap: with its partner;
+            // Shuffle: a whole side at random. Names from the Brainstorm List
+            Spell("Tourist Trap", TargetType.EnemyCreatures,
+                "Authentic local cuisine. Twenty-two euros a coffee.",
+                "Disruption Maneuver: pull target enemy creature a step forward (Headquarters to its Flank, a Flank to the Vanguard); a creature already there trades places with it. Drags their important people into reach.",
+                Act(ActionType.Pull, 0, TargetType.EnemyCreatures, TargetModifier.None))
+                .Picture("A sunburnt tourist in socks and sandals lured off the street by a neon sign reading AUTHENTIC, into a restaurant where a waiter already holds out a bill a metre long."),
         };
         #endregion
 
@@ -1861,10 +1883,13 @@ namespace SlayTheClone {
                 "Health Loss (not damage, which fits Mind): 4 on a random enemy creature, 1 on a random friendly one.",
                 Buff(-4, TargetType.EnemyCreatures, attack: false, health: true, AtRandom), Buff(-1, TargetType.FriendlyCreatures, attack: false, health: true, AtRandom))
                 .Picture("The trolley problem from above: a lever, a trolley and a split track, with one bored man on a track scrolling his phone."),
-            Spell("Red Herring", TargetType.Player,
+            // A decoy tank (the user, 2026-10-17; it was a Watchdog spell): hidden, hot, and costly to find out
+            Creature("Red Herring", 1, 7, speed: 1, deploy: 0,
                 "Look over there. No, the fish.",
-                "A misleading Monitored Watchdog: the next enemy attack is redirected to a random creature. 1 charge.",
-                CreateWatchdog(new WatchdogSpec { watches = WatchedAction.Attack, side = WatchdogSide.Enemy, effect = WatchdogEffect.Redirect, charges = 1 }, TargetType.Enemy))
+                "Undercover: it enters as ??? to the enemy. Its Arrival puts Heat Signature 2 on itself, so random effects, Homing ones and redirected attacks go to it. When Revealed: whoever revealed it is Exhausted; revealed by a spell, the enemy draws 1 fewer card with the next hand. Chasing it costs them their momentum.",
+                On(EffectTrigger.OnPlay, Status(StatusEffectType.HeatSignature, 1, TargetType.Self, potency: 2)),
+                On(EffectTrigger.OnRevealed, Stun(1, TargetType.Enemy), Act(ActionType.CutDraws, 1, TargetType.Enemy, TargetModifier.None)))
+                .With(CreatureAbility.Undercover)
                 .Picture("A red fish in a detective's trench coat and hat, pointing a fin dramatically off to the side."),
             Spell("Imposter Syndrome", TargetType.EnemyCreatures,
                 "Twenty years of experience. Still waiting to be found out.",
@@ -1921,6 +1946,19 @@ namespace SlayTheClone {
                 Buff(-1, TargetType.EnemyCreatures, attack: true, health: false, days: 1))
                 .Combo()
                 .Picture("A man telling a story at a bar with his arms spread wider and wider, the fish he's describing growing from a sardine to a whale in thought bubbles behind him."),
+            // Maneuvers (the user, 2026-10-17): spells that only move creatures, in three flavours by whose: Ambivalent (either
+            // side's), Disruption (the enemy's), Logistics (yours). Push and Pull: a step back or forward; Swap: with its partner;
+            // Shuffle: a whole side at random. Names from the Brainstorm List
+            Spell("Domino Effect", TargetType.AllCreatures,
+                "One falls back, and everyone behind it finds out.",
+                "Ambivalent Maneuver: push target creature, on either side, a step back (the Vanguard to a Flank, a Flank to its Headquarters slot); a creature already there trades places with it. Clear your own front, or knock theirs off it.",
+                Act(ActionType.Push, 0, TargetType.AllCreatures, TargetModifier.None))
+                .Picture("A row of office workers falling like dominoes down a corridor, the first one tipped by a single pointing finger, the last one spilling coffee over the boss."),
+            Spell("Controlled Chaos", TargetType.AllCreatures,
+                "Everything is going exactly to plan. Which plan, though.",
+                "Ambivalent Maneuver: every creature on the side it's played on changes slots at random. Scramble their formation, or roll the dice on yours.",
+                Act(ActionType.Shuffle, 0, TargetType.AllCreatures, TargetModifier.DroppedSide))
+                .Picture("A calm psychiatrist conducting an orchestra of patients who have all swapped instruments, the drummer on the violin, the sheet music flying through the air."),
         };
         #endregion
 
@@ -2170,6 +2208,14 @@ namespace SlayTheClone {
                 "Burn 3 for 3 Days on target creature: 9 damage in all. Slow removal.",
                 Status(StatusEffectType.Burned, 3, TargetType.EnemyCreatures, potency: 3))
                 .Picture("A cow in a lab coat staring blankly into a microscope while its own brain, full of holes like Swiss cheese, floats in a jar beside it."),
+            // Maneuvers (the user, 2026-10-17): spells that only move creatures, in three flavours by whose: Ambivalent (either
+            // side's), Disruption (the enemy's), Logistics (yours). Push and Pull: a step back or forward; Swap: with its partner;
+            // Shuffle: a whole side at random. Names from the Brainstorm List
+            Spell("Heimlich Maneuver", TargetType.FriendlyCreatures,
+                "Science saves lives. Ribs, less so.",
+                "Logistics Maneuver: push target friendly creature a step back (the Vanguard to a Flank, a Flank to its Headquarters slot); a creature already there trades places with it. Gets a hurt one out of the front line.",
+                Act(ActionType.Push, 0, TargetType.FriendlyCreatures, TargetModifier.None))
+                .Picture("A scientist in a lab coat performing the Heimlich maneuver on a robot, a glowing chip flying out of its mouth across the lab while a colleague times it on a clipboard."),
         };
         #endregion
 

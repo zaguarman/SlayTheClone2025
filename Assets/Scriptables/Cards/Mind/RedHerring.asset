@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7045b055a5fcdc42beaa86cfaf37ca1, type: 3}
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
   m_Name: RedHerring
-  m_EditorClassIdentifier: Scripts::SlayTheClone.SpellCardScriptableObject
-  cardId: 78263eb3-3bcb-4a8a-afc4-09d0243443c7
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 0cd9a596-3917-4ae1-9fdc-45466e607443
   cardName: Red Herring
   description: Look over there. No, the fish.
-  cardType: 1
+  cardType: 0
   faction: 8
   artwork: {fileID: 3286163911610860551, guid: 6d64b91e2a49a434d8f85f70a84ab6af, type: 3}
   discardCost: 0
@@ -33,12 +33,47 @@ MonoBehaviour:
   potion: 0
   combo: 0
   effects:
-  - effectType: 1
+  - effectType: 0
     trigger: 0
     oncePerCombat: 0
     actions:
-    - actionType: 11
+    - actionType: 7
       value: 0
+      targetType: 5
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 5
+      statusDuration: 1
+      statusPotency: 2
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      onlyIfTargetDies: 0
+      decoy: {fileID: 0}
+  - effectType: 0
+    trigger: 7
+    oncePerCombat: 0
+    actions:
+    - actionType: 5
+      value: 1
       targetType: 1
       targetModifier: 0
       modifyAttack: 1
@@ -54,8 +89,8 @@ MonoBehaviour:
         watches: 0
         side: 0
         atMost: 0
-        effect: 1
-        charges: 1
+        effect: 0
+        charges: 0
         timing: 0
         pick: 0
         moveEarlier: 0
@@ -68,8 +103,51 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'A misleading Monitored Watchdog: the next enemy attack is redirected
-    to a random creature. 1 charge.'
+    - actionType: 30
+      value: 1
+      targetType: 1
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      onlyIfTargetDies: 0
+      decoy: {fileID: 0}
+  designNotes: 'Undercover: it enters as ??? to the enemy. Its Arrival puts Heat
+    Signature 2 on itself, so random effects, Homing ones and redirected attacks
+    go to it. When Revealed: whoever revealed it is Exhausted; revealed by a spell,
+    the enemy draws 1 fewer card with the next hand. Chasing it costs them their
+    momentum.'
   artDescription: A red fish in a detective's trench coat and hat, pointing a fin
     dramatically off to the side.
-  defaultTargetType: 0
+  attack: 1
+  health: 7
+  speed: 1
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 17
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

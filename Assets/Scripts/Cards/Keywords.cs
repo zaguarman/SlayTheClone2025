@@ -88,6 +88,14 @@ namespace SlayTheClone {
             group = "Movement";
             Add("Leapfrog", "Moves by jumping over creatures to an empty slot.");
             Add("Swap", "Trades places with a friendly creature, however far.");
+            // Maneuvers (the user, 2026-10-17): spells that only move creatures
+            Add("Maneuver", "A spell that only moves creatures around the board. [Ambivalent] ones work on either side, [Disruption] ones only on the enemy's, [Logistics] ones only on yours. A [Rooted] creature isn't moved.");
+            Add("Ambivalent", "A [Maneuver] for either side: reorganise your creatures, or disrupt the enemy's.");
+            Add("Disruption", "A [Maneuver] that only moves enemy creatures: chaos in their formation.");
+            Add("Logistics", "A [Maneuver] that only moves your own creatures.");
+            Add("Push", "It goes one step back: the Vanguard to a Flank (an empty one if there is one), a Flank to the Headquarters slot behind it. A creature already there trades places with it. Headquarters can't go further back.");
+            Add("Pull", "It comes one step forward: a Headquarters slot to the Flank in front of it, a Flank to the Vanguard. A creature already there trades places with it. The Vanguard can't come further forward.");
+            Add("Partner", "Its partner in the formation: Flank with Flank, Headquarters with Headquarters; the Vanguard's is the left Flank.");
 
             // ---------------------------------------------------------------- Creature stats and states
             group = "Stats";

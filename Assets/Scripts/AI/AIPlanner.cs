@@ -592,6 +592,15 @@ namespace SlayTheClone {
             }
             if (action.actionType == ActionType.CreateWatchdog) return Style.Intel;
             if (action.actionType == ActionType.SwapSlotEffects) return SwapValue();
+            // Shuffle (a Maneuver): scrambling their formation is worth a little; ours, rarely
+            if (action.actionType == ActionType.Shuffle) {
+                var side = action.targetType switch {
+                    TargetType.Enemy or TargetType.EnemyCreatures => view.Them, TargetType.Player or TargetType.FriendlyCreatures => view.Me,
+                    _ => aim as IPlayer ?? (aim as BoardSlot)?.Owner ?? (aim as ICreature)?.Owner ?? view.Them
+                };
+                int creatures = (side == view.Them ? view.Theirs : view.Mine).Count();
+                return creatures < 2 ? 0 : side == view.Them ? 0.4f * creatures * Style.Removal : -0.3f * creatures;
+            }
             // Send For: the right card next Day (it picks the best one when it resolves)
             if (action.actionType == ActionType.SendFor) return SendFor.Choices(view.Me, action).Count > 0 ? 2.5f * Style.Cards : 0;
             // GoldenEye: each of their Watchdogs gone is a trap we no longer walk into
@@ -787,6 +796,8 @@ namespace SlayTheClone {
                 }
                 case ActionType.Equip: // A second ability on one of ours: more on a strong one; none on theirs
                     return creature.Ours ? (creature.Creature?.Gear == CreatureAbility.None ? 1.5f + AttackOf(creature) * 0.2f : 0.5f) : -1f;
+                case ActionType.Push or ActionType.Pull: // Maneuvers: theirs into reach or off their bonuses; a hurt one of ours out of the front
+                    return PositionValue(creature, action.actionType == ActionType.Pull);
                 case ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility:
                     return IntendedFor(spell, creature.Ours ? view.Me : view.Them) ? 1 : -1; // Hard to weigh: done where the card means it
                 case ActionType.Armor or ActionType.Heal when Hard && creature.Ours:
@@ -977,6 +988,16 @@ namespace SlayTheClone {
         }
 
         // Which side the card is meant for: the one its default target names (all creatures: either)
+        // A step back or forward (Push, Pull): theirs pulled out of Headquarters into reach, or pushed off the Vanguard's Armor and
+        // the Flanks' bonus; ours, a hurt one sent back, a healthy one brought forward
+        private float PositionValue(SeenCreature creature, bool forward) {
+            int depth = Formation.Depth(creature.Slot.Index);
+            if (forward ? depth == 0 : depth == 2) return -0.2f; // It can't go further
+            if (!creature.Ours) return forward ? (depth == 2 ? 1.5f : 0.4f) : (depth == 0 ? 1f : 0.6f);
+            bool hurt = HealthLeft(creature) <= 3;
+            return forward ? (hurt ? -1f : 0.6f) : (hurt ? 1.2f : -0.4f);
+        }
+
         private bool IntendedFor(Spell spell, IPlayer side) => spell == null || spell.DefaultTargetType switch {
             TargetType.Enemy or TargetType.EnemyCreatures => side != view.Me,
             TargetType.Player or TargetType.FriendlyCreatures or TargetType.Self => side == view.Me,

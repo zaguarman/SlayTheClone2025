@@ -77,6 +77,9 @@ namespace SlayTheClone.Tests {
             Assert.AreEqual("Destroy target creature\nSacrifice 1: your weakest creature will be sacrificed to play this", printed["Necronomicon"], "A sacrifice comes after what it buys");
             Assert.AreEqual("5 damage to target creature or player and 2 damage to its neighbors", printed["Holy Hand Grenade of Antioch"], "Its neighbors alone");
             Assert.AreEqual("2 damage to target creature or player and 3 damage to it if it's Digital Society", printed["Cyberpsychosis"], "A requisite on a faction");
+            Assert.AreEqual("Disruption\nEvery enemy creature changes slots at random", printed["Mass Emigration"], "A Maneuver says whose creatures it moves");
+            StringAssert.EndsWith("When Revealed: exhaust whoever revealed it; revealed by a spell, the enemy draws 1 fewer card with the next hand",
+                printed["Red Herring"], "Whoever revealed it: a creature, or else the enemy");
 
             var carried = assets.OfType<CreatureCardScriptableObject>().Select(c => c.ability).ToHashSet();
             foreach (var asset in assets) { // Or given by a card: gained, or a Gear's
@@ -104,8 +107,9 @@ namespace SlayTheClone.Tests {
 
         // Null when the action can work
         private static string FindProblem(EffectAction action, EffectTrigger trigger) {
-            // Counterattack and Retaliate: an enemy-targeted OnDamage effect lands on the creature whose attack hit this one
-            bool retaliates = trigger == EffectTrigger.OnDamage && action.targetType == TargetType.Enemy;
+            // Counterattack and Retaliate: an enemy-targeted OnDamage effect lands on the creature whose attack hit this one; a
+            // When Revealed one, on whoever revealed it (a creature, or else the enemy player)
+            bool retaliates = trigger is EffectTrigger.OnDamage or EffectTrigger.OnRevealed && action.targetType == TargetType.Enemy;
             switch (action.actionType) {
                 case ActionType.Armor:
                 case ActionType.ModifyStat:
@@ -114,7 +118,7 @@ namespace SlayTheClone.Tests {
                 case ActionType.Cleanse:
                 case ActionType.CopyStats:
                 case ActionType.StealStatChanges:
-                case ActionType.SwapPositions:
+                case ActionType.SwapPositions or ActionType.Push or ActionType.Pull:
                 case ActionType.GrantAbility:
                 case ActionType.Equip:
                 case ActionType.Destroy:
@@ -151,7 +155,8 @@ namespace SlayTheClone.Tests {
             else if (action.actionType is ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.Destroy
                      or ActionType.TakeControl or ActionType.Attack or ActionType.Funnel or ActionType.PassHarmfulStatuses
                      or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Revive
-                     or ActionType.CopyStatuses or ActionType.EndDay or ActionType.Defect or ActionType.SwapStats or ActionType.SwapSlotEffects) {
+                     or ActionType.CopyStatuses or ActionType.EndDay or ActionType.Defect or ActionType.SwapStats or ActionType.SwapSlotEffects
+                     or ActionType.Push or ActionType.Pull or ActionType.Shuffle) {
                 return null; // Says what it does instead of a value
             }
             else if (action.actionType is ActionType.Cleanse or ActionType.CleanseSlot or ActionType.CreateWatchdog or ActionType.Reveal or ActionType.WipeWatchdogs

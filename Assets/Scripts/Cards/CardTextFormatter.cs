@@ -16,7 +16,7 @@ namespace SlayTheClone {
     public static class CardTextFormatter {
 
         public static string GetTypeLine(CardData data) {
-            string type = data is SpellData ? EffectResolver.IsTrend(data.effects) ? "Trend" : "Spell" : "Creature";
+            string type = data is SpellData ? EffectResolver.IsTrend(data.effects) ? "Trend" : Maneuvers.IsManeuver(data.effects) ? "Maneuver" : "Spell" : "Creature";
             return data.faction == Faction.None ? type : $"{type} — {FactionName(data.faction)}";
         }
 
@@ -52,6 +52,7 @@ namespace SlayTheClone {
                 }
                 if (gear != CreatureAbility.None) keywords.Add($"{Keywords.Link("Gear")}: {AbilityName(gear)}");
             }
+            if (isSpell && Maneuvers.IsManeuver(data.effects)) keywords.Add(Keywords.Link(Maneuvers.FlavourOf(data.effects))); // Whose creatures it moves
             if (data.homing) keywords.Add(Keywords.Link("Homing"));
             if (data.potion) keywords.Add(Keywords.Link("Potion"));
             else if (data.singleUse) keywords.Add(Keywords.Link("Single Use"));
@@ -149,7 +150,9 @@ namespace SlayTheClone {
             (string icon, string text) trigger = isSpell ? default : retaliates ? (EffectIcons.Hurt, Keywords.Link("Retaliate")) : DescribeTrigger(effect);
             string body = JoinClauses(retaliates ? actions.Select(RetaliationClause).ToList() : Clauses(actions, isSpell, atDawn));
             // When Revealed against the enemy: it strikes whoever revealed it
-            if (!isSpell && effect.trigger == EffectTrigger.OnRevealed) body = body.Replace("enemy player", "whoever revealed it");
+            if (!isSpell && effect.trigger == EffectTrigger.OnRevealed) { // A creature that revealed it, or else the enemy player (a spell)
+                body = body.Replace(" and enemy player draws", "; revealed by a spell, the enemy draws").Replace("enemy player", "whoever revealed it");
+            }
             string once = effect.oncePerCombat ? "Once per combat, " : "";
 
             if (trigger.text == null) return CapitalizeRich(once + body);
@@ -357,7 +360,18 @@ namespace SlayTheClone {
                 case ActionType.CopyStatuses:
                     return $"{target} copies the statuses of the creature facing it";
                 case ActionType.SwapPositions:
-                    return $"{target} trades places with the creature to its right";
+                    return $"{target} trades places with its {Keywords.Link("Partner", "partner")}";
+                case ActionType.Push:
+                    return $"{Keywords.Link("Push", "push")} {target} back";
+                case ActionType.Pull:
+                    return $"{Keywords.Link("Pull", "pull")} {target} forward";
+                case ActionType.Shuffle:
+                    string whose = action.targetType switch {
+                        TargetType.Enemy or TargetType.EnemyCreatures => "every enemy creature",
+                        TargetType.Player or TargetType.FriendlyCreatures => "every friendly creature",
+                        _ => "every creature on target side"
+                    };
+                    return $"{whose} changes slots at {Keywords.Link("Random", "random")}";
                 case ActionType.GrantAbility:
                     return $"{target} gains {AbilityName(action.ability)}";
                 case ActionType.Equip:

@@ -16,18 +16,19 @@ RULES
 
 TO SUPERVISE
 
-  298 cards whose art direction Claude decided alone: no note from the user and no sign-off yet. Once
+  304 cards whose art direction Claude decided alone: no note from the user and no sign-off yet. Once
   the user has checked one, its approval goes into SUPERVISED in Tools/art_briefs.py (or their changes into USER_NOTES).
 
-  Corporate (46): Overtime, Peace the Frontier, Casino, Headhunter, Counterfeit, Private Equity, Shell Company, Golden Parachute, Work Shift Rotation, Unpaid Intern, Inhuman Resources, Micromanager, Multilevel Marketing Seller, Day Trader, Pluriemployed Hustler, Satoshi Nakamoto, Multimillionaire Philanthropist, Charles Ponzi, Margin Call, Mass Layoffs, Team Building Exercise, Dead Cat Bounce, Business Operating Expenses, Taxpayer Funds Venture Capital Profits, Tax-Exempt Corruption, Solidarity Towards The Small Businessman, Inheritance, NDA, Inflation, Escape Goat, Laissez-Faire, The Invisible Hand, C-Suite, Venture Capital, Corporate Bailouts, Flash Crash, Just in Time, Hedonic Treadmillionaire, Moral Bankruptcy, Usury, Middle Manager, Big Four, Bloomberg Terminal, Internal Protocol: Quota Crusher Mindset, Smartwatch, High-Frequency Trading Scam
-  Statecraft (29): Supply Depot, Presidential Pardon, Congruent Use of Force, Weapons of Mass Distraction, King Emeritus, Spite-Elected President, Police Officer Productivity Target, Internal Revenue Service, Mercenaries, Man o' War, Ministry for Equality, Protocol Enforcers, Demagogue, Red Tape, Preemptive Strike, Martial Law, Kakistocracy, Mutually Assured Destruction, Panem Et Circenses, Diplomat, Raised Security Level, Lost Landmine, Ceasefire, Violence Monopoly, Border Crossing, Peace Force, Security Guard, Si Vis Pacem, Para Bellum, Exoskeleton
-  Zeitgeist (32): Drug Smuggler, Not on My Watch, One for the Road, Chain Smoker, Karen, Boomer, Hipster, Underdog, Hikikomori, Reality TV Star, Scam Artist, Football Hooligans, Antihero, Bodybuilder, Plot Armor, YOLO, Toxic Positivity, Delivery Cyclist, Zeitgeist, Rush Hour, No Glove, No Love, Listen Kid, Ol' Reliable, Weaponized Incompetence, Absentee Parents, The Friends We Made Along the Way, Spite Voter, Fidget Spinner, Camper Van, Lost Generation, Universal Basic Income, Calm Your Tits
+  Corporate (46): Overtime, Peace the Frontier, Casino, Headhunter, Counterfeit, Private Equity, Shell Company, Golden Parachute, Work Shift Rotation, Unpaid Intern, Inhuman Resources, Micromanager, Multilevel Marketing Seller, Day Trader, Pluriemployed Hustler, Satoshi Nakamoto, Multimillionaire Philanthropist, Charles Ponzi, Margin Call, Mass Layoffs, Team Building Exercise, Dead Cat Bounce, Business Operating Expenses, Taxpayer Funds Venture Capital Profits, Tax-Exempt Corruption, Solidarity Towards The Small Businessman, Inheritance, NDA, Inflation, Escape Goat, Laissez-Faire, The Invisible Hand, C-Suite, Venture Capital, Corporate Bailouts, Flash Crash, Just in Time, Hedonic Treadmillionaire, Moral Bankruptcy, Usury, Middle Manager, Big Four, Bloomberg Terminal, Internal Protocol: Quota Crusher Mindset, High-Frequency Trading Scam, Valet
+  Statecraft (29): Supply Depot, Presidential Pardon, Congruent Use of Force, Weapons of Mass Distraction, King Emeritus, Spite-Elected President, Police Officer Productivity Target, Internal Revenue Service, Mercenaries, Man o' War, Ministry for Equality, Protocol Enforcers, Demagogue, Red Tape, Preemptive Strike, Martial Law, Kakistocracy, Mutually Assured Destruction, Panem Et Circenses, Diplomat, Raised Security Level, Lost Landmine, Ceasefire, Violence Monopoly, Border Crossing, Peace Force, Security Guard, Si Vis Pacem, Para Bellum, Mass Emigration
+  Zeitgeist (33): Drug Smuggler, Not on My Watch, One for the Road, Chain Smoker, Karen, Boomer, Hipster, Underdog, Hikikomori, Reality TV Star, Scam Artist, Football Hooligans, Antihero, Bodybuilder, Plot Armor, YOLO, Toxic Positivity, Delivery Cyclist, Zeitgeist, Rush Hour, No Glove, No Love, Listen Kid, Ol' Reliable, Weaponized Incompetence, Absentee Parents, The Friends We Made Along the Way, Spite Voter, Fidget Spinner, Camper Van, Lost Generation, Universal Basic Income, Calm Your Tits, Tourist Trap
   Digital Society (16): Its Been 84 Years..., Good Boi, Crypto "Entrepreneur", Digital Nomad, NPC, Chronically Online, Conspiracy Theorist, Clickbait, Cancelled, Social Panopticon, Short King, Content Creator, Thirst Trap, Selfie Esteem, Influencer, U Mad Bro?
-  Shadow Ops. (54): Cleaner, Political Decoy, Mole, Signal Jammer, Deep Cover, Human Intelligence, Wet Work, Perfectly Timed Camera Malfunction, Smoke And Mirrors, Eavesdrop, Tapped Communications, Whistleblower, Involuntary Free Polonium Giveaway, Humanitarian Trafficking Action, Dead Man's Switch, Fell Out of a Window, Coup d'État, Operation Paperclip, False Flag Operation, Never Let Them Know Your Next Move, Frame Job, Devil's Breath, He Didn't Kill Himself, Extraction, Witness Protection Program, Death By "Natural Causes", Asset Recruitment, If I Told You, I'd Have to Kill You, Lone Gunman, Glomar Response, Sabotage, Ghost Army, Inflatable Tank, Social Engineering, Bilderberg Membership, Dead Drop, The Golden Gun, Die Another Day, Licence to Kill, Shaken, Not Stirred, GoldenEye, Supply Chain Attack, Femme Fatale, Exploding Pen, Drug Pigeon, Embassy, Secret Anthrax Laboratory, Tracking Beacon, Arsonist, Counter-Surveillance, Compromised Agent, Polonium Umbrella, Nonchalant Agent, Q Branch
-  Tech (16): Web Scraping, DDOS Attack, End-to-End Encryption, SysAdmin, Meatproxy As A Service, Ransomware Attack, Man-in-the-Middle, Technical Debt, Threat Hunter, Ctrl + Z, Pair Programming, Suspicious USB Stick in the Parking Lot, Code Review, Bomber Drone, Hovercraft, Ctrl + Y
+  Shadow Ops. (53): Cleaner, Political Decoy, Mole, Signal Jammer, Deep Cover, Human Intelligence, Wet Work, Perfectly Timed Camera Malfunction, Smoke And Mirrors, Eavesdrop, Tapped Communications, Whistleblower, Involuntary Free Polonium Giveaway, Humanitarian Trafficking Action, Dead Man's Switch, Fell Out of a Window, Coup d'État, Operation Paperclip, False Flag Operation, Never Let Them Know Your Next Move, Frame Job, Devil's Breath, He Didn't Kill Himself, Extraction, Witness Protection Program, Death By "Natural Causes", Asset Recruitment, If I Told You, I'd Have to Kill You, Lone Gunman, Glomar Response, Sabotage, Ghost Army, Inflatable Tank, Social Engineering, Bilderberg Membership, Dead Drop, The Golden Gun, Die Another Day, Licence to Kill, Shaken, Not Stirred, GoldenEye, Supply Chain Attack, Femme Fatale, Exploding Pen, Drug Pigeon, Embassy, Secret Anthrax Laboratory, Tracking Beacon, Arsonist, Counter-Surveillance, Compromised Agent, Polonium Umbrella, Nonchalant Agent
+  Tech (15): Web Scraping, DDOS Attack, End-to-End Encryption, SysAdmin, Meatproxy As A Service, Ransomware Attack, Man-in-the-Middle, Technical Debt, Threat Hunter, Ctrl + Z, Pair Programming, Suspicious USB Stick in the Parking Lot, Code Review, Bomber Drone, Ctrl + Y
   Myth (40): Taqiyya, Memento Mori, Martyr, Exorcism, Mummy, Omniscient Space-Time Bending Bearded Wizard, Cultist, Phoenix, Excess of Bread and Wine, Sacrificial Ritual, Reincarnation, Holy War, The Great Flood, Lance Of Longinus, Necronomicon, The Wicker Man, Thoughts and Prayers, Religious Instrumentalization, Deus Vult, Curse Of Hubris, Zealot, Vampire, Living Dead, Buddy Christ, Pope, The Lobster Professor, Amen, Pyramids, Horsemen Of Apocalypse, God's Grace, The Omen, Grim Reaper, Blessing in Disguise, Die by the Sword, Mithril, Here Be Dragons, Gracias Jesús, Heretic, Ambrosia, Publicly Funded Faith Schools
-  Mind (19): Lucid Dreaming, Momentum, Survivorship Bias, Yesn't, Cyberpsychosis, Reflect, Mimetic Theory, Pessimist, Introvert, Roko's Basilisk, Imposter Syndrome, Ship of Theseus, Socrates, Maslow's Pyramid, Legerdemain, Hold That Thought, Projection, Psychiatrists, Hyperbole
-  Utopia (38): Geomagnetic Reversal, Research Lab, Clone, Hypermetamorphosis, Extremophile, Philosophy PhD, Mathematician, Quantum Physicist, Perpetual Motion Machine, Genetically Modified Organism, Pioneer, Vaccine, Climate Change, Overpopulation, Black Hole, Stasis Field, Absolute Zero, Splitting The Atom, Gene Editing, Cold Fusion, Antimatter, Biohacking, Blood Transfusion, Evolution Theory, Mutation, Exponential Growth, Scientific Method, Chimera, Resurrected T-Rex, Longevity Hub, Femtosecond Laser, Quark, Seasteading, Ankylorhiza, White Dwarf, Biohacker, Prion Disease, Nanobots
+  Mind (21): Lucid Dreaming, Momentum, Survivorship Bias, Yesn't, Cyberpsychosis, Reflect, Mimetic Theory, Pessimist, Introvert, Roko's Basilisk, Imposter Syndrome, Ship of Theseus, Socrates, Maslow's Pyramid, Legerdemain, Hold That Thought, Projection, Psychiatrists, Hyperbole, Domino Effect, Controlled Chaos
+  Utopia (38): Geomagnetic Reversal, Research Lab, Clone, Hypermetamorphosis, Extremophile, Philosophy PhD, Mathematician, Quantum Physicist, Perpetual Motion Machine, Genetically Modified Organism, Pioneer, Vaccine, Climate Change, Overpopulation, Black Hole, Stasis Field, Absolute Zero, Splitting The Atom, Gene Editing, Cold Fusion, Antimatter, Biohacking, Blood Transfusion, Evolution Theory, Mutation, Exponential Growth, Scientific Method, Chimera, Resurrected T-Rex, Longevity Hub, Femtosecond Laser, Quark, Seasteading, Ankylorhiza, White Dwarf, Biohacker, Prion Disease, Heimlich Maneuver
+  Shelved (5): Smartwatch, Exoskeleton, Q Branch, Hovercraft, Nanobots
   Potion (8): Nicotine, Stimulant Drug, Superglue, Soylent, Flamethrower, Eject Button, Stealth Suit, Creatine
 
 
@@ -183,11 +184,11 @@ Bloomberg Terminal (creature)
 Internal Protocol: Quota Crusher Mindset (spell)
     A motivational poster over a cubicle farm, a lone runner on a mountain top under the words QUOTA CRUSHER, the workers below asleep on their keyboards.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
-Smartwatch (spell)
-    A sleek smartwatch on a sweating wrist, its screen flashing 'Stand up! Productivity -3%', a subscription renewal notice sliding in underneath.
-    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 High-Frequency Trading Scam (spell)
     A server rack in a basement next to the stock exchange, cables running under the street, a trader's face reflected in a screen of numbers moving too fast to read.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Valet (spell)
+    A valet in a gold-trimmed uniform with a megacorp logo swapping two parked cars with a forklift, under a sign reading PREMIUM PARKING - SUBSCRIBERS ONLY.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
 STATECRAFT
@@ -283,8 +284,8 @@ Security Guard (creature)
 Si Vis Pacem, Para Bellum (spell)
     A Roman general signing a peace treaty with one hand while the other points at a row of catapults being built behind the tent.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
-Exoskeleton (spell)
-    A soldier in a powered military exoskeleton standing guard at a checkpoint, an extension cord trailing from his back to a wall socket in the guard booth.
+Mass Emigration (spell)
+    A crowd with suitcases running in every direction at once past a signpost pointing every way, while a minister at a podium announces that the economy has never been stronger.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
 ZEITGEIST
@@ -405,6 +406,9 @@ Universal Basic Income (spell)
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Calm Your Tits (spell)
     A man at a family barbecue telling his furious aunt to calm down, everyone around them freezing mid-bite, the aunt's face going from red to purple.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Tourist Trap (spell)
+    A sunburnt tourist in socks and sandals lured off the street by a neon sign reading AUTHENTIC, into a restaurant where a waiter already holds out a bill a metre long.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
 DIGITAL SOCIETY
@@ -680,9 +684,6 @@ Polonium Umbrella (spell)
 Nonchalant Agent (creature)
     An agent in a tuxedo leaning on a casino bar sipping a martini without looking, his free hand already flicking a pistol from his sleeve at a henchman who has only half drawn.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
-Q Branch (spell)
-    An old quartermaster in a lab coat demonstrating an exploding briefcase to a bored agent, a test dummy in the background missing its head.
-    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
 TECH
 
@@ -744,9 +745,6 @@ Code Review (spell)
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Bomber Drone (creature)
     A quadcopter drone with a delivery company's logo dropping a small bomb on a tank and zipping away, a 5-star rating popping up on its operator's phone below.
-    TO SUPERVISE: Claude's own art direction, not checked by the user yet
-Hovercraft (spell)
-    A sleek hovercraft gliding over a minefield, every mine underneath it blinking red and doing nothing, a deminer watching with his mouth open.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Ctrl + Y (spell)
     A keyboard with the Y key worn down to a nub, a hand mashing Ctrl + Y while the same explosion repeats on the screen behind it.
@@ -950,7 +948,7 @@ Trolley Problem (spell)
     The trolley problem from above: a lever, a trolley and a split track, with one bored man on a track scrolling his phone.
     USER: 2026-10-14 (pixel art): like the classic drawing (the user's reference): side on, the trolley, the track splitting, a man at the lever, one person tied on one branch and five on the other.
     USER: 2026-10-14: the man at the lever stands back from the tracks, beyond the split, never between them.
-Red Herring (spell)
+Red Herring (creature)
     A red fish in a detective's trench coat and hat, pointing a fin dramatically off to the side.
     USER: 2026-10-14 (pixel art): no suit and no fin pulling at it; keep the hat, centred on the head.
 Imposter Syndrome (spell)
@@ -979,6 +977,12 @@ Psychiatrists (creature)
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Hyperbole (spell)
     A man telling a story at a bar with his arms spread wider and wider, the fish he's describing growing from a sardine to a whale in thought bubbles behind him.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Domino Effect (spell)
+    A row of office workers falling like dominoes down a corridor, the first one tipped by a single pointing finger, the last one spilling coffee over the boss.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Controlled Chaos (spell)
+    A calm psychiatrist conducting an orchestra of patients who have all swapped instruments, the drummer on the violin, the sheet music flying through the air.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
 UTOPIA
@@ -1108,6 +1112,24 @@ Biohacker (creature)
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Prion Disease (spell)
     A cow in a lab coat staring blankly into a microscope while its own brain, full of holes like Swiss cheese, floats in a jar beside it.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Heimlich Maneuver (spell)
+    A scientist in a lab coat performing the Heimlich maneuver on a robot, a glowing chip flying out of its mouth across the lab while a colleague times it on a clipboard.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+
+SHELVED
+
+Smartwatch (spell)
+    A sleek smartwatch on a sweating wrist, its screen flashing 'Stand up! Productivity -3%', a subscription renewal notice sliding in underneath.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Exoskeleton (spell)
+    A soldier in a powered military exoskeleton standing guard at a checkpoint, an extension cord trailing from his back to a wall socket in the guard booth.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Q Branch (spell)
+    An old quartermaster in a lab coat demonstrating an exploding briefcase to a bored agent, a test dummy in the background missing its head.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Hovercraft (spell)
+    A sleek hovercraft gliding over a minefield, every mine underneath it blinking red and doing nothing, a deminer watching with his mouth open.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Nanobots (spell)
     A swarm of glittering nanobots stitching a robot's torn arm back together, a few of them on a tiny picket line holding 'Fair Wages' signs.

@@ -166,6 +166,14 @@ namespace SlayTheClone {
                 var facing = Opposite(source as ICreature);
                 return facing != null && !facing.IsDead ? new List<ITarget> { facing } : new List<ITarget>();
             }
+            if (action.actionType == ActionType.Shuffle) { // A Maneuver on a whole side: the side it names, or the one it was played on
+                var shuffled = action.targetType switch {
+                    TargetType.Enemy or TargetType.EnemyCreatures => controller.Opponent,
+                    TargetType.Player or TargetType.FriendlyCreatures => controller,
+                    _ => chosenTarget as IPlayer ?? (SlotOf(chosenTarget) as BoardSlot)?.Owner ?? (chosenTarget as ICreature)?.Owner ?? controller
+                };
+                return shuffled != null ? new List<ITarget> { shuffled } : new List<ITarget>();
+            }
             if (action.targetModifier.HasFlag(TargetModifier.DroppedSide)) { // The creatures of the side it was played on
                 var side = chosenTarget as IPlayer ?? (SlotOf(chosenTarget) as BoardSlot)?.Owner ?? controller;
                 var there = TargetingSystem.GetValidTargets(controller, action.targetType, action.targetModifier)
@@ -425,6 +433,7 @@ namespace SlayTheClone {
                 or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.Cleanse
                 or ActionType.CreateWatchdog or ActionType.DelayDeployment or ActionType.Rush or ActionType.Defect
                 or ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility or ActionType.Equip or ActionType.SwapStats
+                or ActionType.Push or ActionType.Pull
                 or ActionType.TakeControl or ActionType.Attack or ActionType.Funnel or ActionType.PassHarmfulStatuses
                 or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Resurrect
                 or ActionType.Consolidate or ActionType.CopyStatuses;
@@ -529,6 +538,10 @@ namespace SlayTheClone {
                 }
                 case ActionType.SwapPositions:
                     return creature != null ? new SwapPositionsAction(creature) : null;
+                case ActionType.Push or ActionType.Pull: // Maneuvers: a step back, or forward
+                    return creature != null ? new PushAction(creature, action.actionType == ActionType.Pull) : null;
+                case ActionType.Shuffle: // A Maneuver: that whole side, at random
+                    return target is IPlayer shuffled ? new ShuffleAction(shuffled) : null;
                 case ActionType.ReturnToHand: // Back to its owner's hand, with the next Day's hand (Extraction)
                     return creature != null ? new ReturnToHandAction(creature) : null;
                 case ActionType.FakeDeath: // It "dies" (its Last Will happens), then back to the hand (He Didn't Kill Himself)
