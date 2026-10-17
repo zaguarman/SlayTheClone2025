@@ -25,7 +25,9 @@ STILL OPEN
     • Turned 2026-10-17 (the user: "do this"): Health 30 (Player.StartingHealth) and the 17 creatures with 4+ Attack and
       Deployment Time 0 now deploy 1 (Pessimist, Introvert, Ship of Theseus, Zealot, One-Trick Pony, Karen, Boomer, Hipster,
       Reality TV Star, Football Hooligans, Antihero, Bodybuilder, Absentee Parents, Its Been 84 Years..., Sherman Tank,
-      Mercenaries, Technical Debt; in the card files). Measured right after: see Faction Balance Plan 11.
+      Mercenaries, Technical Debt; in the card files). Measured right after (Faction Balance Plan 11): Hard still lost to Medium,
+      Swarm rose to 81% and Midrange fell to 66%: the knobs took the bodies off the planning decks and fed the swarm. Knob 3
+      turned the same evening: the Flanks' +1 Attack is gone (Formation.FlankAttack 0). Measured next.
 
 46. Liminal Space and the creatures with 0 Attack (2026-10-17)
     • What the shuffled tournament's audit saw: "Perpetual Motion Machine 4/0 is still alive on the board". Liminal Space trades
