@@ -14,6 +14,13 @@ namespace SlayTheClone {
 
             if (targetCreature == null || targetCreature.IsDead) return;
 
+            // Do Your Own Research (Anti-Vaxxer): healing damages it instead
+            if (amount > 0 && Abilities.Has(targetCreature, Enums.CreatureAbility.DoYourOwnResearch)) {
+                Log($"{targetCreature.Name} refuses the cure: {amount} damage instead (Do Your Own Research)", LogTag.Effects);
+                context.ActionsQueue.AddAction(new DamageCreatureAction(targetCreature, amount));
+                return;
+            }
+
             int actualHealAmount = targetCreature.Heal(amount);
             if (actualHealAmount > 0) {
                 mediator.NotifyCreatureHealed(targetCreature, actualHealAmount);

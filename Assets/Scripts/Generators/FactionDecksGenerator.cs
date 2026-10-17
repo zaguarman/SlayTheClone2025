@@ -58,10 +58,11 @@ namespace SlayTheClone {
 
         // The cards being worked on now, to test in a match: two of each, filled up to 20 with their faction's best deck. It's
         // first in the menus. Change it with the work
-        // Here (the user, 2026-10-17): the Pokémon picks, one card each, and Karen with her Mood Swings
-        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Mind, new[] {
-            "Liminal Space", "Monkey See, Monkey Do", "Groundhog Day", "Freaky Friday", "Florida Man", "DMCA", "3rd Parallel Job",
-            "Filibuster", "Curfew", "Spin Doctor", "Plausible Deniability", "Thoughts and Prayers", "Holy Ghost", "Karen" });
+        // Here (the user, 2026-10-17): the second Pokémon batch, the ability creatures and the Destiny Bonds
+        private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Statecraft, new[] {
+            "Legal Department", "Civil Servant", "Bomb Squad", "Sleepwalker", "Riot Police", "One-Trick Pony", "Drill Sergeant", "Clingy Ex",
+            "Empath", "Berserker", "Backup Dancer", "EMP Drone", "Tutankhamun", "Teflon Don", "Sapper", "Anti-Vaxxer",
+            "Mutually Assured Destruction", "Holy Pigeon", "Tithe", "Job Rotation" });
         private static string WorkbenchName => Workbench.Cards.Length <= 3 ? $"Workbench - {string.Join(", ", Workbench.Cards)}" : "Workbench - New Cards";
 
         // The decks being worked on now, the most important first: the menus list them right after the Workbench, in this
@@ -97,15 +98,15 @@ namespace SlayTheClone {
             // Heimlich Maneuver, Domino Effect and Controlled Chaos.
             // Black Budget, Hustle Rush, Lab Grown, Threat Model and Blessed Martyrs rebuilt 2026-10-17 from the balance study's card
             // numbers (Faction Balance Plan, step 10 of the next picks): each keeps its strategy, 8 creatures and 7 spells, two of each
-            ("Corporate - Hustle Rush", "CorporateRushDeck", "Your Startup's Founder", "Moving fast. Breaking you.", "Aggro", new[] { "Micromanager", "Micromanager", "Cleaning Robot", "Cleaning Robot", "Multilevel Marketing Seller", "Multilevel Marketing Seller", "Bloomberg Terminal", "Bloomberg Terminal", "Charles Ponzi", "Charles Ponzi", "Day Trader", "Day Trader", "Middle Manager", "Middle Manager", "Shell Company", "Shell Company", "Flash Crash", "Flash Crash", "Hostile Takeover", "Hostile Takeover", "Team Building Exercise", "Team Building Exercise", "High-Frequency Trading Scam", "High-Frequency Trading Scam", "Inheritance", "Inheritance", "Venture Capital", "Venture Capital", "Valet", "Valet", "DMCA", "DMCA", "3rd Parallel Job", "3rd Parallel Job" }),
-            ("Statecraft - Shock and Awe", "StatecraftAggroDeck", "The Minister of Defence", "Peace through superior firepower.", "Aggro", new[] { "Mercenaries", "Mercenaries", "Sherman Tank", "Sherman Tank", "Police Officer Productivity Target", "Police Officer Productivity Target", "Spite-Elected President", "Spite-Elected President", "Demagogue", "Demagogue", "Man o' War", "Man o' War", "Preemptive Strike", "Preemptive Strike", "Raised Security Level", "Raised Security Level", "Martial Law", "Martial Law", "Panem Et Circenses", "Weapons of Mass Distraction", "Security Guard", "Security Guard", "Mass Emigration", "Mass Emigration", "Filibuster", "Filibuster", "Curfew", "Curfew", "Spin Doctor", "Spin Doctor" }),
-            ("Zeitgeist - Underdogs", "ZeitgeistSwarmDeck", "Your Neighbourhood", "Nobody believed in them. Correctly.", "Swarm", new[] { "Underdog", "Underdog", "Plot Armor", "Plot Armor", "Scam Artist", "Scam Artist", "Delivery Cyclist", "Delivery Cyclist", "Drug Smuggler", "Drug Smuggler", "Hikikomori", "Hikikomori", "Not on My Watch", "Karen", "Karen", "No Glove, No Love", "No Glove, No Love", "One for the Road", "One for the Road", "Rush Hour", "Generational Trauma", "Generational Trauma", "Mental Health Day", "YOLO", "The Friends We Made Along the Way", "The Friends We Made Along the Way", "Absentee Parents", "Absentee Parents", "Ol' Reliable", "Ol' Reliable", "Weaponized Incompetence", "Listen Kid", "Listen Kid", "Lost Generation", "Lost Generation", "Spite Voter", "Spite Voter", "Camper Van", "Camper Van", "Universal Basic Income", "Calm Your Tits", "Tourist Trap", "Tourist Trap", "Groundhog Day", "Groundhog Day", "Freaky Friday", "Freaky Friday", "Florida Man", "Florida Man" }),
-            ("Utopia - Lab Grown", "UtopiaEngineDeck", "The Gene Therapist", "Side effects may include winning.", "Engine", new[] { "Quark", "Quark", "Ankylorhiza", "Ankylorhiza", "Particle Accelerator", "Particle Accelerator", "Cold Fusion", "Cold Fusion", "Hypermetamorphosis", "Hypermetamorphosis", "Resurrected T-Rex", "Resurrected T-Rex", "Antimatter", "Antimatter", "Biohacker", "Biohacker", "Biohacking", "Biohacking", "Mutation", "Mutation", "Exponential Growth", "Exponential Growth", "Seasteading", "Seasteading", "Blood Transfusion", "Blood Transfusion", "Stasis Field", "Stasis Field", "Gene Editing", "Gene Editing", "Heimlich Maneuver", "Heimlich Maneuver" }),
+            ("Corporate - Hustle Rush", "CorporateRushDeck", "Your Startup's Founder", "Moving fast. Breaking you.", "Aggro", new[] { "Micromanager", "Micromanager", "Cleaning Robot", "Cleaning Robot", "Multilevel Marketing Seller", "Multilevel Marketing Seller", "Bloomberg Terminal", "Bloomberg Terminal", "Charles Ponzi", "Charles Ponzi", "Day Trader", "Day Trader", "Middle Manager", "Middle Manager", "Shell Company", "Shell Company", "Flash Crash", "Flash Crash", "Hostile Takeover", "Hostile Takeover", "Team Building Exercise", "Team Building Exercise", "High-Frequency Trading Scam", "High-Frequency Trading Scam", "Inheritance", "Inheritance", "Venture Capital", "Venture Capital", "Valet", "Valet", "DMCA", "DMCA", "3rd Parallel Job", "3rd Parallel Job", "Legal Department", "Legal Department", "Job Rotation", "Job Rotation", "Resignation Letter", "Resignation Letter", "Teflon Don", "Teflon Don", "Insurance Policy", "Insurance Policy", "Seniority Priority", "Seniority Priority" }),
+            ("Statecraft - Shock and Awe", "StatecraftAggroDeck", "The Minister of Defence", "Peace through superior firepower.", "Aggro", new[] { "Mercenaries", "Mercenaries", "Sherman Tank", "Sherman Tank", "Police Officer Productivity Target", "Police Officer Productivity Target", "Spite-Elected President", "Spite-Elected President", "Demagogue", "Demagogue", "Man o' War", "Man o' War", "Preemptive Strike", "Preemptive Strike", "Raised Security Level", "Raised Security Level", "Martial Law", "Martial Law", "Panem Et Circenses", "Weapons of Mass Distraction", "Security Guard", "Security Guard", "Mass Emigration", "Mass Emigration", "Filibuster", "Filibuster", "Curfew", "Curfew", "Spin Doctor", "Spin Doctor", "Civil Servant", "Civil Servant", "Bomb Squad", "Bomb Squad", "Riot Police", "Riot Police", "Drill Sergeant", "Drill Sergeant", "Sapper", "Sapper", "Mutually Assured Destruction", "Mutually Assured Destruction", "Due Process", "Due Process" }),
+            ("Zeitgeist - Underdogs", "ZeitgeistSwarmDeck", "Your Neighbourhood", "Nobody believed in them. Correctly.", "Swarm", new[] { "Underdog", "Underdog", "Plot Armor", "Plot Armor", "Scam Artist", "Scam Artist", "Delivery Cyclist", "Delivery Cyclist", "Drug Smuggler", "Drug Smuggler", "Hikikomori", "Hikikomori", "Not on My Watch", "Karen", "Karen", "No Glove, No Love", "No Glove, No Love", "One for the Road", "One for the Road", "Rush Hour", "Generational Trauma", "Generational Trauma", "Mental Health Day", "YOLO", "The Friends We Made Along the Way", "The Friends We Made Along the Way", "Absentee Parents", "Absentee Parents", "Ol' Reliable", "Ol' Reliable", "Weaponized Incompetence", "Listen Kid", "Listen Kid", "Lost Generation", "Lost Generation", "Spite Voter", "Spite Voter", "Camper Van", "Camper Van", "Universal Basic Income", "Calm Your Tits", "Tourist Trap", "Tourist Trap", "Groundhog Day", "Groundhog Day", "Freaky Friday", "Freaky Friday", "Florida Man", "Florida Man", "One-Trick Pony", "Clingy Ex", "Backup Dancer", "Anti-Vaxxer" }),
+            ("Utopia - Lab Grown", "UtopiaEngineDeck", "The Gene Therapist", "Side effects may include winning.", "Engine", new[] { "Quark", "Quark", "Ankylorhiza", "Ankylorhiza", "Particle Accelerator", "Particle Accelerator", "Cold Fusion", "Cold Fusion", "Hypermetamorphosis", "Hypermetamorphosis", "Resurrected T-Rex", "Resurrected T-Rex", "Antimatter", "Antimatter", "Biohacker", "Biohacker", "Biohacking", "Biohacking", "Mutation", "Mutation", "Exponential Growth", "Exponential Growth", "Seasteading", "Seasteading", "Blood Transfusion", "Blood Transfusion", "Stasis Field", "Stasis Field", "Gene Editing", "Gene Editing", "Heimlich Maneuver", "Heimlich Maneuver", "Blood Transfusion", "Blood Transfusion", "Peer Review", "Peer Review" }),
             ("Digital Society - Influencer Economy", "DigitalSocietyMidrangeDeck", "Your Favourite Streamer", "Like, subscribe, surrender.", "Midrange", new[] { "Thirst Trap", "Thirst Trap", "Content Creator", "Content Creator", "Short King", "Short King", "Good Boi", "Good Boi", "Its Been 84 Years...", "Its Been 84 Years...", "Catfish", "Catfish", "Meta Group Chat", "Meta Group Chat", "Cancelled", "Cancelled", "Social Panopticon", "Social Panopticon", "Its A Trap", "Dogpile", "Dogpile", "Console Memory Card", "Selfie Esteem", "Selfie Esteem", "Influencer", "Influencer", "U Mad Bro?", "U Mad Bro?" }),
-            ("Shadow Ops. - Black Budget", "ShadowOpsControlDeck", "The Station Chief", "This meeting never happened.", "Control", new[] { "Embassy", "Embassy", "Mole", "Mole", "Arsonist", "Arsonist", "Cleaner", "Cleaner", "Compromised Agent", "Compromised Agent", "Political Decoy", "Political Decoy", "Control Room", "Control Room", "Signal Jammer", "Signal Jammer", "Counter-Surveillance", "Counter-Surveillance", "Supply Chain Attack", "Supply Chain Attack", "Secret Anthrax Laboratory", "Secret Anthrax Laboratory", "Human Intelligence", "Human Intelligence", "Sabotage", "Sabotage", "Perfectly Timed Camera Malfunction", "Perfectly Timed Camera Malfunction", "Tracking Beacon", "Tracking Beacon", "Plausible Deniability", "Plausible Deniability" }),
-            ("Tech - Threat Model", "TechComboDeck", "The Red Team", "We found 47 vulnerabilities. You are 46 of them.", "Combo", new[] { "Suspicious USB Stick in the Parking Lot", "Suspicious USB Stick in the Parking Lot", "Technical Debt", "Technical Debt", "Scope Creep", "Scope Creep", "SysAdmin", "SysAdmin", "Threat Hunter", "Threat Hunter", "Script Kiddie", "Script Kiddie", "Legacy Code", "Legacy Code", "Sex Clanker", "Sex Clanker", "Ransomware Attack", "Ransomware Attack", "Code Review", "Code Review", "Ctrl + Y", "Ctrl + Y", "Man-in-the-Middle", "Man-in-the-Middle", "Antivirus", "Antivirus", "DDOS Attack", "DDOS Attack", "Pair Programming", "Pair Programming" }),
-            ("Myth - Blessed Martyrs", "MythEngineDeck", "The Abbess", "Blessed are the meek. Briefly.", "Engine", new[] { "Pyramids", "Pyramids", "Heretic", "Heretic", "Reincarnation", "Reincarnation", "Black Knight", "Black Knight", "Cultist", "Cultist", "Here Be Dragons", "Here Be Dragons", "Buddy Christ", "Buddy Christ", "Zealot", "Zealot", "Deus Vult", "Deus Vult", "Gracias Jesús", "Gracias Jesús", "Mithril", "Mithril", "Ambrosia", "Ambrosia", "Excess of Bread and Wine", "Excess of Bread and Wine", "Monkey Hand", "Monkey Hand", "Publicly Funded Faith Schools", "Publicly Funded Faith Schools", "Thoughts and Prayers", "Thoughts and Prayers", "Holy Ghost", "Holy Ghost" }),
-            ("Mind - Mind Games", "MindControlDeck", "Your Therapist", "And how does losing make you feel?", "Control", new[] { "Socrates", "Socrates", "Roko's Basilisk", "Roko's Basilisk", "Schrodinger's Cat", "Schrodinger's Cat", "Introvert", "Introvert", "Ship of Theseus", "Ship of Theseus", "Legerdemain", "Legerdemain", "Maslow's Pyramid", "Maslow's Pyramid", "Yesn't", "Yesn't", "Red Herring", "Red Herring", "Survivorship Bias", "Momentum", "Trolley Problem", "Trolley Problem", "Lucid Dreaming", "Hold That Thought", "Hold That Thought", "Psychiatrists", "Psychiatrists", "Projection", "Hyperbole", "Hyperbole", "Domino Effect", "Domino Effect", "Controlled Chaos", "Controlled Chaos", "Liminal Space", "Liminal Space", "Monkey See, Monkey Do", "Monkey See, Monkey Do" }),
+            ("Shadow Ops. - Black Budget", "ShadowOpsControlDeck", "The Station Chief", "This meeting never happened.", "Control", new[] { "Embassy", "Embassy", "Mole", "Mole", "Arsonist", "Arsonist", "Cleaner", "Cleaner", "Compromised Agent", "Compromised Agent", "Political Decoy", "Political Decoy", "Control Room", "Control Room", "Signal Jammer", "Signal Jammer", "Counter-Surveillance", "Counter-Surveillance", "Supply Chain Attack", "Supply Chain Attack", "Secret Anthrax Laboratory", "Secret Anthrax Laboratory", "Human Intelligence", "Human Intelligence", "Sabotage", "Sabotage", "Perfectly Timed Camera Malfunction", "Perfectly Timed Camera Malfunction", "Tracking Beacon", "Tracking Beacon", "Plausible Deniability", "Plausible Deniability", "Hostage Situation", "Hostage Situation" }),
+            ("Tech - Threat Model", "TechComboDeck", "The Red Team", "We found 47 vulnerabilities. You are 46 of them.", "Combo", new[] { "Suspicious USB Stick in the Parking Lot", "Suspicious USB Stick in the Parking Lot", "Technical Debt", "Technical Debt", "Scope Creep", "Scope Creep", "SysAdmin", "SysAdmin", "Threat Hunter", "Threat Hunter", "Script Kiddie", "Script Kiddie", "Legacy Code", "Legacy Code", "Sex Clanker", "Sex Clanker", "Ransomware Attack", "Ransomware Attack", "Code Review", "Code Review", "Ctrl + Y", "Ctrl + Y", "Man-in-the-Middle", "Man-in-the-Middle", "Antivirus", "Antivirus", "DDOS Attack", "DDOS Attack", "Pair Programming", "Pair Programming", "EMP Drone", "EMP Drone", "Buffering", "Buffering" }),
+            ("Myth - Blessed Martyrs", "MythEngineDeck", "The Abbess", "Blessed are the meek. Briefly.", "Engine", new[] { "Pyramids", "Pyramids", "Heretic", "Heretic", "Reincarnation", "Reincarnation", "Black Knight", "Black Knight", "Cultist", "Cultist", "Here Be Dragons", "Here Be Dragons", "Buddy Christ", "Buddy Christ", "Zealot", "Zealot", "Deus Vult", "Deus Vult", "Gracias Jesús", "Gracias Jesús", "Mithril", "Mithril", "Ambrosia", "Ambrosia", "Excess of Bread and Wine", "Excess of Bread and Wine", "Monkey Hand", "Monkey Hand", "Publicly Funded Faith Schools", "Publicly Funded Faith Schools", "Thoughts and Prayers", "Thoughts and Prayers", "Holy Ghost", "Holy Ghost", "Tithe", "Tithe", "Berserker", "Berserker", "Tutankhamun", "Tutankhamun", "Holy Pigeon", "Holy Pigeon", "The Last Shall Be First", "The Last Shall Be First" }),
+            ("Mind - Mind Games", "MindControlDeck", "Your Therapist", "And how does losing make you feel?", "Control", new[] { "Socrates", "Socrates", "Roko's Basilisk", "Roko's Basilisk", "Schrodinger's Cat", "Schrodinger's Cat", "Introvert", "Introvert", "Ship of Theseus", "Ship of Theseus", "Legerdemain", "Legerdemain", "Maslow's Pyramid", "Maslow's Pyramid", "Yesn't", "Yesn't", "Red Herring", "Red Herring", "Survivorship Bias", "Momentum", "Trolley Problem", "Trolley Problem", "Lucid Dreaming", "Hold That Thought", "Hold That Thought", "Psychiatrists", "Psychiatrists", "Projection", "Hyperbole", "Hyperbole", "Domino Effect", "Domino Effect", "Controlled Chaos", "Controlled Chaos", "Liminal Space", "Liminal Space", "Monkey See, Monkey Do", "Monkey See, Monkey Do", "Sleepwalker", "Sleepwalker", "Empath", "Empath", "Tabula Rasa", "Tabula Rasa", "Reality Check", "Reality Check", "Slow Thinking", "Slow Thinking" }),
             // Two factions that play well together (Faction Compendium 5, Example Two-Faction Decks)
             ("Myth + Corporate - Prosperity Gospel", "ProsperityGospelDeck", "The Televangelist", "Your donation is tax-deductible. Your soul is not.", "Combo", new[] { "Sacrificial Ritual", "Sacrificial Ritual", "Omen Reading", "Necronomicon", "Necronomicon", "Cultist", "Cultist", "Unpaid Intern", "Unpaid Intern", "Golden Parachute", "Golden Parachute", "Charles Ponzi", "Day Trader", "Day Trader", "Fat Tony", "Fat Tony", "Martyr", "Martyr", "Tax-Exempt Corruption", "Monkey Hand", "Holy War", "Holy War", "Hostile Takeover", "Hostile Takeover" }),
             ("Digital Society + Shadow Ops. - Panopticon", "PanopticonDeck", "The Data Broker", "We know what you did. We sold it.", "Combo", new[] { "Meta Group Chat", "Meta Group Chat", "Social Panopticon", "Social Panopticon", "Cancelled", "Cancelled", "Control Room", "Control Room", "Wet Work", "Wet Work", "Perfectly Timed Camera Malfunction", "Perfectly Timed Camera Malfunction", "Tapped Communications", "Keyboard Warrior", "Keyboard Warrior", "Chronically Online", "Chronically Online", "Licence to Kill", "Licence to Kill", "Cleaner", "Cleaner", "Dogpile", "Dogpile" }),
@@ -227,16 +228,48 @@ namespace SlayTheClone {
         // Pays with capital (future: discard cards). Until discarding exists, its strongest cards leak value to the enemy.
         // Can't heal. Engine: card draw, workers that die usefully, money that hurts someone else first.
         private static List<CardDef> CorporateCards() => new List<CardDef> {
+            // The second Pokémon batch (the user, 2026-10-17): Rocky Helmet, Skill Swap, Memento, Good as Gold, Destiny Bond, Trick Room
+            Creature("Legal Department", 2, 7, speed: 1, deploy: 0,
+                "You'll be hearing from us. Repeatedly. At your home address.",
+                "Litigious (Pokémon's Rocky Helmet): a creature that attacks it takes 2 damage. A wall that sues.")
+                .With(CreatureAbility.Litigious)
+                .Picture("A phalanx of identical lawyers in grey suits behind a long desk, each holding up a thick folder like a riot shield, a fist that punched the desk recoiling with a CEASE AND DESIST stapled to it."),
+            Spell("Job Rotation", TargetType.AllCreatures,
+                "Everyone will now be doing someone else's job, badly. It builds character.",
+                "Skill Swap: target creature and the creature facing it swap abilities, for the combat. Their Signal Jammer on your Bodyguard's side of the table, and the other way round.",
+                Act(ActionType.SwapAbilities, 0, TargetType.AllCreatures, TargetModifier.None))
+                .Picture("An office where the surgeon in scrubs is fixing the printer, the IT guy in a hoodie is holding a scalpel over a patient, and the HR woman is piloting a forklift through the open-plan floor, an EMPLOYEE ROTATION WEEK banner above them."),
+            Spell("Resignation Letter", TargetType.EnemyCreatures,
+                "I quit. Effective immediately. Also I took the client list.",
+                "Memento: your weakest creature is sacrificed (an additional cost), and target enemy creature gets -3 Attack until it leaves play. Its exit takes the wind out of them.",
+                Buff(-3, TargetType.EnemyCreatures, attack: true, health: false))
+                .Sacrificing(1)
+                .Picture("A man walking out of a glass tower with a cardboard box of his things and a huge grin, a letter fluttering behind him, while through the window his former boss sits slumped at a desk buried under the work he left."),
+            Creature("Teflon Don", 4, 5, speed: 2, deploy: 1,
+                "Charged forty times. Convicted of being fabulous.",
+                "Teflon (Pokémon's Good as Gold): enemy statuses don't land on it. Every Mafia theme is Corporate: legality is a business with a high entry price.")
+                .With(CreatureAbility.Teflon)
+                .Picture("A silver-haired mob boss in a camel coat and pinstripes strolling out of a courthouse waving to cameras, indictment papers sliding off his coat like water off a non-stick pan, two lawyers scooping them up behind him."),
+            Spell("Insurance Policy", TargetType.FriendlyCreatures,
+                "In the event of death, the beneficiary receives the killer.",
+                "Destiny Bond: Mutually Assured for 3 Days on target friendly creature: the creature that kills it is destroyed too. The policy pays out in kind.",
+                Status(StatusEffectType.MutuallyAssured, 3, TargetType.FriendlyCreatures))
+                .Picture("An insurance agent in a beige suit sliding a policy across the desk to a nervous creature, the fine print magnified under a glass reading WHOEVER KILLS YOU, WE KILL, a tiny coffin-shaped paperweight on the desk."),
+            Spell("Seniority Priority", TargetType.Player,
+                "The slowest to adapt go first. It's called experience.",
+                "Trend for 3 Days (Trick Room, Corporate's flavour): Rush Hour, the slowest act first.",
+                SetTrend(Trend.RushHour, 3))
+                .Picture("A boardroom where a very old executive with a walking frame is being ushered to the head of the table past a queue of young employees frozen mid-stride, a plaque on the wall reading 40 YEARS OF SERVICE."),
             // The Pokémon picks (the user, 2026-10-17): Imprison as the DMCA, Belly Drum as a third job
-            Spell("DMCA", TargetType.Enemy,
+            Spell("DMCA", TargetType.EnemyCreatures,
                 "This creature has been claimed by its rights holder. Your appeal has been automatically denied.",
-                "Imprison (the user, 2026-10-17): for 3 Days the enemy can't play a card that shares its name with a creature on the board, either side's. The copy on the board holds the rights: their second copies wait in the hand (every deck runs two). Monkey See, Monkey Do sets it up.",
-                Act(ActionType.Seal, 3, TargetType.Enemy, TargetModifier.None))
+                "Imprison (the user, 2026-10-17): target enemy creature is destroyed (taken down), and for 2 Days the enemy can't play a card that shares its name with a creature on the board, either side's (every deck runs two copies: the second waits while a copy stands).",
+                Destroy(TargetType.EnemyCreatures), Act(ActionType.Seal, 2, TargetType.Enemy, TargetModifier.None))
                 .Picture("A lawyer in a sharp suit slapping a huge red COPYRIGHT STRIKE sticker over the face of a creature on a giant video thumbnail, a second identical thumbnail beside it greyed out with CLAIMED across it, a tiny APPEAL button crossed out."),
             Spell("3rd Parallel Job", TargetType.FriendlyCreatures,
                 "Sleep is for people with one income.",
-                "Belly Drum (the user, 2026-10-17): you take 8 damage; target friendly creature gets +6 Attack for good. The hustle: your Health for a monster.",
-                Damage(8, TargetType.Player), Buff(6, TargetType.FriendlyCreatures, attack: true, health: false))
+                "Belly Drum (the user, 2026-10-17): target friendly creature loses half its Health and its Attack doubles. The hustle: its Health for a monster.",
+                Act(ActionType.DoubleDown, 0, TargetType.FriendlyCreatures, TargetModifier.None))
                 .Picture("A hollow-eyed man at three desks pushed together, a laptop and a different lanyard on each, three video calls on mute, an IV drip of coffee into his arm, the wall clock at 3:00, his biceps absurdly huge from typing."),
             Spell("Overtime", TargetType.FriendlyCreatures,
                 "Just this once. Every week.",
@@ -518,6 +551,42 @@ namespace SlayTheClone {
         // Pays with bureaucracy: its creatures take longer to deploy than similar ones, and its spells tie up its own side.
         // Can't hide anything. Engine: armor, area damage, slow but sturdy bodies, disables.
         private static List<CardDef> StatecraftCards() => new List<CardDef> {
+            // The second Pokémon batch (the user, 2026-10-17): Protect, Rapid Spin, Assault Vest, Intimidate, Toxic Debris, Destiny Bond, Trick Room
+            Creature("Civil Servant", 2, 6, speed: 1, deploy: 0,
+                "Not my department. Not my desk. Not my problem.",
+                "Hunker Down (Pokémon's Protect): on a Day it plans nothing, it takes no damage. The wall that works by not working.")
+                .With(CreatureAbility.HunkerDown)
+                .Picture("A clerk behind a counter whose window has just slammed shut with a CLOSED sign, arms folded, a cup of tea steaming, a queue of furious citizens' fists bouncing off the glass as if it were a force field."),
+            Creature("Bomb Squad", 2, 5, speed: 1, deploy: 0,
+                "Cut the red wire. Or the blue one. It's a coin toss with a pension.",
+                "Bomb Disposal (Pokémon's Rapid Spin): the Slot Effect on a slot it enters is cleared before it goes off: Landmines, Snares, Checkpoints, a Shield, Scorched Earth, a Prayer.")
+                .With(CreatureAbility.BombDisposal)
+                .Picture("A technician in a bulky green bomb suit kneeling over a cartoon landmine with wire cutters, a tiny sweat drop, a robot on tank treads holding a torch for him, the rest of the squad watching from very far away through binoculars."),
+            Creature("Riot Police", 3, 5, speed: 1, deploy: 0,
+                "Protecting the public from the public.",
+                "Riot Gear (Pokémon's Assault Vest): each Dawn, +2 Armor. Armor fades 1 at each Dusk, so it keeps a plate on.")
+                .With(CreatureAbility.RiotGear)
+                .Picture("A line of riot police in black armour and helmets behind transparent shields, each shield plastered with a different sticker: HAVE A NICE DAY, BABY ON BOARD, I BRAKE FOR PROTESTS."),
+            Creature("Drill Sergeant", 3, 4, speed: 2, deploy: 0,
+                "I can't HEAR you. Good. Stay that way.",
+                "Intimidate: Arrival: -2 Attack to the enemy creature facing it, until it leaves play.",
+                On(EffectTrigger.OnPlay, Buff(-2, TargetType.EnemyCreatures, attack: true, health: false, modifier: Facing)))
+                .Picture("A drill sergeant in a campaign hat screaming an inch from the face of a huge enemy brute who has shrunk to half his size, knees knocking, his club drooping, spit flying in an arc."),
+            Creature("Sapper", 2, 5, speed: 1, deploy: 0,
+                "Where there's a hole, there's a way.",
+                "Shrapnel (Pokémon's Toxic Debris): when an attack hits it, a Landmine 2 lands on a random empty enemy slot. Hitting it seeds their side.")
+                .With(CreatureAbility.Shrapnel)
+                .Picture("A soldier with a shovel and a satchel of mines diving out of a trench as a shell bursts beside him, mines flying out of the satchel in a lazy arc toward the enemy's side of the field, each with a little parachute."),
+            Spell("Mutually Assured Destruction", TargetType.FriendlyCreatures,
+                "If we go, you go. That's the whole plan. There is no other plan.",
+                "Destiny Bond (the user, 2026-10-17): Mutually Assured for 2 Days on target friendly creature: the creature that kills it is destroyed too.",
+                Status(StatusEffectType.MutuallyAssured, 2, TargetType.FriendlyCreatures))
+                .Picture("Two generals at either end of a war room table, each with a finger on a big red button, wired to the same bomb between them, both smiling politely, a Cold War map glowing behind them."),
+            Spell("Due Process", TargetType.Player,
+                "Justice will be served. In the order the forms were received.",
+                "Trend for 3 Days (Trick Room, Statecraft's flavour): Rush Hour, the slowest act first.",
+                SetTrend(Trend.RushHour, 3))
+                .Picture("A courthouse corridor where a snail with a briefcase is called into court first while a sprinter in running gear waits on a bench with a ticket reading 8,241, the wall clock with no hands."),
             // The Pokémon picks (the user, 2026-10-17): Quash as a Filibuster, Gravity as a Curfew, the spokesman's dodge
             Spell("Filibuster", TargetType.EnemyCreatures,
                 "The senator will now read the phone book. All of it. Slowly.",
@@ -697,6 +766,27 @@ namespace SlayTheClone {
         // Pays with self-harm: damage to its own creatures and to you. Fast (Deployment Time 0-1), buffs that burn out.
         // Can't use Intelligence. Engine: cheap bodies that spike and fizzle, chaos that hits everyone.
         private static List<CardDef> ZeitgeistCards() => new List<CardDef> {
+            // The second Pokémon batch (the user, 2026-10-17): the Choice items, Shadow Tag, Dancer, and healing that hurts
+            Creature("One-Trick Pony", 5, 3, speed: 2, deploy: 0,
+                "It does the one thing. Ask it for the other thing and watch it do the one thing.",
+                "Fixated (Pokémon's Choice items): once it attacks, it repeats that attack every Day until it leaves: the same slot, whatever moves there. Big numbers for no choices.")
+                .With(CreatureAbility.Fixated)
+                .Picture("A pony in a tiny circus hat standing on its hind legs on a stool, doing the exact same trick in three frames in a row, the ringmaster's cue cards for other tricks piling up ignored on the sawdust."),
+            Creature("Clingy Ex", 2, 4, speed: 2, deploy: 0,
+                "We're not done talking. We'll never be done talking.",
+                "Clingy (Pokémon's Shadow Tag): the enemy creature facing it can't move, and nothing moves it: Rooted as long as the Ex faces it.")
+                .With(CreatureAbility.Clingy)
+                .Picture("A person clamped around the leg of someone trying to walk away, dragged along the pavement, phone in hand showing 47 missed calls, the other one staring straight ahead with dead eyes."),
+            Creature("Backup Dancer", 2, 3, speed: 2, deploy: 0,
+                "Three steps behind the star, five steps ahead of the choreography.",
+                "Backup Dancer (Pokémon's Dancer): when a friendly creature beside it attacks, it attacks the same slot too, if it planned nothing. Once a Day.")
+                .With(CreatureAbility.BackupDancer)
+                .Picture("A pop star mid-high-kick on a stage, and beside her a backup dancer in sequins doing the exact same kick a half-beat behind, both kicks landing on a stagehand's face at the edge of the stage."),
+            Creature("Anti-Vaxxer", 3, 5, speed: 2, deploy: 0,
+                "I've done my own research. It was a video.",
+                "Do Your Own Research: healing damages it instead. Hand it a cure and it takes the hit; the enemy's healing on it hurts it too.")
+                .With(CreatureAbility.DoYourOwnResearch)
+                .Picture("A woman in a SPIRITUAL NOT MEDICAL t-shirt slapping a syringe out of a doctor's hand, a crystal pendant swinging, while a tiny cartoon virus on her shoulder gives a thumbs up."),
             // The Pokémon picks (the user, 2026-10-17): Encore as Groundhog Day, Trick as Freaky Friday, Metronome as Florida Man
             Spell("Groundhog Day", TargetType.EnemyCreatures,
                 "Okay, campers, rise and shine! And don't forget your booties, 'cause it's cold out there today.",
@@ -741,7 +831,7 @@ namespace SlayTheClone {
                 .Picture("A man chained by the neck to a giant cigarette pack like a dog on a leash, and happy about it: grinning, a cigarette in his mouth, a cloud of smoke around his head. The pack is a classic red-and-white one (a red chevron lid over a white body, a small gold crest, \"FILTER CIGARETTES\" on the red band), no brand name."),
             Creature("Karen", 4, 5, speed: 1, deploy: 0,
                 "Would like to speak to your manager. And theirs. And God's.",
-                "Mood Swings (the user, 2026-10-17, Pokémon's Moody): each Dawn, +2 to one of its stats and -1 to another, at random, for good. Future: Impatient. Escalates every Day nobody gives it an intent.",
+                "Mood Swings (the user, 2026-10-17, Pokémon's Moody): each Dawn, +2 to one of its stats and -1 to another, at random. Future: Impatient. Escalates every Day nobody gives it an intent.",
                 On(EffectTrigger.OnDamage, Buff(1, TargetType.Self, attack: true, health: false)))
                 .With(CreatureAbility.MoodSwings),
             Creature("Boomer", 4, 6, speed: 1, deploy: 0,
@@ -763,7 +853,7 @@ namespace SlayTheClone {
                 On(EffectTrigger.OnPlay, Stun(2, TargetType.Self))),
             Creature("Reality TV Star", 5, 4, speed: 2, deploy: 0,
                 "Famous for being famous. Unbearable for free.",
-                "Mood Swings (the user, 2026-10-17: 'and others'): famous for the drama; each Dawn, +2 to one of its stats and -1 to another, at random, for good. Future: Plot Armor. Survives a lethal hit once (OnAboutToDie).",
+                "Mood Swings (the user, 2026-10-17: 'and others'): famous for the drama; each Dawn, +2 to one of its stats and -1 to another, at random. Future: Plot Armor. Survives a lethal hit once (OnAboutToDie).",
                 On(EffectTrigger.OnPlay, Buff(2, TargetType.Self, attack: true, health: true), Damage(1, TargetType.FriendlyCreatures)))
                 .With(CreatureAbility.MoodSwings),
             Creature("Scam Artist", 2, 2, speed: 3, deploy: 0,
@@ -1068,6 +1158,12 @@ namespace SlayTheClone {
 
         // Shadow Ops.: fragile agents, hidden plans, traps
         private static List<CardDef> ShadowOpsCards() => new List<CardDef> {
+            // The second Pokémon batch (the user, 2026-10-17): Destiny Bond, the hostage's version
+            Spell("Hostage Situation", TargetType.FriendlyCreatures,
+                "Nobody move, or the creature gets it. And then you get it.",
+                "Destiny Bond: Mutually Assured for 2 Days and Heat Signature 2 on target friendly creature: their random and redirected attacks go to it, and the creature that kills it is destroyed too.",
+                Status(StatusEffectType.MutuallyAssured, 2, TargetType.FriendlyCreatures), Status(StatusEffectType.HeatSignature, 1, TargetType.FriendlyCreatures, potency: 2))
+                .Picture("A masked agent holding a very calm creature hostage in a bank lobby, a dead man's switch in his hand wired to every other creature in the room, a negotiator outside with a megaphone and a sandwich."),
             // The Pokémon pick (the user, 2026-10-17): Wide Guard as Plausible Deniability
             Spell("Plausible Deniability", TargetType.Player,
                 "I have no recollection of that creature, that Day, or this conversation.",
@@ -1442,6 +1538,17 @@ namespace SlayTheClone {
 
         // Tech: rewires the queue
         private static List<CardDef> TechCards() => new List<CardDef> {
+            // The second Pokémon batch (the user, 2026-10-17): Neutralizing Gas, Trick Room
+            Creature("EMP Drone", 1, 4, speed: 2, deploy: 0,
+                "No signal. No abilities. No complaints: nobody can call to complain.",
+                "Jamming Field (Pokémon's Neutralizing Gas): every other creature's ability is switched off while it stands, on either side. Yours too.")
+                .With(CreatureAbility.JammingField)
+                .Picture("A quadcopter drone hovering over the battlefield emitting concentric rings of static, every creature below holding a phone with no bars, their glowing ability icons flickering out one by one."),
+            Spell("Buffering", TargetType.Player,
+                "99%. 99%. 99%. 99%.",
+                "Trend for 3 Days (Trick Room, Tech's flavour): Rush Hour, the slowest act first.",
+                SetTrend(Trend.RushHour, 3))
+                .Picture("A battlefield frozen under a giant spinning loading wheel, every creature caught mid-leap with a BUFFERING 99% label, the one dial-up modem in the corner going first."),
             Spell("Web Scraping", TargetType.Player,
                 "We respect your robots.txt. We read it, anyway.",
                 "Tech's scouting: send for any card among the top 5 of your deck; it joins your next hand.",
@@ -1563,6 +1670,33 @@ namespace SlayTheClone {
         // for miracles (Sacrifice), prophecies that come true Days later (Prophecy), converts (control change), and wrath on
         // the unbelievers (Holy War). Pays with its own creatures; can't move them.
         private static List<CardDef> MythCards() => new List<CardDef> {
+            // The second Pokémon batch (the user, 2026-10-17): Leech Seed, Berserk, Perish Body, the Holy Pigeon, Trick Room
+            Spell("Tithe", TargetType.EnemyCreatures,
+                "Ten percent, every Sunday, forever. God's own subscription.",
+                "Leech Seed (the user, 2026-10-17): Leech 1 for 3 Days on target enemy creature: at each Dusk it takes 1 and you heal 1.",
+                Status(StatusEffectType.Leeched, 3, TargetType.EnemyCreatures, potency: 1))
+                .Picture("A collection plate on a very long pole reaching from a gilded pulpit all the way across the battlefield into an enemy creature's pocket, coins flowing back along it into a fat bishop's lap."),
+            Creature("Berserker", 3, 6, speed: 2, deploy: 0,
+                "Pain is just the body's way of asking for more.",
+                "Berserk: +3 Attack at half Health or less. The worse it gets, the better he does.")
+                .With(CreatureAbility.Berserk)
+                .Picture("A bare-chested Norse warrior with a bear pelt over his head, arrows sticking out of him like a pincushion, grinning wider with each one, swinging an axe in each hand, foam on his beard."),
+            Creature("Tutankhamun", 2, 7, speed: 1, deploy: 1,
+                "Death shall come on swift wings to him who disturbs the peace of the king. Swift-ish.",
+                "Pharaoh's Curse (Pokémon's Perish Body): a creature that attacks it is Doomed 3, and so is the pharaoh (the Carnarvon curse: Mummy, the Hive Mind test creature, keeps its name). Three Days of growing dread for both.")
+                .With(CreatureAbility.PharaohsCurse)
+                .Picture("A bandaged mummy sitting up in its sarcophagus pointing a bony finger at a tomb raider in a pith helmet, both of them with a little hourglass over their heads showing the same three grains of sand."),
+            Creature("Holy Pigeon", 1, 3, speed: 3, deploy: 0,
+                "The Holy Spirit, as depicted. Please do not feed it.",
+                "Leapfrog (the user, 2026-10-17: 'make also the holy pigeon'): it flies over creatures to an empty slot. Arrival: Bless 1 on every friendly creature: a ward against the next status.",
+                On(EffectTrigger.OnPlay, Status(StatusEffectType.Blessed, 0, TargetType.FriendlyCreatures, potency: 1, modifier: Each)))
+                .With(MovementKeyword.Leapfrog)
+                .Picture("A fat grey city pigeon with a golden halo and two tiny angel wings perched on a cathedral gargoyle, a beam of holy light on it, a crumb of communion wafer in its beak, a saint's statue below it freshly anointed."),
+            Spell("The Last Shall Be First", TargetType.Player,
+                "And the first shall wait their turn, like everyone else.",
+                "Trend for 3 Days (Trick Room, Myth's flavour, after the verse): Rush Hour, the slowest act first.",
+                SetTrend(Trend.RushHour, 3))
+                .Picture("The pearly gates with a velvet rope and a bouncer angel waving through a line of old beggars, cripples and a snail while a procession of kings and CEOs with golden tickets is held at the back."),
             // The Pokémon picks (the user, 2026-10-17): Wish as Thoughts and Prayers, Wonder Guard as the Holy Ghost
             Spell("Thoughts and Prayers", TargetType.FriendlyCreatures,
                 "Our thoughts are with you. Our prayers are in the post.",
@@ -1896,6 +2030,32 @@ namespace SlayTheClone {
 
         // Mind: wins without raw damage
         private static List<CardDef> MindCards() => new List<CardDef> {
+            // The second Pokémon batch (the user, 2026-10-17): Sleep Talk, Synchronize, Haze (area and target), Trick Room
+            Creature("Sleepwalker", 3, 4, speed: 2, deploy: 0,
+                "Do not wake it. Do not stand in front of it either.",
+                "Autopilot (Pokémon's Sleep Talk): Exhausted, it still attacks: a random enemy slot. A stun doesn't stop it, it just stops aiming.")
+                .With(CreatureAbility.Autopilot)
+                .Picture("A man in striped pyjamas and a nightcap sleepwalking across a battlefield with his arms out, eyes shut, a candle in one hand, swinging a pillow that knocks a helmeted soldier clean off his feet."),
+            Creature("Empath", 2, 5, speed: 2, deploy: 0,
+                "I feel your pain. Now you feel mine. It's only fair.",
+                "Empathy (Pokémon's Synchronize): an enemy status that lands on it lands on the creature that sent it too; from a spell, on a random enemy creature.")
+                .With(CreatureAbility.Empathy)
+                .Picture("A woman in a cardigan with her hand on her heart, tears in her eyes, mirrored exactly by the enemy soldier opposite who has suddenly burst into the same tears, both of them on fire from the same Burn."),
+            Spell("Tabula Rasa", TargetType.AllCreatures,
+                "Blank slate. Everyone back to who they were printed as.",
+                "Haze, the area (the user, 2026-10-17): every creature on the board loses its stat changes, raises and cuts alike. Statuses stay.",
+                Cleanse(CleanseTarget.StatModifications, TargetType.AllCreatures))
+                .Picture("A giant blackboard eraser sweeping across a battlefield drawn in chalk, the creatures' scribbled +2s and -1s vanishing into white dust, a philosopher in a toga holding the eraser."),
+            Spell("Reality Check", TargetType.AllCreatures,
+                "You're not that strong. You were never that strong. Sit down.",
+                "Haze, on a target (the user, 2026-10-17): target creature loses its stat changes, raises and cuts alike. Statuses stay.",
+                Cleanse(CleanseTarget.StatModifications, TargetType.AllCreatures))
+                .Picture("A puffed-up bodybuilder flexing in front of a mirror, and in the mirror a skinny man in the same pose; a therapist beside him tapping the glass with a pen."),
+            Spell("Slow Thinking", TargetType.Player,
+                "System 2 would like a word. It will take a while.",
+                "Trend for 3 Days (Trick Room, Mind's flavour, after Kahneman): Rush Hour, the slowest act first.",
+                SetTrend(Trend.RushHour, 3))
+                .Picture("A chess clock between a hare bouncing impatiently and a tortoise in reading glasses still considering its first move, the hare's clock run out, the tortoise's barely started, a referee raising the tortoise's arm."),
             // The Pokémon picks (the user, 2026-10-17): Wonder Room as a Liminal Space, Ditto as Monkey See, Monkey Do
             Spell("Liminal Space", TargetType.Player,
                 "You have been here before. You have never been here. The carpet remembers you.",
@@ -2055,6 +2215,17 @@ namespace SlayTheClone {
         // Accelerationism, its philosophy: technology solves everything, however bad it gets first. It gambles, takes its own
         // creatures to the brink of death (On the Brink: at 2 Health or less they deal double) and then the breakthrough pays.
         private static List<CardDef> UtopiaCards() => new List<CardDef> {
+            // The second Pokémon batch (the user, 2026-10-17): Pain Split, and Peer Review as a reveal
+            Spell("Blood Transfusion", TargetType.AllCreatures,
+                "Universal donor. Universally unwilling.",
+                "Pain Split (the user, 2026-10-17): target creature and the creature facing it share their Health out equally (the odd point to the one that had less). Not damage, not healing: nothing answers it.",
+                Act(ActionType.SplitPain, 0, TargetType.AllCreatures, TargetModifier.None))
+                .Picture("Two hospital beds facing each other with a single blood bag hung between them, the tube running from a huge glowing-pink healthy creature to a grey wilted one, both ending up the same shade of medium pink."),
+            Spell("Peer Review", TargetType.EnemyCreatures,
+                "Interesting results. Shame they don't replicate.",
+                "The user, 2026-10-17 (Peer Review kept for another archetype: a reveal plus an effect): reveal target enemy creature's slot, its plans and what hides there, and its findings are retracted: Blackout 2, its ability and effects switched off.",
+                Reveal(TargetType.EnemyCreatures), Status(StatusEffectType.Blackout, 2, TargetType.EnemyCreatures))
+                .Picture("Three reviewers in lab coats with magnifying glasses peering at a scientist's poster, red RETRACTED stamps hammering onto it, the scientist's hidden second poster behind it dragged into the light."),
             Spell("Geomagnetic Reversal", TargetType.EnemyCreatures,
                 "North is south now. The compass apologises. The pigeons do not.",
                 "The user, 2026-10-16: target creature's Attack and Health trade places, on either side. Its Attack becomes its Health as it is now, and its Health its Attack: a glass cannon becomes a wall, a wall a glass cannon, and a creature with no Attack is left with no Health and dies.",

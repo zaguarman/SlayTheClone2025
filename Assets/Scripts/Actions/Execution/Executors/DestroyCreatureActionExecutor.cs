@@ -39,6 +39,12 @@ namespace SlayTheClone {
             Log($"Executor: {creature.Name} is destroyed", LogTag.Creatures | LogTag.Combat | LogTag.Actions);
             creature.MarkAsDead();
             if (creature.Owner != null) creature.Owner.Fallen++; // Grudge counts the fallen of its side
+            // Mutually Assured (Destiny Bond): the creature that killed it dies too
+            var killer = destroy.GetKiller();
+            if (killer != null && killer != creature && !killer.IsDead && context.ModifierManager.HasStatusEffect(creature, StatusEffectType.MutuallyAssured)) {
+                Log($"Executor: {creature.Name} takes {killer.Name} with it (Mutually Assured)", LogTag.Creatures | LogTag.Combat);
+                context.ActionsQueue.AddAction(new DestroyCreatureAction(killer, creature, unconditional: true, controller: creature.Owner));
+            }
             context.GameMediator.NotifyCreatureDied(creature);
 
             // OnDied effects wait their turn in the Ability and Attack layer

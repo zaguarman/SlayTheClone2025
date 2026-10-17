@@ -316,6 +316,12 @@ namespace SlayTheClone {
                     return $"a fresh copy of {target} appears in the slot facing it on your side (whatever stands there is discarded)";
                 case ActionType.TradeStats: // Freaky Friday
                     return $"{target} and the creature facing it trade Attack and Health";
+                case ActionType.DoubleDown: // 3rd Parallel Job
+                    return $"{target} loses half its Health and its Attack doubles";
+                case ActionType.SplitPain: // Blood Transfusion
+                    return $"{target} and the creature facing it share their Health out equally";
+                case ActionType.SwapAbilities: // Job Rotation
+                    return $"{target} and the creature facing it swap abilities";
                 case ActionType.Seal: // The DMCA
                     return $"{Keywords.Link("DMCA")}{DaysTag(value)}: the enemy can't play a card that shares its name with a creature on the board, either side's";
                 case ActionType.SwapStats: // Geomagnetic Reversal
@@ -526,6 +532,8 @@ namespace SlayTheClone {
                 case StatusEffectType.Looping: return $"{Keywords.Link("Looping", "Groundhog Day")} on {target}: it repeats today's action, the same target, for the next {days} {(days == 1 ? "Day" : "Days")}, and can plan nothing else";
                 case StatusEffectType.Stalled: return $"{target} {Keywords.Link("Stalled", "acts last")} {(days <= 1 ? "this Day" : $"for {days} Days")}";
                 case StatusEffectType.Deniable: return $"{(days <= 1 ? "this Day" : $"for {days} Days")}, effects that hit more than one creature {Keywords.Link("Deniable", "skip")} {target}";
+                case StatusEffectType.Leeched: return $"{Keywords.Link("Leeched", $"Leech {potency}")}{DaysTag(days)} on {target}";
+                case StatusEffectType.MutuallyAssured: return $"{Keywords.Link("Mutually Assured")}{DaysTag(days)} on {target}: the creature that kills it dies too";
                 case StatusEffectType.Survivor: return $"{Keywords.Link("Survivor")} on {target}";
                 default: return null;
             }

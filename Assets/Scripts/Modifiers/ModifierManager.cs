@@ -20,8 +20,7 @@ namespace SlayTheClone {
 
         #region Constructor
         public ModifierManager(IGameMediator mediator, IModifierFactory factory) {
-            MovementRules.IsRooted = creature => HasStatusEffect(creature, StatusEffectType.Rooted); // The game in play's
-            Abilities.IsDeniable = creature => HasStatusEffect(creature, StatusEffectType.Deniable); // Plausible Deniability: area effects skip it this Day
+            MovementRules.IsRooted = creature => HasStatusEffect(creature, StatusEffectType.Rooted) || Abilities.IsPinned(creature); // Or a Clingy Ex faces it // The game in play's
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             modifierFactory = factory ?? throw new ArgumentNullException(nameof(factory));
 
@@ -197,7 +196,7 @@ namespace SlayTheClone {
         /// </summary>
         public bool CanMove(ICreature creature) {
             if (creature == null || creature.IsDead || creature.Slot == null) return false;
-            if (HasStatusEffect(creature, StatusEffectType.Rooted)) return false;
+            if (HasStatusEffect(creature, StatusEffectType.Rooted) || Abilities.IsPinned(creature)) return false; // Rooted, or a Clingy Ex faces it
             return !GetActiveModifiersFor(creature).OfType<StatusEffectModifier>().Any(s => s.PreventsActions());
         }
 
@@ -255,6 +254,10 @@ namespace SlayTheClone {
                     actionsQueue.AddAction(new HealCreatureAction(creature, Abilities.SelfRepairHeal));
                 }
                 Abilities.TryMoodSwings(creature, this); // Mood Swings: its stats drift each Dawn
+                if (Abilities.Has(creature, CreatureAbility.RiotGear)) { // Riot Gear: it suits up each Dawn
+                    creature.ModifyArmorPool(Abilities.RiotGearArmor);
+                    mediator.NotifyCreatureArmorChanged(creature, creature.CurrentArmorPool);
+                }
                 creature.HandleEffect(EffectTrigger.StartOfTurn, actionsQueue);
             }
             Log($"ModifierManager: Start of turn {startingTurnNumber} processing complete.", LogTag.Effects | LogTag.Turns);
@@ -296,6 +299,14 @@ namespace SlayTheClone {
                         Log($"{creature.Name} burns for {burn.Potency} (StatusEffect '{burn.Name}')", LogTag.Effects | LogTag.Turns);
                         actionsQueue.AddAction(new DamageCreatureAction(creature, burn.Potency, creature) { Source = OriginOf(creature, burn), FromStatus = true });
                     }
+                }
+
+                // Leeched (Tithe, Pokémon's Leech Seed): each Dusk it bleeds X, and the enemy player heals X
+                foreach (var leech in modifiers.OfType<StatusEffectModifier>()
+                             .Where(s => s.EffectType == StatusEffectType.Leeched && s.Potency > 0 && s.ActsAtDuskOf(endedTurnNumber)).ToList()) {
+                    Log($"{creature.Name} is leeched for {leech.Potency}", LogTag.Effects | LogTag.Turns);
+                    actionsQueue.AddAction(new DamageCreatureAction(creature, leech.Potency, creature) { Source = OriginOf(creature, leech), FromStatus = true });
+                    creature.Owner?.Opponent?.Heal(leech.Potency);
                 }
 
                 // Remove expired modifiers; RemoveModifier recalculates stats and notifies when needed

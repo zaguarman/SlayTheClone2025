@@ -16,6 +16,7 @@ namespace SlayTheClone {
         public ICreature Source { get; }
         /// <summary>Whose effect it is; null: nobody's. Return to Sender only bounces enemy statuses.</summary>
         public IPlayer Controller { get; }
+        public bool Echo { get; set; } // Empathy's copy of a status: it isn't copied again
         /// <summary>The card whose effect it is, if any: shown tucked under the creature while the status lasts.</summary>
         public ICard Origin { get; set; }
 

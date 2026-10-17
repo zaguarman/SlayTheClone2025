@@ -171,6 +171,7 @@ namespace SlayTheClone {
             label.overflowMode = TextOverflowModes.Truncate;
             float left = 14f;
             if (factions != null) {
+                if (factions.Count <= 1) coinArea = CoinSize; // One coin: the text starts right after it (the user, 2026-10-17)
                 var coins = AddCoins(button.transform, factions, CoinSize, coinArea);
                 coins.anchorMin = coins.anchorMax = coins.pivot = new Vector2(0f, 0.5f);
                 coins.anchoredPosition = new Vector2(14f, 0f);
@@ -180,20 +181,26 @@ namespace SlayTheClone {
             }
             if (string.IsNullOrEmpty(subtitle)) return button;
 
-            var labelRect = label.rectTransform;
-            labelRect.anchorMin = new Vector2(0f, 0.5f);
-            labelRect.offsetMin = new Vector2(left, 0f);
-            labelRect.offsetMax = new Vector2(-14f, -6f);
-            label.alignment = factions != null ? TextAlignmentOptions.BottomLeft : TextAlignmentOptions.Bottom;
+            // The two lines as one block, centred in the button whatever their heights (the user, 2026-10-17: no empty space
+            // over the title with none under the line below it)
+            var texts = NewObject("Texts", button.transform);
+            var textsRect = (RectTransform)texts.transform;
+            textsRect.anchorMin = Vector2.zero;
+            textsRect.anchorMax = Vector2.one;
+            textsRect.offsetMin = new Vector2(left, 4f);
+            textsRect.offsetMax = new Vector2(-14f, -4f);
+            var stack = texts.AddComponent<VerticalLayoutGroup>();
+            stack.childAlignment = factions != null ? TextAnchor.MiddleLeft : TextAnchor.MiddleCenter;
+            stack.spacing = 0f;
+            stack.childControlWidth = stack.childControlHeight = true;
+            stack.childForceExpandWidth = true;
+            stack.childForceExpandHeight = false;
+            label.transform.SetParent(texts.transform, false);
+            label.alignment = factions != null ? TextAlignmentOptions.Left : TextAlignmentOptions.Center;
 
-            var under = AddText(button.transform, subtitle, 19, UITheme.Hex(0xC9C0AE), FontStyles.Normal, height: -1);
-            var underRect = under.rectTransform;
-            underRect.anchorMin = Vector2.zero;
-            underRect.anchorMax = new Vector2(1f, 0.5f);
-            underRect.offsetMin = new Vector2(left, 6f);
-            underRect.offsetMax = new Vector2(-14f, -2f);
-            under.alignment = factions != null ? TextAlignmentOptions.TopLeft : TextAlignmentOptions.Top;
-            under.textWrappingMode = TextWrappingModes.Normal;
+            var under = AddText(texts.transform, subtitle, 19, UITheme.Hex(0xC9C0AE), FontStyles.Normal, height: -1);
+            under.alignment = factions != null ? TextAlignmentOptions.Left : TextAlignmentOptions.Center;
+            under.textWrappingMode = TextWrappingModes.NoWrap;
             under.enableAutoSizing = true;
             under.fontSizeMin = 12;
             under.fontSizeMax = 19;

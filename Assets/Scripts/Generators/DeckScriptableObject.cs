@@ -5,6 +5,12 @@ using static SlayTheClone.DebugLogger;
 
 namespace SlayTheClone {
     public class DeckScriptableObject : ScriptableObject {
+        /// <summary>The deck's own name, without its faction prefix: "Corporate - Shareholder Value" is "Shareholder Value".</summary>
+        public static string ShortName(string deckName) {
+            int dash = deckName?.IndexOf(" - ", System.StringComparison.Ordinal) ?? -1;
+            return dash > 0 && dash + 3 < deckName.Length ? deckName.Substring(dash + 3) : deckName;
+        }
+
         [SerializeField] private string deckName = "New Deck";
         [SerializeField] private List<CardDataScriptableObject> cards = new List<CardDataScriptableObject>();
         [SerializeField] private string lastUpdated = ""; // When its cards last changed (UTC, round-trip format): menus list the newest first

@@ -70,8 +70,8 @@ MonoBehaviour:
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: "Mood Swings (the user, 2026-10-17, Pok\xE9mon's Moody): each Dawn,
-    +2 to one of its stats and -1 to another, at random, for good. Future: Impatient.
-    Escalates every Day nobody gives it an intent."
+    +2 to one of its stats and -1 to another, at random. Future: Impatient. Escalates
+    every Day nobody gives it an intent."
   artDescription: 
   attack: 4
   health: 5

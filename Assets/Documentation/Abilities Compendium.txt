@@ -297,7 +297,7 @@ Grudge
            arrived. Losses become fuel: Last Will decks and swarms finally build toward something.
     Answers: Kill it first, or don't kill its friends.
 
-Sucker Punch
+Backstab (was Sucker Punch; renamed by the user, 2026-10-17)
     Inspired by: Sucker Punch (Kingambit). On Nonchalant Agent (Shadow Ops.).
     Type: Passive
     Description: "Its attack on a creature goes before every other, but only if that creature planned an attack; otherwise it holds back."
@@ -385,3 +385,112 @@ Immaculate (the user, 2026-10-17)
     Notes: Combat damage, spell and ability damage, Landmines, Checkpoints and Earthquakes: none. A Burn tick kills it
            (1 Health). Destroy, Doomed, Kill Order and Burnout still take it. Zero-Day ignores it.
     Answers: Any Burn; a Destroy; Doomed.
+
+Litigious (the user, 2026-10-17)
+    Inspired by: Rocky Helmet. On Legal Department (Corporate).
+    Type: Defensive
+    Description: "A creature that attacks it takes 2 damage."
+    Notes: After the hit lands, whatever the hit did. Zero-Day ignores it.
+    Answers: Spells and abilities, which aren't attacks.
+
+Hunker Down (the user, 2026-10-17)
+    Inspired by: Protect. On Civil Servant (Statecraft).
+    Type: Defensive
+    Description: "On a Day it plans nothing, it takes no damage."
+    Notes: Untouchable for the Day, set once everyone has planned, before the Briefing. A Day it attacks, moves or uses an
+           ability, it's an ordinary creature.
+    Answers: Statuses still land (a Burn ticks, a Doom counts down); wait it out, it does nothing meanwhile.
+
+Bomb Disposal (the user, 2026-10-17)
+    Inspired by: Rapid Spin. On Bomb Squad (Statecraft).
+    Type: Movement
+    Description: "The Slot Effect on a slot it enters is cleared before it goes off."
+    Notes: Landmines, Snares, Checkpoints, Shields, Scorched Earth and Prayers alike: summoned there or moved in.
+    Answers: Nothing to answer; keep the traps where it isn't going.
+
+Autopilot (the user, 2026-10-17)
+    Inspired by: Sleep Talk. On Sleepwalker (Mind).
+    Type: Combat
+    Description: "Exhausted, it still attacks: a random enemy slot."
+    Notes: An occupied slot if there is one. Its plan is made for it before the Day resolves. Read off the printed card:
+           Exhausted switches abilities off, and that's exactly when it works.
+    Answers: Kill it, Root it (it still attacks), or keep nothing it can hit.
+
+Riot Gear (the user, 2026-10-17)
+    Inspired by: Assault Vest. On Riot Police (Statecraft).
+    Type: Passive
+    Description: "Each Dawn, +2 Armor."
+    Notes: Armor fades 1 at each Dusk, so it keeps a plate on; up to the Armor cap.
+    Answers: Insider Job ignores Armor; effects that aren't damage.
+
+Fixated (the user, 2026-10-17)
+    Inspired by: the Choice items. On One-Trick Pony (Zeitgeist).
+    Type: Control (its own)
+    Description: "Once it attacks, it repeats that attack every Day until it leaves."
+    Notes: Groundhog Day's loop, for as long as it stands: the same slot, whatever moves there (an empty slot: the player).
+           The plan is made for it at Dawn and can't be taken back.
+    Answers: Move what it aims at; a Maneuver on it changes nothing (the slot it aims at is the slot).
+
+Clingy (the user, 2026-10-17)
+    Inspired by: Shadow Tag. On Clingy Ex (Zeitgeist).
+    Type: Control
+    Description: "The enemy creature facing it can't move, and nothing moves it."
+    Notes: As if Rooted, for as long as the Ex faces it. Moving the Ex frees it.
+    Answers: Move the Ex (a Maneuver), kill it, or switch its ability off.
+
+Empathy (the user, 2026-10-17)
+    Inspired by: Synchronize. On Empath (Mind).
+    Type: Defensive
+    Description: "An enemy status that lands on it lands on the creature that sent it too (from a spell, on a random enemy creature)."
+    Notes: The copy keeps the Days and the potency. Once: the echo doesn't echo. Zero-Day ignores it.
+    Answers: Statuses that help (a Bless on it blesses you back too); Teflon.
+
+Berserk (the user, 2026-10-17)
+    Inspired by: Berserk. On Berserker (Myth).
+    Type: Passive
+    Description: "+3 Attack at half Health or less."
+    Notes: Recalculated after every action, like Grudge and On Trend.
+    Answers: Finish it, or heal it (the bonus goes).
+
+Backup Dancer (the user, 2026-10-17)
+    Inspired by: Dancer. On Backup Dancer (Zeitgeist).
+    Type: Combat
+    Description: "When a friendly creature beside it attacks, it attacks the same slot too, if it planned nothing."
+    Notes: Once a Day, as part of the friend's attack (right after it). It must be able to act.
+    Answers: Stun it, or kill the star first.
+
+Jamming Field (the user, 2026-10-17)
+    Inspired by: Neutralizing Gas. On EMP Drone (Tech).
+    Type: Control
+    Description: "Every other creature's ability is switched off while it stands."
+    Notes: Either side's, yours included (Backstab, Bodyguard, Litigious...); printed drawbacks (Irreplaceable, Turncoat)
+           hold. Two drones switch each other off, like two Signal Jammers.
+    Answers: Kill it: abilities come back at once.
+
+Pharaoh's Curse (the user, 2026-10-17)
+    Inspired by: Perish Body. On Tutankhamun (Myth).
+    Type: Defensive
+    Description: "A creature that attacks it is Doomed 3, and so is it."
+    Notes: Neither if already Doomed. Doomed: +1 Attack each Dawn, then Last Rites and death; Blessed negates it. Zero-Day ignores it.
+    Answers: Spells and abilities; a Bless before the attack; Composed doesn't help (it isn't a stun).
+
+Teflon (the user, 2026-10-17)
+    Inspired by: Good as Gold. On Teflon Don (Corporate).
+    Type: Defensive
+    Description: "Enemy statuses don't land on it."
+    Notes: Friendly ones do (your Bless, your Shield). Zero-Day ignores it.
+    Answers: Damage; stat changes (they aren't statuses).
+
+Shrapnel (the user, 2026-10-17)
+    Inspired by: Toxic Debris. On Sapper (Statecraft).
+    Type: Defensive
+    Description: "When an attack hits it, a Landmine 2 lands on a random empty enemy slot."
+    Notes: Every hit that does damage, Armor included; no empty slot, no mine. Zero-Day ignores it.
+    Answers: Fill your slots; Bomb Disposal; Hover.
+
+Do Your Own Research (the user, 2026-10-17)
+    Inspired by: the user's own ("one that makes healing the creature damage it"). On Anti-Vaxxer (Zeitgeist).
+    Type: Passive (a drawback, and a weapon)
+    Description: "Healing damages it instead."
+    Notes: Any healing, yours or theirs: Rain, Prayers, Hormesis' Burn. Blackout switches it off.
+    Answers: Heal it.

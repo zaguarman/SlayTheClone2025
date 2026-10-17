@@ -16,24 +16,42 @@ RULES
 
 TO SUPERVISE
 
-  311 cards whose art direction Claude decided alone: no note from the user and no sign-off yet. Once
+  343 cards whose art direction Claude decided alone: no note from the user and no sign-off yet. Once
   the user has checked one, its approval goes into SUPERVISED in Tools/art_briefs.py (or their changes into USER_NOTES).
 
-  Corporate (48): DMCA, 3rd Parallel Job, Overtime, Peace the Frontier, Casino, Headhunter, Counterfeit, Private Equity, Shell Company, Golden Parachute, Work Shift Rotation, Unpaid Intern, Inhuman Resources, Micromanager, Multilevel Marketing Seller, Day Trader, Pluriemployed Hustler, Satoshi Nakamoto, Multimillionaire Philanthropist, Charles Ponzi, Margin Call, Mass Layoffs, Team Building Exercise, Dead Cat Bounce, Business Operating Expenses, Taxpayer Funds Venture Capital Profits, Tax-Exempt Corruption, Solidarity Towards The Small Businessman, Inheritance, NDA, Inflation, Escape Goat, Laissez-Faire, The Invisible Hand, C-Suite, Venture Capital, Corporate Bailouts, Flash Crash, Just in Time, Hedonic Treadmillionaire, Moral Bankruptcy, Usury, Middle Manager, Big Four, Bloomberg Terminal, Internal Protocol: Quota Crusher Mindset, High-Frequency Trading Scam, Valet
-  Statecraft (31): Filibuster, Curfew, Spin Doctor, Supply Depot, Presidential Pardon, Congruent Use of Force, Weapons of Mass Distraction, King Emeritus, Spite-Elected President, Police Officer Productivity Target, Internal Revenue Service, Mercenaries, Man o' War, Ministry for Equality, Protocol Enforcers, Demagogue, Red Tape, Preemptive Strike, Martial Law, Kakistocracy, Mutually Assured Destruction, Panem Et Circenses, Diplomat, Raised Security Level, Lost Landmine, Ceasefire, Violence Monopoly, Border Crossing, Peace Force, Security Guard, Si Vis Pacem, Para Bellum
-  Zeitgeist (34): Groundhog Day, Freaky Friday, Florida Man, Drug Smuggler, Not on My Watch, One for the Road, Chain Smoker, Karen, Boomer, Hipster, Underdog, Hikikomori, Reality TV Star, Scam Artist, Football Hooligans, Antihero, Bodybuilder, Plot Armor, YOLO, Toxic Positivity, Delivery Cyclist, Zeitgeist, Rush Hour, No Glove, No Love, Listen Kid, Ol' Reliable, Weaponized Incompetence, Absentee Parents, Spite Voter, Fidget Spinner, Camper Van, Lost Generation, Universal Basic Income, Calm Your Tits
+  Corporate (54): Legal Department, Job Rotation, Resignation Letter, Teflon Don, Insurance Policy, Seniority Priority, DMCA, 3rd Parallel Job, Overtime, Peace the Frontier, Casino, Headhunter, Counterfeit, Private Equity, Shell Company, Golden Parachute, Work Shift Rotation, Unpaid Intern, Inhuman Resources, Micromanager, Multilevel Marketing Seller, Day Trader, Pluriemployed Hustler, Satoshi Nakamoto, Multimillionaire Philanthropist, Charles Ponzi, Margin Call, Mass Layoffs, Team Building Exercise, Dead Cat Bounce, Business Operating Expenses, Taxpayer Funds Venture Capital Profits, Tax-Exempt Corruption, Solidarity Towards The Small Businessman, Inheritance, NDA, Inflation, Escape Goat, Laissez-Faire, The Invisible Hand, C-Suite, Venture Capital, Corporate Bailouts, Flash Crash, Just in Time, Hedonic Treadmillionaire, Moral Bankruptcy, Usury, Middle Manager, Big Four, Bloomberg Terminal, Internal Protocol: Quota Crusher Mindset, High-Frequency Trading Scam, Valet
+  Statecraft (38): Civil Servant, Bomb Squad, Riot Police, Drill Sergeant, Sapper, Mutually Assured Destruction, Due Process, Filibuster, Curfew, Spin Doctor, Supply Depot, Presidential Pardon, Congruent Use of Force, Weapons of Mass Distraction, King Emeritus, Spite-Elected President, Police Officer Productivity Target, Internal Revenue Service, Mercenaries, Man o' War, Ministry for Equality, Protocol Enforcers, Demagogue, Red Tape, Preemptive Strike, Martial Law, Kakistocracy, Mutually Assured Destruction, Panem Et Circenses, Diplomat, Raised Security Level, Lost Landmine, Ceasefire, Violence Monopoly, Border Crossing, Peace Force, Security Guard, Si Vis Pacem, Para Bellum
+  Zeitgeist (38): One-Trick Pony, Clingy Ex, Backup Dancer, Anti-Vaxxer, Groundhog Day, Freaky Friday, Florida Man, Drug Smuggler, Not on My Watch, One for the Road, Chain Smoker, Karen, Boomer, Hipster, Underdog, Hikikomori, Reality TV Star, Scam Artist, Football Hooligans, Antihero, Bodybuilder, Plot Armor, YOLO, Toxic Positivity, Delivery Cyclist, Zeitgeist, Rush Hour, No Glove, No Love, Listen Kid, Ol' Reliable, Weaponized Incompetence, Absentee Parents, Spite Voter, Fidget Spinner, Camper Van, Lost Generation, Universal Basic Income, Calm Your Tits
   Digital Society (16): Its Been 84 Years..., Good Boi, Crypto "Entrepreneur", Digital Nomad, NPC, Chronically Online, Conspiracy Theorist, Clickbait, Cancelled, Social Panopticon, Short King, Content Creator, Thirst Trap, Selfie Esteem, Influencer, U Mad Bro?
-  Shadow Ops. (54): Plausible Deniability, Cleaner, Political Decoy, Mole, Signal Jammer, Deep Cover, Human Intelligence, Wet Work, Perfectly Timed Camera Malfunction, Smoke And Mirrors, Eavesdrop, Tapped Communications, Whistleblower, Involuntary Free Polonium Giveaway, Humanitarian Trafficking Action, Dead Man's Switch, Fell Out of a Window, Coup d'État, Operation Paperclip, False Flag Operation, Never Let Them Know Your Next Move, Frame Job, Devil's Breath, He Didn't Kill Himself, Extraction, Witness Protection Program, Death By "Natural Causes", Asset Recruitment, If I Told You, I'd Have to Kill You, Lone Gunman, Glomar Response, Sabotage, Ghost Army, Inflatable Tank, Social Engineering, Bilderberg Membership, Dead Drop, The Golden Gun, Die Another Day, Licence to Kill, Shaken, Not Stirred, GoldenEye, Supply Chain Attack, Femme Fatale, Exploding Pen, Drug Pigeon, Embassy, Secret Anthrax Laboratory, Tracking Beacon, Arsonist, Counter-Surveillance, Compromised Agent, Polonium Umbrella, Nonchalant Agent
-  Tech (15): Web Scraping, DDOS Attack, End-to-End Encryption, SysAdmin, Meatproxy As A Service, Ransomware Attack, Man-in-the-Middle, Technical Debt, Threat Hunter, Ctrl + Z, Pair Programming, Suspicious USB Stick in the Parking Lot, Code Review, Bomber Drone, Ctrl + Y
-  Myth (41): Thoughts and Prayers, Holy Ghost, Taqiyya, Memento Mori, Martyr, Exorcism, Mummy, Omniscient Space-Time Bending Bearded Wizard, Cultist, Phoenix, Excess of Bread and Wine, Sacrificial Ritual, Reincarnation, Holy War, The Great Flood, Lance Of Longinus, Necronomicon, The Wicker Man, Thoughts and Prayers, Religious Instrumentalization, Deus Vult, Curse Of Hubris, Zealot, Vampire, Living Dead, Buddy Christ, Pope, The Lobster Professor, Amen, Pyramids, Horsemen Of Apocalypse, God's Grace, The Omen, Grim Reaper, Die by the Sword, Mithril, Here Be Dragons, Gracias Jesús, Heretic, Ambrosia, Publicly Funded Faith Schools
-  Mind (22): Liminal Space, Monkey See, Monkey Do, Lucid Dreaming, Momentum, Survivorship Bias, Yesn't, Cyberpsychosis, Reflect, Mimetic Theory, Pessimist, Introvert, Roko's Basilisk, Imposter Syndrome, Ship of Theseus, Socrates, Maslow's Pyramid, Legerdemain, Hold That Thought, Projection, Psychiatrists, Hyperbole, Controlled Chaos
-  Utopia (37): Geomagnetic Reversal, Research Lab, Clone, Hypermetamorphosis, Extremophile, Philosophy PhD, Mathematician, Quantum Physicist, Perpetual Motion Machine, Genetically Modified Organism, Pioneer, Vaccine, Climate Change, Overpopulation, Black Hole, Stasis Field, Absolute Zero, Splitting The Atom, Gene Editing, Cold Fusion, Antimatter, Biohacking, Blood Transfusion, Evolution Theory, Mutation, Exponential Growth, Scientific Method, Chimera, Resurrected T-Rex, Longevity Hub, Femtosecond Laser, Quark, Seasteading, Ankylorhiza, Biohacker, Prion Disease, Heimlich Maneuver
+  Shadow Ops. (55): Hostage Situation, Plausible Deniability, Cleaner, Political Decoy, Mole, Signal Jammer, Deep Cover, Human Intelligence, Wet Work, Perfectly Timed Camera Malfunction, Smoke And Mirrors, Eavesdrop, Tapped Communications, Whistleblower, Involuntary Free Polonium Giveaway, Humanitarian Trafficking Action, Dead Man's Switch, Fell Out of a Window, Coup d'État, Operation Paperclip, False Flag Operation, Never Let Them Know Your Next Move, Frame Job, Devil's Breath, He Didn't Kill Himself, Extraction, Witness Protection Program, Death By "Natural Causes", Asset Recruitment, If I Told You, I'd Have to Kill You, Lone Gunman, Glomar Response, Sabotage, Ghost Army, Inflatable Tank, Social Engineering, Bilderberg Membership, Dead Drop, The Golden Gun, Die Another Day, Licence to Kill, Shaken, Not Stirred, GoldenEye, Supply Chain Attack, Femme Fatale, Exploding Pen, Drug Pigeon, Embassy, Secret Anthrax Laboratory, Tracking Beacon, Arsonist, Counter-Surveillance, Compromised Agent, Polonium Umbrella, Nonchalant Agent
+  Tech (17): EMP Drone, Buffering, Web Scraping, DDOS Attack, End-to-End Encryption, SysAdmin, Meatproxy As A Service, Ransomware Attack, Man-in-the-Middle, Technical Debt, Threat Hunter, Ctrl + Z, Pair Programming, Suspicious USB Stick in the Parking Lot, Code Review, Bomber Drone, Ctrl + Y
+  Myth (46): Tithe, Berserker, Tutankhamun, Holy Pigeon, The Last Shall Be First, Thoughts and Prayers, Holy Ghost, Taqiyya, Memento Mori, Martyr, Exorcism, Mummy, Omniscient Space-Time Bending Bearded Wizard, Cultist, Phoenix, Excess of Bread and Wine, Sacrificial Ritual, Reincarnation, Holy War, The Great Flood, Lance Of Longinus, Necronomicon, The Wicker Man, Thoughts and Prayers, Religious Instrumentalization, Deus Vult, Curse Of Hubris, Zealot, Vampire, Living Dead, Buddy Christ, Pope, The Lobster Professor, Amen, Pyramids, Horsemen Of Apocalypse, God's Grace, The Omen, Grim Reaper, Die by the Sword, Mithril, Here Be Dragons, Gracias Jesús, Heretic, Ambrosia, Publicly Funded Faith Schools
+  Mind (27): Sleepwalker, Empath, Tabula Rasa, Reality Check, Slow Thinking, Liminal Space, Monkey See, Monkey Do, Lucid Dreaming, Momentum, Survivorship Bias, Yesn't, Cyberpsychosis, Reflect, Mimetic Theory, Pessimist, Introvert, Roko's Basilisk, Imposter Syndrome, Ship of Theseus, Socrates, Maslow's Pyramid, Legerdemain, Hold That Thought, Projection, Psychiatrists, Hyperbole, Controlled Chaos
+  Utopia (39): Blood Transfusion, Peer Review, Geomagnetic Reversal, Research Lab, Clone, Hypermetamorphosis, Extremophile, Philosophy PhD, Mathematician, Quantum Physicist, Perpetual Motion Machine, Genetically Modified Organism, Pioneer, Vaccine, Climate Change, Overpopulation, Black Hole, Stasis Field, Absolute Zero, Splitting The Atom, Gene Editing, Cold Fusion, Antimatter, Biohacking, Blood Transfusion, Evolution Theory, Mutation, Exponential Growth, Scientific Method, Chimera, Resurrected T-Rex, Longevity Hub, Femtosecond Laser, Quark, Seasteading, Ankylorhiza, Biohacker, Prion Disease, Heimlich Maneuver
   Shelved (5): Smartwatch, Exoskeleton, Q Branch, Hovercraft, Nanobots
   Potion (8): Nicotine, Stimulant Drug, Superglue, Soylent, Flamethrower, Eject Button, Stealth Suit, Creatine
 
 
 CORPORATE
 
+Legal Department (creature)
+    A phalanx of identical lawyers in grey suits behind a long desk, each holding up a thick folder like a riot shield, a fist that punched the desk recoiling with a CEASE AND DESIST stapled to it.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Job Rotation (spell)
+    An office where the surgeon in scrubs is fixing the printer, the IT guy in a hoodie is holding a scalpel over a patient, and the HR woman is piloting a forklift through the open-plan floor, an EMPLOYEE ROTATION WEEK banner above them.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Resignation Letter (spell)
+    A man walking out of a glass tower with a cardboard box of his things and a huge grin, a letter fluttering behind him, while through the window his former boss sits slumped at a desk buried under the work he left.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Teflon Don (creature)
+    A silver-haired mob boss in a camel coat and pinstripes strolling out of a courthouse waving to cameras, indictment papers sliding off his coat like water off a non-stick pan, two lawyers scooping them up behind him.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Insurance Policy (spell)
+    An insurance agent in a beige suit sliding a policy across the desk to a nervous creature, the fine print magnified under a glass reading WHOEVER KILLS YOU, WE KILL, a tiny coffin-shaped paperweight on the desk.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Seniority Priority (spell)
+    A boardroom where a very old executive with a walking frame is being ushered to the head of the table past a queue of young employees frozen mid-stride, a plaque on the wall reading 40 YEARS OF SERVICE.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 DMCA (spell)
     A lawyer in a sharp suit slapping a huge red COPYRIGHT STRIKE sticker over the face of a creature on a giant video thumbnail, a second identical thumbnail beside it greyed out with CLAIMED across it, a tiny APPEAL button crossed out.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
@@ -199,6 +217,27 @@ Valet (spell)
 
 STATECRAFT
 
+Civil Servant (creature)
+    A clerk behind a counter whose window has just slammed shut with a CLOSED sign, arms folded, a cup of tea steaming, a queue of furious citizens' fists bouncing off the glass as if it were a force field.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Bomb Squad (creature)
+    A technician in a bulky green bomb suit kneeling over a cartoon landmine with wire cutters, a tiny sweat drop, a robot on tank treads holding a torch for him, the rest of the squad watching from very far away through binoculars.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Riot Police (creature)
+    A line of riot police in black armour and helmets behind transparent shields, each shield plastered with a different sticker: HAVE A NICE DAY, BABY ON BOARD, I BRAKE FOR PROTESTS.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Drill Sergeant (creature)
+    A drill sergeant in a campaign hat screaming an inch from the face of a huge enemy brute who has shrunk to half his size, knees knocking, his club drooping, spit flying in an arc.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Sapper (creature)
+    A soldier with a shovel and a satchel of mines diving out of a trench as a shell bursts beside him, mines flying out of the satchel in a lazy arc toward the enemy's side of the field, each with a little parachute.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Mutually Assured Destruction (spell)
+    Two generals at either end of a war room table, each with a finger on a big red button, wired to the same bomb between them, both smiling politely, a Cold War map glowing behind them.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Due Process (spell)
+    A courthouse corridor where a snail with a briefcase is called into court first while a sprinter in running gear waits on a bench with a ticket reading 8,241, the wall clock with no hands.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Filibuster (spell)
     An old senator at a podium reading from a phone book as thick as a pillow, hour 14 on the chamber clock, the benches full of sleeping politicians, one with a newspaper over his face, a clerk's eyes rolled back.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
@@ -306,6 +345,18 @@ Mass Emigration (spell)
 
 ZEITGEIST
 
+One-Trick Pony (creature)
+    A pony in a tiny circus hat standing on its hind legs on a stool, doing the exact same trick in three frames in a row, the ringmaster's cue cards for other tricks piling up ignored on the sawdust.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Clingy Ex (creature)
+    A person clamped around the leg of someone trying to walk away, dragged along the pavement, phone in hand showing 47 missed calls, the other one staring straight ahead with dead eyes.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Backup Dancer (creature)
+    A pop star mid-high-kick on a stage, and beside her a backup dancer in sequins doing the exact same kick a half-beat behind, both kicks landing on a stagehand's face at the edge of the stage.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Anti-Vaxxer (creature)
+    A woman in a SPIRITUAL NOT MEDICAL t-shirt slapping a syringe out of a doctor's hand, a crystal pendant swinging, while a tiny cartoon virus on her shoulder gives a thumbs up.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Groundhog Day (spell)
     A man in a hotel bed slapping an alarm clock that reads 6:00, the same clock, the same bed, the same groundhog in a tiny top hat on the windowsill, three identical frames of it stacked like a film strip, his face more desperate in each.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
@@ -526,6 +577,9 @@ U Mad Bro? (creature)
 
 SHADOW OPS.
 
+Hostage Situation (spell)
+    A masked agent holding a very calm creature hostage in a bank lobby, a dead man's switch in his hand wired to every other creature in the room, a negotiator outside with a megaphone and a sandwich.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Plausible Deniability (spell)
     A man in a grey suit at a hearing shrugging with both palms up in front of a wall of documents so redacted they are solid black bars, a speech bubble reading I DON'T RECALL, the committee's questions bouncing off him as little paper planes.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
@@ -715,6 +769,12 @@ Nonchalant Agent (creature)
 
 TECH
 
+EMP Drone (creature)
+    A quadcopter drone hovering over the battlefield emitting concentric rings of static, every creature below holding a phone with no bars, their glowing ability icons flickering out one by one.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Buffering (spell)
+    A battlefield frozen under a giant spinning loading wheel, every creature caught mid-leap with a BUFFERING 99% label, the one dial-up modem in the corner going first.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Web Scraping (spell)
     A cat scratching at a laptop screen, claw marks tearing the web page open and spilling out cards and data.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
@@ -780,6 +840,21 @@ Ctrl + Y (spell)
 
 MYTH
 
+Tithe (spell)
+    A collection plate on a very long pole reaching from a gilded pulpit all the way across the battlefield into an enemy creature's pocket, coins flowing back along it into a fat bishop's lap.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Berserker (creature)
+    A bare-chested Norse warrior with a bear pelt over his head, arrows sticking out of him like a pincushion, grinning wider with each one, swinging an axe in each hand, foam on his beard.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Tutankhamun (creature)
+    A bandaged mummy sitting up in its sarcophagus pointing a bony finger at a tomb raider in a pith helmet, both of them with a little hourglass over their heads showing the same three grains of sand.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Holy Pigeon (creature)
+    A fat grey city pigeon with a golden halo and two tiny angel wings perched on a cathedral gargoyle, a beam of holy light on it, a crumb of communion wafer in its beak, a saint's statue below it freshly anointed.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+The Last Shall Be First (spell)
+    The pearly gates with a velvet rope and a bouncer angel waving through a line of old beggars, cripples and a snail while a procession of kings and CEOs with golden tickets is held at the back.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Thoughts and Prayers (spell)
     A hospital bed with a bandaged creature in it, a GET WELL SOON balloon drifting in through the window two days late, and outside, a crowd of politicians with their hands clasped and eyes closed, each holding a phone showing the hashtag #thoughtsandprayers.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
@@ -945,6 +1020,21 @@ Publicly Funded Faith Schools (spell)
 
 MIND
 
+Sleepwalker (creature)
+    A man in striped pyjamas and a nightcap sleepwalking across a battlefield with his arms out, eyes shut, a candle in one hand, swinging a pillow that knocks a helmeted soldier clean off his feet.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Empath (creature)
+    A woman in a cardigan with her hand on her heart, tears in her eyes, mirrored exactly by the enemy soldier opposite who has suddenly burst into the same tears, both of them on fire from the same Burn.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Tabula Rasa (spell)
+    A giant blackboard eraser sweeping across a battlefield drawn in chalk, the creatures' scribbled +2s and -1s vanishing into white dust, a philosopher in a toga holding the eraser.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Reality Check (spell)
+    A puffed-up bodybuilder flexing in front of a mirror, and in the mirror a skinny man in the same pose; a therapist beside him tapping the glass with a pen.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Slow Thinking (spell)
+    A chess clock between a hare bouncing impatiently and a tortoise in reading glasses still considering its first move, the hare's clock run out, the tortoise's barely started, a referee raising the tortoise's arm.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Liminal Space (spell)
     An endless empty office corridor in sickly yellow light, damp beige carpet, humming fluorescent tubes, one door ajar onto another identical corridor, a lone figure far away with its head turned the wrong way round, no exit anywhere.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
@@ -1027,6 +1117,12 @@ Controlled Chaos (spell)
 
 UTOPIA
 
+Blood Transfusion (spell)
+    Two hospital beds facing each other with a single blood bag hung between them, the tube running from a huge glowing-pink healthy creature to a grey wilted one, both ending up the same shade of medium pink.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Peer Review (spell)
+    Three reviewers in lab coats with magnifying glasses peering at a scientist's poster, red RETRACTED stamps hammering onto it, the scientist's hidden second poster behind it dragged into the light.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Geomagnetic Reversal (spell)
     A globe with its magnetic field lines flipping over, the N and S labels swapping places mid-air, a scientist staring at a compass whose needle spins wildly, and a flock of birds flying in confused loops.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet

@@ -56,6 +56,7 @@ namespace SlayTheClone {
                 // --- Phase 1: Resolution (GDD 3.6): what both sides planned this Day. It's still this Day,
                 // so what resolves now is dated today (statuses applied now skip this Day's Dusk) ---
                 clock.DrawsWaitForNextDay = true; // This Day's hand is about to be discarded: cards drawn from now on come with the next one
+                Abilities.BeforeTheDayResolves(players, actionsQueue, modifierManager); // Hunker Down, Autopilot
                 actionsQueue.BriefWatchdogs(); // The Briefing (GDD 3.7), before anything resolves
                 yield return ResolveQueuedActions();
                 if (gameMediator.IsGameOver) yield break; // Someone fell: the combat ends here

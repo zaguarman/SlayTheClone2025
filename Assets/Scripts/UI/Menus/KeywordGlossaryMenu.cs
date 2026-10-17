@@ -19,6 +19,9 @@ namespace SlayTheClone {
         public const string KeywordButton = "Keyword: ";
         public const string BackButtonName = "GlossaryBackButton";
         public const string FilterName = "KeywordFilter";
+        public const string SectionButton = "Section: ";
+        private const int SectionsPerRow = 3;
+        private const float SectionHeight = 32f;
         private const float FilterHeight = 52f;
         private const string CardLink = "card:";
         private const float ListWidth = CardGalleryMenu.SideColumnWidth; // The same as the gallery's faction list
@@ -83,6 +86,28 @@ namespace SlayTheClone {
         // Scrolls the list just enough for the chosen keyword's button to be fully visible
         private void KeepInView(string key) {
             if (buttons.TryGetValue(key, out var button)) MenuWidgets.KeepInView(list, (RectTransform)button.transform);
+        }
+
+        // The section's name as its small button prints it
+        private static string ShortName(string section) => section switch {
+            "Keyword Abilities" => "Keywords",
+            "Creature Abilities" => "Abilities",
+            "Slot Effects" => "Slots",
+            "Intelligence" => "Intel",
+            "Deployment Time" => "Deploy",
+            _ => section
+        };
+
+        /// <summary>Scrolls the list so the section's heading sits at the top; a filter in the way is cleared first.</summary>
+        public void JumpTo(string section) {
+            if (!headings.TryGetValue(section, out var heading) || list == null) return;
+            if (!string.IsNullOrEmpty(filter?.text)) filter.text = ""; // FilterBy shows everything again
+            Canvas.ForceUpdateCanvases();
+            var content = list.content;
+            var headingRect = (RectTransform)heading.transform;
+            float fromTop = -content.InverseTransformPoint(headingRect.TransformPoint(new Vector3(0f, headingRect.rect.yMax, 0f))).y;
+            float scrollable = content.rect.height - list.viewport.rect.height;
+            list.verticalNormalizedPosition = scrollable <= 0f ? 1f : Mathf.Clamp01(1f - fromTop / scrollable);
         }
 
         /// <summary>The cards on offer whose printed text has the keyword, read from the cards as they are now.</summary>
@@ -167,9 +192,39 @@ namespace SlayTheClone {
             filter.onValueChanged.AddListener(FilterBy);
             filter.onSubmit.AddListener(_ => { if (Listed.Count > 0) ShowKeyword(Listed[0]); });
 
+            // The sections (the user, 2026-10-17: a way to jump about the list): a strip of small buttons under the filter, one per section
+            var groups = Keywords.Groups;
+            int rows = (groups.Count + SectionsPerRow - 1) / SectionsPerRow;
+            float stripHeight = rows * SectionHeight + (rows - 1) * 6f;
+            var strip = NewObject("Sections", area.transform);
+            var stripRect = (RectTransform)strip.transform;
+            stripRect.anchorMin = new Vector2(0f, 1f);
+            stripRect.anchorMax = Vector2.one;
+            stripRect.pivot = new Vector2(0.5f, 1f);
+            stripRect.offsetMin = new Vector2(14f, -14f - FilterHeight - 10f - stripHeight);
+            stripRect.offsetMax = new Vector2(-14f, -14f - FilterHeight - 10f);
+            var stripLayout = strip.AddComponent<GridLayoutGroup>();
+            stripLayout.spacing = new Vector2(6f, 6f);
+            stripLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            stripLayout.constraintCount = SectionsPerRow;
+            stripLayout.cellSize = new Vector2((ListWidth - 28f - 6f * (SectionsPerRow - 1)) / SectionsPerRow, SectionHeight);
+            foreach (var group in groups) {
+                var tab = AddButton(strip.transform, SectionButton + group, ShortName(group), -1, () => JumpTo(group));
+                tab.GetComponent<LayoutElement>().preferredHeight = SectionHeight;
+                var text = tab.GetComponentInChildren<TextMeshProUGUI>();
+                text.rectTransform.offsetMin = new Vector2(4f, 1f); // The cells are small: the button's usual text margin leaves no room
+                text.rectTransform.offsetMax = new Vector2(-4f, -1f);
+                text.fontSize = 15;
+                text.enableAutoSizing = true;
+                text.fontSizeMin = 10;
+                text.fontSizeMax = 15;
+                text.textWrappingMode = TextWrappingModes.NoWrap;
+                text.overflowMode = TextOverflowModes.Truncate;
+            }
+
             var viewport = NewObject("Viewport", area.transform);
             Stretch(viewport, 14);
-            ((RectTransform)viewport.transform).offsetMax = new Vector2(-14f, -14f - FilterHeight - 10f);
+            ((RectTransform)viewport.transform).offsetMax = new Vector2(-14f, -14f - FilterHeight - 10f - stripHeight - 10f);
             viewport.AddComponent<RectMask2D>();
             viewport.AddComponent<Image>().color = Color.clear;
 

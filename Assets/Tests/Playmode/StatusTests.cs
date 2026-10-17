@@ -418,5 +418,24 @@ namespace SlayTheClone.Tests {
             game.Resolve();
             Assert.AreEqual((10, 8), (denier.Health, bystander.Health), "The area hit skipped the Deniable creature");
         }
+
+        // The second Pokémon batch (the user, 2026-10-17): Leech Seed and Destiny Bond
+        [Test]
+        public void PokemonPicks2_Leeched_BleedsAndHealsTheEnemy_MutuallyAssured_TakesTheKillerAlong() {
+            var tithed = game.Summon(p2, game.Creature("Tithed", 1, 6), 0);
+            p1.TakeDamage(5);
+            int before = p1.Health;
+            game.Run(new ApplyStatusEffectAction(tithed, StatusEffectType.Leeched, 3, 1, null, p1));
+            game.StartTurn();
+            Assert.AreEqual((6, before), (tithed.Health, p1.Health), "No tick at the Dusk of the Day it lands");
+            game.StartTurn();
+            Assert.AreEqual((5, before + 1), (tithed.Health, p1.Health), "Then it bleeds 1 a Dusk, and the enemy heals 1");
+
+            var bomb = game.Summon(p1, game.Creature("Bomb", 1, 3), 1);
+            var killer = game.Summon(p2, game.Creature("Killer", 5, 5), 1);
+            game.Run(new ApplyStatusEffectAction(bomb, StatusEffectType.MutuallyAssured, 2, 0));
+            game.Attack(killer, p1.Battlefield[1]);
+            Assert.IsTrue(bomb.IsDead && killer.IsDead, "Mutually Assured: the killer dies too");
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using static SlayTheClone.DebugLogger;
 using static SlayTheClone.Enums;
 
@@ -89,6 +90,16 @@ namespace SlayTheClone {
             // Only an attack is answered (Counterattack, Retaliate): hitting back isn't an attack, so it's never answered in turn
             if (damageToArmor + actualHealthDamage > 0) {
                 TriggerEffects(targetCreature, EffectTrigger.OnDamage, damageAction.IsCombatDamage() ? attacker : null, context);
+                // Shrapnel (Sapper, Pokémon's Toxic Debris): an attack that hits it scatters a Landmine on a random empty enemy slot
+                if (damageAction.IsCombatDamage() && attacker?.Owner != null && attacker.Owner != targetCreature.Owner
+                    && Abilities.Defends(targetCreature, CreatureAbility.Shrapnel, attacker)) {
+                    var empty = attacker.Owner.Battlefield.Where(s => !s.IsOccupied()).ToList();
+                    if (empty.Count > 0) {
+                        var slot = empty[GameRandom.Next(empty.Count)];
+                        Log($"Executor: shrapnel from {targetCreature.Name} lands on {slot}", LogTag.Actions | LogTag.Combat);
+                        context.ActionsQueue.AddAction(new PlaceSlotEffectAction(slot, SlotEffectType.Landmine, Abilities.ShrapnelDamage, 0, targetCreature.Owner));
+                    }
+                }
             }
             if (targetCreature.Health <= 0) {
                 context.ActionsQueue.AddAction(new CheckLethalAction(targetCreature, attacker));

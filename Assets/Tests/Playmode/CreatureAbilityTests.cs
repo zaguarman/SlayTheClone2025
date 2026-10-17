@@ -718,5 +718,128 @@ namespace SlayTheClone.Tests {
             game.StartTurn(); // The Burn ticks from the Dusk after the Day it lands
             Assert.IsTrue(ghost.IsDead, "Only a status hurts it, and 1 Health is all it has");
         }
+
+        // The second Pokémon batch (the user, 2026-10-17): fifteen abilities, each checked once
+        [Test]
+        public void PokemonPicks2_FifteenAbilities_EachDoWhatTheirCardSays() {
+            // Litigious (Rocky Helmet): the attacker takes 2
+            var legal = With(CreatureAbility.Litigious, p1, 0, attack: 2, health: 7);
+            var hitter = With(CreatureAbility.None, p2, 0, attack: 3, health: 10);
+            game.Attack(hitter, p1.Battlefield[0]);
+            Assert.AreEqual((4, 8), (legal.Health, hitter.Health), "The hit lands, and the attacker takes 2 back");
+
+            // Hunker Down (Protect): a Day it plans nothing, no damage; a Day it attacks, the hit lands
+            Fresh();
+            var clerk = With(CreatureAbility.HunkerDown, p1, 0, attack: 2, health: 6);
+            hitter = With(CreatureAbility.None, p2, 0, attack: 3, health: 10);
+            game.Declare(hitter, p1.Battlefield[0]);
+            Abilities.BeforeTheDayResolves(new IPlayer[] { p1, p2 }, game.ActionsQueue, game.ModifierManager);
+            game.Resolve();
+            Assert.AreEqual(6, clerk.Health, "It planned nothing: nothing touches it");
+            game.StartTurn();
+            game.Declare(clerk, p2.Battlefield[0]);
+            game.Declare(hitter, p1.Battlefield[0]);
+            Abilities.BeforeTheDayResolves(new IPlayer[] { p1, p2 }, game.ActionsQueue, game.ModifierManager);
+            game.Resolve();
+            Assert.AreEqual(3, clerk.Health, "It attacked: the hit lands");
+
+            // Bomb Disposal (Rapid Spin): a Landmine on the slot it enters is defused
+            Fresh();
+            game.Run(new PlaceSlotEffectAction(p1.Battlefield[1], SlotEffectType.Landmine, 3, 0, p2));
+            var squad = With(CreatureAbility.BombDisposal, p1, 1, attack: 2, health: 5);
+            Assert.AreEqual(5, squad.Health, "Defused before it went off");
+            Assert.IsNull(p1.Battlefield[1].Effect);
+
+            // Autopilot (Sleep Talk): Exhausted, it still attacks, a random enemy slot (an occupied one if there is one)
+            Fresh();
+            var sleeper = With(CreatureAbility.Autopilot, p1, 0, attack: 3, health: 4);
+            var only = With(CreatureAbility.None, p2, 2, attack: 0, health: 10);
+            game.Run(new ApplyStatusEffectAction(sleeper, StatusEffectType.Exhausted, 1, 0));
+            Abilities.BeforeTheDayResolves(new IPlayer[] { p1, p2 }, game.ActionsQueue, game.ModifierManager);
+            game.Resolve();
+            Assert.AreEqual(7, only.Health, "Exhausted, it still attacked the one creature there");
+
+            // Riot Gear (Assault Vest): +2 Armor each Dawn
+            Fresh();
+            var police = With(CreatureAbility.RiotGear, p1, 0, attack: 3, health: 5);
+            game.StartTurn();
+            Assert.AreEqual(2, police.CurrentArmorPool);
+
+            // Fixated (the Choice items): from its first attack on, the same attack every Day
+            Fresh();
+            var pony = With(CreatureAbility.Fixated, p1, 0, attack: 5, health: 3);
+            var wall = With(CreatureAbility.None, p2, 1, attack: 0, health: 30);
+            game.Attack(pony, p2.Battlefield[1]);
+            Assert.AreEqual(25, wall.Health);
+            game.StartTurn();
+            Assert.IsTrue(game.ActionsQueue.HasActiveAction(pony.TargetId), "Its plan is made for it");
+            game.Resolve();
+            Assert.AreEqual(20, wall.Health, "The same slot again");
+
+            // Clingy (Shadow Tag): the enemy creature facing it can't move
+            Fresh();
+            With(CreatureAbility.Clingy, p1, 0);
+            var clung = With(CreatureAbility.None, p2, 0);
+            Assert.IsTrue(MovementRules.IsRooted(clung), "Faced by a Clingy Ex, it's as good as Rooted");
+            Assert.IsFalse(game.ModifierManager.CanMove(clung));
+
+            // Empathy (Synchronize): an enemy status lands on its sender too
+            Fresh();
+            var empath = With(CreatureAbility.Empathy, p1, 0);
+            var sender = With(CreatureAbility.None, p2, 0, attack: 2, health: 8);
+            game.Run(new ApplyStatusEffectAction(empath, StatusEffectType.Burned, 2, 1, sender, p2));
+            Assert.IsTrue(HasStatus(empath, StatusEffectType.Burned) && HasStatus(sender, StatusEffectType.Burned), "Both burn");
+
+            // Berserk: +3 Attack at half Health or less
+            Fresh();
+            var berserker = With(CreatureAbility.Berserk, p1, 0, attack: 3, health: 6);
+            game.Run(TargetedActions.Damage(berserker, 3));
+            Assert.AreEqual(6, berserker.Attack);
+
+            // Backup Dancer (Dancer): it attacks the slot the friend beside it attacks, if it planned nothing
+            Fresh();
+            var star = With(CreatureAbility.None, p1, 0, attack: 2, health: 5);
+            With(CreatureAbility.BackupDancer, p1, 1, attack: 2, health: 3);
+            var crowd = With(CreatureAbility.None, p2, 2, attack: 0, health: 20);
+            game.Attack(star, p2.Battlefield[2]);
+            Assert.AreEqual(16, crowd.Health, "The star's 2 and the dancer's 2");
+
+            // Jamming Field (Neutralizing Gas): every other creature's ability is off; its own is on
+            Fresh();
+            var drone = With(CreatureAbility.JammingField, p1, 0, attack: 1, health: 4);
+            var contrarian = With(CreatureAbility.Contrarian, p2, 0);
+            ChangeAttack(contrarian, 2, p2);
+            Assert.AreEqual(5, contrarian.Attack, "Jammed: the buff is a buff");
+            Assert.IsTrue(Abilities.Has(drone, CreatureAbility.JammingField));
+
+            // Pharaoh's Curse (Perish Body): the attacker and the mummy are both Doomed 3
+            Fresh();
+            var mummy = With(CreatureAbility.PharaohsCurse, p1, 0, attack: 2, health: 7);
+            var raider = With(CreatureAbility.None, p2, 0, attack: 3, health: 10);
+            game.Attack(raider, p1.Battlefield[0]);
+            Assert.IsTrue(HasStatus(raider, StatusEffectType.Doomed) && HasStatus(mummy, StatusEffectType.Doomed));
+
+            // Teflon (Good as Gold): enemy statuses slide off; friendly ones land
+            Fresh();
+            var don = With(CreatureAbility.Teflon, p1, 0);
+            game.Run(new ApplyStatusEffectAction(don, StatusEffectType.Burned, 2, 1, null, p2));
+            Assert.IsFalse(HasStatus(don, StatusEffectType.Burned));
+            game.Run(new ApplyStatusEffectAction(don, StatusEffectType.Blessed, 0, 1, null, p1));
+            Assert.IsTrue(HasStatus(don, StatusEffectType.Blessed));
+
+            // Shrapnel (Toxic Debris): an attack that hits it seeds a Landmine on an empty enemy slot
+            Fresh();
+            With(CreatureAbility.Shrapnel, p1, 0, attack: 2, health: 5);
+            hitter = With(CreatureAbility.None, p2, 0, attack: 3, health: 10);
+            game.Attack(hitter, p1.Battlefield[0]);
+            Assert.IsTrue(p2.Battlefield.Any(s => s.Effect?.Type == SlotEffectType.Landmine), "A Landmine on their side");
+
+            // Do Your Own Research: healing damages it instead
+            Fresh();
+            var antivax = With(CreatureAbility.DoYourOwnResearch, p1, 0, attack: 3, health: 5);
+            game.Run(TargetedActions.Damage(antivax, 2));
+            game.Run(new HealCreatureAction(antivax, 2));
+            Assert.AreEqual(1, antivax.Health, "The cure hurt it: 3, then 1");
+        }
     }
 }

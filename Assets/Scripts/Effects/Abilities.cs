@@ -14,7 +14,8 @@ namespace SlayTheClone {
         private static readonly CreatureAbility[] Defensive = {
             CreatureAbility.Contrarian, CreatureAbility.Extremist, CreatureAbility.Unbothered, CreatureAbility.NoU,
             CreatureAbility.Spite, CreatureAbility.Underground, CreatureAbility.TooMainstream, CreatureAbility.ReturnToSender,
-            CreatureAbility.HiveMind, CreatureAbility.NextQuestion, CreatureAbility.Immaculate
+            CreatureAbility.HiveMind, CreatureAbility.NextQuestion, CreatureAbility.Immaculate,
+            CreatureAbility.Litigious, CreatureAbility.Empathy, CreatureAbility.PharaohsCurse, CreatureAbility.Teflon, CreatureAbility.Shrapnel
         };
 
         public static bool IsDefensive(CreatureAbility ability) => Defensive.Contains(ability);
@@ -75,7 +76,7 @@ namespace SlayTheClone {
             CreatureAbility.SorryImLate => "Sorry I'm Late",
             CreatureAbility.HeProtec => "He Protec",
             CreatureAbility.Turncoat => "Turncoat",
-            CreatureAbility.SuckerPunch => "Sucker Punch",
+            CreatureAbility.SuckerPunch => "Backstab", // Renamed by the user (2026-10-17): not Pokémon's name for the same rule
             CreatureAbility.HitAndRun => "Hit and Run",
             CreatureAbility.ShieldBash => "Shield Bash",
             CreatureAbility.StripSearch => "Strip Search",
@@ -84,6 +85,13 @@ namespace SlayTheClone {
             CreatureAbility.MoodSwings => "Mood Swings",
             CreatureAbility.NextQuestion => "Next Question",
             CreatureAbility.WildCard => "Wild Card",
+            CreatureAbility.HunkerDown => "Hunker Down",
+            CreatureAbility.BombDisposal => "Bomb Disposal",
+            CreatureAbility.RiotGear => "Riot Gear",
+            CreatureAbility.BackupDancer => "Backup Dancer",
+            CreatureAbility.JammingField => "Jamming Field",
+            CreatureAbility.PharaohsCurse => "Pharaoh's Curse",
+            CreatureAbility.DoYourOwnResearch => "Do Your Own Research",
             _ => ability.ToString()
         };
 
@@ -137,10 +145,26 @@ namespace SlayTheClone {
             CreatureAbility.Hover => "Slot Effects don't touch it: no trap or Checkpoint as it enters or leaves a slot",
             CreatureAbility.SelfRepair => $"each Dawn, it heals {SelfRepairHeal}",
             // The Pokémon picks (the user, 2026-10-17)
-            CreatureAbility.MoodSwings => "each Dawn, +2 to one of its stats and -1 to another, at random, for good",
+            CreatureAbility.MoodSwings => "each Dawn, +2 to one of its stats and -1 to another, at random",
             CreatureAbility.NextQuestion => "once a Day, when an attack is about to hit it, it steps into an empty slot of its side and the attack hits nothing",
             CreatureAbility.WildCard => "its attack on a creature does one of these, at random: hits twice, Burns it 2 instead, Exhausts it instead, or nothing at all",
             CreatureAbility.Immaculate => "attacks and effects do nothing to it: only a status (Burn) hurts it",
+            // The second batch (the user, 2026-10-17)
+            CreatureAbility.Litigious => $"a creature that attacks it takes {LitigiousDamage} damage",
+            CreatureAbility.HunkerDown => "on a Day it plans nothing, it takes no damage",
+            CreatureAbility.BombDisposal => "the Slot Effect on a slot it enters is cleared before it goes off",
+            CreatureAbility.Autopilot => "Exhausted, it still attacks: a random enemy slot",
+            CreatureAbility.RiotGear => $"each Dawn, +{RiotGearArmor} Armor",
+            CreatureAbility.Fixated => "once it attacks, it repeats that attack every Day until it leaves",
+            CreatureAbility.Clingy => "the enemy creature facing it can't move, and nothing moves it",
+            CreatureAbility.Empathy => "an enemy status that lands on it lands on the creature that sent it too (from a spell, on a random enemy creature)",
+            CreatureAbility.Berserk => $"+{BerserkBonus} Attack at half Health or less",
+            CreatureAbility.BackupDancer => "when a friendly creature beside it attacks, it attacks the same slot too, if it planned nothing",
+            CreatureAbility.JammingField => "every other creature's ability is switched off while it stands",
+            CreatureAbility.PharaohsCurse => "a creature that attacks it is Doomed 3, and so is it",
+            CreatureAbility.Teflon => "enemy statuses don't land on it",
+            CreatureAbility.Shrapnel => $"when an attack hits it, a Landmine {ShrapnelDamage} lands on a random empty enemy slot",
+            CreatureAbility.DoYourOwnResearch => "healing damages it instead",
             _ => ""
         };
 
@@ -172,7 +196,52 @@ namespace SlayTheClone {
         /// abilities, and no Signal Jammer faces it. Switched off isn't removed: it still has the ability.
         /// </summary>
         public static bool IsActive(ICreature creature) =>
-            creature != null && (creature.Ability != CreatureAbility.None || creature.Gear != CreatureAbility.None) && IsSwitchedOn(creature) && !IsJammed(creature);
+            creature != null && (creature.Ability != CreatureAbility.None || creature.Gear != CreatureAbility.None) && IsSwitchedOn(creature) && !IsJammed(creature)
+            && !IsGassed(creature);
+
+        /// <summary>Jamming Field (EMP Drone): every other creature's ability is switched off while one stands, on either side.</summary>
+        public static bool IsGassed(ICreature creature) =>
+            creature?.Owner?.Opponent != null && creature.Owner.Battlefield.Concat(creature.Owner.Opponent.Battlefield)
+                .Select(s => s.OccupyingCreature)
+                .Any(other => other != null && other != creature && !other.IsDead && other.Ability == CreatureAbility.JammingField && IsSwitchedOn(other) && !IsJammed(other));
+
+        /// <summary>The enemy creature directly opposite, if any.</summary>
+        public static ICreature Facing(ICreature creature) {
+            var slot = creature?.Slot;
+            var opposite = slot?.Owner?.Opponent?.Battlefield;
+            return opposite != null && slot.Index < opposite.Count ? opposite[slot.Index].OccupyingCreature : null;
+        }
+
+        /// <summary>Clingy (Clingy Ex): the enemy creature facing it can't move, and nothing moves it (as if Rooted).</summary>
+        public static bool IsPinned(ICreature creature) => Facing(creature) is ICreature clinger && Has(clinger, CreatureAbility.Clingy);
+
+        public const int LitigiousDamage = 2, RiotGearArmor = 2, BerserkBonus = 3, ShrapnelDamage = 2;
+
+        /// <summary>
+        /// Before the Day resolves (after everyone has planned, before the Briefing): Hunker Down, a creature that planned
+        /// nothing takes no damage this Day; Autopilot, an Exhausted one still attacks, a random enemy slot (an occupied one if
+        /// there is one). Both are environment actions, so they're in place before anything else.
+        /// </summary>
+        public static void BeforeTheDayResolves(IEnumerable<IPlayer> players, IActionsQueue queue, IModifierManager modifiers) {
+            foreach (var player in players) {
+                if (player?.Battlefield == null || player.Opponent == null) continue;
+                foreach (var creature in player.Battlefield.Select(s => s.OccupyingCreature).Where(c => c != null && !c.IsDead).ToList()) {
+                    if (Has(creature, CreatureAbility.HunkerDown) && !queue.HasActiveAction(creature.TargetId)) {
+                        Log($"{creature.Name} hunkers down: it planned nothing, so nothing touches it today", LogTag.Effects);
+                        using (queue.QueueingEnvironment()) queue.AddAction(new ApplyStatusEffectAction(creature, StatusEffectType.Untouchable, 1, 0, creature, player));
+                    }
+                    // Autopilot is read off the printed card: Exhausted switches abilities off, and that's exactly when it works
+                    if (creature.Ability == CreatureAbility.Autopilot && creature.IsOperative && !queue.HasActiveAction(creature.TargetId)
+                        && (modifiers?.HasStatusEffect(creature, StatusEffectType.Exhausted) ?? false)) {
+                        var slots = player.Opponent.Battlefield;
+                        var occupied = slots.Where(s => s.OccupyingCreature is { IsDead: false }).ToList();
+                        var pick = occupied.Count > 0 ? occupied[GameRandom.Next(occupied.Count)] : slots[GameRandom.Next(slots.Count)];
+                        Log($"{creature.Name} is on autopilot: Exhausted, it still attacks slot {pick.Index}", LogTag.Effects);
+                        queue.AddAction(new BattlefieldCombatAction(creature, pick));
+                    }
+                }
+            }
+        }
 
         // A Signal Jammer's own ability is judged without other jammers, so two facing each other switch each other off.
         // Scorched Earth switches the ability of the creature standing on it off too.
@@ -199,12 +268,12 @@ namespace SlayTheClone {
         public static bool Defends(ICreature target, CreatureAbility ability, ICreature source) =>
             Has(target, ability) && !(IsDefensive(ability) && Has(source, CreatureAbility.ZeroDay));
 
-        /// <summary>Deniable (Plausible Deniability, this Day): set by the game's modifiers, like MovementRules.IsRooted.</summary>
-        public static Func<ICreature, bool> IsDeniable = _ => false;
-
-        /// <summary>Whether an effect that hits more than one creature skips it: Too Mainstream, or Deniable this Day.</summary>
-        public static bool ShrugsOffArea(ICreature creature, ICreature source) =>
-            Defends(creature, CreatureAbility.TooMainstream, source) || IsDeniable(creature);
+        /// <summary>
+        /// Whether an effect that hits more than one creature skips it: Too Mainstream, or Deniable this Day (Plausible
+        /// Deniability, a status, read from the game's own modifiers: the AI's games run side by side, so nothing static).
+        /// </summary>
+        public static bool ShrugsOffArea(ICreature creature, ICreature source, IModifierManager modifiers) =>
+            Defends(creature, CreatureAbility.TooMainstream, source) || (modifiers?.HasStatusEffect(creature, StatusEffectType.Deniable) ?? false);
 
         /// <summary>
         /// "The creature that caused it", for bounced effects: the source creature if it's still in play, otherwise (a spell)
@@ -379,7 +448,7 @@ namespace SlayTheClone {
         public const int GrudgeMost = 5, TrendBonus = 2, StripBonus = 2, SelfRepairHeal = 2;
 
         /// <summary>The abilities whose Attack hangs on the game around the creature: recalculated after every action.</summary>
-        public static bool HangsOnTheGame(CreatureAbility ability) => ability is CreatureAbility.Grudge or CreatureAbility.OnTrend or CreatureAbility.ShieldBash;
+        public static bool HangsOnTheGame(CreatureAbility ability) => ability is CreatureAbility.Grudge or CreatureAbility.OnTrend or CreatureAbility.ShieldBash or CreatureAbility.Berserk;
 
         /// <summary>
         /// The Attack its ability adds from the game around it: Grudge, +1 for each friendly creature fallen this combat (up to
@@ -392,6 +461,7 @@ namespace SlayTheClone {
                 CreatureAbility.Grudge => Math.Min(GrudgeMost, creature.Owner?.Fallen ?? 0),
                 CreatureAbility.OnTrend => trends != null && trends.Current != Trend.None ? TrendBonus : 0,
                 CreatureAbility.ShieldBash => Math.Max(0, creature.CurrentArmorPool),
+                CreatureAbility.Berserk => creature.Health * 2 <= creature.MaxHealth ? BerserkBonus : 0, // Half Health or less
                 _ => 0
             };
         }

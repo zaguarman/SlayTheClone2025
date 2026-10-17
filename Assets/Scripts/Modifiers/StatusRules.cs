@@ -78,7 +78,7 @@ namespace SlayTheClone {
                 or StatusEffectType.Untouchable or StatusEffectType.Cooldown or StatusEffectType.Brainwashed or StatusEffectType.KillOrder
                 or StatusEffectType.BorrowedTime or StatusEffectType.Licensed or StatusEffectType.Composed or StatusEffectType.Blackout
                 or StatusEffectType.Survivor or StatusEffectType.Burnout or StatusEffectType.Shielded or StatusEffectType.Provoked
-                or StatusEffectType.Looping or StatusEffectType.Stalled or StatusEffectType.Deniable) {
+                or StatusEffectType.Looping or StatusEffectType.Stalled or StatusEffectType.Deniable or StatusEffectType.Leeched or StatusEffectType.MutuallyAssured) {
                 foreach (var old in manager.GetActiveModifiersFor(target).OfType<StatusEffectModifier>()
                              .Where(s => s.EffectType == type).ToList()) {
                     manager.RemoveModifier(target, old);
@@ -138,6 +138,8 @@ namespace SlayTheClone {
                 StatusEffectType.Looping => $"Groundhog Day ({days}): it repeats the same action each Day, and plans nothing else",
                 StatusEffectType.Stalled => "Stalled: it acts last this Day",
                 StatusEffectType.Deniable => "Deniable: effects that hit more than one creature skip it this Day",
+                StatusEffectType.Leeched => $"Leeched ({days}): each Dusk it takes {potency} and the enemy heals {potency}",
+                StatusEffectType.MutuallyAssured => $"Mutually Assured ({days}): the creature that kills it dies too",
                 StatusEffectType.Blessed or StatusEffectType.HeatSignature => type.ToString(), // Its stacks are added by the status itself
                 _ => $"{type} ({days})"
             };

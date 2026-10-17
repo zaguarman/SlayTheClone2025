@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: RiotPolice
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: ad730668-7ae5-4a40-9abe-8de5f3fc9d16
+  cardName: Riot Police
+  description: Protecting the public from the public.
+  cardType: 0
+  faction: 2
+  artwork: {fileID: 3286163911610860551, guid: 363c8158610ff374da992b8c6db7701f, type: 3}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  combo: 0
+  setUpBy: []
+  effects: []
+  designNotes: "Riot Gear (Pok\xE9mon's Assault Vest): each Dawn, +2 Armor. Armor
+    fades 1 at each Dusk, so it keeps a plate on."
+  artDescription: 'A line of riot police in black armour and helmets behind transparent
+    shields, each shield plastered with a different sticker: HAVE A NICE DAY, BABY
+    ON BOARD, I BRAKE FOR PROTESTS.'
+  attack: 3
+  health: 5
+  speed: 1
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 56
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

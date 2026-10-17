@@ -37,7 +37,10 @@ namespace SlayTheClone {
 
             // The attack was declared earlier; re-check the attacker can still act now that it resolves.
             // Last Rites only needs the attacker alive on the board.
-            bool canAttack = combatAction.IsLastRites ? !attacker.IsDead && attacker.Slot != null : context.ModifierManager.CanAct(attacker);
+            // Autopilot (Sleepwalker): Exhausted, it still attacks (read off the printed card: Exhausted switches abilities off)
+            bool autopilot = attacker.Ability == Enums.CreatureAbility.Autopilot && attacker.IsOperative && !attacker.IsDead && attacker.Slot != null
+                && context.ModifierManager.HasStatusEffect(attacker, Enums.StatusEffectType.Exhausted);
+            bool canAttack = combatAction.IsLastRites ? !attacker.IsDead && attacker.Slot != null : context.ModifierManager.CanAct(attacker) || autopilot;
             if (!canAttack) {
                 Log($"BattlefieldCombatActionExecutor: {attacker.Name}'s attack cancelled.", LogTag.Actions | LogTag.Combat);
                 return;
@@ -112,6 +115,34 @@ namespace SlayTheClone {
             if (primaryTarget is ICreature wired && wired.Owner != null && wired.Owner != attacker.Owner && wired.Owner.Relics.Contains(Relic.Taser)) {
                 actionsQueue.AddAction(new DamageCreatureAction(attacker, Relics.TaserDamage));
             }
+            // Litigious (Legal Department, Pokémon's Rocky Helmet): whoever attacks it gets hurt
+            if (primaryTarget is ICreature sued && Abilities.Defends(sued, Enums.CreatureAbility.Litigious, attacker)) {
+                actionsQueue.AddAction(new DamageCreatureAction(attacker, Abilities.LitigiousDamage));
+            }
+            // Pharaoh's Curse (Mummy, Pokémon's Perish Body): a creature that attacks it is Doomed 3, and so is the mummy
+            if (primaryTarget is ICreature tomb && Abilities.Defends(tomb, Enums.CreatureAbility.PharaohsCurse, attacker)) {
+                foreach (var cursed in new[] { attacker, tomb }) {
+                    if (!context.ModifierManager.HasStatusEffect(cursed, Enums.StatusEffectType.Doomed))
+                        actionsQueue.AddAction(new ApplyStatusEffectAction(cursed, Enums.StatusEffectType.Doomed, 3, 0, tomb, tomb.Owner));
+                }
+            }
+            // Backup Dancer: a friendly creature beside the attacker that planned nothing attacks the same slot, once a Day
+            if (attacker.Slot?.Owner != null && targetSlot != null && !combatAction.IsLastRites) {
+                var row = attacker.Slot.Owner.Battlefield;
+                foreach (int i in Formation.Neighbours(attacker.Slot.Index)) {
+                    var dancer = i < row.Count ? row[i].OccupyingCreature : null;
+                    string key = dancer != null ? $"{dancer.CopyId}#dance#{context.TurnClock.TurnNumber}" : null;
+                    if (dancer == null || !Abilities.Has(dancer, Enums.CreatureAbility.BackupDancer) || actionsQueue.HasActiveAction(dancer.TargetId)
+                        || !context.ModifierManager.CanAct(dancer) || dancer.Owner.UsedOncePerCombat.Contains(key)) continue;
+                    dancer.Owner.UsedOncePerCombat.Add(key);
+                    Log($"{dancer.Name} dances along: it attacks slot {targetSlot.Index} with {attacker.Name}", LogTag.Combat | LogTag.Effects);
+                    actionsQueue.AddAction(new BattlefieldCombatAction(dancer, targetSlot));
+                }
+            }
+            // Fixated (One-Trick Pony, the Choice items): from its first attack on, it repeats that attack every Day
+            if (Abilities.Has(attacker, Enums.CreatureAbility.Fixated) && !combatAction.IsLastRites && !actionsQueue.IsLooping(attacker)) {
+                actionsQueue.StartLoop(attacker, combatAction);
+            }
             // Double Tap: a second hit right after the first, on the same target
             if (Abilities.Has(attacker, Enums.CreatureAbility.DoubleTap)) QueueCombatDamage(actionsQueue, primaryTarget, attacker);
             // Spray and Pray: the creatures beside the target slot (a step away in the formation) are hit too, each for its attack
@@ -119,7 +150,7 @@ namespace SlayTheClone {
                 var row = targetSlot.Owner.Battlefield;
                 foreach (int i in Formation.Neighbours(targetSlot.Index)) {
                     var beside = i >= 0 && i < row.Count ? row[i].OccupyingCreature : null;
-                    if (beside != null && !Abilities.ShrugsOffArea(beside, attacker)) QueueCombatDamage(actionsQueue, beside, attacker);
+                    if (beside != null && !Abilities.ShrugsOffArea(beside, attacker, context.ModifierManager)) QueueCombatDamage(actionsQueue, beside, attacker);
                 }
             }
             // Chain Mail: the hit jumps on to the next creatures in line, at half the damage each jump

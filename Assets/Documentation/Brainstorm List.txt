@@ -872,7 +872,6 @@ Card Game Factions Overview
 			Mercenaries
 			Militar Salute
 			Misile Crisis
-			Mutually Assured Destruction
 			Nuclear Disaster
 			Nuclear Submarine
 			Nuclear Summer
@@ -1144,7 +1143,6 @@ Card Game Factions Overview
 			Bioengineered Meat
 			Biohacking
 			Bioweapon
-			Blood Transfusion
 			Clone
 			Cold Fusion
 			Contagious Disease
@@ -1212,7 +1210,6 @@ Card Game Factions Overview
 			Drunken Sincerity
 			Dyslexia
 			Educated Guess
-			Empathy
 			Encore
 			Equilibrium
 			Existential Dread
@@ -1271,7 +1268,6 @@ Card Game Factions Overview
 			Straw Man Argument
 			Survivorship Bias
 			Synergy
-			Tabula Rasa
 			Terminal Lucidity
 			The Eliza Effect
 			The Human Factor
@@ -1779,11 +1775,11 @@ Card Game Factions Overview
 				Zeitgeist "Get Off the Stage".
 			Yawn (2026-10-17, Pokémon, how is to be determined): the target is Exhausted at the next Dawn unless it moves or leaves
 				its slot first (pairs with the Maneuvers). Names: Mind "Boring Lecture", Utopia "Peer Review".
-			Trick Room flavours (2026-10-17): Rush Hour is the Trend (the slowest act first); other factions could set it under their
-				own card names: Mind "Slow Thinking" (Kahneman), Myth "The Last Shall Be First", Corporate "Seniority", Statecraft
-				"Due Process", Utopia "Peer Review", Tech "Latency", Digital Society "Buffering", Shadow Ops. "Slow Burn".
-			Destiny Bond variations (2026-10-17, Pokémon; the user picks one): see the session's proposals (Mutually Assured
-				Destruction, Blood Pact, Insurance Policy, Scorched Earth Policy, Hostage Situation).
+			Trick Room flavours (2026-10-17): Rush Hour is the Trend; Slow Thinking, The Last Shall Be First, Seniority Priority, Due
+				Process and Buffering set it (cards). The user kept it from Utopia, Digital Society and Shadow Ops.
+			Destiny Bond (2026-10-17): Mutually Assured Destruction, Insurance Policy and Hostage Situation are cards; Blood Pact (the two
+				facing creatures bound: when either dies, so does the other) and Scorched Earth Policy (when it dies to an enemy, every
+				enemy creature takes 2) are still ideas.
 		Flavor text waiting for a card
 			"Nothing beats a Jet2 holiday. And right now you can save £50 per person. That's £200 off for a family of four."
 				(the user, 2026-10-15: the Jet2 advert, quoted as a meme; it names a real company, a trademark risk the user takes on.

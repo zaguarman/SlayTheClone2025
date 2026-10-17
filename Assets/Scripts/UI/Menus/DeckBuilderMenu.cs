@@ -161,9 +161,11 @@ namespace SlayTheClone {
             var heading = AddText(deckListContent, "Starter decks", 24, AccentColor, FontStyles.Bold | FontStyles.SmallCaps, height: 40);
             heading.alignment = TextAlignmentOptions.BottomLeft;
             starterHeading = heading.gameObject;
+            // The deck's own name on the title line, its factions and size under it (the user, 2026-10-17: the rows were cut and wrapping)
             foreach (var deck in DeckScriptableObject.InMenuOrder(Catalog.Decks)) {
-                var button = AddChoice(deckListContent, StarterDeckButton + deck.GetDeckName(), deck.GetDeckName(), $"{deck.Cards.Count} cards · copy it to make it yours",
-                    () => Open(deck), DeckCatalog.CoinsFor(deck));
+                string factions = string.Join(" + ", DeckCatalog.FactionsOf(deck).Select(CardTextFormatter.FactionName));
+                var button = AddChoice(deckListContent, StarterDeckButton + deck.GetDeckName(), DeckScriptableObject.ShortName(deck.GetDeckName()),
+                    $"{factions} · {deck.Cards.Count} cards", () => Open(deck), DeckCatalog.CoinsFor(deck));
                 ShowChosen(button, deck == OpenDeck);
                 deckButtons.Add((button, deck));
             }
@@ -408,7 +410,7 @@ namespace SlayTheClone {
             WheelScroll.AddTo(scroll);
             rows = content.transform;
 
-            var hint = AddText(column, "Click a card to add a copy (two at most, 20 to 40 cards); click it here, or right-click it, to take one out.", 18, UITheme.Hex(0xC9C0AE), FontStyles.Italic, height: 48);
+            var hint = AddText(column, "Click a card to add a copy (two at most, 20 to 60 cards); click it here, or right-click it, to take one out.", 18, UITheme.Hex(0xC9C0AE), FontStyles.Italic, height: 48);
             hint.textWrappingMode = TextWrappingModes.Normal;
 
             var buttons = NewObject("Buttons", column);

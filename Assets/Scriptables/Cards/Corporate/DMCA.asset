@@ -39,8 +39,39 @@ MonoBehaviour:
     trigger: 0
     oncePerCombat: 0
     actions:
+    - actionType: 19
+      value: 0
+      targetType: 4
+      targetModifier: 0
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 0
+      statusDuration: 0
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      onlyIfTargetDies: 0
+      decoy: {fileID: 0}
     - actionType: 50
-      value: 3
+      value: 2
       targetType: 1
       targetModifier: 0
       modifyAttack: 1
@@ -70,11 +101,11 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'Imprison (the user, 2026-10-17): for 3 Days the enemy can''t play
-    a card that shares its name with a creature on the board, either side''s. The
-    copy on the board holds the rights: their second copies wait in the hand (every
-    deck runs two). Monkey See, Monkey Do sets it up.'
+  designNotes: 'Imprison (the user, 2026-10-17): target enemy creature is destroyed
+    (taken down), and for 2 Days the enemy can''t play a card that shares its name
+    with a creature on the board, either side''s (every deck runs two copies: the
+    second waits while a copy stands).'
   artDescription: A lawyer in a sharp suit slapping a huge red COPYRIGHT STRIKE sticker
     over the face of a creature on a giant video thumbnail, a second identical thumbnail
     beside it greyed out with CLAIMED across it, a tiny APPEAL button crossed out.
-  defaultTargetType: 1
+  defaultTargetType: 4

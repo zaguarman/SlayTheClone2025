@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: BombSquad
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 2e11b051-d9a1-4839-bc27-738c4bd97ad4
+  cardName: Bomb Squad
+  description: Cut the red wire. Or the blue one. It's a coin toss with a pension.
+  cardType: 0
+  faction: 2
+  artwork: {fileID: 3286163911610860551, guid: 1b2b967e60cc0624a8d6a0f9a0df8ba8, type: 3}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  combo: 0
+  setUpBy: []
+  effects: []
+  designNotes: "Bomb Disposal (Pok\xE9mon's Rapid Spin): the Slot Effect on a slot
+    it enters is cleared before it goes off: Landmines, Snares, Checkpoints, a Shield,
+    Scorched Earth, a Prayer."
+  artDescription: A technician in a bulky green bomb suit kneeling over a cartoon
+    landmine with wire cutters, a tiny sweat drop, a robot on tank treads holding
+    a torch for him, the rest of the squad watching from very far away through binoculars.
+  attack: 2
+  health: 5
+  speed: 1
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 54
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

@@ -729,10 +729,10 @@ namespace SlayTheClone {
         /// Groundhog Day (the user, 2026-10-17, Pokémon's Encore): the creature's plan as the loop closes (an attack on that
         /// slot, a move, an ability, or nothing) is what it does each Day while it's Looping, made for it at Dawn.
         /// </summary>
-        public void StartLoop(ICreature creature) {
+        public void StartLoop(ICreature creature, IGameAction planned = null) {
             if (creature == null) return;
             var owner = creature.Owner;
-            var planned = GetActiveAction(creature.TargetId);
+            planned ??= GetActiveAction(creature.TargetId);
             Func<IGameAction> again = planned switch {
                 BattlefieldCombatAction attack when attack.GetTargetSlot() is BoardSlot aimed => () => new BattlefieldCombatAction(creature, aimed),
                 MoveCreatureAction move when move.GetToSlot() is BoardSlot to => () => new MoveCreatureAction(creature, creature.Slot, to, owner),
@@ -745,14 +745,17 @@ namespace SlayTheClone {
 
         public bool IsLooping(ICreature creature) => creature != null && IsLooping(creature.TargetId);
 
-        private bool IsLooping(string creatureId) =>
-            creatureId != null && loops.TryGetValue(creatureId, out var loop) && Modifiers.HasStatusEffect(loop.creature, StatusEffectType.Looping);
+        private bool IsLooping(string creatureId) => creatureId != null && loops.TryGetValue(creatureId, out var loop) && StillLoops(loop.creature);
+
+        // Groundhog Day's status, or a Fixated creature (One-Trick Pony): its loop lasts as long as it stands
+        private bool StillLoops(ICreature creature) =>
+            Modifiers.HasStatusEffect(creature, StatusEffectType.Looping) || Abilities.Has(creature, Enums.CreatureAbility.Fixated);
 
         /// <summary>At Dawn, once the Day's effects are done: the looping creatures' plans are made for them. A loop ends with its status.</summary>
         public void ReplayLoops() {
             foreach (var (id, loop) in loops.ToList()) {
                 var creature = loop.creature;
-                if (creature.IsDead || creature.Slot == null || !Modifiers.HasStatusEffect(creature, StatusEffectType.Looping)) {
+                if (creature.IsDead || creature.Slot == null || !StillLoops(creature)) {
                     loops.Remove(id);
                     continue;
                 }

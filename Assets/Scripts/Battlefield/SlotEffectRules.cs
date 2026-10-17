@@ -32,6 +32,12 @@ namespace SlayTheClone {
         public static void OnEnter(ICreature creature, BoardSlot slot, ActionExecutionContext context) {
             creature?.ReleaseHeldEntryEffects(context.ActionsQueue); // Moved off Scorched Earth: its entry effects happen now
             if (creature == null || Abilities.Has(creature, CreatureAbility.Hover)) return; // Hover: traps don't touch it
+            // Bomb Disposal (Bomb Squad, Pokémon's Rapid Spin): the Slot Effect on a slot it enters is cleared before it goes off
+            if (slot?.Effect != null && Abilities.Has(creature, CreatureAbility.BombDisposal)) {
+                Log($"{creature.Name} defuses {slot.Effect.Name} on {slot}", LogTag.Effects);
+                Remove(slot, context.GameMediator, context.ActionsQueue);
+                return;
+            }
             // Checkpoint (a side hazard, Pokémon's Stealth Rock): every creature that enters pays, and it stays
             if (slot?.Effect?.Type == SlotEffectType.Checkpoint) {
                 Trigger(slot, context, $"{creature.Name} is stopped at a Checkpoint", new DamageCreatureAction(creature, slot.Effect.Value) { Source = slot.Effect.Source });

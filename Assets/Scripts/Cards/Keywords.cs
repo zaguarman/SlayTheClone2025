@@ -61,7 +61,7 @@ namespace SlayTheClone {
             Add("Retaliate", "Retaliate followed by a status, like [Exhausted|exhaust] or [Burned|Burn] 2: when a creature attacks this one, that status lands on the attacker, with the numbers shown.");
             Add("Decay", "Decay X: takes X damage at each [Dusk].");
             Add("Regenerate", "Regenerate X: heals X at each [Dusk].");
-            Add("Grow", "Grow X (no number: 1): +X Attack and +X Health for good at each [Dawn].");
+            Add("Grow", "Grow X (no number: 1): +X Attack and +X Health at each [Dawn].");
             Add("Rebirth", "Once per combat, when this would die, it's reborn instead: it survives with 1 Health. The wheel turns: last life a worm, this life a dog.");
             Add("Summon", "Summon X (no number: 1): X random creatures from your deck enter your empty slots.");
             Add("Destroy", "Kills it outright, whatever its Health or [Armor]. [Untouchable] still saves it.");
@@ -131,6 +131,8 @@ namespace SlayTheClone {
             Add("Looping", "Groundhog Day: the plan it had as the loop closed (an attack on that slot, a move, an ability, or nothing) is its plan each [Day] it lasts, made for it at [Dawn]; it can plan nothing else, and the plan can't be taken back. A stun still cancels the Day's.");
             Add("Stalled", "It acts last this [Day]: its attack, move or ability comes after every other in its part of the Day.");
             Add("Deniable", "This [Day], effects that hit more than one creature skip it, like [Too Mainstream].");
+            Add("Leeched", "Leech X for the [Days] shown: at each [Dusk] after the Day it lands, it takes X and the enemy player heals X.");
+            Add("Mutually Assured", "For the [Days] shown: when a creature kills it, that creature is [Destroy|destroyed] too. Destiny Bond.");
             Add("Blackout", "Blackout X (no number: 1): its ability and its effects (arrival, Dawn and Dusk, retaliation, [Last Will]) are switched off for X [Days].");
             Add("Cleanse", "Removes every status, whichever side it helps.");
             Add("Purge", "Removes every status, good and bad.");

@@ -15,7 +15,8 @@ namespace SlayTheClone {
             WipeWatchdogs, CutDraws, Revive, SendFor, Earthquake, Resurrect, Grace, Consolidate, CopyStatuses, EndDay, Rush, Defect, SwapStats,
             SwapSlotEffects, Equip,
             Push, Pull, Shuffle, Spin,
-            Mimic, TradeStats, Seal } // Mimic (Monkey See, Monkey Do), TradeStats (Freaky Friday), Seal (the DMCA): the Pokémon picks, 2026-10-17. Renamed Buff to ModifyStat. New ones go last: cards store them as numbers. Push/Pull/Shuffle/Spin: moves
+            Mimic, TradeStats, Seal,
+            DoubleDown, SplitPain, SwapAbilities } // 3rd Parallel Job, Blood Transfusion, Job Rotation (2026-10-17). // Mimic (Monkey See, Monkey Do), TradeStats (Freaky Friday), Seal (the DMCA): the Pokémon picks, 2026-10-17. Renamed Buff to ModifyStat. New ones go last: cards store them as numbers. Push/Pull/Shuffle/Spin: moves
 
         /// <summary>
         /// What a creature must be for an effect to land on it (checked when it lands), e.g. only a Revealed one is Destroyed.
@@ -44,7 +45,11 @@ namespace SlayTheClone {
             // Gear only (held items, 2026-10-16): Hover keeps it off Slot Effects, Self-Repair heals it each Dawn
             Hover, SelfRepair,
             // The Pokémon picks (the user, 2026-10-17): Moody, a dodge (the politician's), Metronome, Wonder Guard
-            MoodSwings, NextQuestion, WildCard, Immaculate
+            MoodSwings, NextQuestion, WildCard, Immaculate,
+            // The second batch (the user, 2026-10-17): Rocky Helmet, Protect, Rapid Spin, Sleep Talk, Assault Vest, the Choice items, Shadow Tag,
+            // Synchronize, Berserk, Dancer, Neutralizing Gas, Perish Body, Good as Gold, Toxic Debris, and healing that hurts
+            Litigious, HunkerDown, BombDisposal, Autopilot, RiotGear, Fixated, Clingy, Empathy, Berserk, BackupDancer, JammingField,
+            PharaohsCurse, Teflon, Shrapnel, DoYourOwnResearch
         }
 
         // Watchdogs (GDD 3.11): what they watch, whose, what they do, and when they look
@@ -85,7 +90,9 @@ namespace SlayTheClone {
             Provoked,       // Taunt and Follow Me: its attacks go to the creature facing it, and it can't use its Active ability
             Looping,       // Groundhog Day (Encore): it repeats the plan it had when the loop closed, each Day, and can plan nothing else
             Stalled,       // Filibuster (Quash): it acts last in its layer this Day
-            Deniable       // Plausible Deniability (Wide Guard): effects that hit more than one creature skip it
+            Deniable,      // Plausible Deniability (Wide Guard): effects that hit more than one creature skip it
+            Leeched,       // Tithe (Leech Seed): each Dusk it takes X and the enemy player heals X
+            MutuallyAssured // Destiny Bond (Mutually Assured Destruction, Insurance Policy, Hostage Situation): the creature that kills it dies too
         }
 
         // Conditions on battlefield slots ('Slot Effects Compendium'). One per slot; a new one replaces the old

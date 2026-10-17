@@ -1312,8 +1312,8 @@ namespace SlayTheClone {
                 return true;
             }
             if (GameManager.ModifierManager.CanMove(creature)) return false;
-            ShowCantAct(card, GameManager.ModifierManager.HasStatusEffect(creature, Enums.StatusEffectType.Rooted) && GameManager.ModifierManager.CanAct(creature)
-                ? "Rooted: it can't move" : CantActText(creature));
+            ShowCantAct(card, MovementRules.IsRooted(creature) && GameManager.ModifierManager.CanAct(creature)
+                ? (Abilities.IsPinned(creature) ? "Clingy Ex: it can't move while it's faced" : "Rooted: it can't move") : CantActText(creature));
             return true;
         }
 

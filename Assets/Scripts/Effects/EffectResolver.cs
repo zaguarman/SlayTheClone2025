@@ -86,7 +86,7 @@ namespace SlayTheClone {
                     QueueChain(attacker, primaryTarget, damage, queue);
                 }
                 else {
-                    var spread = WithoutTooMainstream(TargetingSystem.GetAdditionalTargets(attacker.Owner, primaryTarget, action.targetModifier).ToList(), attacker);
+                    var spread = WithoutTooMainstream(TargetingSystem.GetAdditionalTargets(attacker.Owner, primaryTarget, action.targetModifier).ToList(), attacker, queue?.Modifiers);
                     foreach (var target in spread) {
                         // Without a value the spread hits like the attack itself, for the attack the attacker has when it lands
                         var hit = action.value > 0
@@ -141,10 +141,10 @@ namespace SlayTheClone {
                 return new List<ITarget> { SlotOf(chosenTarget) }.Where(slot => slot != null).ToList();
             }
             if (chosenTarget != null && UsesChosenTarget(action) && action.targetModifier.HasFlag(TargetModifier.Beside)) {
-                return WithoutTooMainstream(NeighboursOf(chosenTarget).ToList(), source);
+                return WithoutTooMainstream(NeighboursOf(chosenTarget).ToList(), source, queue?.Modifiers);
             }
             if (chosenTarget != null && action.targetModifier.HasFlag(TargetModifier.AlliesOfTarget)) {
-                return WithoutTooMainstream(AlliesOf(chosenTarget).ToList(), source);
+                return WithoutTooMainstream(AlliesOf(chosenTarget).ToList(), source, queue?.Modifiers);
             }
             // Myth's loophole: a Phoenix Feather still finds its creature when a Sacrifice took it first this Day (one offering
             // pays every rite); the resurrection checks the Day
@@ -160,7 +160,7 @@ namespace SlayTheClone {
                 if (OwnSideOnly(action.actionType) && (resolved as ICreature)?.Owner != controller) resolved = null; // A sacrifice is yours to make
                 var targets = resolved != null ? new List<ITarget> { resolved } : new List<ITarget>();
                 if (action.targetModifier.HasFlag(TargetModifier.WithAdjacent)) targets.AddRange(NeighboursOf(chosenTarget));
-                return action.targetModifier.HasFlag(TargetModifier.WithAdjacent) ? WithoutTooMainstream(targets, source) : targets;
+                return action.targetModifier.HasFlag(TargetModifier.WithAdjacent) ? WithoutTooMainstream(targets, source, queue?.Modifiers) : targets;
             }
             if (action.targetModifier.HasFlag(TargetModifier.Opposite)) {
                 var facing = Opposite(source as ICreature);
@@ -178,7 +178,7 @@ namespace SlayTheClone {
                 var side = chosenTarget as IPlayer ?? (SlotOf(chosenTarget) as BoardSlot)?.Owner ?? controller;
                 var there = TargetingSystem.GetValidTargets(controller, action.targetType, action.targetModifier)
                     .OfType<ICreature>().Where(c => c.Owner == side).Cast<ITarget>().ToList();
-                return WithoutTooMainstream(there, source);
+                return WithoutTooMainstream(there, source, queue?.Modifiers);
             }
             if (action.targetModifier.HasFlag(TargetModifier.Random)) return PickAtRandom(source, controller, action, queue);
             if (action.targetModifier.HasFlag(TargetModifier.Strongest)) {
@@ -189,7 +189,7 @@ namespace SlayTheClone {
             var valid = TargetingSystem.GetValidTargets(controller, action.targetType, action.targetModifier);
             bool area = action.targetType is TargetType.AllCreatures or TargetType.FriendlyCreatures or TargetType.EnemyCreatures
                 && !action.targetModifier.HasFlag(TargetModifier.Random);
-            return area ? WithoutTooMainstream(valid, source) : valid;
+            return area ? WithoutTooMainstream(valid, source, queue?.Modifiers) : valid;
         }
 
         // Random: one of the creatures it can affect, picked when it happens. Heat Signature draws it: if any of them has
@@ -222,8 +222,8 @@ namespace SlayTheClone {
         }
 
         /// <summary>Too Mainstream: immune to effects that affect more than one creature (area, "each creature", spreads).</summary>
-        private static List<ITarget> WithoutTooMainstream(List<ITarget> targets, ICard source) =>
-            targets.Where(t => !(t is ICreature c && Abilities.ShrugsOffArea(c, source as ICreature))).ToList(); // Too Mainstream, or Deniable this Day
+        private static List<ITarget> WithoutTooMainstream(List<ITarget> targets, ICard source, IModifierManager modifiers) =>
+            targets.Where(t => !(t is ICreature c && Abilities.ShrugsOffArea(c, source as ICreature, modifiers))).ToList(); // Too Mainstream, or Deniable this Day
 
         /// <summary>
         /// What a card dropped on a slot is aimed at. A spell aimed at one of the caster's own creatures, on the board or
@@ -433,7 +433,7 @@ namespace SlayTheClone {
                 or ActionType.ApplyStatus or ActionType.Armor or ActionType.Stun or ActionType.Cleanse
                 or ActionType.CreateWatchdog or ActionType.DelayDeployment or ActionType.Rush or ActionType.Defect
                 or ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility or ActionType.Equip or ActionType.SwapStats
-                or ActionType.Push or ActionType.Pull or ActionType.Mimic or ActionType.TradeStats
+                or ActionType.Push or ActionType.Pull or ActionType.Mimic or ActionType.TradeStats or ActionType.DoubleDown or ActionType.SplitPain or ActionType.SwapAbilities
                 or ActionType.TakeControl or ActionType.Attack or ActionType.Funnel or ActionType.PassHarmfulStatuses
                 or ActionType.StealGoodStatuses or ActionType.ReturnToHand or ActionType.FakeDeath or ActionType.Vanish or ActionType.Resurrect
                 or ActionType.Consolidate or ActionType.CopyStatuses;
@@ -605,6 +605,16 @@ namespace SlayTheClone {
                     var (one, other) = Pair(source, creature);
                     return one != null && other != null ? new TradeStatsAction(one, other) : null;
                 }
+                case ActionType.DoubleDown: // 3rd Parallel Job: half its Health for double its Attack
+                    return creature != null ? new DoubleDownAction(creature) : null;
+                case ActionType.SplitPain: { // Blood Transfusion: the target and the creature facing it share their Health
+                    var (one, other) = Pair(source, creature);
+                    return one != null && other != null ? new SplitPainAction(one, other) : null;
+                }
+                case ActionType.SwapAbilities: { // Job Rotation: the target and the creature facing it swap abilities
+                    var (one, other) = Pair(source, creature);
+                    return one != null && other != null ? new SwapAbilitiesAction(one, other) : null;
+                }
                 case ActionType.Seal: // The DMCA: value is the Days
                     return target is IPlayer claimed && action.value > 0 ? new SealAction(claimed, action.value) : null;
                 case ActionType.SwapStats: // Geomagnetic Reversal: its Attack and Health trade places
@@ -649,7 +659,7 @@ namespace SlayTheClone {
         public static void QueueChain(ICreature attacker, ITarget primaryTarget, int damage, IActionsQueue queue) {
             if (!(primaryTarget is ICreature hitCreature)) return; // Chains need a creature to jump from
 
-            foreach (var target in WithoutTooMainstream(TargetingSystem.GetDirectionalChainTargets(hitCreature, MaxChainJumps).Cast<ITarget>().ToList(), attacker)) {
+            foreach (var target in WithoutTooMainstream(TargetingSystem.GetDirectionalChainTargets(hitCreature, MaxChainJumps).Cast<ITarget>().ToList(), attacker, queue?.Modifiers)) {
                 if (damage <= 0) break;
                 QueueCombatDamage(target, damage, attacker, queue);
                 damage /= 2;

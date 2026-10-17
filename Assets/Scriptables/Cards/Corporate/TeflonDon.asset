@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: TeflonDon
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: 0c0c4e97-883a-42cc-884f-d950e1341178
+  cardName: Teflon Don
+  description: Charged forty times. Convicted of being fabulous.
+  cardType: 0
+  faction: 4
+  artwork: {fileID: 3286163911610860551, guid: 27ee75b54cc49b5488b74990f5cbd195, type: 3}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  combo: 0
+  setUpBy: []
+  effects: []
+  designNotes: "Teflon (Pok\xE9mon's Good as Gold): enemy statuses don't land on
+    it. Every Mafia theme is Corporate: legality is a business with a high entry
+    price."
+  artDescription: A silver-haired mob boss in a camel coat and pinstripes strolling
+    out of a courthouse waving to cameras, indictment papers sliding off his coat
+    like water off a non-stick pan, two lawyers scooping them up behind him.
+  attack: 4
+  health: 5
+  speed: 2
+  turnsUntilOperative: 1
+  movement: 0
+  ability: 64
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

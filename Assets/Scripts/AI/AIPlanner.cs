@@ -800,9 +800,11 @@ namespace SlayTheClone {
                     return creature.Ours ? (creature.Creature?.Gear == CreatureAbility.None ? 1.5f + AttackOf(creature) * 0.2f : 0.5f) : -1f;
                 case ActionType.Push or ActionType.Pull: // Maneuvers: theirs into reach or off their bonuses; a hurt one of ours out of the front
                     return PositionValue(creature, action.actionType == ActionType.Pull);
+                case ActionType.DoubleDown: // 3rd Parallel Job: a big friendly creature with Health to spare
+                    return creature.Ours && creature.Operative ? AttackOf(creature) - HealthLeft(creature) * 0.25f : -2;
                 case ActionType.Mimic: // Monkey See, Monkey Do: one of theirs copied onto our side (over whatever stands there)
                     return creature.Ours ? -1 : creature.Worth * 0.8f;
-                case ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility or ActionType.TradeStats:
+                case ActionType.CopyStats or ActionType.StealStatChanges or ActionType.SwapPositions or ActionType.GrantAbility or ActionType.TradeStats or ActionType.SplitPain or ActionType.SwapAbilities:
                     return IntendedFor(spell, creature.Ours ? view.Me : view.Them) ? 1 : -1; // Hard to weigh: done where the card means it
                 case ActionType.Armor or ActionType.Heal when Hard && creature.Ours:
                     return Protection(creature, action.actionType, action.value);
@@ -950,6 +952,8 @@ namespace SlayTheClone {
                 StatusEffectType.Looping => creature.Operative ? -1.2f * System.Math.Max(1, days) : -0.3f,
                 StatusEffectType.Stalled => creature.Operative && CanAttack(creature) ? -0.8f : 0, // Filibuster: its hit lands after ours
                 StatusEffectType.Deniable => 0.8f, // Plausible Deniability: area effects pass it by
+                StatusEffectType.Leeched => -(System.Math.Max(1, action.statusPotency) * days) * 0.9f, // Tithe: a slow bleed that heals us
+                StatusEffectType.MutuallyAssured => creature.Ours ? creature.Worth * 0.4f + 0.5f : -0.5f, // Destiny Bond: on ours
                 StatusEffectType.Blackout => creature.Ability != CreatureAbility.None || creature.Retaliation > 0 ? -1.5f : -0.5f,
                 _ => 0
             };

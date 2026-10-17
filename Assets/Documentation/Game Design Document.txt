@@ -1075,6 +1075,49 @@ flavours of it are in the Brainstorm List); Yawn and Roar wait in the Brainstorm
 among its variations.
 
 
+5.14 The second Pokémon batch (2026-10-17)
+
+The user's second list, each as an ability on one creature (the ability names are plain words; the Pokémon original in
+brackets), plus spells and the changes to the first batch:
+• DMCA now takes the card down too: target enemy creature is destroyed, and the seal lasts 2 Days. 3rd Parallel Job: the
+  creature loses half its Health and its Attack doubles (Double Down). No card says "for good" any more: stat changes
+  stay for the combat, as the rules say, and that's that.
+• Backstab: the ability that was called Sucker Punch (the user: not Pokémon's name for the same rule). The rule is unchanged.
+• Litigious (Rocky Helmet), Legal Department: a creature that attacks it takes 2.
+• Hunker Down (Protect), Civil Servant: on a Day it plans nothing, it takes no damage (Untouchable, set before the Day
+  resolves as an environment action).
+• Bomb Disposal (Rapid Spin), Bomb Squad: the Slot Effect on a slot it enters is cleared before it goes off.
+• Autopilot (Sleep Talk), Sleepwalker: Exhausted, it still attacks, a random enemy slot (an occupied one if there is one),
+  its plan made for it before the Day resolves. Read off the printed card, since Exhausted switches abilities off.
+• Riot Gear (Assault Vest), Riot Police: +2 Armor each Dawn.
+• Fixated (the Choice items), One-Trick Pony: from its first attack on, it repeats that attack every Day until it leaves
+  (Groundhog Day's loop, for as long as it stands).
+• Clingy (Shadow Tag), Clingy Ex: the enemy creature facing it can't move, and nothing moves it (as if Rooted).
+• Empathy (Synchronize), Empath: an enemy status that lands on it lands on the creature that sent it too; from a spell,
+  on a random enemy creature. Once: the echo doesn't echo.
+• Berserk, Berserker: +3 Attack at half Health or less.
+• Backup Dancer (Dancer): when a friendly creature beside it attacks, it attacks the same slot too, if it planned
+  nothing; once a Day.
+• Jamming Field (Neutralizing Gas), EMP Drone: every other creature's ability is switched off while it stands, either side's.
+• Pharaoh's Curse (Perish Body), Tutankhamun: a creature that attacks it is Doomed 3, and so is it.
+• Teflon (Good as Gold), Teflon Don: enemy statuses don't land on it.
+• Shrapnel (Toxic Debris), Sapper: when an attack hits it, a Landmine 2 lands on a random empty enemy slot.
+• Do Your Own Research, Anti-Vaxxer: healing damages it instead (the user: "one that makes healing the creature damage it").
+• Defiant is Spite already; Intimidate is an Arrival effect (Drill Sergeant: -2 Attack to the creature facing it, until it leaves play).
+Statuses: Leeched (Leech Seed; Tithe, Myth: each Dusk after the Day it lands it takes X and the enemy player heals X) and
+Mutually Assured (Destiny Bond: the creature that kills it is destroyed too), on three cards as the user asked: Mutually
+Assured Destruction (Statecraft, 2 Days), Insurance Policy (Corporate, 3 Days) and Hostage Situation (Shadow Ops., 2 Days
+and Heat Signature 2, so their attacks come to it).
+Spells: Job Rotation (Skill Swap: the target and the creature facing it swap abilities), Resignation Letter (Memento: a
+Sacrifice, and -3 Attack on target enemy creature), Blood Transfusion (Pain Split: the two share their Health out
+equally), Tabula Rasa and Reality Check (Haze: every creature's, or the target's, stat changes removed), Peer Review
+(Utopia, kept for another archetype: reveal target enemy creature and Blackout 2). Holy Pigeon (Myth): Leapfrog, Arrival
+Bless 1 on every friendly creature.
+Trick Room: Rush Hour is the Trend; the factions the user chose set it under their own names: Slow Thinking (Mind),
+The Last Shall Be First (Myth), Seniority Priority (Corporate), Due Process (Statecraft), Buffering (Tech).
+Defensive (Zero-Day ignores them): Litigious, Empathy, Pharaoh's Curse, Teflon, Shrapnel.
+
+
 6. DESIGN PHILOSOPHY & BALANCING
 
 6.1 Tone
@@ -1092,7 +1135,7 @@ Easy to decide, hard to master; complexity arrives gradually, like Plants vs. Zo
 so some decks can be very deep. The budget can stretch a little, not much. Before any new keyword:
     • Can it be one line on the card, and is the decision it asks for readable in a few seconds?
     • Does it reuse a rule the player already knows? If it can fold into an existing keyword, it does.
-    • Exceptions to remember (Sucker Punch, Hormesis, Martyrdom) stay on one card each.
+    • Exceptions to remember (Backstab, Hormesis, Martyrdom) stay on one card each.
     • Card text is plain sentences: a mechanic's name only as a label in front ("Watchdog: disable the next 2 enemy
       attacks"), never "condition -> effect, charges (timing)".
     • A mechanic that adds friction for its depth waits on a shelf (Gear, 2026-10-17) rather than going in half-made.

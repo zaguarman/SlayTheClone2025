@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: HolyPigeon
+  m_EditorClassIdentifier: Scripts::SlayTheClone.CreatureCardScriptableObject
+  cardId: e7ba23b2-9772-45e6-a77c-c42a8bd615bd
+  cardName: Holy Pigeon
+  description: The Holy Spirit, as depicted. Please do not feed it.
+  cardType: 0
+  faction: 1
+  artwork: {fileID: 3286163911610860551, guid: 9a54b74d309948a41967855561fe0bfe, type: 3}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  combo: 0
+  setUpBy: []
+  effects:
+  - effectType: 0
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 7
+      value: 0
+      targetType: 3
+      targetModifier: 2
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 4
+      statusDuration: 0
+      statusPotency: 1
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      onlyIfTargetDies: 0
+      decoy: {fileID: 0}
+  designNotes: 'Leapfrog (the user, 2026-10-17: ''make also the holy pigeon''): it
+    flies over creatures to an empty slot. Arrival: Bless 1 on every friendly creature:
+    a ward against the next status.'
+  artDescription: A fat grey city pigeon with a golden halo and two tiny angel wings
+    perched on a cathedral gargoyle, a beam of holy light on it, a crumb of communion
+    wafer in its beak, a saint's statue below it freshly anointed.
+  attack: 1
+  health: 3
+  speed: 3
+  turnsUntilOperative: 0
+  movement: 1
+  ability: 0
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

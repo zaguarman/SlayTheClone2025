@@ -16,6 +16,11 @@ namespace SlayTheClone {
             // no longer in play) to a random creature on the caster's side. No U deflects it to a random one in any case
             var controller = statusAction.Controller;
             bool enemy = controller != null && targetCreature.Owner != null && controller != targetCreature.Owner;
+            // Teflon (Teflon Don, Pokémon's Good as Gold): enemy statuses don't land on it
+            if (enemy && Abilities.Defends(targetCreature, CreatureAbility.Teflon, statusAction.Source)) {
+                Log($"{statusType} slides off {targetCreature.Name} (Teflon)", LogTag.Effects);
+                return;
+            }
             if (enemy && Abilities.Defends(targetCreature, CreatureAbility.NoU, statusAction.Source)) {
                 var deflectTo = Abilities.BounceTarget(null, controller, atRandom: true);
                 Log($"{targetCreature.Name}'s No U deflects {statusType} to {deflectTo?.Name ?? "nobody (it fails)"}", LogTag.Effects);
@@ -38,6 +43,14 @@ namespace SlayTheClone {
             if (landed != null) {
                 context.ModifierManager.Attach(targetCreature, statusAction.Origin, landed, controller);
                 Log($"Executed ApplyStatusEffectAction via Executor: Applied {statusType} to {targetCreature.Name}", LogTag.Actions | LogTag.Effects);
+                // Empathy (Empath, Pokémon's Synchronize): an enemy status that lands on it lands on the creature that sent it
+                // too; from a spell, on a random enemy creature. Once: the echo doesn't echo
+                if (enemy && !statusAction.Echo && Abilities.Defends(targetCreature, CreatureAbility.Empathy, statusAction.Source)
+                    && Abilities.BounceTarget(statusAction.Source, controller, atRandom: true) is ICreature echoTo) {
+                    Log($"{targetCreature.Name} feels it too: {statusType} on {echoTo.Name} (Empathy)", LogTag.Effects);
+                    context.ActionsQueue.AddAction(new ApplyStatusEffectAction(echoTo, statusType, statusAction.GetDuration(), statusAction.GetPotency(),
+                        targetCreature, targetCreature.Owner) { Echo = true });
+                }
             }
         }
     }

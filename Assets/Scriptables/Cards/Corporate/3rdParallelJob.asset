@@ -38,9 +38,9 @@ MonoBehaviour:
     trigger: 0
     oncePerCombat: 0
     actions:
-    - actionType: 0
-      value: 8
-      targetType: 0
+    - actionType: 51
+      value: 0
+      targetType: 3
       targetModifier: 0
       modifyAttack: 1
       modifyHealth: 1
@@ -69,39 +69,8 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-    - actionType: 6
-      value: 6
-      targetType: 3
-      targetModifier: 0
-      modifyAttack: 1
-      modifyHealth: 0
-      modifySpeed: 0
-      statusEffectToApply: 0
-      statusDuration: 0
-      statusPotency: 0
-      cleanse: 0
-      purge: 0
-      slotEffect: 0
-      watchdog:
-        watches: 0
-        side: 0
-        atMost: 0
-        effect: 0
-        charges: 0
-        timing: 0
-        pick: 0
-        moveEarlier: 0
-        damaging: 0
-      trend: 0
-      ability: 0
-      sendFor: 0
-      fromDiscard: 0
-      requires: 0
-      delayDays: 0
-      onlyIfTargetDies: 0
-      decoy: {fileID: 0}
-  designNotes: 'Belly Drum (the user, 2026-10-17): you take 8 damage; target friendly
-    creature gets +6 Attack for good. The hustle: your Health for a monster.'
+  designNotes: 'Belly Drum (the user, 2026-10-17): target friendly creature loses
+    half its Health and its Attack doubles. The hustle: its Health for a monster.'
   artDescription: A hollow-eyed man at three desks pushed together, a laptop and
     a different lanyard on each, three video calls on mute, an IV drip of coffee
     into his arm, the wall clock at 3:00, his biceps absurdly huge from typing.

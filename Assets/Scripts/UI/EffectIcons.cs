@@ -67,6 +67,8 @@ namespace SlayTheClone {
                 case StatusEffectType.Looping: return Days;
                 case StatusEffectType.Stalled: return Days;
                 case StatusEffectType.Deniable: return Armor;
+                case StatusEffectType.Leeched: return Hurt;
+                case StatusEffectType.MutuallyAssured: return Death;
                 default: return null;
             }
         }

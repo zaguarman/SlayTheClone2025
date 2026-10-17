@@ -725,3 +725,29 @@ Deniable (the user, 2026-10-17)
         Re-application Behavior: Refresh
     Answers: Aim at it alone.
     Cleansable: Yes
+
+Leeched (the user, 2026-10-17)
+    Faction: Myth (Tithe)
+    Inspired by: Leech Seed
+    Type: Damage over time
+    Description: "Each Dusk it takes X, and the enemy player heals X."
+    Core Impact: A slow bleed that pays the other side: X a Dusk, from the Dusk after the Day it lands. The heal goes to
+                 the creature's enemy player, whoever set it.
+    Stacking & Duration:
+        Initial Stacks: the Days shown
+        Re-application Behavior: Refresh
+    Answers: Cleanse; Teflon; Immaculate doesn't help (a status hurts it).
+    Cleansable: Yes
+
+Mutually Assured (the user, 2026-10-17)
+    Faction: Statecraft (Mutually Assured Destruction), Corporate (Insurance Policy), Shadow Ops. (Hostage Situation)
+    Inspired by: Destiny Bond
+    Type: Deterrent
+    Description: "The creature that kills it dies too."
+    Core Impact: Destroyed outright, Health and Armor aside (Untouchable, a Blessing and Grace still apply to the killer).
+                 Only a creature's kill counts: a spell's, a Burn's or a Doom's doesn't.
+    Stacking & Duration:
+        Initial Stacks: the Days shown
+        Re-application Behavior: Refresh
+    Answers: Kill it with a spell or a status; wait it out; Cleanse.
+    Cleansable: Yes

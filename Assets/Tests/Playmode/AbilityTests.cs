@@ -143,5 +143,27 @@ namespace SlayTheClone.Tests {
             game.Run(new PlayCardAction(nobody, p2, p2.Battlefield[4]));
             Assert.IsNotNull(p2.Battlefield[4].OccupyingCreature, "A name not on the board plays as ever");
         }
+
+        // The second Pokémon batch (the user, 2026-10-17): Belly Drum, Pain Split and Skill Swap as actions
+        [Test]
+        public void PokemonPicks2_DoubleDown_SplitPain_SwapAbilities() {
+            var hustler = game.Summon(p1, game.Creature("Hustler", 3, 9), 0);
+            game.Run(new DoubleDownAction(hustler));
+            Assert.AreEqual((6, 5), (hustler.Attack, hustler.Health), "Half its Health for double its Attack");
+
+            var donor = game.Summon(p1, game.Creature("Donor", 1, 10), 1);
+            var patient = game.Summon(p2, game.Creature("Patient", 1, 10), 1);
+            game.Run(TargetedActions.Damage(patient, 7));
+            game.Run(new SplitPainAction(donor, patient));
+            Assert.AreEqual((6, 7), (donor.Health, patient.Health), "13 shared out: the odd point to the one that had less");
+
+            var spiteful = game.Creature("Spiteful", 2, 5);
+            spiteful.ability = CreatureAbility.Spite;
+            var plain = game.Creature("Plain", 2, 5);
+            var a = game.Summon(p1, spiteful, 2);
+            var b = game.Summon(p2, plain, 2);
+            game.Run(new SwapAbilitiesAction(a, b));
+            Assert.AreEqual((CreatureAbility.None, CreatureAbility.Spite), (a.Ability, b.Ability), "They swapped abilities");
+        }
     }
 }
