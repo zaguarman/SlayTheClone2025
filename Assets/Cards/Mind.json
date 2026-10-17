@@ -14,6 +14,69 @@
       "picture": "A woman in a cardigan with her hand on her heart, tears in her eyes, mirrored exactly by the enemy soldier opposite who has suddenly burst into the same tears, both of them on fire from the same Burn."
     },
     {
+      "name": "Freudian Slip", "type": "creature", "attack": 1, "health": 3, "speed": 2, "deploy": 0,
+      "flavor": "I meant to say 'pass the salt'. I said 'you ruined my life'.",
+      "notes": "Mind's opener (the user, 2026-10-17: Mind gets new creatures from the backlog; Open Questions 48, 49): ready at once, small. Arrival: the enemy creature facing it is Revealed for 2 Days (it let something slip).",
+      "picture": "A man at a dinner table mid-sentence, a hand clapped over his mouth, a speech bubble with a crossed-out word and a tiny Freud peering out from behind it with a notepad; his mother at the head of the table.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [ { "action": "ApplyStatus", "target": "EnemyCreatures", "modifier": "Opposite", "status": "Revealed", "days": 2 } ] }
+      ]
+    },
+    {
+      "name": "The ELIZA Effect", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 0,
+      "flavor": "HOW DOES THAT MAKE YOU FEEL? ...it understands me.",
+      "notes": "Mind's second opener: ready at once. Each Dawn the enemy creature facing it is Provoked for 1 Day (Taunt): it keeps talking to the machine, and attacks it.",
+      "picture": "A 1960s teletype terminal with a cardigan draped over it like a therapist, a patient on a couch pouring his heart out to it, the paper reading TELL ME MORE ABOUT YOUR MOTHER.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [ { "action": "ApplyStatus", "target": "EnemyCreatures", "modifier": "Opposite", "status": "Provoked", "days": 1 } ] }
+      ]
+    },
+    {
+      "name": "Epistemology", "type": "creature", "attack": 3, "health": 5, "speed": 1, "deploy": 1,
+      "flavor": "How do you know that? No, really. How?",
+      "notes": "A mid body for Mind's Control decks. Arrival: every enemy creature is Revealed for 2 Days (how knowledge is gained: by looking). Its plans can be seen and Watchdogs can match them.",
+      "picture": "A philosopher in a tweed jacket holding a magnifying glass up to a wall of pinned index cards and red string, every card reading HOW DO YOU KNOW?, an enemy soldier caught in the lens looking guilty.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [ { "action": "ApplyStatus", "target": "EnemyCreatures", "modifier": "AllSameTypeTargets", "status": "Revealed", "days": 2 } ] }
+      ]
+    },
+    {
+      "name": "Phronetic", "type": "creature", "attack": 3, "health": 4, "speed": 2, "deploy": 1,
+      "flavor": "Knowing the rule is nothing. Knowing when it doesn't apply is everything.",
+      "notes": "Practical wisdom: a mid body that plans a Day ahead. Arrival: a Monitored Watchdog that nullifies the next enemy spell (1 charge). Tech's Watchdogs lifted it from 22% to 55%; Mind gets one on a body.",
+      "picture": "A weathered carpenter in reading glasses ignoring the instruction manual on the floor and eyeballing a beam instead, a pencil behind her ear, the beam fitting perfectly; a chalkboard formula behind her crossed out.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [ { "action": "CreateWatchdog", "target": "Enemy", "watchdog": { "watches": "Spell", "side": "Enemy", "effect": "Nullify", "charges": 1 } } ] }
+      ]
+    },
+    {
+      "name": "Tolerance Paradox", "type": "creature", "attack": 3, "health": 5, "speed": 1, "deploy": 1,
+      "flavor": "We tolerate everything. Except that. Especially that.",
+      "notes": "A mid body that answers: Counterattack 2, every attack that hits it is hit back for 2 (the intolerant aren't tolerated). Damage that isn't an attack isn't answered.",
+      "picture": "A smiling bouncer in a rainbow sash at the door of a party, politely but firmly carrying a man in a tiny moustache out by the collar, a sign on the door: EVERYONE WELCOME*.",
+      "effects": [
+        { "trigger": "OnDamage", "actions": [ { "action": "Damage", "value": 2, "target": "Enemy" } ] }
+      ]
+    },
+    {
+      "name": "Ontology", "type": "creature", "attack": 2, "health": 7, "speed": 1, "deploy": 2,
+      "flavor": "It is what it is. That's the whole field.",
+      "notes": "Mind's wall: slow to arrive, hard to move. Each Dawn it loses every stat change, raises and cuts alike (it stays what it is), so debuffs and Liminal Space wash off it by morning.",
+      "picture": "A heavy marble statue of a philosopher on a plinth reading IS, pigeons on its head, graffiti on the plinth saying WAS and WILL BE scrubbed off by a janitor with a bucket, the statue unbothered.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [ { "action": "Cleanse", "target": "Self", "cleanse": "StatModifications" } ] }
+      ]
+    },
+    {
+      "name": "God Is Dead", "type": "creature", "attack": 5, "health": 5, "speed": 1, "deploy": 2,
+      "flavor": "And we have killed him. Anyway, who's for brunch?",
+      "notes": "Mind's finisher: a big body two Days away. Arrival: every status on every creature, both sides, is Cleansed (no more blessings, no more curses: the user's backlog, 2026-10-14). The Enlightenment answer to Myth's Blessed and Doomed.",
+      "picture": "A moustached philosopher with wild hair at a brunch table, lifting a mimosa, while behind him a vast marble god topples off its pedestal in a cloud of dust and halos roll away like hubcaps; the other brunchers keep eating.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [ { "action": "Cleanse", "target": "AllCreatures", "modifier": "AllSameTypeTargets" } ] }
+      ]
+    },
+    {
       "name": "Tabula Rasa", "type": "spell", "target": "AllCreatures",
       "flavor": "Blank slate. Everyone back to who they were printed as.",
       "notes": "Haze, the area (the user, 2026-10-17): every creature on the board loses its stat changes, raises and cuts alike. Statuses stay.",

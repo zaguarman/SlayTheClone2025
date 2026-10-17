@@ -1,5 +1,9 @@
 Adventure Map
 
+Checked 2026-10-17 (the user asked for the Spire's choke points): the generated maps hold them on every seed tried: the first row
+all fights, row 9 all treasure, the last row all rest sites, no elite or rest site before row 6, never two of a kind in a row
+or on a fork's branches. If the screen shows otherwise, it's the drawing, not the map.
+
 How the adventure's map is built, after Slay the Spire 2's (researched 2026-10-15 from the fan references Spire Codex and
 the Slay the Spire wiki, which read the game's data; the path drawing itself isn't published for the sequel, so it follows
 the first game's, well documented). Code: Assets/Scripts/Adventure/AdventureMap.cs.

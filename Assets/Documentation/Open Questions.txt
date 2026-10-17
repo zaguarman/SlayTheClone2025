@@ -5,6 +5,37 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+49. The curve: openers, builders and finishers (the user, 2026-10-17: "cards that help you start the game, similar to a 1/1 or
+    1/2 low mana cost in Magic, cards that help you build up upon and others that are more focused on finishing the game")
+    • Where it stands: with no mana, a card's cost is its Deployment Time and its body. The studies say a creature ready at
+      once wins 44% of its games, one that deploys 1 or 2 55% (study-2026-10-17f): the Days are the mana. Today the curve
+      is uneven by subfaction: Online is all openers (0-deploy 2-to-3-point bodies), Mind was all mids until tonight, Myth
+      and Utopia hold most of the finishers.
+    • Proposal, a target shape per subfaction (two decks each): 2 openers (ready at once, 3-5 points of stats, a small
+      Arrival: a Reveal, a Heat, a token), 4 to 6 mids (deploy 1, 7-9 points, the subfaction's mechanic on them), 2
+      finishers (deploy 2, 10+ points or a board-wide Arrival), and the builders as spells and Policies (draw, Prophecy,
+      Slot Effects, a Watchdog) rather than bodies. Mind's seven new creatures (Faction Balance Plan 16) follow the shape;
+      the other subfactions get a Faction Gaps pass against it, filled from the backlog.
+    • Recommendation: adopt the shape as the deck-building rule (Deck Proposals can enforce it: 2/5/2 by Deployment Time) and
+      fill the gaps subfaction by subfaction, measured once per batch.
+
+50. The economy: what stands in for mana (the user, 2026-10-17: "in Magic we try to make every turn as efficient as possible:
+    turn 1 one mana, turn 2 two... maybe a 1/1 and a 2/2 instead of a 3/3. We have to talk about this kind of economy")
+    • Where it stands: a player may place any number of creatures a Day into empty slots (five), draws 2 a Day with the hand's
+      5-spell cap, and the only cost is Deployment Time. So the efficient play is to dump the hand on Day 1 and the curve is
+      decided by what the deck drew, not by what the player planned. Nothing rewards the 1/1-then-2/2 line.
+    • Options:
+        A) Keep it: Deployment Time is the cost, the curve cards (49) do the work. No new rule; the dump stays the best line.
+        B) Mobilisation: one creature may be placed on Day 1, two on Day 2, three from Day 3 on (spells free). No counter and
+           no new UI: the End Turn button says "1 more creature today". It makes openers matter (the one body on Day 1),
+           rewards planning the order, gives "builder" cards a home (a card that lets you place one more this Day: Overtime,
+           Mobilisation, Crunch), and fits the quick-decisions vision (one more thing to read, nothing to juggle).
+        C) Supply: a counter that grows a point a Day and creatures cost points by size. Mana with another name: a number to
+           track, cards to re-cost, the hand to read against it.
+    • Recommendation: B, measured as an experiment with the AI studies (the planners need one line: place in order of worth
+      up to the Day's allowance) before any card is re-costed; A is the fallback if B flattens the game. C is against the
+      vision (Streamline gameplay).
+
 48. Online and Mind stay at the bottom after a plain buff (2026-10-17, study-2026-10-17g)
     • Where it stands: Online wins 21% of its deck games, Mind 22%, after +1 Health on Online's small bodies and a Day more on
       Mind's slow spells did nothing (Tech, buffed the same way, went 22% to 55%: its buffs made two creatures ready at once and

@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2692fe58e74692941a5e9849bf08a1ab, type: 3}
+  m_Name: FreudianSlip
+  m_EditorClassIdentifier: Scripts::Zeitgeist.CreatureCardScriptableObject
+  cardId: f39fc08b-2c09-4a69-99d1-5c8de0ba14c8
+  cardName: Freudian Slip
+  description: I meant to say 'pass the salt'. I said 'you ruined my life'.
+  cardType: 0
+  faction: 8
+  artwork: {fileID: 0}
+  discardCost: 0
+  discardChosen: 0
+  singleUse: 0
+  sacrifice: 0
+  doomCost: 0
+  prophecy: 0
+  prophecyLatest: 0
+  gamble: 0
+  homing: 0
+  ripening: 0
+  policy: 0
+  upgraded: 0
+  potion: 0
+  combo: 0
+  setUpBy: []
+  effects:
+  - effectType: 0
+    trigger: 0
+    oncePerCombat: 0
+    actions:
+    - actionType: 7
+      value: 0
+      targetType: 4
+      targetModifier: 32
+      modifyAttack: 1
+      modifyHealth: 1
+      modifySpeed: 0
+      statusEffectToApply: 7
+      statusDuration: 2
+      statusPotency: 0
+      cleanse: 0
+      purge: 0
+      slotEffect: 0
+      watchdog:
+        watches: 0
+        side: 0
+        atMost: 0
+        effect: 0
+        charges: 0
+        timing: 0
+        pick: 0
+        moveEarlier: 0
+        damaging: 0
+      trend: 0
+      ability: 0
+      sendFor: 0
+      fromDiscard: 0
+      requires: 0
+      delayDays: 0
+      onlyIfTargetDies: 0
+      decoy: {fileID: 0}
+  designNotes: 'Mind''s opener (the user, 2026-10-17: Mind gets new creatures from
+    the backlog; Open Questions 48, 49): ready at once, small. Arrival: the enemy
+    creature facing it is Revealed for 2 Days (it let something slip).'
+  artDescription: A man at a dinner table mid-sentence, a hand clapped over his mouth,
+    a speech bubble with a crossed-out word and a tiny Freud peering out from behind
+    it with a notepad; his mother at the head of the table.
+  attack: 1
+  health: 3
+  speed: 2
+  turnsUntilOperative: 0
+  movement: 0
+  ability: 0
+  gift: 0
+  rootedWhileDeploying: 0
+  token: 0
+  disguise: {fileID: 0}

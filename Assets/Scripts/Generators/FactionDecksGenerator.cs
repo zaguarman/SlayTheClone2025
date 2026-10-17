@@ -134,7 +134,7 @@ namespace Zeitgeist {
             }),
             ("Enlightenment - Mind Games", "MindControlDeck", "Your Therapist", "And how does losing make you feel?", "Control", new[] {
                 // Rebuilt 2026-10-17 from the studies' numbers (Tools/propose_decks.py)
-                "Tabula Rasa", "Tabula Rasa", "Roko's Basilisk", "Roko's Basilisk", "Ship of Theseus", "Ship of Theseus", "Hyperbole", "Hyperbole", "Red Herring", "Red Herring", "Psychiatrists", "Trolley Problem", "Introvert", "Cyberpsychosis", "Socrates", "Empath", "Liminal Space", "Sleepwalker", "Yesn't", "Projection", "Maslow's Pyramid", "Pessimist", "Lucid Dreaming", "Imposter Syndrome", "Slow Thinking", "Momentum", "Hold That Thought", "Reality Check", "Domino Effect", "Schrodinger's Cat", "Survivorship Bias", "Controlled Chaos",
+                "Freudian Slip", "The ELIZA Effect", "Epistemology", "Phronetic", "Tolerance Paradox", "Ontology", "God Is Dead", "Tabula Rasa", "Tabula Rasa", "Roko's Basilisk", "Roko's Basilisk", "Ship of Theseus", "Ship of Theseus", "Hyperbole", "Hyperbole", "Red Herring", "Red Herring", "Psychiatrists", "Trolley Problem", "Introvert", "Cyberpsychosis", "Socrates", "Empath", "Liminal Space", "Sleepwalker", "Yesn't", "Projection", "Maslow's Pyramid", "Pessimist", "Lucid Dreaming", "Imposter Syndrome", "Slow Thinking", "Momentum", "Hold That Thought", "Reality Check", "Domino Effect", "Schrodinger's Cat", "Survivorship Bias", "Controlled Chaos",
             }),
             // Two factions that play well together (Faction Compendium 5, Example Two-Faction Decks)
             ("Establishment + Capital - Prosperity Gospel", "ProsperityGospelDeck", "The Televangelist", "Your donation is tax-deductible. Your soul is not.", "Combo", new[] {
@@ -221,7 +221,7 @@ namespace Zeitgeist {
             // Sturdy creatures that wear the enemy down, and stat cuts that kill
             [Faction.Mind] = ("Enlightenment - All in Your Head", new[] {
                 // Rebuilt 2026-10-17 from the studies' numbers (Tools/propose_decks.py)
-                "Roko's Basilisk", "Roko's Basilisk", "Cyberpsychosis", "Cyberpsychosis", "Ship of Theseus", "Ship of Theseus", "Tabula Rasa", "Tabula Rasa", "Red Herring", "Red Herring", "Trolley Problem", "Pessimist", "Introvert", "Imposter Syndrome", "Hyperbole", "Psychiatrists", "Socrates", "Empath", "Lucid Dreaming", "Liminal Space", "Sleepwalker", "Yesn't", "Projection", "Maslow's Pyramid", "Reflect", "Schrodinger's Cat", "Mimetic Theory", "Slow Thinking", "Momentum", "Hold That Thought", "Monkey See, Monkey Do", "Legerdemain",
+                "Freudian Slip", "The ELIZA Effect", "Epistemology", "Phronetic", "Tolerance Paradox", "Ontology", "God Is Dead", "Roko's Basilisk", "Roko's Basilisk", "Cyberpsychosis", "Cyberpsychosis", "Ship of Theseus", "Ship of Theseus", "Tabula Rasa", "Tabula Rasa", "Red Herring", "Red Herring", "Trolley Problem", "Pessimist", "Introvert", "Imposter Syndrome", "Hyperbole", "Psychiatrists", "Socrates", "Empath", "Lucid Dreaming", "Liminal Space", "Sleepwalker", "Yesn't", "Projection", "Maslow's Pyramid", "Reflect", "Schrodinger's Cat", "Mimetic Theory", "Slow Thinking", "Momentum", "Hold That Thought", "Monkey See, Monkey Do", "Legerdemain",
             }),
         };
 

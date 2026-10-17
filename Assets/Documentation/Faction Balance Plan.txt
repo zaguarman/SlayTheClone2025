@@ -229,3 +229,15 @@ games in this meta (a creature that deploys 1 or 2 wins 55%); its payoffs (Click
 creatures to fill 16 creature slots in two decks and 22 spells that read the board rather than change it. Neither is fixed by
 a point: Open Questions 48 lays out the choices (Online's payoff spells back up a notch in another shape, Mind more
 creatures from the backlog). Next after the user's call; meanwhile the web build (Builds/WebGL) carries all of tonight.
+
+16. MIND GETS ITS CREATURES (2026-10-17 night, the user: "Mind has to get new creatures from the backlog")
+Seven creatures from the backlog's Mind names, in the curve's shape (Open Questions 49): two openers ready at once (Freudian
+Slip 1/3/2, Arrival Reveals the creature facing it 2 Days; The ELIZA Effect 2/4/2, each Dawn Provokes the one facing it), four
+mids at Deployment Time 1 (Epistemology 3/5/1, Arrival Reveals every enemy creature 2 Days; Phronetic 3/4/2, Arrival a
+Watchdog nullifying the next enemy spell; Tolerance Paradox 3/5/1, Counterattack 2; Ontology 2/7/1 at Deployment Time 2, each
+Dawn it loses its stat changes) and a finisher (God Is Dead 5/5/1, Deployment Time 2, Arrival Cleanses every status on every
+creature). Both Mind decks hold one of each (Mind Games 40 cards, All in Your Head 39). Their pictures are described in the
+card file and the briefs; not drawn yet (the user decides). Measured next as study-2026-10-17h, after the formation rollback.
+Also checked tonight: no creature prints odd stats any more (no Speed above 3, no 1/2/7); the 0-Attack walls (Satoshi
+Nakamoto, Pyramids, Embassy, Golden Dome, Supreme Court, Philosophy PhD, Perpetual Motion Machine, Sleeper Agent, the USB
+Stick) are by design and tied to Open Questions 46.
