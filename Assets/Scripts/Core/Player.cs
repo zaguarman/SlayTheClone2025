@@ -88,7 +88,7 @@ namespace Zeitgeist {
         public static int SpellsIn(IEnumerable<ICard> hand) => hand.Count(c => !(c is ICreature) && c.SourceData?.potion != true); // Potions aside
         public static int CreaturesIn(IEnumerable<ICard> hand) => hand.Count(c => c is ICreature);
         public const int BattlefieldSize = 5;
-        public const int StartingHealth = 20; // A fight starts at it (an adventure carries its own); healing has no ceiling
+        public const int StartingHealth = 30; // 30 since 2026-10-17 (the user: the meta rewards planning over aggression; it was 20). A fight starts at it (an adventure carries its own); healing has no ceiling
 
         public int Health { get; private set; }
         public int StartHealth { get; }

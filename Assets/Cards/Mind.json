@@ -147,13 +147,13 @@
       ]
     },
     {
-      "name": "Pessimist", "type": "creature", "attack": 5, "health": 5, "speed": 1, "deploy": 0, "ability": "Contrarian",
+      "name": "Pessimist", "type": "creature", "attack": 5, "health": 5, "speed": 1, "deploy": 1, "ability": "Contrarian",
       "flavor": "The glass is half empty. Also, it's poisoned.",
       "notes": "Mechanics test: Contrarian. Stat changes on it are reversed: debuff it and it grows, buff it and it shrinks.",
       "picture": "A man in a raincoat under his own tiny raincloud on a sunny beach, frowning at a winning lottery ticket."
     },
     {
-      "name": "Introvert", "type": "creature", "attack": 4, "health": 6, "speed": 1, "deploy": 0, "ability": "Unbothered",
+      "name": "Introvert", "type": "creature", "attack": 4, "health": 6, "speed": 1, "deploy": 1, "ability": "Unbothered",
       "flavor": "Didn't hear you. Didn't want to.",
       "notes": "Mechanics test: Unbothered. Enemy effects can't lower its stats.",
       "picture": "A person in big headphones reading in a blanket fort while a loud party rages around them, the partygoers' shouted invitations bouncing off the blankets."
@@ -220,7 +220,7 @@
       ]
     },
     {
-      "name": "Ship of Theseus", "type": "creature", "attack": 4, "health": 5, "speed": 1, "deploy": 0,
+      "name": "Ship of Theseus", "type": "creature", "attack": 4, "health": 5, "speed": 1, "deploy": 1,
       "flavor": "Every plank replaced. Still the same ship. Probably.",
       "notes": "Regenerate 1: it repairs itself plank by plank.",
       "picture": "Every plank replaced until nothing's left: the ship is only a dotted outline on the water, and Theseus in his crested helmet scratches his head on the shore, wondering where his ship went.",

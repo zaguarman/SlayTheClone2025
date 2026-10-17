@@ -70,11 +70,24 @@ namespace Zeitgeist {
             }
         }
 
-        /// <summary>Puts the log on the clipboard and, where there's a file system, saves it too; returns the file's path or null.</summary>
+#if UNITY_WEBGL && !UNITY_EDITOR
+        [System.Runtime.InteropServices.DllImport("__Internal")] private static extern int GameLog_Copy(string text);
+#endif
+
+        /// <summary>
+        /// Puts the log on the clipboard and, where there's a file system, saves it too; returns the file's path or null. In the
+        /// browser the page does the copying and hands the log over as a download as well (Assets/Plugins/WebGL/GameLog.jslib).
+        /// </summary>
         public static string Copy() {
             string text = Text();
+#if UNITY_WEBGL && !UNITY_EDITOR
+            try { GameLog_Copy(text); }
+            catch (Exception e) { Debug.LogWarning($"The log couldn't be copied: {e.Message}"); }
+            return "the browser's downloads (zeitgeist-game-log.txt)";
+#else
             try { GUIUtility.systemCopyBuffer = text; }
             catch (Exception e) { Debug.LogWarning($"The log couldn't be copied: {e.Message}"); }
+#endif
             if (Application.platform == RuntimePlatform.WebGLPlayer) return null;
             try {
                 string folder = Path.Combine(Application.persistentDataPath, "GameLogs");

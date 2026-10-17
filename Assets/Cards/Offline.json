@@ -2,7 +2,7 @@
   "mod": "Offline",
   "cards": [
     {
-      "name": "One-Trick Pony", "type": "creature", "attack": 5, "health": 3, "speed": 2, "deploy": 0, "ability": "Fixated",
+      "name": "One-Trick Pony", "type": "creature", "attack": 5, "health": 3, "speed": 2, "deploy": 1, "ability": "Fixated",
       "flavor": "It does the one thing. Ask it for the other thing and watch it do the one thing.",
       "notes": "Fixated (Pokémon's Choice items): once it attacks, it repeats that attack every Day until it leaves: the same slot, whatever moves there. Big numbers for no choices.",
       "picture": "A pony in a tiny circus hat standing on its hind legs on a stool, doing the exact same trick in three frames in a row, the ringmaster's cue cards for other tricks piling up ignored on the sawdust."
@@ -99,7 +99,7 @@
       "picture": "A man chained by the neck to a giant cigarette pack like a dog on a leash, and happy about it: grinning, a cigarette in his mouth, a cloud of smoke around his head. The pack is a classic red-and-white one (a red chevron lid over a white body, a small gold crest, \"FILTER CIGARETTES\" on the red band), no brand name."
     },
     {
-      "name": "Karen", "type": "creature", "attack": 4, "health": 5, "speed": 1, "deploy": 0, "ability": "MoodSwings",
+      "name": "Karen", "type": "creature", "attack": 4, "health": 5, "speed": 1, "deploy": 1, "ability": "MoodSwings",
       "flavor": "Would like to speak to your manager. And theirs. And God's.",
       "notes": "Mood Swings (the user, 2026-10-17, Pokémon's Moody): each Dawn, +2 to one of its stats and -1 to another, at random. Future: Impatient. Escalates every Day nobody gives it an intent.",
       "effects": [
@@ -109,7 +109,7 @@
       ]
     },
     {
-      "name": "Boomer", "type": "creature", "attack": 4, "health": 6, "speed": 1, "deploy": 0,
+      "name": "Boomer", "type": "creature", "attack": 4, "health": 6, "speed": 1, "deploy": 1,
       "flavor": "Bought a house at 22. Recommends you stop buying coffee.",
       "notes": "Future: OLD MAN YELLS AT CLOUD. Hits a random creature that moved this Day.",
       "effects": [
@@ -119,7 +119,7 @@
       ]
     },
     {
-      "name": "Hipster", "type": "creature", "attack": 4, "health": 4, "speed": 2, "deploy": 0, "ability": "TooMainstream",
+      "name": "Hipster", "type": "creature", "attack": 4, "health": 4, "speed": 2, "deploy": 1, "ability": "TooMainstream",
       "flavor": "Liked this battlefield before it got so crowded.",
       "notes": "Too Mainstream: immune to effects that affect more than one creature. Future: Hipster status. Hurts only creatures that share a name with another creature.",
       "effects": [
@@ -149,7 +149,7 @@
       ]
     },
     {
-      "name": "Reality TV Star", "type": "creature", "attack": 5, "health": 4, "speed": 2, "deploy": 0, "ability": "MoodSwings",
+      "name": "Reality TV Star", "type": "creature", "attack": 5, "health": 4, "speed": 2, "deploy": 1, "ability": "MoodSwings",
       "flavor": "Famous for being famous. Unbearable for free.",
       "notes": "Mood Swings (the user, 2026-10-17: 'and others'): famous for the drama; each Dawn, +2 to one of its stats and -1 to another, at random. Future: Plot Armor. Survives a lethal hit once (OnAboutToDie).",
       "effects": [
@@ -170,7 +170,7 @@
       ]
     },
     {
-      "name": "Football Hooligans", "type": "creature", "attack": 5, "health": 3, "speed": 2, "deploy": 0,
+      "name": "Football Hooligans", "type": "creature", "attack": 5, "health": 3, "speed": 2, "deploy": 1,
       "flavor": "Lost the match. Won the street.",
       "notes": "Future: a riot that spreads to adjacent creatures each Dusk.",
       "effects": [
@@ -180,7 +180,7 @@
       ]
     },
     {
-      "name": "Antihero", "type": "creature", "attack": 5, "health": 4, "speed": 2, "deploy": 0,
+      "name": "Antihero", "type": "creature", "attack": 5, "health": 4, "speed": 2, "deploy": 1,
       "flavor": "Not a good guy. Just a better-written bad one.",
       "notes": "Future: picks its own target among the creatures that hurt you last Day.",
       "effects": [
@@ -190,7 +190,7 @@
       ]
     },
     {
-      "name": "Bodybuilder", "type": "creature", "attack": 5, "health": 3, "speed": 3, "deploy": 0,
+      "name": "Bodybuilder", "type": "creature", "attack": 5, "health": 3, "speed": 3, "deploy": 1,
       "flavor": "Natural. Definitely natural. Don't check.",
       "notes": "Future: Coffeinated, then Burnout. Never skips leg day, skips every rest day.",
       "effects": [
@@ -377,7 +377,7 @@
       ]
     },
     {
-      "name": "Absentee Parents", "type": "creature", "attack": 4, "health": 4, "speed": 2, "deploy": 0,
+      "name": "Absentee Parents", "type": "creature", "attack": 4, "health": 4, "speed": 2, "deploy": 1,
       "flavor": "Gone for cigarettes. Back for the inheritance.",
       "notes": "An honest body: 4/4, ready at once, Speed 2. Last Will: you draw 1 next Day.",
       "picture": "A family portrait on a mantelpiece with two parent-shaped holes cut out of it, a postcard from Ibiza tucked into the frame.",

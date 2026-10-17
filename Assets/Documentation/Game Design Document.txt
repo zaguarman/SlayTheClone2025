@@ -1155,5 +1155,5 @@ so some decks can be very deep. The budget can stretch a little, not much. Befor
 Getting the balance right is extremely important. It will need ongoing playtesting, data, and adjustments.
 Numerical Balance
     • Start with conservative numbers for stats, damage, healing, Armor, and durations.
-    • Player Health starts at 20 for both sides by default (Relics, Stocks, or specific encounters may change it).
+    • Player Health starts at 30 for both sides by default (20 until 2026-10-17; the user: the meta rewards planning over aggression) (Relics, Stocks, or specific encounters may change it).
     • Cost stat modifications appropriately. Persistent Stat Modifications should be more expensive or harder to get, because they last the whole combat and standard cleanses don't remove them.

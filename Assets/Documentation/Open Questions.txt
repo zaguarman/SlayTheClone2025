@@ -21,7 +21,11 @@ STILL OPEN
         - Face damage through an empty lane: 1 less (a minimum of 1) when the attacker entered play this Day or last.
     • Recommendation: start with the two that change the least and measure once (headless, 7 minutes for both studies):
       Health 30 and beaters at Deployment Time 1. Then the levels run says whether Hard starts to beat Medium; if not, the
-      Flanks' Attack to 0 next. Each knob is one line and reversible. Nothing changed yet.
+      Flanks' Attack to 0 next. Each knob is one line and reversible.
+    • Turned 2026-10-17 (the user: "do this"): Health 30 (Player.StartingHealth) and the 17 creatures with 4+ Attack and
+      Deployment Time 0 now deploy 1 (Pessimist, Introvert, Ship of Theseus, Zealot, One-Trick Pony, Karen, Boomer, Hipster,
+      Reality TV Star, Football Hooligans, Antihero, Bodybuilder, Absentee Parents, Its Been 84 Years..., Sherman Tank,
+      Mercenaries, Technical Debt; in the card files). Measured right after: see Faction Balance Plan 11.
 
 46. Liminal Space and the creatures with 0 Attack (2026-10-17)
     • What the shuffled tournament's audit saw: "Perpetual Motion Machine 4/0 is still alive on the board". Liminal Space trades

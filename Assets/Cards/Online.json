@@ -2,7 +2,7 @@
   "mod": "Online",
   "cards": [
     {
-      "name": "Its Been 84 Years...", "type": "creature", "attack": 4, "health": 5, "speed": 1, "deploy": 0, "ability": "SorryImLate",
+      "name": "Its Been 84 Years...", "type": "creature", "attack": 4, "health": 5, "speed": 1, "deploy": 1, "ability": "SorryImLate",
       "flavor": "Sorry I'm late. Traffic was terrible. And the century.",
       "notes": "Sorry I'm Late (the user, 2026-10-16, a meme ability): played onto a friendly creature, it arrives after the attacks, so the creature it replaces takes the Day's hits first. A big body that walks in fresh.",
       "picture": "A very old lady in a cardigan wheeled in on a hospital bed through a doorway, a tiny party hat on, a wall clock behind her covered in cobwebs, a dusty birthday cake on the table with 84 candles burnt down to stubs."

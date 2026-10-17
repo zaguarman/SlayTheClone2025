@@ -403,7 +403,7 @@
       "picture": "A rubber tank half-deflated on a field, its barrel drooping, a soldier patching a hole with a bicycle repair kit."
     },
     {
-      "name": "Sherman Tank", "type": "creature", "faction": "Statecraft", "attack": 6, "health": 6, "speed": 1, "deploy": 0,
+      "name": "Sherman Tank", "type": "creature", "faction": "Statecraft", "attack": 6, "health": 6, "speed": 1, "deploy": 1,
       "flavor": "Thirty tons of steel. Allegedly.",
       "notes": "Never a real card: the face a Ghost Army decoy shows the enemy until it's revealed.",
       "picture": "A heavy tank rolling out of the morning fog, cannon level, mud spraying from its tracks."

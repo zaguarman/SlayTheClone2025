@@ -714,7 +714,7 @@ namespace Zeitgeist.Tests {
             var florida = With(CreatureAbility.WildCard, p1, 0, attack: 3, health: 5);
             var mark = With(CreatureAbility.None, p2, 0, attack: 0, health: 20);
             game.Attack(florida, p2.Battlefield[0]);
-            Assert.IsTrue(mark.Health is 14 or 20, $"Twice (14), or a Burn, a stun or nothing (20), never 17: {mark.Health}");
+            Assert.IsTrue(mark.Health is Player.StartingHealth - 6 or Player.StartingHealth, $"Twice (-6), or a Burn, a stun or nothing (full), never 17: {mark.Health}");
 
             // Immaculate: attacks and effects do nothing to it; only a Burn hurts it
             Fresh();

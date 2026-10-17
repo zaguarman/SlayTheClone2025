@@ -123,7 +123,7 @@
       ]
     },
     {
-      "name": "Technical Debt", "type": "creature", "attack": 4, "health": 5, "speed": 2, "deploy": 0,
+      "name": "Technical Debt", "type": "creature", "attack": 4, "health": 5, "speed": 2, "deploy": 1,
       "flavor": "Ship it now. Someone will fix it later. You are someone.",
       "notes": "Decay 1: strong today, it pays for it every Dusk.",
       "picture": "A laptop held together with duct tape and a TODO sticky note, beside an empty, cracked piggy bank, the dashed outlines of the missing banknotes floating above.",

@@ -178,7 +178,7 @@
       ]
     },
     {
-      "name": "Mercenaries", "type": "creature", "attack": 4, "health": 5, "speed": 3, "deploy": 0,
+      "name": "Mercenaries", "type": "creature", "attack": 4, "health": 5, "speed": 3, "deploy": 1,
       "flavor": "Loyal to whoever pays next.",
       "notes": "Future: Recruitment bait. When it dies, the enemy may Recruit it instead.",
       "effects": [

@@ -39,7 +39,7 @@ namespace Zeitgeist {
         /// <summary>The game log onto the clipboard (and into a file, outside the browser); the button says so for a moment.</summary>
         public void CopyLog() {
             string path = GameLog.Copy();
-            if (copyLogLabel != null) copyLogLabel.text = path != null ? "Copied, and saved" : "Copied";
+            if (copyLogLabel != null) copyLogLabel.text = path == null ? "Copied" : path.StartsWith("the browser") ? "Copied, and downloaded" : "Copied, and saved";
             Log(path != null ? $"Game log copied and saved to {path}" : "Game log copied", LogTag.UI);
         }
 

@@ -383,7 +383,7 @@
       ]
     },
     {
-      "name": "Zealot", "type": "creature", "attack": 4, "health": 3, "speed": 2, "deploy": 0,
+      "name": "Zealot", "type": "creature", "attack": 4, "health": 3, "speed": 2, "deploy": 1,
       "flavor": "Will die for the cause. Will tell you about it first.",
       "notes": "When ready: Doomed 3 on itself. It grows +1 Attack each Dawn, then its Last Rites strike and it dies for the cause.",
       "picture": "A wild-eyed hermit in sackcloth with a long beard, waving a burning torch and a hand-painted REPENT sign on a busy city sidewalk.",
