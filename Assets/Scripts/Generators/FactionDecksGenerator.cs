@@ -997,7 +997,7 @@ namespace Zeitgeist {
                 "Didn't like either of them. Voted for the worst one, out of principle.",
                 "Laid Off: when it's discarded from your hand, 2 damage to a random enemy creature. Zeitgeist reacts: even the creatures it doesn't play hit back.",
                 On(EffectTrigger.OnDiscarded, Damage(2, TargetType.EnemyCreatures, AtRandom)))
-                .Picture("A grumpy man in a voting booth gleefully ticking the box of a clown candidate, a 'Don't Blame Me' badge pinned to his cardigan."),
+                .Picture("The Raiders of the Lost Ark idol swap (the user's reference, 2026-10-17): the meme's lower panel, head-on: the adventurer in his fedora and leather jacket behind a temple pedestal, centre, leaning in at us, his right hand closing on the golden idol on the pedestal (a grinning politician's head in a red tie), his left holding the identical golden politician he swaps in, lower left; CORRUPT POLITICIAN in white block letters over each idol; a 'Don't Blame Me' badge on the jacket."),
             // It spins (the user, 2026-10-17); it was a 2/3, Speed 3 On Trend creature (+2 Attack while a Trend is on, a fad):
             // Bloomberg Terminal keeps On Trend
             Creature("Fidget Spinner", 2, 3, speed: 3, deploy: 0,

@@ -16,6 +16,7 @@ OUT = os.path.join(ROOT, "Assets", "Documentation", "Card Art Briefs.txt")
 
 # What the user asked for, in their words (dated), per card name. Add to it whenever the user describes a card's art.
 USER_NOTES = {
+    "Spite Voter": ["2026-10-17: the user's reference, the Raiders of the Lost Ark idol-swap meme: VOTERS (Indiana Jones, weighing it up at the temple pedestal) swapping the golden idol, labelled CORRUPT POLITICIAN, for another golden idol labelled CORRUPT POLITICIAN.", "2026-10-17: write CORRUPT POLITICIAN on each idol; the characters on the same spots and the same camera angle as the reference (the lower panel: the adventurer behind the pedestal, centre, the swapped idol in his left hand, the pedestal's to the right)."],
     "White Dwarf": ["2026-10-17: a dwarf like in The Lord of the Rings."],
     "Blessing in Disguise": ["2026-10-17: something that references the story: a farmer's horse runs away; his neighbours say 'What bad luck!'; the farmer replies 'Maybe.'"],
     "The Friends We Made Along the Way": ["2026-10-17: Jesus with two guns instead of the cultist."],

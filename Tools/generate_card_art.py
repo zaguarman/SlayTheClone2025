@@ -8390,18 +8390,75 @@ def ol_reliable():
 
 
 def spite_voter():
-    # A grumpy man in a voting booth gleefully ticking the box of a clown candidate, a 'Don't Blame Me' badge on his cardigan
-    defs, body = bg_vapor()
-    body += rect(20, 10, 312, 14, "#2a2a6a") + path("M20 24 L20 200 L60 200 C 50 140 60 80 60 24 Z", "#3a3aa0") + path("M332 24 L332 200 L292 200 C 302 140 292 80 292 24 Z", "#3a3aa0")
-    body += rect(186, 70, 120, 100, "#f4f4f4", 'stroke="#555" stroke-width="2"')
-    for i, y in enumerate((80, 112, 144)):
-        body += rect(194, y, 16, 16, "#ffffff", 'stroke="#333" stroke-width="2"') + rect(216, y + 5, 50, 4, "#999")
-        if i == 1:
-            body += circle(286, y + 8, 10, "#ffffff", 'stroke="#555" stroke-width="1"') + circle(286, y + 9, 3, "#d0342c") + circle(278, y + 2, 5, "#ff7a1a") + circle(294, y + 2, 5, "#ff7a1a")
-            body += stroke(f"M196 {y + 8} l 5 6 l 12 -16", "#d0342c", 3)
-    body += person(110, 200, 1.3, SKIN[0], "#8a7a5a", face="grin", hair=OLD_HAIR, glasses="round", brows="angry")
-    body += stroke("M136 162 L190 120", "#8a7a5a", 9) + stroke("M190 120 L198 108", "#1a1a1a", 3)
-    body += circle(90, 176, 12, "#ffd23a", 'stroke="#8a6a1a" stroke-width="2"') + lettering("NOT", 90, 168, 4.5, "#333", width=1) + lettering("ME", 90, 176, 4.5, "#333", width=1)
+    # The user's reference (2026-10-17), the Raiders of the Lost Ark idol-swap meme, its lower panel: the adventurer behind the
+    # pedestal, centre, leaning in at us; his right hand on the golden idol on the pedestal (right of centre), his left holding
+    # the identical idol he swaps in (left of centre, lower); both idols labelled CORRUPT POLITICIAN in the meme's white block
+    # letters. A dark temple seen head-on: a doorway at the left, stone blocks, creepers. The 'Don't Blame Me' badge stays
+    defs = lin("bg", ["#2c2616", "#0c0a06"]) + lin("gold", ["#fff0a0", "#e0b030", "#9a6a10"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    for i in range(7):
+        y = 10 + i * 30
+        body += stroke(f"M0 {y} L{W} {y}", "#1a1610", 2, 'opacity="0.9"')
+        for j in range(6):
+            body += stroke(f"M{j * 70 + (i % 2) * 35} {y} l 0 30", "#1a1610", 2, 'opacity="0.9"')
+    body += rect(22, 40, 54, 160, "#050402") + path("M22 40 Q 49 10 76 40 Z", "#050402")  # The doorway at the left
+    body += poly([(176, 0), (236, 0), (300, 200), (130, 200)], "#ffe9a0", 'opacity="0.08"')
+    body += path("M352 0 C 322 42 342 92 304 134 C 292 162 334 182 352 200 Z", "#2a4a1c", 'opacity="0.75"')
+    for x0, y0 in ((100, 0), (318, 24), (334, 96)):
+        body += stroke(f"M{x0} {y0} q 8 30 -4 60 q -6 24 6 46", "#3a6a24", 3, 'opacity="0.8"')
+    body += rect(0, 192, W, 8, "#1a1810")
+
+    def politician(cx, cy, k):
+        # A golden idol head: a politician's grin, slicked gold hair, a red tie
+        o = ellipse(cx, cy, 22 * k, 26 * k, "url(#gold)", 'stroke="#7a5a10" stroke-width="2"')
+        o += path(f"M{cx - 22 * k:.1f} {cy - 6 * k:.1f} C {cx - 18 * k:.1f} {cy - 36 * k:.1f} {cx + 18 * k:.1f} {cy - 36 * k:.1f} {cx + 22 * k:.1f} {cy - 6 * k:.1f} Z", "#c89a20", 'stroke="#7a5a10" stroke-width="1.5"')
+        o += stroke(f"M{cx - 14 * k:.1f} {cy - 24 * k:.1f} q 10 -6 24 -2", "#fff0a0", 1.5 * k)
+        o += circle(cx - 8 * k, cy - 4 * k, 5.5 * k, "#2a1a00") + circle(cx + 8 * k, cy - 4 * k, 5.5 * k, "#2a1a00")
+        o += circle(cx - 6.5 * k, cy - 5.5 * k, 2 * k, "#fff0a0") + circle(cx + 9.5 * k, cy - 5.5 * k, 2 * k, "#fff0a0")
+        o += stroke(f"M{cx - 14 * k:.1f} {cy - 11 * k:.1f} l 12 3 M{cx + 14 * k:.1f} {cy - 11 * k:.1f} l -12 3", "#7a5a10", 2 * k)
+        o += path(f"M{cx - 13 * k:.1f} {cy + 7 * k:.1f} Q {cx:.1f} {cy + 22 * k:.1f} {cx + 13 * k:.1f} {cy + 7 * k:.1f} Z", "#2a1a00")
+        for t in range(-2, 3):
+            o += rect(cx + t * 5 * k - 1.6 * k, cy + 8 * k, 3.2 * k, 4 * k, "#fff8d0")
+        o += rect(cx - 14 * k, cy + 24 * k, 28 * k, 8 * k, "url(#gold)", 'rx="3" stroke="#7a5a10" stroke-width="1.5"')
+        o += poly([(cx - 3 * k, cy + 24 * k), (cx + 3 * k, cy + 24 * k), (cx + 4 * k, cy + 38 * k), (cx, cy + 43 * k), (cx - 4 * k, cy + 38 * k)], "#d0342c", 'stroke="#7a1a14" stroke-width="1"')
+        return o
+
+    def label(cx, top, k):
+        return lettering("CORRUPT", cx, top, 7 * k, "#ffffff", width=1.6 * k, outline="#111111") + lettering("POLITICIAN", cx, top + 9 * k, 7 * k, "#ffffff", width=1.6 * k, outline="#111111")
+
+    # The adventurer behind the pedestal, leaning in at us: the hat high in the middle, the jacket's shoulders wide
+    hx, hy, r = 156, 72, 26
+    body += path("M96 200 C 96 130 216 130 216 200 Z", "#4a3018")  # Shoulders
+    body += rect(hx - 7, hy + r - 6, 14, 16, SKIN[1])
+    body += path("M134 200 L148 118 L164 118 L178 200 Z", "#d8cfa8")  # The shirt in the open jacket
+    body += path("M134 200 L148 118 L126 150 Z", "#3a2410") + path("M178 200 L164 118 L186 150 Z", "#3a2410")  # Lapels
+    body += circle(hx, hy, r, SKIN[1])
+    body += path(f"M{hx - 13} {hy + 14} C {hx - 6} {hy + 22} {hx + 6} {hy + 22} {hx + 13} {hy + 14} L{hx + 13} {hy + 19} C {hx + 4} {hy + 26} {hx - 4} {hy + 26} {hx - 13} {hy + 19} Z", "#3a2410", 'opacity="0.45"')  # Stubble
+    body += circle(hx - 9, hy - 2, 3, "#222") + circle(hx + 9, hy - 2, 3, "#222")
+    body += stroke(f"M{hx - 16} {hy - 11} l 13 4 M{hx + 16} {hy - 11} l -13 4", "#2a1a0a", 3)  # A frown of concentration
+    body += stroke(f"M{hx - 7} {hy + 11} l 14 0", "#2a1a0a", 2.5)
+    body += ellipse(hx, hy - r * 0.62, r * 1.8, 8, "#6a4a22", 'stroke="#3a2810" stroke-width="1.5"')
+    body += path(f"M{hx - r * 0.95:.1f} {hy - r * 0.62:.1f} L{hx - r * 0.85:.1f} {hy - r * 1.75:.1f} Q {hx:.1f} {hy - r * 1.45:.1f} {hx + r * 0.85:.1f} {hy - r * 1.75:.1f} L{hx + r * 0.95:.1f} {hy - r * 0.62:.1f} Z", "#6a4a22", 'stroke="#3a2810" stroke-width="1.5"')
+    body += rect(hx - r * 0.95, hy - r * 0.92, r * 1.9, 6, "#2a1a0a")
+    body += circle(196, 170, 11, "#ffd23a", 'stroke="#8a6a1a" stroke-width="2"') + lettering("NOT", 196, 163, 4, "#333", width=1) + lettering("ME", 196, 170, 4, "#333", width=1)
+    # The arms: his right down to the pedestal's idol, his left holding the one he brought
+    body += stroke("M196 150 C 216 150 232 144 244 136", "#4a3018", 14)
+    body += stroke("M118 152 C 110 160 118 170 134 166", "#4a3018", 14)
+    # What he holds, left of centre and lower, the hand under it
+    body += politician(136, 146, 0.72)
+    body += circle(136, 180, 10, SKIN[1], 'stroke="#8a5a30" stroke-width="1.5"') + stroke("M126 176 l 4 -12 M134 174 l 1 -12 M142 175 l 3 -11 M149 178 l 5 -8", SKIN[1], 4)
+    # The pedestal, in front of him, right of centre; the idol on it, his hand closing on it
+    body += ellipse(240, 194, 60, 8, "#050402")
+    body += rect(214, 158, 52, 36, "#56564c", 'stroke="#26261f" stroke-width="2"')
+    body += rect(206, 150, 68, 12, "#6c6c60", 'rx="3" stroke="#26261f" stroke-width="2"')
+    body += ellipse(240, 150, 34, 8, "#7c7c70", 'stroke="#26261f" stroke-width="2"')
+    for x0 in (222, 236, 256):
+        body += circle(x0, 194, 3, "#2a4a1c")
+    body += politician(240, 112, 0.82)
+    body += circle(252, 128, 9, SKIN[1], 'stroke="#8a5a30" stroke-width="1.5"') + stroke("M246 120 l -4 -10 M252 118 l 0 -11 M258 120 l 5 -10 M262 128 l 8 -4", SKIN[1], 4)
+    # The meme's labels, over each idol
+    body += label(136, 96, 0.9)
+    body += label(240, 56, 1.0)
     return svg(defs, body)
 
 

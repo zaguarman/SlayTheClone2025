@@ -143,7 +143,7 @@ The Hard styles and Medium (1584 games, every pairing):
     strong for what they cost; Swarm (going wide) and Bastion (turtling) are the weakest plans.
     Best AI per deck: Zeitgeist, Mind and Corporate with Spymaster; Digital Society with Hexer; Myth with Bastion;
     Utopia and Shadow Ops. with Controller; Panopticon with Swarm (see the report).
-A draw is a combat called off after 40 Days (about 1 game in 5 between Hard styles), or both at 0 at once.
+A draw is a combat called off after 80 Days (40 until 2026-10-17, when about 1 game in 5 between Hard styles was one), or both at 0 at once.
 
 
 6. BUGS FOUND BY THE AI GAMES (GameAudit)

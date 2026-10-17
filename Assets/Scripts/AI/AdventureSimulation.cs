@@ -237,7 +237,7 @@ namespace Zeitgeist {
             text.AppendLine("Health, otherwise upgrade the strongest card. Elites and treasure rooms give a relic; fights drop potions (40%),");
             text.AppendLine("which join the opening hand. Events are walked through. The opening choice: a relic. Shops sell a relic too (bought with");
             text.AppendLine("what's left); elites carry a relic, the boss two, and the boss's faction is known from the start.");
-            text.AppendLine("A fight still going after 40 Days counts as lost (stalled).");
+            text.AppendLine($"A fight still going after {AITournament.MaxDays} Days counts as lost (stalled).");
             text.AppendLine();
             text.AppendLine("1. BY FACTION, the most trouble first (bosses beaten, then fights won)");
             text.AppendLine();

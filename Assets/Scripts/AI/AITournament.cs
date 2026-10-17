@@ -16,7 +16,7 @@ namespace Zeitgeist {
     /// </summary>
     public static partial class AITournament {
         /// <summary>A combat still going after this many Days is called off: nobody wins it.</summary>
-        public const int MaxDays = 40;
+        public const int MaxDays = 80; // The user, 2026-10-17: 80, not 40
 
         public readonly struct Result {
             public readonly string Deck, Deck2; // Player 1's and player 2's

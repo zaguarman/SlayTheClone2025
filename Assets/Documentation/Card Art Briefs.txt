@@ -16,12 +16,12 @@ RULES
 
 TO SUPERVISE
 
-  344 cards whose art direction Claude decided alone: no note from the user and no sign-off yet. Once
+  343 cards whose art direction Claude decided alone: no note from the user and no sign-off yet. Once
   the user has checked one, its approval goes into SUPERVISED in Tools/art_briefs.py (or their changes into USER_NOTES).
 
   Corporate (54): Legal Department, Job Rotation, Resignation Letter, Teflon Don, Insurance Policy, Seniority Priority, DMCA, 3rd Parallel Job, Overtime, Peace the Frontier, Casino, Headhunter, Counterfeit, Private Equity, Shell Company, Golden Parachute, Work Shift Rotation, Unpaid Intern, Inhuman Resources, Micromanager, Multilevel Marketing Seller, Day Trader, Pluriemployed Hustler, Satoshi Nakamoto, Multimillionaire Philanthropist, Charles Ponzi, Margin Call, Mass Layoffs, Team Building Exercise, Dead Cat Bounce, Business Operating Expenses, Taxpayer Funds Venture Capital Profits, Tax-Exempt Corruption, Solidarity Towards The Small Businessman, Inheritance, NDA, Inflation, Escape Goat, Laissez-Faire, The Invisible Hand, C-Suite, Venture Capital, Corporate Bailouts, Flash Crash, Just in Time, Hedonic Treadmillionaire, Moral Bankruptcy, Usury, Middle Manager, Big Four, Bloomberg Terminal, Internal Protocol: Quota Crusher Mindset, High-Frequency Trading Scam, Valet
   Statecraft (39): Civil Servant, Bomb Squad, Drone Operator, Riot Police, Drill Sergeant, Sapper, Mutually Assured Destruction, Due Process, Filibuster, Curfew, Spin Doctor, Supply Depot, Presidential Pardon, Congruent Use of Force, Weapons of Mass Distraction, King Emeritus, Spite-Elected President, Police Officer Productivity Target, Internal Revenue Service, Mercenaries, Man o' War, Ministry for Equality, Protocol Enforcers, Demagogue, Red Tape, Preemptive Strike, Martial Law, Kakistocracy, Doomsday Clock, Panem Et Circenses, Diplomat, Raised Security Level, Lost Landmine, Ceasefire, Violence Monopoly, Border Crossing, Peace Force, Security Guard, Si Vis Pacem, Para Bellum
-  Mainstream (38): One-Trick Pony, Clingy Ex, Backup Dancer, Anti-Vaxxer, Groundhog Day, Freaky Friday, Florida Man, Drug Smuggler, Not on My Watch, One for the Road, Chain Smoker, Karen, Boomer, Hipster, Underdog, Hikikomori, Reality TV Star, Scam Artist, Football Hooligans, Antihero, Bodybuilder, Plot Armor, YOLO, Toxic Positivity, Delivery Cyclist, Zeitgeist, Rush Hour, No Glove, No Love, Listen Kid, Ol' Reliable, Weaponized Incompetence, Absentee Parents, Spite Voter, Fidget Spinner, Camper Van, Lost Generation, Universal Basic Income, Calm Your Tits
+  Offline (37): One-Trick Pony, Clingy Ex, Backup Dancer, Anti-Vaxxer, Groundhog Day, Freaky Friday, Florida Man, Drug Smuggler, Not on My Watch, One for the Road, Chain Smoker, Karen, Boomer, Hipster, Underdog, Hikikomori, Reality TV Star, Scam Artist, Football Hooligans, Antihero, Bodybuilder, Plot Armor, YOLO, Toxic Positivity, Delivery Cyclist, Zeitgeist, Rush Hour, No Glove, No Love, Listen Kid, Ol' Reliable, Weaponized Incompetence, Absentee Parents, Fidget Spinner, Camper Van, Lost Generation, Universal Basic Income, Calm Your Tits
   Online (16): Its Been 84 Years..., Good Boi, Crypto "Entrepreneur", Digital Nomad, NPC, Chronically Online, Conspiracy Theorist, Clickbait, Cancelled, Social Panopticon, Short King, Content Creator, Thirst Trap, Selfie Esteem, Influencer, U Mad Bro?
   Shadow Ops. (55): Hostage Situation, Plausible Deniability, Cleaner, Political Decoy, Mole, Signal Jammer, Deep Cover, Human Intelligence, Wet Work, Perfectly Timed Camera Malfunction, Smoke And Mirrors, Eavesdrop, Tapped Communications, Whistleblower, Involuntary Free Polonium Giveaway, Humanitarian Trafficking Action, Dead Man's Switch, Fell Out of a Window, Coup d'État, Operation Paperclip, False Flag Operation, Never Let Them Know Your Next Move, Frame Job, Devil's Breath, He Didn't Kill Himself, Extraction, Witness Protection Program, Death By "Natural Causes", Asset Recruitment, If I Told You, I'd Have to Kill You, Lone Gunman, Glomar Response, Sabotage, Ghost Army, Inflatable Tank, Social Engineering, Bilderberg Membership, Dead Drop, The Golden Gun, Die Another Day, Licence to Kill, Shaken, Not Stirred, GoldenEye, Supply Chain Attack, Femme Fatale, Exploding Pen, Drug Pigeon, Embassy, Secret Anthrax Laboratory, Tracking Beacon, Arsonist, Counter-Surveillance, Compromised Agent, Polonium Umbrella, Nonchalant Agent
   Tech (17): EMP Drone, Buffering, Web Scraping, DDOS Attack, End-to-End Encryption, SysAdmin, Meatproxy As A Service, Ransomware Attack, Man-in-the-Middle, Technical Debt, Threat Hunter, Ctrl + Z, Pair Programming, Suspicious USB Stick in the Parking Lot, Code Review, Bomber Drone, Ctrl + Y
@@ -346,7 +346,7 @@ Mass Emigration (spell)
     USER: 2026-10-17: put Istanbul's Hagia Sophia (the user's photo: the Sultan Ahmed Mosque at sunset over the Bosphorus, six minarets).
     USER: 2026-10-17: then, told the stories of both: the Hagia Sophia (Claude's recommendation, the building that changed hands) over the Blue Mosque.
 
-MAINSTREAM
+OFFLINE
 
 One-Trick Pony (creature)
     A pony in a tiny circus hat standing on its hind legs on a stool, doing the exact same trick in three frames in a row, the ringmaster's cue cards for other tricks piling up ignored on the sawdust.
@@ -469,8 +469,9 @@ The Friends We Made Along the Way (spell)
     A ragtag group of adventurers around a campfire laughing, an empty treasure chest behind them, a map with the X scribbled out.
     USER: 2026-10-17: Jesus with two guns instead of the cultist.
 Spite Voter (creature)
-    A grumpy man in a voting booth gleefully ticking the box of a clown candidate, a 'Don't Blame Me' badge pinned to his cardigan.
-    TO SUPERVISE: Claude's own art direction, not checked by the user yet
+    The Raiders of the Lost Ark idol swap (the user's reference, 2026-10-17): the meme's lower panel, head-on: the adventurer in his fedora and leather jacket behind a temple pedestal, centre, leaning in at us, his right hand closing on the golden idol on the pedestal (a grinning politician's head in a red tie), his left holding the identical golden politician he swaps in, lower left; CORRUPT POLITICIAN in white block letters over each idol; a 'Don't Blame Me' badge on the jacket.
+    USER: 2026-10-17: the user's reference, the Raiders of the Lost Ark idol-swap meme: VOTERS (Indiana Jones, weighing it up at the temple pedestal) swapping the golden idol, labelled CORRUPT POLITICIAN, for another golden idol labelled CORRUPT POLITICIAN.
+    USER: 2026-10-17: write CORRUPT POLITICIAN on each idol; the characters on the same spots and the same camera angle as the reference (the lower panel: the adventurer behind the pedestal, centre, the swapped idol in his left hand, the pedestal's to the right).
 Fidget Spinner (creature)
     A giant fidget spinner whirling on a school desk, sparks flying off its bearings, a crowd of kids staring at it hypnotized, a teacher's 'Confiscated' box in the corner.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
