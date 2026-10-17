@@ -25,7 +25,8 @@ namespace Zeitgeist {
         // Translucent previews of creatures queued to be summoned into this battlefield
         private readonly Dictionary<BattlefieldSlot, CardController> queuedGhosts = new Dictionary<BattlefieldSlot, CardController>();
         private readonly List<CardController> risingGhosts = new List<CardController>(); // Creatures that will rise (Revive, Phoenix Feather)
-        private readonly List<CardController> moveGhosts = new List<CardController>(); // Where planned moves leave each creature
+        private readonly List<CardController> moveGhosts = new List<CardController>(); // The phantoms planned moves leave behind
+        private readonly List<CardController> displaced = new List<CardController>(); // The cards standing where their planned move ends
         private PlayCardAction draggedGhostPlay; // The play of the ghost being dragged, to tell whether the drop replaced it
         private float nextSummonTime;
 

@@ -71,6 +71,16 @@ namespace Zeitgeist {
         [Tooltip("Moves it away from the card, in preview heights (negative: toward it)")]
         [Range(-1f, 1f)] public float previewAway = 0f;
 
+        [Header("A board card lifted (the user, 2026-10-17: hovered, the card rises over its own slot, bigger, and follows the pointer a little)")]
+        [Tooltip("How much bigger than the card in its slot")]
+        [Range(1f, 2.5f)] public float liftScale = 1.5f;
+        [Tooltip("How far up it rises, in heights of the card in its slot")]
+        [Range(0f, 1f)] public float liftUp = 0.25f;
+        [Tooltip("How much of the pointer's distance from the card's middle it follows (0: it stays put)")]
+        [Range(0f, 0.5f)] public float liftFollow = 0.12f;
+        [Tooltip("The furthest it strays after the pointer, in heights of the card in its slot")]
+        [Range(0f, 1f)] public float liftReach = 0.25f;
+
         [Header("The details box beside the preview")]
         [Tooltip("Its width, in screen pixels")]
         [Range(150f, 600f)] public float detailsWidth = 269f;

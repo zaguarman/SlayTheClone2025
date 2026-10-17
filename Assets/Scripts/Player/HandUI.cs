@@ -36,6 +36,16 @@ namespace Zeitgeist {
 
         /// <summary>The card risen out of the fan, if any: the only one of this hand whose explanations may show.</summary>
         public CardController Raised => hovered;
+
+        private const float TuckDrop = 0.45f; // Card heights the fan drops when a board card is lifted to read
+        private bool tucked;
+
+        /// <summary>The hand drops out of the way (a board card lifted to read: the user, 2026-10-17) and comes back when it's put down.</summary>
+        public void SetTucked(bool down) {
+            if (tucked == down) return;
+            tucked = down;
+            Arrange(animate: true);
+        }
         private const float PickedScale = 1.15f;  // Picked up, a card grows a little (of its size in the hand)...
         private const float OverBoardReach = 260f; // ...and shrinks to board size as it's carried this far above the hand
         private const float DiscardStagger = 0.06f;
@@ -365,7 +375,7 @@ namespace Zeitgeist {
                 float dip = FanRadius - Mathf.Sqrt(FanRadius * FanRadius - x * x);
                 float height = CardHeight * scale;
                 // Your hand: the top ShownShare of each card above the screen's edge. The other hand: at its area's middle
-                float y = IsYourHand ? edge + height * (ShownShare - 0.5f) - dip : -facing * dip;
+                float y = IsYourHand ? edge + height * (ShownShare - 0.5f) - dip - (tucked ? height * TuckDrop : 0f) : -facing * dip;
                 float tilt = -facing * angle * Mathf.Rad2Deg;
                 float cardScale = scale;
                 if (hoveredIndex >= 0 && i != hoveredIndex) x += Mathf.Sign(i - hoveredIndex) * CardWidth * scale * (IsYourHand ? YourHoverRoom : HoverRoom);

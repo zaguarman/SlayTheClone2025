@@ -274,7 +274,8 @@ namespace Zeitgeist {
             }
             // Reading keywords: passing over another card on the way to an explanation doesn't replace them, nor does a
             // card under the enlarged one or its explanations
-            if ((keywordPopups.Count > 0 && PointerInArea(GameInput.PointerPosition)) || PointerReading(GameInput.PointerPosition)) {
+            // (Not a window's card: the grid's cards sit within each other's margin, and the next one must take over; the user, 2026-10-17)
+            if ((!InWindow(card) && keywordPopups.Count > 0 && PointerInArea(GameInput.PointerPosition)) || PointerReading(GameInput.PointerPosition)) {
                 Refused(card, $"the pointer is on what's shown already ({activeCard?.GetLinkedCardInstance()?.Name}, {keywordPopups.Count} explanations)");
                 return;
             }
@@ -284,6 +285,7 @@ namespace Zeitgeist {
 
             HideTooltip();
             activeCard = card;
+            lastHeldAt = Time.unscaledTime; // Just shown counts as held, until the pointer is seen to leave
             browsed = Mathf.Clamp(startBrowse, 0, card.AttachedCards.Count); // Opened from a tucked card: on that one
             startBrowse = 0;
             canvasGroup.alpha = 1;
@@ -301,6 +303,7 @@ namespace Zeitgeist {
                     PlacePreview(card, (RectTransform)preview.transform);
                     var shown = (RectTransform)preview.transform;
                     ShowWheel(shown.position, shown.up, fadeIn: false);
+                    TuckHands(true);
                 }
             }
             UpdateTooltipContent(card);
@@ -396,29 +399,49 @@ namespace Zeitgeist {
             if (preview != null && !previewIsCard) Destroy(preview.gameObject);
             preview = null;
             previewIsCard = false;
+            if (lifted) TuckHands(false);
+            lifted = false;
             ClearLeaving();
             ClearWheel();
             canvasGroup.alpha = 0;
             gameObject.SetActive(false);
         }
 
-        // Above the card when it is in the lower half of the screen, below it otherwise; always fully on screen
+        // Over the card itself, risen a little (the user, 2026-10-17: no enlarged copy beside it on the table; the card
+        // reads where it stands, bigger, and follows the pointer a little). Always fully on screen
         private void PlacePreview(CardController card, RectTransform previewRect) {
-            var corners = new Vector3[4];
-            ((RectTransform)card.transform).GetWorldCorners(corners);
-            var eventCamera = CanvasUtility.GetEventCamera(card);
-            Vector2 cardMin = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[0]);
-            Vector2 cardMax = RectTransformUtility.WorldToScreenPoint(eventCamera, corners[2]);
-
-            bool showAbove = (cardMin.y + cardMax.y) * 0.5f < Screen.height * 0.5f;
+            var onScreen = CardScreenRect(card) ?? new Rect(GameInput.PointerPosition, Vector2.zero);
+            liftCentre = onScreen.center;
             float height = ScreenRect(previewRect).height / ShownScaleOf(card); // The sliders' unit: the preview's height before Shown Scale
-            float gap = Roulette.previewGap * height;
-            previewRect.pivot = new Vector2(0.5f, showAbove ? 0f : 1f);
-            previewRect.position = new Vector2((cardMin.x + cardMax.x) * 0.5f, showAbove ? cardMax.y + gap : cardMin.y - gap);
-            // The sliders' nudges: sideways, and away from the card; with a stack, the shown card's own (its wheel stays put)
-            previewRect.position += new Vector3(Roulette.previewSideways * height, (showAbove ? 1f : -1f) * Roulette.previewAway * height, 0f);
+            previewRect.pivot = new Vector2(0.5f, 0.5f);
+            previewRect.position = liftCentre + Vector2.up * (onScreen.height * Roulette.liftUp);
+            // The sliders' nudges: sideways and up; with a stack, the shown card's own (its wheel stays put)
+            previewRect.position += new Vector3(Roulette.previewSideways * height, Roulette.previewAway * height, 0f);
             if (card.AttachedCards.Count > 0) previewRect.position += Roulette.ShownOffset(previewRect.up, height);
             KeepOnScreen(previewRect);
+            liftHome = previewRect.position;
+            lifted = !previewIsCard;
+        }
+
+        private const float WindowMargin = 12f; // Around a window's card and its explanations: the next card in the grid is further than that
+        private Vector2 liftHome, liftCentre; // Where the lifted card settles, and the middle of the card under it
+        private bool lifted;
+
+        // The lifted card leans after the pointer, a little and smoothly, never further than its reach. Not with a wheel of
+        // tucked cards round it (the user: the roulette stays): the wheel is placed once, where the card settled
+        private void FollowPointer(Vector2 pointer) {
+            if (preview == null || previewIsCard || activeCard == null || activeCard.AttachedCards.Count > 0) return;
+            float unit = CardScreenRect(activeCard)?.height ?? 0f;
+            var target = liftHome + Vector2.ClampMagnitude((pointer - liftCentre) * Roulette.liftFollow, unit * Roulette.liftReach);
+            var rect = (RectTransform)preview.transform;
+            rect.position = Vector2.Lerp(rect.position, target, 1f - Mathf.Exp(-12f * Time.unscaledDeltaTime));
+        }
+
+        // Your hand drops out of the way while a board card is lifted (the user), and comes back when it's put down
+        private static void TuckHands(bool down) {
+            foreach (var hand in FindObjectsByType<HandUI>(FindObjectsSortMode.None)) {
+                if (hand.IsYourHand) hand.SetTucked(down);
+            }
         }
 
         // To the right of the preview, or to its left when there is no room
@@ -568,10 +591,14 @@ namespace Zeitgeist {
             TrackKeywords(pointer);
             // A risen hand card with its explanations open holds only while the pointer is around it or them, measured every
             // frame (a missed pointer exit can't keep it up over the hand), and lets go quickly so the next card can rise
-            bool handReading = previewIsCard && keywordPopups.Count > 0;
-            bool held = handReading ? PointerInArea(pointer) : !released || PointerInArea(pointer);
+            // A window's card (the gallery, the deck builder) the same, explanations open or not (the user, 2026-10-17: left
+            // open over the grid they were clutter), within a smaller margin
+            if (lifted) FollowPointer(pointer);
+            bool window = InWindow(activeCard);
+            bool quick = previewIsCard && (keywordPopups.Count > 0 || window);
+            bool held = quick ? PointerInArea(pointer, window ? WindowMargin : AreaMargin) : !released || PointerInArea(pointer);
             if (held) lastHeldAt = Time.unscaledTime;
-            else if (Time.unscaledTime - lastHeldAt > (handReading ? HandReleaseGrace : ReleaseGrace)) HideTooltip();
+            else if (Time.unscaledTime - lastHeldAt > (quick ? HandReleaseGrace : ReleaseGrace)) HideTooltip();
         }
 
         // A card of the deck window (a pile, a pick): shown big already, it's its own preview
@@ -789,23 +816,25 @@ namespace Zeitgeist {
         /// Whether the pointer is anywhere around what the tooltip shows: the card, its preview and the open explanations,
         /// with a margin. Only leaving all of it closes the tooltip.
         /// </summary>
-        public bool PointerInArea(Vector2 pointer) {
+        public bool PointerInArea(Vector2 pointer) => PointerInArea(pointer, AreaMargin);
+
+        private bool PointerInArea(Vector2 pointer, float margin) {
             if (activeCard == null || preview == null) return false;
             var areas = keywordPopups.Select(p => ScreenRect(p.Rect)).Append(PreviewScreenRect()).ToList();
             var card = CardScreenRect(activeCard);
             if (card.HasValue) areas.Add(card.Value);
-            return areas.Any(r => Rect.MinMaxRect(r.xMin - AreaMargin, r.yMin - AreaMargin, r.xMax + AreaMargin, r.yMax + AreaMargin).Contains(pointer));
+            return areas.Any(r => Rect.MinMaxRect(r.xMin - margin, r.yMin - margin, r.xMax + margin, r.yMax + margin).Contains(pointer));
         }
 
         // With cards tucked under it, the shown card's own size (a slider), the wheel's cards keeping theirs
         private static float ShownScaleOf(CardController card) => card != null && card.AttachedCards.Count > 0 ? Roulette.shownScale : 1f;
 
-        // Twice a card's own size, and always well bigger than the card as it's shown (a pile window's cards are big already)
+        // Lift Scale times the card's own size on screen (a slider), the stack's Shown Scale on top
         private float PreviewScaleFor(CardController card) {
             var canvas = GetComponentInParent<Canvas>();
             float unit = (canvas != null ? canvas.scaleFactor : 1f) * CardColumns.CardHeight; // A preview at scale 1, on screen
-            float scale = CardScreenRect(card) is Rect shown && unit > 0f ? Mathf.Max(PreviewScale, 1.3f * shown.height / unit) : PreviewScale;
-            return scale * ShownScaleOf(card);
+            float own = CardScreenRect(card) is Rect shown && unit > 0f ? shown.height / unit : 1f;
+            return Roulette.liftScale * own * ShownScaleOf(card);
         }
 
         private static Rect? CardScreenRect(CardController card) {

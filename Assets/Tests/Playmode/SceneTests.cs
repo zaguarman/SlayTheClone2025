@@ -364,10 +364,13 @@ namespace Zeitgeist.Tests {
 
             game.Queue.AddAction(new MoveCreatureAction(mover, p1.Battlefield[0], p1.Battlefield[2], p1));
             yield return null;
-            CollectionAssert.AreEquivalent(new[] { (mover, p1.Battlefield[2]), (wall, p1.Battlefield[0]) }, game.BoardView(p1).MoveGhosts.ToList(),
-                "A ghost of each creature where it will end up, the one it trades places with included");
+            // The cards stand where their moves end, a phantom in each slot left (the user, 2026-10-17), the one it trades places with included
+            CollectionAssert.AreEquivalent(new[] { (mover, p1.Battlefield[0]), (wall, p1.Battlefield[2]) }, game.BoardView(p1).MoveGhosts.ToList(),
+                "A phantom of each creature in the slot it leaves");
             var arrows = game.QueuedArrows(p1);
             Vector2 Slot(int i) => game.BoardView(p1).FindSlotView(p1.Battlefield[i]).transform.position;
+            Assert.Less(Vector2.Distance(game.BoardView(p1).GetCardController(mover).transform.position, Slot(2)), 0.01f, "The mover's card stands where its move ends...");
+            Assert.Less(Vector2.Distance(game.BoardView(p1).GetCardController(wall).transform.position, Slot(0)), 0.01f, "...and the one it trades places with in its slot");
             Assert.AreEqual(2, arrows.Count, "One arrow for the mover, one for the creature it trades places with");
             Assert.IsTrue(arrows.Any(a => Vector2.Distance(a.StartPosition, Slot(2)) < 0.01f && Vector2.Distance(a.EndPosition, Slot(0)) < 0.01f),
                 "The other creature's arrow shows where it ends up"); 
@@ -718,6 +721,7 @@ namespace Zeitgeist.Tests {
 
             // Keywords: hovering one on the enlarged card explains it, and its explanation's keywords can be followed in turn
             Tooltip.Existing.HideTooltip();
+            yield return new WaitForSecondsRealtime(0.2f); // The hand slides back up from its tuck (it drops while a board card is lifted)
             SceneGame.Hover(Shown(quake));
             yield return SceneGame.PreviewShows();
             var tooltip = Tooltip.Existing;

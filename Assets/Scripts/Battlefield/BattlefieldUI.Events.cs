@@ -538,8 +538,9 @@ namespace Zeitgeist {
             spellGhostOrder.Clear();
         }
 
-        // A see-through copy of each creature planned to move (or be pushed or swapped) in the slot it will end in, with the
-        // formation arrows. Not interactive: the real card stays where it is and is still the one to drag
+        // Each creature planned to move (or be pushed or swapped) stands where its move ends, its tucked cards with it (the
+        // strips follow their card), and a see-through phantom of it stays in the slot it leaves (the user, 2026-10-17). The
+        // card is still the one to drag, and still its slot's: only its place on the table changes
         private void ShowMoveGhosts() {
             var preview = MovementRules.Preview(Player.Battlefield, MovementRules.PlannedMovesOf(Player, GameManager.ActionsQueue, move => !HiddenFromScreen(move)));
             foreach (var entry in preview.FinalSlots) {
@@ -547,22 +548,32 @@ namespace Zeitgeist {
                 var finalSlot = entry.Value;
                 if (creature == null || finalSlot == null || creature.Slot == finalSlot || finalSlot.Owner != Player) continue;
 
-                var slot = battlefieldSlots[finalSlot.Index];
-                var ghost = CardViews.Create(creature, Player, slot.transform);
+                var from = battlefieldSlots[creature.Slot.Index];
+                var to = battlefieldSlots[finalSlot.Index];
+                var card = from.OccupyingCard;
+                if (card != null && card != CardController.Dragged) {
+                    // Someone stands there and stays (a swap partner leaves): lift the mover so both stay visible
+                    var standing = to.OccupyingCreature;
+                    bool stays = standing != null && !(preview.FinalSlots.TryGetValue(standing, out var goes) && goes != to.Model);
+                    float raise = stays || queuedGhosts.ContainsKey(to) ? ((RectTransform)card.transform).rect.height * CardInSlotScale * ReplacingGhostRaise : 0f;
+                    card.transform.position = to.transform.TransformPoint(new Vector3(0f, raise, 0f));
+                    displaced.Add(card);
+                }
+
+                var ghost = CardViews.Create(creature, Player, from.transform);
                 if (ghost == null) continue;
                 ghost.name = $"MoveGhost_{creature.Name}";
                 ghost.transform.localRotation = Quaternion.identity;
                 ghost.transform.localScale = Vector3.one * CardInSlotScale;
-                ghost.SetQueued(true, blockRaycasts: false, badge: "Moving");
+                ghost.transform.localPosition = Vector3.zero;
+                ghost.transform.SetAsFirstSibling(); // Under the card, until the card has left
+                ghost.SetQueued(true, blockRaycasts: false, badge: "Leaving");
                 ghost.SetAnonymous(FogOfWar.HidesIdentity(Viewer, creature));
-                // Someone stands there now (it leaves first): lift the ghost so both stay visible
-                float raise = slot.OccupyingCard != null || queuedGhosts.ContainsKey(slot) ? ((RectTransform)ghost.transform).rect.height * CardInSlotScale * ReplacingGhostRaise : 0f;
-                ghost.transform.localPosition = new Vector3(0f, raise, 0f);
                 moveGhosts.Add(ghost);
             }
         }
 
-        /// <summary>The creatures shown as ghosts in the slot they're planned to end their move in.</summary>
+        /// <summary>The creatures shown as phantoms in the slot their planned move takes them out of (the cards themselves stand where it ends).</summary>
         public IEnumerable<(ICreature creature, BoardSlot slot)> MoveGhosts =>
             moveGhosts.Where(g => g != null).Select(g => (g.GetLinkedCreature(), g.GetComponentInParent<BattlefieldSlot>()?.Model));
 
@@ -626,6 +637,10 @@ namespace Zeitgeist {
                 if (ghost != null) Destroy(ghost.gameObject);
             }
             moveGhosts.Clear();
+            foreach (var card in displaced) { // Back onto its own slot, until the next pass places it again
+                if (card != null && card != CardController.Dragged) card.transform.localPosition = Vector3.zero;
+            }
+            displaced.Clear();
         }
 
         protected override void SetupCardEventHandlers(CardController controller) {

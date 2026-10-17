@@ -307,6 +307,9 @@ namespace Zeitgeist {
                 if (!GameManager.ModifierManager.CanAct(creature)) ShowCantAct(card, CantActText(creature));
                 else GameManager.CombatHandler.HandleCreatureCombat(creature, targetSlot.Model);
             }
+            else if (!GameManager.ModifierManager.CanMove(creature) && targetSlot.Model != creature.Slot) {
+                ShowCantAct(card, CantMoveText(creature)); // Picked up to attack, dropped on its own side: the drop is refused, and says why
+            }
             else {
                 HandleCreatureMove(creature, targetSlot.Model);
             }

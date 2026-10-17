@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static Zeitgeist.DebugLogger;
+using static Zeitgeist.Enums;
 
 namespace Zeitgeist {
     /// <summary>The battlefield: dragging creatures and cards over it (a part of BattlefieldUI).</summary>
@@ -20,7 +21,7 @@ namespace Zeitgeist {
             // No arrow until the pointer is off the creature's own card, about: a few pixels' drag draws nothing
             var cardRect = (RectTransform)card.transform;
             float clear = DragArrowClearance * cardRect.rect.height * cardRect.lossyScale.y;
-            arrowManager.ShowDragArrow(startSlot != null ? startSlot.transform.position : card.transform.position, clear);
+            arrowManager.ShowDragArrow(card.transform.position, clear); // From the card itself: a planned move shows it where the move ends
             draggedCard = card;
             card.transform.SetAsLastSibling();
             ShowMoveHints(card.GetLinkedCreature());
@@ -40,10 +41,15 @@ namespace Zeitgeist {
                 return true;
             }
             if (GameManager.ModifierManager.CanMove(creature)) return false;
-            ShowCantAct(card, MovementRules.IsRooted(creature, GameManager.ModifierManager) && GameManager.ModifierManager.CanAct(creature)
-                ? (Abilities.IsPinned(creature) ? "Clingy Ex: it can't move while it's faced" : "Rooted: it can't move") : CantActText(creature));
+            // Rooted, or held by a Clingy Ex (the user, 2026-10-17): it can still attack, so it's picked up; its own side's slots
+            // say it can't move, and a drop on one says so too
+            if (MovementRules.IsRooted(creature, GameManager.ModifierManager) && GameManager.ModifierManager.CanAct(creature)) return false;
+            ShowCantAct(card, CantActText(creature));
             return true;
         }
+
+        private static string CantMoveText(ICreature creature) =>
+            Abilities.IsPinned(creature) ? "Clingy Ex: it can't move while it's faced" : "Rooted: it can't move";
 
         private static string CantActText(ICreature creature) {
             int days = creature.TurnsUntilOperative;
@@ -88,9 +94,11 @@ namespace Zeitgeist {
 
         // Every slot of the row says what dropping the creature there would do, given this side's other planned moves
         private void ShowMoveHints(ICreature creature) {
-            if (creature?.Slot == null || creature.Owner != Player || !GameManager.ModifierManager.CanMove(creature)) return;
+            if (creature?.Slot == null || creature.Owner != Player) return;
+            bool canMove = GameManager.ModifierManager.CanMove(creature);
             foreach (var slot in battlefieldSlots) {
                 if (slot.Model == creature.Slot) continue;
+                if (!canMove) { slot.ShowMoveHint(MoveKind.Walk, blocked: true, CantMoveText(creature)); continue; } // Picked up to attack: no slot takes it
                 var (kind, blocked, hint) = MovementRules.Evaluate(creature, slot.Model, GameManager.ActionsQueue);
                 slot.ShowMoveHint(kind, blocked, hint);
             }
