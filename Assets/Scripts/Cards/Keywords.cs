@@ -84,6 +84,13 @@ namespace Zeitgeist {
             Add("Take Control", "It changes sides for good: it goes to the [Slot|slot] facing the one it stood in, under your control, and whatever stands there is discarded. It keeps its Health, statuses and stat changes, and loses what it planned. It's still its owner's card: when it leaves play, it goes back to them.");
             Add("Gift", "You play it into an empty enemy slot: it joins their side, and they control it. It's still your card: when it leaves play, it comes back to your discard pile. They can get rid of it by summoning over it.");
 
+            // ---------------------------------------------------------------- The formation (the user, 2026-10-15; built 2026-10-17)
+            group = "Formation";
+            Add("Vanguard", "The slot alone at the front of a side. The wall that takes the melee: it can attack only their Vanguard (its attack hits the player when that slot is empty), and it puts on 1 [Armor] each [Dawn], up to 2. See [Reach].");
+            Add("Flanks", "The two slots in the middle row. The shooters: +1 Attack and +1 Speed while a creature stands there, and they can attack their Vanguard and their Flanks. See [Reach].");
+            Add("Headquarters", "The two slots at the back. The important people, hard to reach: no ordinary attack reaches them (only spells, and [Artillery]). From there a creature can attack only their Vanguard. See [Reach].");
+            Add("Reach", "Which enemy slots a creature can attack, decided by where it stands: the distance between two slots is how deep each sits ([Vanguard] 0, [Flanks] 1, [Headquarters] 2), added, plus 1. The Vanguard melees at distance 1; the Flanks and Headquarters shoot at 2 to 3; [Artillery] hits at exactly 4. Checked when the attack is planned: moved before it resolves, the creature still hits where it aimed.");
+
             // ---------------------------------------------------------------- Movement
             group = "Movement";
             Add("Leapfrog", "Moves by jumping over creatures to an empty slot.");
@@ -181,6 +188,7 @@ namespace Zeitgeist {
 
         // An ability's reminder text, with the keywords it mentions as links
         private static string AbilityText(CreatureAbility ability) => ability switch {
+            CreatureAbility.Artillery => "It attacks at a distance of exactly 4 (see [Reach]), never nearer: from a Flank their [Headquarters], from Headquarters their [Flanks].",
             CreatureAbility.Unpatchable => "Enemy effects can't lower its stats, and [Zero-Day] can't get around it.",
             CreatureAbility.Underground => "In combat it ignores the other creature's stat changes.",
             CreatureAbility.ZeroDay => "Its attacks and effects ignore defensive abilities, except [Cold Storage].",

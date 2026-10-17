@@ -305,6 +305,7 @@ namespace Zeitgeist {
             if (creature.Owner != Player) {
                 // Still deploying, it could be picked up to move, not to attack: say so
                 if (!GameManager.ModifierManager.CanAct(creature)) ShowCantAct(card, CantActText(creature));
+                else if (!Abilities.InReach(creature, targetSlot.Model)) ShowCantAct(card, Abilities.OutOfReachText(creature)); // The slot decides (the user, 2026-10-17)
                 else GameManager.CombatHandler.HandleCreatureCombat(creature, targetSlot.Model);
             }
             else if (!GameManager.ModifierManager.CanMove(creature) && targetSlot.Model != creature.Slot) {

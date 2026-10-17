@@ -151,11 +151,13 @@ namespace Zeitgeist.Tests {
             Assert.AreEqual(p2Health - hound.Attack, p2.Health);
             CollectionAssert.AreEqual(new[] { hound.Attack }, playerHits);
 
-            // An enemy-targeted OnDamage effect strikes back at the attacker, on every hit
+            // An enemy-targeted OnDamage effect strikes back at the attacker, on every hit. The porcupine comes into the hound's
+            // reach first: a Vanguard melees their Vanguard alone (GDD 2.4); the jackal on a Flank shoots it there too
+            game.Run(new MoveCreatureAction(porcupine, p2.Battlefield[1], p2.Battlefield[0], p2));
             var jackal = game.Summon(p1, game.Creature("Jackal", 1, 4), 1);
             int houndHealth = hound.Health;
-            game.CombatHandler.HandleCreatureCombat(hound, p2.Battlefield[1]);
-            game.CombatHandler.HandleCreatureCombat(jackal, p2.Battlefield[1]);
+            game.CombatHandler.HandleCreatureCombat(hound, p2.Battlefield[0]);
+            game.CombatHandler.HandleCreatureCombat(jackal, p2.Battlefield[0]);
             game.Resolve();
             Assert.AreEqual(porcupine.MaxHealth - hound.Attack - jackal.Attack, porcupine.Health);
             Assert.AreEqual(houndHealth - 1, hound.Health);
@@ -163,10 +165,10 @@ namespace Zeitgeist.Tests {
 
             // Effects that change stats go through the queue too, landing before anything else that waits
             var cucumber = game.Summon(p2, game.Creature("Cucumber", 0, 4, 1,
-                TestGame.Effect(EffectTrigger.OnDamage, ActionType.ModifyStat, 2, TargetType.FriendlyCreatures)), 3);
-            Attack(hound, p2.Battlefield[3]);
-            Assert.AreEqual(2, cucumber.Attack);
-            Assert.AreEqual(6 - hound.Attack, cucumber.Health); // Max health 4 + 2, minus the hit
+                TestGame.Effect(EffectTrigger.OnDamage, ActionType.ModifyStat, 2, TargetType.FriendlyCreatures)), 1);
+            Attack(jackal, p2.Battlefield[1]); // Flank to Flank: in reach
+            Assert.AreEqual(2 + Formation.FlankAttack, cucumber.Attack, "+2 from the hit, and its Flank's +1");
+            Assert.AreEqual(6 - jackal.Attack, cucumber.Health); // Max health 4 + 2, minus the hit (the jackal's 1 and its Flank's +1)
 
             // Attacks declared in the same turn resolve by speed: a creature killed first never lands its hit
             var falcon = game.Summon(p1, game.Creature("Falcon", 4, 2, speed: 3), 2);
@@ -190,17 +192,18 @@ namespace Zeitgeist.Tests {
             var ram = game.Creature("Ram", 1, 5, 1,
                 TestGame.Effect(EffectTrigger.OnDamage, ActionType.ModifyStat, 1, TargetType.Self),
                 TestGame.Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets));
-            var p1Ram = game.Summon(p1, ram, 3);
-            game.Summon(p2, ram, 4);
+            game.Run(new MoveCreatureAction(jackal, p1.Battlefield[1], p1.Battlefield[3], p1)); // Makes room on the Flank: Headquarters reach no further than their Vanguard
+            var p1Ram = game.Summon(p1, ram, 1);
+            game.Summon(p2, ram, 2); // Where the boar fell
             LogAssert.Expect(LogType.Error, new Regex("Stopped resolving after"));
-            Attack(p1Ram, p2.Battlefield[4]);
+            Attack(p1Ram, p2.Battlefield[2]);
             Assert.AreEqual(0, game.ActionsQueue.GetPendingActionsCount());
         }
 
         [Test]
         public void Board_PositionsDecideMovesReplacementsAndChains() {
             var eel = game.Summon(p1, game.Creature("Eel", 3, 4, 1,
-                TestGame.Effect(EffectTrigger.OnDamage, ActionType.Damage, 4, TargetType.EnemyCreatures, TargetModifier.Chained)), 0);
+                TestGame.Effect(EffectTrigger.OnDamage, ActionType.Damage, 4, TargetType.EnemyCreatures, TargetModifier.Chained)), 1); // A Flank: it reaches their Flanks (GDD 2.4)
             var crabs = new[] {
                 game.Summon(p2, game.Creature("Crab A", 0, 10), 1),
                 game.Summon(p2, game.Creature("Crab B", 0, 10), 3),
@@ -210,13 +213,13 @@ namespace Zeitgeist.Tests {
             // A chain attack jumps from the creature hit to the next one a step away in the formation, halving each jump:
             // the left Flank, then the left Headquarters behind it, then the other Headquarters slot
             Attack(eel, p2.Battlefield[1]);
-            Assert.AreEqual(10 - 3, crabs[0].Health); // The attack itself
+            Assert.AreEqual(10 - eel.Attack, crabs[0].Health); // The attack itself (its 3 and the Flank's +1)
             Assert.AreEqual(10 - 4, crabs[1].Health); // First jump
             Assert.AreEqual(10 - 2, crabs[2].Health); // Second jump
 
             // Moving to an empty slot relocates the creature
-            game.Run(new MoveCreatureAction(eel, p1.Battlefield[0], p1.Battlefield[4], p1));
-            Assert.IsFalse(p1.Battlefield[0].IsOccupied());
+            game.Run(new MoveCreatureAction(eel, p1.Battlefield[1], p1.Battlefield[4], p1));
+            Assert.IsFalse(p1.Battlefield[1].IsOccupied());
             Assert.AreSame(p1.Battlefield[4], eel.Slot);
 
             // Moving onto a friendly creature a step away: they trade places
@@ -255,7 +258,7 @@ namespace Zeitgeist.Tests {
             Assert.AreEqual(ResolutionLayer.LateArrivals, game.ActionsQueue.LayerOfPending(game.ActionsQueue.GetPendingActions().OfType<PlayCardAction>().Single()),
                 "It waits in the last layer, after the attacks");
             game.Resolve();
-            Assert.AreEqual(6, guard.Health, "He Protec: it stays through the attacks and takes the hit on its slot...");
+            Assert.AreEqual(9 - biter.Attack, guard.Health, "He Protec: it stays through the attacks and takes the hit on its slot (the biter's 3 and its Flank's +1)...");
             Assert.AreSame(pup, p1.Battlefield[1].OccupyingCreature, "...then the newcomer takes its place");
             Assert.AreEqual(2, pup.Health, "...unhurt");
             AssertDiscarded(p1, guard);
@@ -278,7 +281,7 @@ namespace Zeitgeist.Tests {
             leaderData.ability = CreatureAbility.Irreplaceable;
             int turtleAttack = turtle.Attack;
             var leader = game.Summon(p1, leaderData, 1);
-            Assert.AreEqual(2, leader.Attack, "Its +2 Attack goes to the other friendly creatures, not itself...");
+            Assert.AreEqual(2 + Formation.FlankAttack, leader.Attack, "Its +2 Attack goes to the other friendly creatures, not itself (its own 2, and its Flank's +1)...");
             Assert.AreEqual(turtleAttack + 2, turtle.Attack, "...the others get it");
             var usurper = (ICreature)game.GiveCard(p1, game.Creature("Usurper", 3, 3));
             game.Play(usurper, p1, p1.Battlefield[1]);
@@ -293,7 +296,7 @@ namespace Zeitgeist.Tests {
             Assert.AreSame(turtle, p1.Battlefield[4].OccupyingCreature);
             Assert.IsFalse(p1.Battlefield[0].IsOccupied());
             int healthBeforeStunnedAttack = p2.Health;
-            Attack(turtle, p2.Battlefield[4]); // An empty slot: the attack would hit the player
+            Attack(turtle, p2.Battlefield[0]); // An empty slot in reach (Headquarters to their Vanguard): the attack would hit the player
             Assert.AreEqual(healthBeforeStunnedAttack, p2.Health);
 
             // A creature that needs time to become operative can't attack yet and its effects are off, but it can move (the

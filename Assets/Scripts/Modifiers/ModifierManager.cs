@@ -257,6 +257,11 @@ namespace Zeitgeist {
                     creature.ModifyArmorPool(Abilities.RiotGearArmor);
                     mediator.NotifyCreatureArmorChanged(creature, creature.CurrentArmorPool);
                 }
+                // The Vanguard takes the melee: +1 Armor each Dawn, up to 2 (GDD 2.4; the user, 2026-10-17)
+                if (creature.Slot != null && Formation.PositionOf(creature.Slot.Index) == Formation.Position.Vanguard && creature.CurrentArmorPool < Formation.VanguardArmorCap) {
+                    creature.ModifyArmorPool(1);
+                    mediator.NotifyCreatureArmorChanged(creature, creature.CurrentArmorPool);
+                }
                 creature.HandleEffect(EffectTrigger.StartOfTurn, actionsQueue);
             }
             Log($"ModifierManager: Start of turn {startingTurnNumber} processing complete.", LogTag.Effects | LogTag.Turns);
@@ -370,6 +375,10 @@ namespace Zeitgeist {
             int finalMaxHealth = Math.Max(0, CalculateStat(creature.BaseHealth, mods, ModifiableStat.Health)); // 0 means it dies (GDD 3.3)
             int finalSpeed = Math.Max(0, CalculateStat(creature.BaseSpeed, mods, ModifiableStat.Speed));
             finalAttack += Abilities.AttackFromGame(creature, Trends); // Grudge, On Trend
+            if (creature.Slot != null && Formation.PositionOf(creature.Slot.Index) == Formation.Position.Flanks) { // The Flanks shoot: +1 Attack and +1 Speed while there (GDD 2.4)
+                finalAttack += Formation.FlankAttack;
+                finalSpeed += Formation.FlankSpeed;
+            }
 
             var before = (creature.Attack, creature.MaxHealth, creature.Speed, creature.Health);
 
@@ -388,9 +397,16 @@ namespace Zeitgeist {
         private ICard OriginOf(ICreature creature, IModifier modifier) =>
             attachments.TryGetValue(creature.TargetId, out var list) ? list.FirstOrDefault(a => a.Modifier == modifier)?.Card : null;
 
+        // Where each creature stood at the last refresh: a Flank's bonus comes and goes with its slot (the user, 2026-10-17)
+        private readonly Dictionary<string, int> lastDepth = new Dictionary<string, int>();
+
         public void RefreshConditionalStats() {
             foreach (var creature in creatures.Values.ToList()) {
-                if (creature != null && !creature.IsDead && Abilities.HangsOnTheGame(creature.Ability)) RecalculateStats(creature);
+                if (creature == null || creature.IsDead) continue;
+                int depth = creature.Slot != null ? Formation.Depth(creature.Slot.Index) : -1;
+                bool moved = !lastDepth.TryGetValue(creature.TargetId, out int stood) || stood != depth;
+                if (moved) lastDepth[creature.TargetId] = depth;
+                if (moved || Abilities.HangsOnTheGame(creature.Ability)) RecalculateStats(creature);
             }
         }
 

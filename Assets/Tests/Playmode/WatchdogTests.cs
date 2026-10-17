@@ -39,23 +39,23 @@ namespace Zeitgeist.Tests {
 
         [Test]
         public void OnWatch_Nullify_Conditions_AndTheOldestMatchTriggers() {
-            var mine = game.Summon(p1, game.Creature("Mine", 4, 10), 0);
+            var mine = game.Summon(p1, game.Creature("Mine", 4, 10), 1); // A Flank, leaving their Vanguard an empty slot in reach of the brute
             var brute = game.Summon(p2, game.Creature("Brute", 3, 10), 0);
             Watch(Spec(WatchdogEffect.Nullify), p1);
-            game.Attack(brute, p1.Battlefield[1]); // An empty slot: it would hit player 1
+            game.Attack(brute, p1.Battlefield[0]); // An empty slot: it would hit player 1
             Assert.AreEqual(Player.StartingHealth, p1.Health, "Nullified");
             Assert.IsEmpty(game.ActionsQueue.Watchdogs, "Its only charge is used: it's gone");
-            game.Attack(brute, p1.Battlefield[1]);
+            game.Attack(brute, p1.Battlefield[0]);
             Assert.AreEqual(Player.StartingHealth - 3, p1.Health);
 
             Watch(Spec(WatchdogEffect.Nullify, atMost: 2), p1);
-            game.Attack(brute, p1.Battlefield[1]);
+            game.Attack(brute, p1.Battlefield[0]);
             Assert.AreEqual(Player.StartingHealth - 6, p1.Health, "Attack 3 isn't 2 or less");
             Watch(Spec(WatchdogEffect.Nullify), p1);
             game.Attack(mine, p2.Battlefield[1]);
-            Assert.AreEqual(Player.StartingHealth - 4, p2.Health, "It watches enemy attacks, not friendly ones");
+            Assert.AreEqual(Player.StartingHealth - mine.Attack, p2.Health, "It watches enemy attacks, not friendly ones");
             Watch(Spec(WatchdogEffect.Reveal), p1);
-            game.Attack(brute, p1.Battlefield[1]);
+            game.Attack(brute, p1.Battlefield[0]);
             Assert.AreEqual(Player.StartingHealth - 6, p1.Health, "The older Nullify triggered");
             Assert.AreEqual(2, game.ActionsQueue.Watchdogs.Count, "The newer one kept its charge (with the strength one)");
 
@@ -142,8 +142,8 @@ namespace Zeitgeist.Tests {
 
         [Test]
         public void Briefing_OnlineTheDayItsSet_PicksEveryOrTheStrongest_OneChargePerAction_AndDaysRunOut() {
-            var a = game.Summon(p2, game.Creature("A", 2, 10), 0);
-            var b = game.Summon(p2, game.Creature("B", 3, 10), 1);
+            var a = game.Summon(p2, game.Creature("A", 2, 10), 4); // Headquarters both: no Flank bonus to B's Speed, no Dawn Armor on A (A's attack must come first)
+            var b = game.Summon(p2, game.Creature("B", 3, 10), 3);
             var c = game.Summon(p2, game.Creature("C", 4, 10), 2);
             Watch(Spec(WatchdogEffect.Nullify, timing: WatchdogTiming.Briefing, pick: BriefingPick.Every, charges: 2), p1);
 
@@ -154,7 +154,7 @@ namespace Zeitgeist.Tests {
 
             game.StartTurn();
             game.Declare(a, p1.Battlefield[0]);
-            game.Declare(b, p1.Battlefield[1]);
+            game.Declare(b, p1.Battlefield[0]); // Headquarters reach their Vanguard alone
             game.ActionsQueue.BriefWatchdogs();
             game.Resolve();
             Assert.AreEqual(Player.StartingHealth - 3, p1.Health, "One charge per action: its last one only stops the first, B's attack lands");
@@ -197,7 +197,7 @@ namespace Zeitgeist.Tests {
             game.ActionsQueue.BriefWatchdogs();
             game.Resolve();
             Assert.AreEqual(health - 2, p1.Health, "Only A's attack lands...");
-            Assert.AreEqual(10 - 4, c.Health, "...C's backfires on C");
+            Assert.AreEqual(10 - c.Attack, c.Health, "...C's backfires on C (its 4 and its Flank's +1)");
 
             // GoldenEye wipes out a player's Watchdogs, and only theirs
             Watch(Spec(WatchdogEffect.Nullify, charges: 3), p1);

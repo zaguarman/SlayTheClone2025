@@ -48,17 +48,18 @@ namespace Zeitgeist.Tests {
             ChangeAttack(contrarian, -2, p2);
             Assert.AreEqual(3, contrarian.Attack, "...and the enemy's debuff helps it");
 
-            var extremist = With(CreatureAbility.Extremist, p1, 1);
+            var extremist = With(CreatureAbility.Extremist, p1, 3); // Headquarters: no Flank bonus
             ChangeAttack(extremist, 2, p1);
             ChangeAttack(extremist, -1, p2);
             Assert.AreEqual(5, extremist.Attack, "Extremist: +4, then -2");
 
+            int flank = Formation.FlankAttack; // Calm stands on a Flank (the other slots are taken): +1 Attack on top of its numbers
             var calm = With(CreatureAbility.Unbothered, p1, 2);
             ChangeAttack(calm, -2, p2);
-            Assert.AreEqual(3, calm.Attack, "Unbothered: the enemy can't lower its stats");
+            Assert.AreEqual(3 + flank, calm.Attack, "Unbothered: the enemy can't lower its stats");
             ChangeAttack(calm, -1, p1);
             ChangeAttack(calm, 1, p2);
-            Assert.AreEqual(3, calm.Attack, "Its owner can, and enemy buffs still apply");
+            Assert.AreEqual(3 + flank, calm.Attack, "Its owner can, and enemy buffs still apply");
             game.Run(new ModifyAction(calm, -2, false, true, false, controller: p2));
             Assert.AreEqual(8, calm.Health, "Health Loss isn't a stat change: it goes through");
 
@@ -71,7 +72,7 @@ namespace Zeitgeist.Tests {
             var unpatchable = With(CreatureAbility.Unpatchable, p1, 4);
             var hacker = With(CreatureAbility.ZeroDay, p2, 0);
             ChangeAttack(calm, -2, p2, by: hacker);
-            Assert.AreEqual(1, calm.Attack, "Zero-Day bypasses Unbothered");
+            Assert.AreEqual(1 + flank, calm.Attack, "Zero-Day bypasses Unbothered");
             ChangeAttack(unpatchable, -2, p2, by: hacker);
             Assert.AreEqual(3, unpatchable.Attack, "...but not Unpatchable");
 
@@ -91,7 +92,7 @@ namespace Zeitgeist.Tests {
         public void NoU_DeflectsEnemyEffectsAtRandom_ReturnToSender_BouncesStatusesToTheirSource() {
             var mirror = With(CreatureAbility.NoU, p1, 0);
             var shrinker = With(CreatureAbility.None, p2, 0, health: 10);
-            var weakling = With(CreatureAbility.None, p2, 1, health: 2);
+            var weakling = With(CreatureAbility.None, p2, 3, health: 2); // Headquarters: no Flank bonus
             game.Run(new ApplyStatusEffectAction(weakling, StatusEffectType.HeatSignature, 1, 1)); // Draws the random pick
 
             ChangeAttack(mirror, -1, p2, by: shrinker);
@@ -104,7 +105,7 @@ namespace Zeitgeist.Tests {
             game.Run(new ApplyStatusEffectAction(mirror, StatusEffectType.Exhausted, 1, 0, source: shrinker, controller: p2));
             Assert.IsFalse(game.ModifierManager.HasStatusEffect(mirror, StatusEffectType.Exhausted));
             Assert.IsTrue(game.ModifierManager.HasStatusEffect(weakling, StatusEffectType.Exhausted), "...and statuses");
-            var otherMirror = With(CreatureAbility.NoU, p2, 2);
+            var otherMirror = With(CreatureAbility.NoU, p2, 4); // Headquarters: no Flank bonus
             game.Run(new ApplyStatusEffectAction(otherMirror, StatusEffectType.HeatSignature, 1, 5));
             ChangeAttack(mirror, -1, p2, by: otherMirror);
             Assert.AreEqual(2, otherMirror.Attack, "A deflected effect can't be deflected again");
@@ -127,8 +128,8 @@ namespace Zeitgeist.Tests {
             // False Flag Operation: the creature it destroys rallies the others of its side only (+2 Attack)
             using (var g = new TestGame()) {
                 var victim = g.Summon(g.Player2, g.Creature("Victim", 1, 3), 0);
-                var ally = g.Summon(g.Player2, g.Creature("Ally", 1, 3), 2);
-                var mine = g.Summon(g.Player1, g.Creature("Mine", 1, 3), 1);
+                var ally = g.Summon(g.Player2, g.Creature("Ally", 1, 3), 3); // Off the Flanks: their +1 Attack would muddle the count
+                var mine = g.Summon(g.Player1, g.Creature("Mine", 1, 3), 0);
                 var destroy = TestCards.Effect(EffectTrigger.OnPlay, ActionType.Destroy, 0, TargetType.AllCreatures);
                 var rally = TestCards.Effect(EffectTrigger.OnPlay, ActionType.ModifyStat, 2, TargetType.AllCreatures, TargetModifier.AlliesOfTarget);
                 rally.actions[0].modifyAttack = true;
@@ -159,9 +160,9 @@ namespace Zeitgeist.Tests {
             var buffed = With(CreatureAbility.None, p2, 1, health: 10);
             game.Run(new ModifyAction(buffed, 4, false, true, false, controller: p2)); // 14/14: the buff would soak the hit
             game.Attack(digger, p2.Battlefield[1]);
-            Assert.AreEqual(7, buffed.Health, "Underground, attacking: as if the Health buff weren't there");
+            Assert.AreEqual(10 - digger.Attack, buffed.Health, "Underground, attacking: as if the Health buff weren't there (its 3 and its Flank's +1)");
 
-            var tech = With(CreatureAbility.PennyStock, p1, 2, attack: 3);
+            var tech = With(CreatureAbility.PennyStock, p1, 2, attack: 2); // 2, and its Flank's +1: 3
             var target = With(CreatureAbility.None, p2, 2, health: 20);
             game.Attack(tech, p2.Battlefield[2]);
             Assert.AreEqual(14, target.Health, "Penny Stock: 3 becomes 6");
@@ -169,21 +170,22 @@ namespace Zeitgeist.Tests {
             game.Attack(tech, p2.Battlefield[2]);
             Assert.AreEqual(10, target.Health, "4 is too much to double");
 
+            // (The reach, GDD 2.4: from Headquarters an attack reaches their Vanguard alone, so the targets below stand there, each replacing the last)
             var insider = With(CreatureAbility.InsiderJob, p1, 3, attack: 3);
-            var guard = With(CreatureAbility.None, p2, 3, health: 10);
+            var guard = With(CreatureAbility.None, p2, 0, health: 10);
             game.Run(new ModifyArmorAction(guard, 5));
-            game.Attack(insider, p2.Battlefield[3]);
+            game.Attack(insider, p2.Battlefield[0]);
             Assert.AreEqual(7, guard.Health, "Insider Job ignores Armor...");
             Assert.AreEqual(5, guard.CurrentArmorPool, "...and leaves it untouched");
 
             // Ambush: it arrives as ???, and hits double until the other side knows what it is
-            var sleeper = With(CreatureAbility.Ambush, p1, 3, attack: 3);
-            var mark = With(CreatureAbility.None, p2, 3, health: 20);
+            var sleeper = With(CreatureAbility.Ambush, p1, 4, attack: 3);
+            var mark = With(CreatureAbility.None, p2, 0, health: 20);
             Assert.IsFalse(Intel.KnowsWhatItIs(p2, sleeper), "Ambush: it arrives unknown");
-            game.Attack(sleeper, p2.Battlefield[3]);
+            game.Attack(sleeper, p2.Battlefield[0]);
             Assert.AreEqual(14, mark.Health, "...and while they don't know it, 3 becomes 6");
             game.Run(new ApplyStatusEffectAction(sleeper, StatusEffectType.Revealed, 1, 0, controller: p2));
-            game.Attack(sleeper, p2.Battlefield[3]);
+            game.Attack(sleeper, p2.Battlefield[0]);
             Assert.AreEqual(11, mark.Health, "Revealed, it's known for good: plain damage");
 
             // Destroy kills outright, Health and Armor or not; this one only a Revealed creature, and Untouchable saves it
@@ -192,7 +194,7 @@ namespace Zeitgeist.Tests {
             var hit = game.GiveCard(p1, game.Spell("Hit", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Destroy, 0, TargetType.EnemyCreatures)));
             ((Spell)hit).Effects[0].actions[0].requires = TargetRequisite.Revealed;
             game.Run(new ApplyStatusEffectAction(mark, StatusEffectType.Untouchable, 1, 0, controller: p2));
-            game.Play(hit, p1, p2.Battlefield[3]);
+            game.Play(hit, p1, p2.Battlefield[0]);
             game.Resolve();
             Assert.IsFalse(mark.IsDead, "Destroy: Untouchable saves it");
             var another = game.Summon(p2, game.Creature("Wall", 0, 30), 3);
@@ -210,19 +212,19 @@ namespace Zeitgeist.Tests {
 
             // Extreme Prejudice: its attack destroys what it hits, and then it's gone too
             var hitman = With(CreatureAbility.ExtremePrejudice, p1, 3, attack: 1);
-            var bunker = With(CreatureAbility.None, p2, 3, health: 25);
+            var bunker = With(CreatureAbility.None, p2, 0, health: 25);
             game.Run(new ModifyArmorAction(bunker, 5));
-            game.Attack(hitman, p2.Battlefield[3]);
+            game.Attack(hitman, p2.Battlefield[0]);
             Assert.IsTrue(bunker.IsDead, "Extreme Prejudice: Health and Armor don't save it...");
             Assert.IsTrue(hitman.IsDead, "...and the assassin is gone too");
-            var guarded = With(CreatureAbility.None, p2, 3, health: 2);
+            var guarded = With(CreatureAbility.None, p2, 0, health: 2);
             game.Run(new ApplyStatusEffectAction(guarded, StatusEffectType.Untouchable, 1, 0, controller: p2));
             var second = With(CreatureAbility.ExtremePrejudice, p1, 3, attack: 1);
-            game.Attack(second, p2.Battlefield[3]);
+            game.Attack(second, p2.Battlefield[0]);
             Assert.IsFalse(guarded.IsDead, "Untouchable stops the hit");
             Assert.IsFalse(second.IsDead, "...and the assassin lives to try again");
 
-            var hipster = With(CreatureAbility.TooMainstream, p2, 4);
+            var hipster = With(CreatureAbility.TooMainstream, p2, 1); // A Flank: in reach of the smoker below
             var bomb = game.GiveCard(p1, game.Spell("Bomb", TargetType.EnemyCreatures,
                 Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets)));
             game.Play(bomb, p1, null);
@@ -230,13 +232,14 @@ namespace Zeitgeist.Tests {
             Assert.AreEqual(10, hipster.Health, "Too Mainstream: every enemy creature is too mainstream");
             Assert.AreEqual(8, target.Health);
             var zap = game.GiveCard(p1, game.Spell("Zap", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.EnemyCreatures)));
-            game.Play(zap, p1, p2.Battlefield[4]);
+            game.Play(zap, p1, p2.Battlefield[1]);
             game.Resolve();
             Assert.AreEqual(8, hipster.Health, "Aimed at it alone, it lands");
 
-            var smoker = With(CreatureAbility.Recoil, p1, 4, attack: 2, health: 5);
-            game.Attack(smoker, p2.Battlefield[4]);
-            Assert.AreEqual(4, hipster.Health, "Recoil: its attack hits for 2 more...");
+            var smoker = With(CreatureAbility.Recoil, p1, 1, attack: 2, health: 5); // Flank against Flank: in reach
+            int hipsterHealth = hipster.Health;
+            game.Attack(smoker, p2.Battlefield[1]);
+            Assert.AreEqual(hipsterHealth - smoker.Attack - 2, hipster.Health, "Recoil: its attack (2, and its Flank's +1) hits for 2 more...");
             Assert.AreEqual(4, smoker.Health, "...and costs it 1 damage");
 
             var shift = With(CreatureAbility.Handover, p1, 4, attack: 1, health: 4);
@@ -256,43 +259,47 @@ namespace Zeitgeist.Tests {
             var right = With(CreatureAbility.None, p2, 2);
             var far = With(CreatureAbility.None, p2, 4);
             game.Attack(sprayer, p2.Battlefield[1]);
-            Assert.AreEqual(new[] { 8, 8, 8, 10 }, new[] { left.Health, middle.Health, right.Health, far.Health },
+            int spray = 10 - sprayer.Attack; // Its 2 and its Flank's +1
+            Assert.AreEqual(new[] { spray, spray, spray, 10 }, new[] { left.Health, middle.Health, right.Health, far.Health },
                 "Spray and Pray: the target (the left Flank) and the creatures a step away (the Vanguard, the right Flank), not the far Headquarters");
 
-            var tapper = With(CreatureAbility.DoubleTap, p1, 3, attack: 2);
-            game.Attack(tapper, p2.Battlefield[4]);
-            Assert.AreEqual(6, far.Health, "Double Tap: it hits twice");
+            // (The reach, GDD 2.4: Headquarters is out of every attack's, so the attacks below go Flank to Flank or at the Vanguard)
+            var tapper = With(CreatureAbility.DoubleTap, p1, 2, attack: 2);
+            int middleHealth = middle.Health;
+            game.Attack(tapper, p2.Battlefield[1]);
+            Assert.AreEqual(middleHealth - 2 * tapper.Attack, middle.Health, "Double Tap: it hits twice (its 2 and its Flank's +1, twice)");
 
             var chainer = With(CreatureAbility.ChainMail, p1, 0, attack: 4);
+            int leftHealth = left.Health, rightHealth = right.Health, restHealth = middle.Health + far.Health;
             game.Attack(chainer, p2.Battlefield[0]);
             // From the Vanguard the chain jumps to the Flank that leads on further (the right one, beside the far Headquarters),
             // then to one of the two a step from there, for 1
-            Assert.AreEqual((4, 6), (left.Health, right.Health), "Chain Mail: 4, then the next creature a step away for half (2)...");
-            Assert.AreEqual(8 + 6 - 1, middle.Health + far.Health, "...then the next one for half again (1)");
+            Assert.AreEqual((leftHealth - 4, rightHealth - 2), (left.Health, right.Health), "Chain Mail: 4, then the next creature a step away for half (2)...");
+            Assert.AreEqual(restHealth - 1, middle.Health + far.Health, "...then the next one for half again (1)");
 
             // On the Brink (Utopia's accelerationism): at 2 Health or less, everything it deals is doubled
-            var daredevil = With(CreatureAbility.Brink, p1, 4, attack: 3, health: 5);
-            var dummy = With(CreatureAbility.None, p2, 4, health: 30);
-            game.Attack(daredevil, p2.Battlefield[4]);
-            Assert.AreEqual(27, dummy.Health, "On the Brink, still healthy: plain damage");
+            var daredevil = With(CreatureAbility.Brink, p1, 2, attack: 3, health: 5); // Flank against Flank
+            var dummy = With(CreatureAbility.None, p2, 2, health: 30);
+            game.Attack(daredevil, p2.Battlefield[2]);
+            Assert.AreEqual(30 - daredevil.Attack, dummy.Health, "On the Brink, still healthy: plain damage (its 3 and its Flank's +1)");
             game.Run(new DamageCreatureAction(daredevil, 3));
-            game.Attack(daredevil, p2.Battlefield[4]);
-            Assert.AreEqual(21, dummy.Health, "...at 2 Health, 3 becomes 6");
+            game.Attack(daredevil, p2.Battlefield[2]);
+            Assert.AreEqual(30 - 3 * daredevil.Attack, dummy.Health, "...at 2 Health, it doubles");
 
             // Collateral Damage: what its attack has left once the creature's Armor and Health are gone hits that creature's player
             var executive = With(CreatureAbility.CollateralDamage, p1, 0, attack: 7);
             game.Run(new ModifyArmorAction(left, 1));
-            int before = p2.Health;
+            int before = p2.Health, soaked = 1 + left.Health;
             game.Attack(executive, p2.Battlefield[0]);
-            Assert.IsTrue(left.IsDead, "Collateral Damage: 1 Armor and 4 Health take 5 of its 7...");
-            Assert.AreEqual(before - 2, p2.Health, "...and the 2 left go on to their player");
+            Assert.IsTrue(left.IsDead, "Collateral Damage: 1 Armor and its Health take part of the 7...");
+            Assert.AreEqual(before - (7 - soaked), p2.Health, "...and the rest goes on to their player");
 
             // False Flag Operation: one of yours dies, the rest grow. Its Last Will still happens: Dead Man's Switch destroys
             // their strongest, whatever killed it
             Fresh();
             var deadMan = game.Summon(p1, game.Creature("Dead Man", 1, 2, 1,
                 Effect(EffectTrigger.OnDeath, ActionType.Destroy, 0, TargetType.EnemyCreatures, TargetModifier.Strongest)), 0);
-            var buddy = With(CreatureAbility.None, p1, 1, attack: 1, health: 1);
+            var buddy = With(CreatureAbility.None, p1, 3, attack: 1, health: 1); // Headquarters: no Flank bonus in the numbers
             var small = With(CreatureAbility.None, p2, 0, attack: 2);
             var big = With(CreatureAbility.None, p2, 1, attack: 6);
             var flag = game.Spell("False Flag", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Destroy, 0, TargetType.FriendlyCreatures));
@@ -360,13 +367,14 @@ namespace Zeitgeist.Tests {
             Assert.IsTrue(tank.IsDead, "Its 30 Health don't matter");
             Assert.IsFalse(HasStatus(agent, StatusEffectType.Licensed), "The licence is spent");
             game.StartTurn();
-            game.Attack(agent, p2.Battlefield[1]);
+            game.Run(new MoveCreatureAction(henchman, p2.Battlefield[1], p2.Battlefield[0], p2)); // Into the agent's reach: a Vanguard melees their Vanguard alone
+            game.Attack(agent, p2.Battlefield[0]);
             Assert.AreEqual(29, henchman.Health, "The next attack is a plain one");
 
             // With Double Tap both hits carry the licence: two Blessings, or one Blessing and the creature
             var doubleO = With(CreatureAbility.DoubleTap, p1, 2, attack: 1, health: 5);
             var saint = With(CreatureAbility.None, p2, 2, attack: 1, health: 30);
-            var martyr = With(CreatureAbility.None, p2, 3, attack: 1, health: 30);
+            var martyr = With(CreatureAbility.None, p2, 1, attack: 1, health: 30); // A Flank: in reach of the Flank below (Headquarters would be out of it)
             game.Run(new ApplyStatusEffectAction(saint, StatusEffectType.Blessed, 1, 2));
             game.Run(new ApplyStatusEffectAction(martyr, StatusEffectType.Blessed, 1, 1));
             game.Run(new ApplyStatusEffectAction(doubleO, StatusEffectType.Licensed, 1, 0));
@@ -374,15 +382,15 @@ namespace Zeitgeist.Tests {
             Assert.IsFalse(saint.IsDead, "Two Blessings take both hits");
             Assert.IsFalse(HasStatus(saint, StatusEffectType.Blessed));
             game.StartTurn();
-            var third = With(CreatureAbility.DoubleTap, p1, 3, attack: 1, health: 5);
+            var third = With(CreatureAbility.DoubleTap, p1, 1, attack: 1, health: 5);
             game.Run(new ApplyStatusEffectAction(third, StatusEffectType.Licensed, 1, 0));
-            game.Attack(third, p2.Battlefield[3]);
+            game.Attack(third, p2.Battlefield[1]);
             Assert.IsTrue(martyr.IsDead, "One Blessing takes the first hit; the second kills");
 
             // Femme Fatale: each Dusk, 2 damage to the creature facing her, and she heals 1
             var fatale = game.Summon(p1, game.Creature("Fatale", 2, 4, 1,
                 Effect(EffectTrigger.EndOfTurn, ActionType.Damage, 2, TargetType.EnemyCreatures, TargetModifier.Opposite),
-                Effect(EffectTrigger.EndOfTurn, ActionType.Heal, 1, TargetType.Self)), 1);
+                Effect(EffectTrigger.EndOfTurn, ActionType.Heal, 1, TargetType.Self)), 0); // The Vanguard: facing the henchman, moved there above
             game.Run(TargetedActions.Damage(fatale, 2));
             game.StartTurn();
             Assert.AreEqual(27, henchman.Health, "Squeezed: the one facing her");
@@ -398,8 +406,8 @@ namespace Zeitgeist.Tests {
             var dressed = With(CreatureAbility.None, p2, 1, attack: 1, health: 20);
             ChangeAttack(dressed, 2, p2);
             game.Attack(screener, p2.Battlefield[1]);
-            Assert.AreEqual(1, dressed.Attack, "Strip Search Purged its raise");
-            Assert.AreEqual(20 - 3 - Abilities.StripBonus, dressed.Health, "...and hit 2 harder");
+            Assert.AreEqual(1 + Formation.FlankAttack, dressed.Attack, "Strip Search Purged its raise (its Flank's +1 isn't one)");
+            Assert.AreEqual(20 - screener.Attack - Abilities.StripBonus, dressed.Health, "...and hit 2 harder");
 
             // Sucker Punch: its attack goes first against a creature that attacks, faster or not; it holds back against one that doesn't
             var puncher = With(CreatureAbility.SuckerPunch, p1, 2, attack: 4, health: 5);
@@ -416,7 +424,7 @@ namespace Zeitgeist.Tests {
             // Hit and Run: after its hit, back to the hand with the next Day's, its slot free
             var runner = With(CreatureAbility.HitAndRun, p1, 4, attack: 2, health: 3);
             int health = p2.Health;
-            game.Attack(runner, p2.Battlefield[4]);
+            game.Attack(runner, p2.Battlefield[0]); // Their empty Vanguard: what Headquarters reaches
             Assert.AreEqual(health - 2, p2.Health);
             Assert.IsNull(p1.Battlefield[4].OccupyingCreature, "It ran");
             Assert.IsTrue(p1.ComingBack.Any(c => c.Name == runner.Name), "...back to the hand");
@@ -427,16 +435,16 @@ namespace Zeitgeist.Tests {
             var fodder = With(CreatureAbility.None, p1, 1, attack: 1, health: 1);
             game.Run(TargetedActions.Damage(fodder, 5));
             Assert.AreEqual(3, avenger.Attack, "One friend fallen: +1");
-            var spinner = With(CreatureAbility.OnTrend, p1, 2, attack: 2, health: 5);
+            var spinner = With(CreatureAbility.OnTrend, p1, 3, attack: 2, health: 5); // Headquarters: no Flank bonus in the numbers
             Assert.AreEqual(2, spinner.Attack);
             game.Run(new SetTrendAction(Trend.RushHour, 2, p1));
             Assert.AreEqual(2 + Abilities.TrendBonus, spinner.Attack, "A Trend is on");
 
             // Martyrdom: while Doomed, everything it deals is doubled
             var heretic = With(CreatureAbility.Martyrdom, p1, 3, attack: 3, health: 5);
-            var punchbag = With(CreatureAbility.None, p2, 3, attack: 0, health: 30);
+            var punchbag = With(CreatureAbility.None, p2, 0, attack: 0, health: 30); // Their Vanguard: what the heretic reaches from Headquarters
             game.Run(new ApplyStatusEffectAction(heretic, StatusEffectType.Doomed, 3, 0));
-            game.Attack(heretic, p2.Battlefield[3]);
+            game.Attack(heretic, p2.Battlefield[0]);
             Assert.AreEqual(24, punchbag.Health, "3 Attack, doubled");
 
             // Hormesis heals from Burn instead of taking it
@@ -465,8 +473,8 @@ namespace Zeitgeist.Tests {
             var taunter = With(CreatureAbility.None, p1, 1, attack: 0, health: 10);
             game.Run(new ApplyStatusEffectAction(provoked, StatusEffectType.Provoked, 2, 0));
             int healthBefore = p1.Health;
-            game.Attack(provoked, p1.Battlefield[3]); // Aimed at an empty slot, so the player
-            Assert.AreEqual((7, healthBefore), (taunter.Health, p1.Health), "Provoked: it hit the creature facing it");
+            game.Attack(provoked, p1.Battlefield[2]); // Aimed at an empty slot in its reach, so the player
+            Assert.AreEqual((10 - provoked.Attack, healthBefore), (taunter.Health, p1.Health), "Provoked: it hit the creature facing it (its 3 and its Flank's +1)");
 
             // Combo: 1 more for each other spell its player plays the same Day
             var finisherData = game.Spell("Finisher", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 1, TargetType.EnemyCreatures));
@@ -525,12 +533,12 @@ namespace Zeitgeist.Tests {
             game.Run(new UseAbilityAction(wannabe, p2.Battlefield[0]));
             Assert.AreEqual((6, 9, 7), (wannabe.Attack, wannabe.MaxHealth, wannabe.Health), "Wannabe: a copy of its Attack and Health, damage included");
 
-            var grabber = With(CreatureAbility.CreditGrab, p1, 1, attack: 1, health: 3);
-            var victim = With(CreatureAbility.None, p2, 1, attack: 2, health: 5);
+            var grabber = With(CreatureAbility.CreditGrab, p1, 3, attack: 1, health: 3); // Headquarters both: no Flank bonus in the numbers
+            var victim = With(CreatureAbility.None, p2, 3, attack: 2, health: 5);
             ChangeAttack(victim, 3, p2);
             game.ModifierManager.ChangeBaseStats(victim, 0, 2, 0);
             ChangeAttack(victim, -1, p1);
-            game.Run(new UseAbilityAction(grabber, p2.Battlefield[1]));
+            game.Run(new UseAbilityAction(grabber, p2.Battlefield[3]));
             Assert.AreEqual((4, 5), (grabber.Attack, grabber.MaxHealth), "Credit Grab: the +3 Attack and the +2 Health for good move over");
             Assert.AreEqual((1, 5), (victim.Attack, victim.MaxHealth), "The victim keeps only its lowered stat");
             ChangeAttack(victim, 2, p2);
@@ -545,21 +553,21 @@ namespace Zeitgeist.Tests {
                 "Shell Game: the target trades places with its partner in the formation (the other Headquarters slot)");
 
             // The same effects on spells: a spell works between its target and the creature facing it
-            With(CreatureAbility.None, p2, 2, attack: 5); // Facing the shell, now that the swap took the others to Headquarters
+            var facing = With(CreatureAbility.None, p2, 2, attack: 5); // Facing the shell, now that the swap took the others to Headquarters
             var mimic = Effect(EffectTrigger.OnPlay, ActionType.CopyStats, 0, TargetType.AllCreatures);
             game.Play(game.GiveCard(p1, game.Spell("Mimetic Theory", TargetType.AllCreatures, mimic)), p1, p1.Battlefield[2]);
             var grant = Effect(EffectTrigger.OnPlay, ActionType.GrantAbility, 0, TargetType.FriendlyCreatures);
             grant.actions[0].ability = CreatureAbility.DoubleTap;
             game.Play(game.GiveCard(p1, game.Spell("One for the Road", TargetType.FriendlyCreatures, grant)), p1, p1.Battlefield[2]);
             game.Resolve();
-            Assert.AreEqual(5, shell.Attack, "A spell copies the creature facing its target");
+            Assert.AreEqual(facing.Attack, shell.Attack, "A spell copies the creature facing its target (both on Flanks: the same +1)");
             Assert.AreEqual(CreatureAbility.DoubleTap, shell.Ability, "Any ability can come from a spell");
 
             // Never Let Them Know Your Next Move: the others' stat raises all go to the target
             Fresh();
             var hitman = With(CreatureAbility.None, p1, 0, attack: 1, health: 5);
-            var helperA = With(CreatureAbility.None, p1, 1, attack: 1, health: 5);
-            var helperB = With(CreatureAbility.None, p1, 2, attack: 1, health: 5);
+            var helperA = With(CreatureAbility.None, p1, 3, attack: 1, health: 5); // Headquarters: no Flank bonus in the numbers
+            var helperB = With(CreatureAbility.None, p1, 4, attack: 1, health: 5);
             ChangeAttack(helperA, 3, p1);
             ChangeAttack(helperB, 2, p1);
             game.Play(game.GiveCard(p1, game.Spell("Funnel", TargetType.FriendlyCreatures,
@@ -603,10 +611,10 @@ namespace Zeitgeist.Tests {
             // Invisible Hand on its own side. Each gives what it has, up to 1; Too Mainstream keeps its own
             Fresh();
             var tycoon = With(CreatureAbility.None, p2, 0, attack: 5);
-            var hipster = With(CreatureAbility.TooMainstream, p2, 1, attack: 3);
+            var hipster = With(CreatureAbility.TooMainstream, p2, 3, attack: 3); // Vanguards and Headquarters: no Flank bonus in the numbers
             var worker = With(CreatureAbility.None, p1, 0, attack: 2);
-            var broke = With(CreatureAbility.None, p1, 1, attack: 0);
-            var foreman = With(CreatureAbility.None, p1, 2, attack: 4);
+            var broke = With(CreatureAbility.None, p1, 3, attack: 0);
+            var foreman = With(CreatureAbility.None, p1, 4, attack: 4);
             game.Play(game.GiveCard(p1, game.Spell("Laissez-Faire", TargetType.AllCreatures,
                 Effect(EffectTrigger.OnPlay, ActionType.Consolidate, 1, TargetType.AllCreatures, TargetModifier.Strongest))), p1, null);
             game.Resolve();
@@ -684,14 +692,16 @@ namespace Zeitgeist.Tests {
             // Next Question: once a Day, as an attack is about to hit it, it steps into an empty slot and the attack hits nothing
             Fresh();
             var doctor = With(CreatureAbility.NextQuestion, p1, 0, attack: 2, health: 5);
-            var hitter = With(CreatureAbility.None, p2, 0, attack: 3, health: 10);
+            var hitter = With(CreatureAbility.None, p2, 1, attack: 3, health: 10); // A Flank: it reaches their Vanguard and Flanks
+            With(CreatureAbility.None, p1, 3); // Headquarters taken: the doctor can only step onto a Flank, within the hitter's reach
+            With(CreatureAbility.None, p1, 4);
             int health = p1.Health;
             game.Attack(hitter, p1.Battlefield[0]);
             Assert.AreEqual(5, doctor.Health, "It sidestepped");
             Assert.AreNotSame(p1.Battlefield[0], doctor.Slot, "...into another slot");
             Assert.AreEqual(health, p1.Health, "...and the attack hit nothing, not the player either");
             game.Attack(hitter, doctor.Slot);
-            Assert.AreEqual(2, doctor.Health, "Once a Day: the second attack lands");
+            Assert.AreEqual(5 - hitter.Attack, doctor.Health, "Once a Day: the second attack lands (the hitter's 3 and its Flank's +1)");
             Fresh();
             doctor = With(CreatureAbility.NextQuestion, p1, 0, attack: 2, health: 5);
             for (int i = 1; i < 5; i++) With(CreatureAbility.None, p1, i);
@@ -730,18 +740,18 @@ namespace Zeitgeist.Tests {
 
             // Hunker Down (Protect): a Day it plans nothing, no damage; a Day it attacks, the hit lands
             Fresh();
-            var clerk = With(CreatureAbility.HunkerDown, p1, 0, attack: 2, health: 6);
-            hitter = With(CreatureAbility.None, p2, 0, attack: 3, health: 10);
-            game.Declare(hitter, p1.Battlefield[0]);
+            var clerk = With(CreatureAbility.HunkerDown, p1, 1, attack: 2, health: 6); // Flank against Flank: in reach, and no Vanguard Armor at Dawn
+            hitter = With(CreatureAbility.None, p2, 1, attack: 3, health: 10);
+            game.Declare(hitter, p1.Battlefield[1]);
             Abilities.BeforeTheDayResolves(new IPlayer[] { p1, p2 }, game.ActionsQueue, game.ModifierManager);
             game.Resolve();
             Assert.AreEqual(6, clerk.Health, "It planned nothing: nothing touches it");
             game.StartTurn();
-            game.Declare(clerk, p2.Battlefield[0]);
-            game.Declare(hitter, p1.Battlefield[0]);
+            game.Declare(clerk, p2.Battlefield[1]);
+            game.Declare(hitter, p1.Battlefield[1]);
             Abilities.BeforeTheDayResolves(new IPlayer[] { p1, p2 }, game.ActionsQueue, game.ModifierManager);
             game.Resolve();
-            Assert.AreEqual(3, clerk.Health, "It attacked: the hit lands");
+            Assert.AreEqual(6 - hitter.Attack, clerk.Health, "It attacked: the hit lands (the hitter's 3 and its Flank's +1)");
 
             // Bomb Disposal (Rapid Spin): a Landmine on the slot it enters is defused
             Fresh();
@@ -767,14 +777,15 @@ namespace Zeitgeist.Tests {
 
             // Fixated (the Choice items): from its first attack on, the same attack every Day
             Fresh();
-            var pony = With(CreatureAbility.Fixated, p1, 0, attack: 5, health: 3);
+            var pony = With(CreatureAbility.Fixated, p1, 1, attack: 5, health: 3); // Flank against Flank: in reach, and no Vanguard Armor at Dawn
             var wall = With(CreatureAbility.None, p2, 1, attack: 0, health: 30);
             game.Attack(pony, p2.Battlefield[1]);
-            Assert.AreEqual(25, wall.Health);
+            int kick = pony.Attack; // Its 5 and its Flank's +1
+            Assert.AreEqual(30 - kick, wall.Health);
             game.StartTurn();
             Assert.IsTrue(game.ActionsQueue.HasActiveAction(pony.TargetId), "Its plan is made for it");
             game.Resolve();
-            Assert.AreEqual(20, wall.Health, "The same slot again");
+            Assert.AreEqual(30 - 2 * kick, wall.Health, "The same slot again");
 
             // Clingy (Shadow Tag): the enemy creature facing it can't move
             Fresh();
@@ -798,11 +809,11 @@ namespace Zeitgeist.Tests {
 
             // Backup Dancer (Dancer): it attacks the slot the friend beside it attacks, if it planned nothing
             Fresh();
-            var star = With(CreatureAbility.None, p1, 0, attack: 2, health: 5);
+            var star = With(CreatureAbility.None, p1, 2, attack: 2, health: 5); // Both on the Flanks, a step apart, within reach of their right Flank
             With(CreatureAbility.BackupDancer, p1, 1, attack: 2, health: 3);
             var crowd = With(CreatureAbility.None, p2, 2, attack: 0, health: 20);
             game.Attack(star, p2.Battlefield[2]);
-            Assert.AreEqual(16, crowd.Health, "The star's 2 and the dancer's 2");
+            Assert.AreEqual(20 - 2 * star.Attack, crowd.Health, "The star's 3 (2 and its Flank's +1) and the dancer's 3");
 
             // Jamming Field (Neutralizing Gas): every other creature's ability is off; its own is on
             Fresh();

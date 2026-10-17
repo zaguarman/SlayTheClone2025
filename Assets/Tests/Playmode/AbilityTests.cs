@@ -105,7 +105,7 @@ namespace Zeitgeist.Tests {
             game.Run(new SetTrendAction(Trend.LiminalSpace, 2, p1));
             Assert.AreEqual((7, 1), (wall.Attack, wall.Health));
             Assert.AreEqual((2, 6), (cannon.Attack, cannon.Health));
-            var late = game.Summon(p1, game.Creature("Late", 2, 5), 1);
+            var late = game.Summon(p1, game.Creature("Late", 2, 5), 3); // Headquarters: no Flank bonus in the way of the numbers
             Assert.AreEqual((5, 2), (late.Attack, late.Health), "A creature entering while it trends is traded too");
             game.StartTurn();
             Assert.AreEqual(Trend.LiminalSpace, game.TrendSystem.Current);
@@ -123,7 +123,7 @@ namespace Zeitgeist.Tests {
             var copy = p1.Battlefield[2].OccupyingCreature;
             Assert.IsNotNull(copy, "A copy appeared");
             Assert.AreNotSame(old, copy, "Whatever stood there is discarded");
-            Assert.AreEqual(("Model", 4, 4, true), (copy.Name, copy.Attack, copy.Health, copy.IsToken));
+            Assert.AreEqual(("Model", 4, 4, true), (copy.Name, copy.BaseAttack, copy.Health, copy.IsToken)); // Its own numbers (the copy stands on a Flank: +1 Attack on top)
 
             // Freaky Friday: the two trade Attack and Health, current Health with the body
             var tall = game.Summon(p1, game.Creature("Tall", 1, 8), 3);

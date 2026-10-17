@@ -8902,6 +8902,26 @@ def bomb_squad():
     return svg(defs, body)
 
 
+def drone_operator():
+    # A drone pilot in a headset in an air-conditioned trailer in the desert, a coffee and a family photo on the console, the
+    # screen showing a tiny palace under a targeting reticle twelve time zones away, a DAY SHIFT rota pinned to the wall
+    defs, body = bg_state("#c8a060")
+    body += rect(0, 0, W, 120, "#5a6672") + rect(0, 120, W, 80, "#3a4048")  # The trailer's wall and floor
+    body += rect(24, 20, 70, 54, "#f4f0e6", 'rx="2"') + lettering("DAY SHIFT", 59, 26, 6, "#222", width=1.0)  # The rota
+    for i in range(4):
+        body += rect(30, 40 + i * 8, 58, 4, "#9aa4ae")
+    body += rect(130, 24, 200, 112, "#101418", 'rx="6" stroke="#8a949e" stroke-width="4"')  # The screen
+    body += rect(140, 34, 180, 92, "#2c3e2a")  # Desert seen from above, at night
+    body += rect(210, 70, 40, 26, "#d8c8a0") + poly([(205, 70), (230, 54), (255, 70)], "#c0a878") + rect(226, 60, 8, 14, "#e8dcc0")  # A tiny palace
+    body += stroke("M230 50 L230 110 M200 80 L260 80", "#ff4a3a", 2) + circle(230, 80, 22, "none", 'stroke="#ff4a3a" stroke-width="2"')  # The reticle
+    body += lettering("+12H", 300, 40, 6, "#8af0a0", width=1.0)
+    body += rect(110, 136, 240, 20, "#6a7480", 'rx="3"')  # The console
+    body += rect(300, 118, 22, 20, "#f4f0e6", 'rx="2"') + rect(322, 124, 6, 8, "none", 'stroke="#f4f0e6" stroke-width="3"')  # The coffee
+    body += rect(118, 112, 30, 24, "#d8c8a0", 'stroke="#8a6a3a" stroke-width="2"') + circle(127, 122, 4, SKIN[1]) + circle(139, 122, 4, SKIN[0])  # The family photo
+    body += person(230, 200, 1.0, SKIN[2], "#4a5a3a", face="flat", hat="helmet")
+    return svg(defs, body)
+
+
 def riot_police():
     # A line of riot police behind transparent shields, each with a different sticker
     defs, body = bg_state("#6a6a7a")
@@ -9269,7 +9289,7 @@ CHUNK_MISSING = {
                   "DrugPigeon": drug_pigeon, "Embassy": embassy, "ExplodingPen": exploding_pen, "NonchalantAgent": nonchalant_agent,
                   "PoloniumUmbrella": polonium_umbrella, "QBranch": q_branch, "SecretAnthraxLaboratory": secret_anthrax_laboratory,
                   "TrackingBeacon": tracking_beacon},
-    "Statecraft": {"CivilServant": civil_servant, "BombSquad": bomb_squad, "RiotPolice": riot_police, "DrillSergeant": drill_sergeant, "Sapper": sapper, "MutuallyAssuredDestruction": mutually_assured_destruction, "DueProcess": due_process, "Curfew": curfew, "Filibuster": filibuster, "SpinDoctor": spin_doctor, "BorderCrossing": border_crossing, "Exoskeleton": exoskeleton, "PeaceForce": peace_force,
+    "Statecraft": {"DroneOperator": drone_operator, "CivilServant": civil_servant, "BombSquad": bomb_squad, "RiotPolice": riot_police, "DrillSergeant": drill_sergeant, "Sapper": sapper, "MutuallyAssuredDestruction": mutually_assured_destruction, "DueProcess": due_process, "Curfew": curfew, "Filibuster": filibuster, "SpinDoctor": spin_doctor, "BorderCrossing": border_crossing, "Exoskeleton": exoskeleton, "PeaceForce": peace_force,
                    "SecurityGuard": security_guard, "SiVisPacemParaBellum": si_vis_pacem_para_bellum},
     "Tech": {"EMPDrone": emp_drone, "Buffering": buffering, "BomberDrone": bomber_drone, "CodeReview": code_review, "CtrlY": ctrl_y, "Hovercraft": hovercraft},
     "Utopia": {"Parabiosis": parabiosis, "PeerReview": peer_review, "Ankylorhiza": ankylorhiza, "Biohacker": biohacker, "FemtosecondLaser": femtosecond_laser,

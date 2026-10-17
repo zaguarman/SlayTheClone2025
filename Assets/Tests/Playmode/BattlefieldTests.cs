@@ -48,12 +48,29 @@ namespace Zeitgeist.Tests {
             Assert.AreEqual(1, game.ActionsQueue.GetPendingActionsCount(), "...and an attack replaces a move");
             game.Resolve();
             Assert.AreSame(runner, p1.Battlefield[2].OccupyingCreature);
-            CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(target));
+            CollectionAssert.AreEqual(new[] { 3 }, game.History.DamageTo(target), "Its 2 Attack and a Flank's +1");
+
+            // The formation (the user, 2026-10-17, GDD 2.4): a Flank gives +1 Attack and +1 Speed and shoots their Vanguard
+            // and Flanks, never Headquarters; Artillery hits at exactly 4; off the Flank the bonus goes
+            Assert.AreEqual((3, runner.BaseSpeed + 1), (runner.Attack, runner.Speed), "On a Flank: +1 Attack and +1 Speed");
+            game.Declare(runner, p2.Battlefield[3]);
+            Assert.AreEqual(0, game.ActionsQueue.GetPendingActionsCount(), "Their Headquarters is out of a Flank's reach");
+            var gunData = game.Creature("Gun", 1, 5);
+            gunData.ability = CreatureAbility.Artillery;
+            var gun = game.Summon(p1, gunData, 1);
+            game.Declare(gun, p2.Battlefield[0]);
+            Assert.AreEqual(0, game.ActionsQueue.GetPendingActionsCount(), "Artillery never hits nearer than 4");
+            game.Declare(gun, p2.Battlefield[3]);
+            Assert.AreEqual(1, game.ActionsQueue.GetPendingActionsCount(), "...from a Flank it reaches their Headquarters");
+            game.ActionsQueue.CancelDeclaredAction(gun.TargetId);
+            game.ActionsQueue.AddAction(new MoveCreatureAction(runner, p1.Battlefield[2], p1.Battlefield[0], p1));
+            game.Resolve();
+            Assert.AreEqual((2, runner.BaseSpeed), (runner.Attack, runner.Speed), "Back on the Vanguard, the Flank's bonus is gone");
 
             var bolt = game.Spell("Bolt", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures));
             var ox = game.Summon(p2, game.Creature("Ox", 0, 10), 1);
             game.Run(new PlayCardAction(game.GiveCard(p1, bolt), p1, p2.Battlefield[1]));
-            Assert.AreEqual(8, target.Health, "A spell hits only the creature it was dropped on");
+            Assert.AreEqual(7, target.Health, "A spell hits only the creature it was dropped on");
             Assert.AreEqual(7, ox.Health);
             game.Run(new PlayCardAction(game.GiveCard(p1, bolt), p1, p2.Battlefield[3]));
             Assert.AreEqual(Player.StartingHealth - 3, p2.Health, "...or that side's player on an empty slot");
@@ -76,6 +93,16 @@ namespace Zeitgeist.Tests {
             game.Play(doom, p1, p2.Battlefield[4]);
             game.Resolve();
             Assert.IsTrue(((ICreature)summoned).IsDead, "...and it's hit as it lands");
+
+            // The Vanguard takes the melee: +1 Armor each Dawn, up to 2 (the runner stands there again)
+            game.StartTurn();
+            Assert.AreEqual(1, runner.CurrentArmorPool, "The Vanguard puts on 1 Armor at Dawn...");
+            game.StartTurn();
+            Assert.AreEqual(1, runner.CurrentArmorPool, "...Dusk fades 1 and Dawn adds 1: it keeps a plate on...");
+            game.Run(new ModifyArmorAction(runner, 2));
+            game.StartTurn();
+            Assert.AreEqual(2, runner.CurrentArmorPool, "...and adds none at 2 or more");
+            Assert.AreEqual(0, gun.CurrentArmorPool, "A Flank gets none");
 
             Fresh();
             var plating = game.Spell("Plating", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Armor, 2, TargetType.FriendlyCreatures));
@@ -120,15 +147,15 @@ namespace Zeitgeist.Tests {
             var runaway = game.Summon(p2, game.Creature("Runaway", 1, 10), 0);
             var hunterData = game.Creature("Hunter", 2, 5);
             hunterData.homing = true;
-            var hunter = game.Summon(p1, hunterData, 3);
-            var prey = game.Summon(p2, game.Creature("Prey", 0, 10), 3);
+            var hunter = game.Summon(p1, hunterData, 2); // A Flank: their Flank is in reach when the attack is planned; Homing follows the prey out of it
+            var prey = game.Summon(p2, game.Creature("Prey", 0, 10), 2);
             game.ActionsQueue.AddAction(new MoveCreatureAction(runaway, p2.Battlefield[0], p2.Battlefield[1], p2));
-            game.ActionsQueue.AddAction(new MoveCreatureAction(prey, p2.Battlefield[3], p2.Battlefield[4], p2));
+            game.ActionsQueue.AddAction(new MoveCreatureAction(prey, p2.Battlefield[2], p2.Battlefield[4], p2));
             game.Play(game.GiveCard(p1, homingBolt), p1, p2.Battlefield[0]);
-            game.Declare(hunter, p2.Battlefield[3]);
+            game.Declare(hunter, p2.Battlefield[2]);
             game.Resolve();
             Assert.AreEqual(7, runaway.Health, "A Homing spell follows the enemy creature it was aimed at...");
-            Assert.AreEqual(8, prey.Health, "...and so does a Homing creature's attack");
+            Assert.AreEqual(10 - hunter.Attack, prey.Health, "...and so does a Homing creature's attack (into Headquarters: the reach was checked when it was planned)");
             var decoy = game.Summon(p1, game.Creature("Decoy", 0, 10), 0);
             game.Run(new ApplyStatusEffectAction(decoy, StatusEffectType.HeatSignature, 1, 1));
             game.Play(game.GiveCard(p1, homingBolt), p1, p2.Battlefield[1]);
@@ -160,20 +187,21 @@ namespace Zeitgeist.Tests {
             Assert.AreEqual(new[] { 10, 9, 10, 9, 9 }, enemies.Select(e => e.Health).ToArray(), "A spell with Adjacent also hits the creatures a step away from where it lands");
 
             var cleaver = game.Summon(p1, game.Creature("Cleaver", 2, 5, 1,
-                Effect(EffectTrigger.OnDamage, ActionType.Damage, 0, TargetType.EnemyCreatures, TargetModifier.WithAdjacent)), 0);
+                Effect(EffectTrigger.OnDamage, ActionType.Damage, 0, TargetType.EnemyCreatures, TargetModifier.WithAdjacent)), 1); // A Flank: their left Flank is in its reach
             var rage = game.GiveCard(p1, game.Spell("Rage", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.ModifyStat, 3, TargetType.FriendlyCreatures)));
             game.Declare(cleaver, p2.Battlefield[1]);
-            game.ActionsQueue.AddAction(new PlayCardAction(rage, p1, p1.Battlefield[0])); // Spells land before attacks
+            game.ActionsQueue.AddAction(new PlayCardAction(rage, p1, p1.Battlefield[1])); // Spells land before attacks
             game.Resolve();
             // The left Flank and its neighbours in the formation: the Vanguard, the right Flank, the left Headquarters
-            Assert.AreEqual(new[] { 5, 4, 5, 4, 9 }, enemies.Select(e => e.Health).ToArray(),
+            int hit = cleaver.Attack; // Its 2, Rage's +3 and its Flank's +1
+            Assert.AreEqual(new[] { 10 - hit, 9 - hit, 10 - hit, 9 - hit, 9 }, enemies.Select(e => e.Health).ToArray(),
                 "A spreading attack hits the target and its neighbours, for the attack it has when the hits land");
 
             // Target side (Team Building Exercise): the side it's dropped on, either one; here also outside Headquarters only
             Fresh();
             var front = game.Summon(p1, game.Creature("Front", 1, 5), 0);
             var boss = game.Summon(p1, game.Creature("Boss", 1, 5), 3);
-            var rival = game.Summon(p2, game.Creature("Rival", 1, 5), 1);
+            var rival = game.Summon(p2, game.Creature("Rival", 1, 5), 0); // Their Vanguard: outside Headquarters, no Flank bonus
             var pep = Effect(EffectTrigger.OnPlay, ActionType.ModifyStat, 1, TargetType.AllCreatures, TargetModifier.AllSameTypeTargets | TargetModifier.DroppedSide);
             pep.actions[0].modifyAttack = true;
             pep.actions[0].modifyHealth = false;

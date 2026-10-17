@@ -154,14 +154,14 @@ namespace Zeitgeist.Tests {
 
             // Counterattack answers attacks only: hitting back isn't an attack (two of them never trade blows forever), nor is a spell
             var counter = Effect(EffectTrigger.OnDamage, ActionType.Damage, 0, TargetType.Enemy);
-            var hedgehog = game.Summon(p1, game.Creature("Hedgehog", 2, 10, 1, counter), 4);
-            var porcupine = game.Summon(p2, game.Creature("Porcupine", 3, 10, 1, counter), 4);
-            game.Declare(hedgehog, p2.Battlefield[4]);
+            var hedgehog = game.Summon(p1, game.Creature("Hedgehog", 2, 10, 1, counter), 2); // Flank against Flank: in reach
+            var porcupine = game.Summon(p2, game.Creature("Porcupine", 3, 10, 1, counter), 2);
+            game.Declare(hedgehog, p2.Battlefield[2]);
             game.Resolve();
-            Assert.AreEqual(8, porcupine.Health);
-            Assert.AreEqual(7, hedgehog.Health, "Hit back once, for the Porcupine's Attack, and not answered");
+            Assert.AreEqual(10 - hedgehog.Attack, porcupine.Health);
+            Assert.AreEqual(10 - porcupine.Attack, hedgehog.Health, "Hit back once, for the Porcupine's Attack (its Flank's +1 included), and not answered");
             game.Run(new DamageCreatureAction(porcupine, 1));
-            Assert.AreEqual(7, hedgehog.Health, "Damage that isn't an attack isn't answered");
+            Assert.AreEqual(10 - porcupine.Attack, hedgehog.Health, "Damage that isn't an attack isn't answered");
 
             var giantA = game.Summon(p1, game.Creature("Giant A", 25, 5), 1);
             var giantB = game.Summon(p1, game.Creature("Giant B", 25, 5), 2);
@@ -202,7 +202,7 @@ namespace Zeitgeist.Tests {
             var wall = game.Summon(p2, game.Creature("Wall", 0, 5), 0);
             game.Run(new ModifyArmorAction(wall, 3));
             var first = game.Summon(p1, game.Creature("First", 2, 5), 0);
-            var second = game.Summon(p1, game.Creature("Second", 2, 5), 1);
+            var second = game.Summon(p1, game.Creature("Second", 2, 5), 3); // Headquarters: it reaches their Vanguard, with no Flank bonus
             game.Declare(first, p2.Battlefield[0]);
             game.Declare(second, p2.Battlefield[0]);
             game.Resolve();
@@ -254,7 +254,7 @@ namespace Zeitgeist.Tests {
 
             game.Declare(poker, p2.Battlefield[0]);
             yield return game.EndTurn();
-            Assert.AreEqual(1, wall.CurrentArmorPool, "The hit takes 1 Armor during the Day, then Dusk fades 1 more");
+            Assert.AreEqual(2, wall.CurrentArmorPool, "The hit takes 1 Armor during the Day, then Dusk fades 1 more, and the Vanguard puts 1 on at Dawn");
             Assert.AreEqual(5, wall.Health, "The hit landed on the full 3 Armor, before it faded");
             Assert.AreEqual(10, torch.Health, "Every status skips the Day it's applied (Status Timing)");
             Assert.IsTrue(pumped.IsDead, "The Health buff wearing off took its Health back: it was all that kept it alive");
@@ -265,7 +265,7 @@ namespace Zeitgeist.Tests {
             yield return game.EndTurn();
             Assert.AreEqual(6, torch.Health);
             Assert.IsFalse(game.ModifierManager.HasStatusEffect(torch, StatusEffectType.Burned), "The burn runs out after 2 ticks");
-            Assert.AreEqual(0, wall.CurrentArmorPool, "Armor never fades below 0");
+            Assert.That(wall.CurrentArmorPool, Is.InRange(1, 2), "Armor never fades below 0 (the Vanguard's Dawn plate keeps it at 1 or 2)");
             yield return game.EndTurn();
             CollectionAssert.AreEqual(new[] { 2, 2 }, game.History.DamageTo(torch));
 

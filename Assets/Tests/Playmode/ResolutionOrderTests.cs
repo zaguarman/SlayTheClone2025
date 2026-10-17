@@ -30,7 +30,7 @@ namespace Zeitgeist.Tests {
         /// </summary>
         [Test]
         public void ADayResolvesLayerByLayer_ThenBySpeed_AndHelpLandsBeforeAttacks() {
-            var walker = game.Summon(p1, game.Creature("Walker", 1, 3), 0);
+            var walker = game.Summon(p1, game.Creature("Walker", 1, 3), 1); // A Flank: an empty Flank of theirs is in its reach
             var mover = game.Summon(p1, game.Creature("Mover", 1, 3), 2); // A creature has one intent a Day, so another one moves
             var played = game.GiveCard(p1, game.Creature("Played", 1, 1, speed: 2));
             var summoned = (ICreature)CardFactory.CreateCard(game.Creature("Summoned", 1, 1));
@@ -38,13 +38,13 @@ namespace Zeitgeist.Tests {
             game.History.Clear();
 
             // Queued in the opposite order
-            game.Declare(walker, p2.Battlefield[4]);
+            game.Declare(walker, p2.Battlefield[1]);
             game.ActionsQueue.AddAction(new PlayCardAction(zap, p1, null));
             game.ActionsQueue.AddAction(new SummonCreatureAction(summoned, p2, p2.Battlefield[0]));
             game.ActionsQueue.AddAction(new PlayCardAction(played, p1, p1.Battlefield[2])); // Where the mover stands now
-            game.ActionsQueue.AddAction(new MoveCreatureAction(mover, p1.Battlefield[2], p1.Battlefield[1], p1));
+            game.ActionsQueue.AddAction(new MoveCreatureAction(mover, p1.Battlefield[2], p1.Battlefield[4], p1));
             game.Resolve();
-            Assert.AreSame(mover, p1.Battlefield[1].OccupyingCreature, "Moves come first: the mover steps aside...");
+            Assert.AreSame(mover, p1.Battlefield[4].OccupyingCreature, "Moves come first: the mover steps aside...");
             Assert.AreSame(played, p1.Battlefield[2].OccupyingCreature, "...and the creature summoned into its old slot lands there, replacing nobody");
 
             CollectionAssert.AreEqual(new[] {
@@ -126,7 +126,7 @@ namespace Zeitgeist.Tests {
             }
             using (var g = new TestGame()) {
                 var sturdy = g.Summon(g.Player1, g.Creature("Sturdy", 1, 9), 0);
-                var fragile = g.Summon(g.Player1, g.Creature("Fragile", 5, 1), 1);
+                var fragile = g.Summon(g.Player1, g.Creature("Fragile", 5, 1), 3); // Headquarters: it reaches their Vanguard, with no Flank bonus
                 var dummy = g.Summon(g.Player2, g.Creature("Dummy", 0, 20), 0);
                 g.Declare(sturdy, g.Player2.Battlefield[0]); // Planned first...
                 g.Declare(fragile, g.Player2.Battlefield[0]);

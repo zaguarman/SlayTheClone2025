@@ -81,7 +81,7 @@ namespace Zeitgeist.Tests {
             game.Declare(cipher, p1.Battlefield[2]);
             Assert.IsTrue(P1Sees(PlanOf(sneak)), "Revealed cancels Concealed");
             game.Resolve();
-            Assert.AreEqual(Player.StartingHealth - 2 - 3, p1.Health, "The Revealed attack is nullified; Watchdogs ignore an Encrypted creature's actions...");
+            Assert.AreEqual(Player.StartingHealth - 2 - cipher.Attack, p1.Health, "The Revealed attack is nullified; Watchdogs ignore an Encrypted creature's actions (its 3 and its Flank's +1 land)...");
             Assert.AreEqual(1, game.ActionsQueue.Watchdogs.Single().ChargesLeft, "...and spend no charge on them");
 
             var incoming = game.GiveCard(p2, game.Creature("Incoming", 1, 1));
@@ -160,13 +160,13 @@ namespace Zeitgeist.Tests {
                 var doomed = g.Summon(me, g.Creature("Doomed", 1, 9), 0);
                 g.Run(new ApplyStatusEffectAction(doomed, StatusEffectType.Doomed, 3, 0, controller: them));
                 g.Summon(me, g.Creature("Hitter", 3, 5), 1);
-                var marked = g.Summon(them, g.Creature("Marked", 4, 3), 1);
+                var marked = g.Summon(them, g.Creature("Marked", 4, 3), 0); // Their Vanguard: no Flank bonus (with it, the hitter would die to it and Hard would extract the hitter)
                 g.Run(new ApplyStatusEffectAction(marked, StatusEffectType.KillOrder, 2, 0, controller: me));
                 g.GiveCard(me, g.Spell("Extraction", TargetType.FriendlyCreatures, TestGame.Effect(EffectTrigger.OnPlay, ActionType.ReturnToHand, 0, TargetType.FriendlyCreatures)));
                 new AIPlanner(g.ActionsQueue, g.CombatHandler, level, seed: 7).PlanDay(me);
                 var pending = g.ActionsQueue.GetPendingActions();
                 bool extracts = pending.OfType<PlayCardAction>().Any(p => p.GetCard().Name == "Extraction");
-                bool hitsMarked = pending.OfType<BattlefieldCombatAction>().Any(a => a.GetTargetSlot() == them.Battlefield[1]);
+                bool hitsMarked = pending.OfType<BattlefieldCombatAction>().Any(a => a.GetTargetSlot() == them.Battlefield[0]);
                 Assert.AreEqual(level == AILevel.VeryHard, extracts, $"{level}: extracting the Doomed creature");
                 Assert.AreEqual(level != AILevel.VeryHard, hitsMarked, $"{level}: attacking the creature it gave a Kill Order");
             }

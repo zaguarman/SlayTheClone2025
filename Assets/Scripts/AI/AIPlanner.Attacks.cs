@@ -10,9 +10,22 @@ namespace Zeitgeist {
         #region Attacks
         private bool CanAttack(SeenCreature attacker) => Abilities.CanAttack(attacker.Creature) && AttackOf(attacker) > 0 && !IsStunned(attacker);
 
-        // Easy: the slot in front of it
+        // The formation's reach (the user, 2026-10-17): from where it stands, which of their slots it can attack
+        private static bool Reaches(SeenCreature attacker, SeenSlot slot) =>
+            Formation.InReach(attacker.Slot.Index, slot.Index, attacker.Ability == CreatureAbility.Artillery);
+
+        private IEnumerable<SeenSlot> InReach(SeenCreature attacker) => view.TheirSlots.Where(s => Reaches(attacker, s));
+
+        // An empty slot of theirs it can hit the player through, if any
+        private SeenSlot Open(SeenCreature attacker) => InReach(attacker).FirstOrDefault(s => s.IsEmpty);
+
+        // Easy: the slot in front of it, or the nearest it reaches
         private List<SeenCreature> AttackInFront(List<SeenCreature> ready) {
-            foreach (var attacker in ready.Where(CanAttack)) AttackSlot(attacker, view.TheirSlots[attacker.Slot.Index], attacker.Attack);
+            foreach (var attacker in ready.Where(CanAttack)) {
+                var facing = view.TheirSlots[attacker.Slot.Index];
+                var target = Reaches(attacker, facing) ? facing : InReach(attacker).FirstOrDefault();
+                if (target != null) AttackSlot(attacker, target, attacker.Attack);
+            }
             return ready.Where(c => !CanAttack(c)).ToList();
         }
 
@@ -25,8 +38,8 @@ namespace Zeitgeist {
                     if (!Assassin(attacker) || slot.Creature == null) return ValueOfHitting(slot, damage);
                     return Hittable(slot.Creature) && HealthLeft(slot.Creature) > 0 ? slot.Creature.Worth + HealthLeft(slot.Creature) - attacker.Worth : -1;
                 }
-                var target = view.TheirSlots.OrderByDescending(HitValue).First();
-                AttackSlot(attacker, target, Assassin(attacker) && target.Creature != null ? 999 : damage);
+                var target = InReach(attacker).OrderByDescending(HitValue).FirstOrDefault();
+                if (target != null) AttackSlot(attacker, target, Assassin(attacker) && target.Creature != null ? 999 : damage);
             }
             return ready.Where(c => !CanAttack(c)).ToList();
         }
@@ -44,9 +57,10 @@ namespace Zeitgeist {
         /// </summary>
         private List<SeenCreature> AttackByThreat(List<SeenCreature> ready) {
             var left = ready.Where(CanAttack).ToList();
-            var open = view.TheirSlots.FirstOrDefault(s => s.IsEmpty);
-            if (open != null && left.Sum(DamageOf) >= view.TheirHealth - plannedFace) {
-                foreach (var attacker in left) AttackSlot(attacker, open, DamageOf(attacker));
+            // Lethal: everyone with an empty slot in reach goes at the player (the user, 2026-10-17: each from where it stands)
+            var through = left.Where(a => Open(a) != null).ToList();
+            if (through.Count > 0 && through.Sum(DamageOf) >= view.TheirHealth - plannedFace) {
+                foreach (var attacker in through) AttackSlot(attacker, Open(attacker), DamageOf(attacker));
                 return ready.Where(c => !CanAttack(c)).ToList();
             }
 
@@ -54,10 +68,12 @@ namespace Zeitgeist {
             int ours = System.Math.Max(1, view.Mine.Where(c => c.Operative && CanAttack(c)).Sum(DamageOf));
             int theirs = System.Math.Max(1, TheirPotentialDamage());
             float daysToWin = (view.TheirHealth - plannedFace + ours - 1) / ours, daysToLose = (view.MyHealth + theirs - 1) / theirs;
-            bool ahead = open != null && !defending && daysToWin < daysToLose * Style.Aggression;
+            bool anyOpen = through.Count > 0;
+            bool ahead = anyOpen && !defending && daysToWin < daysToLose * Style.Aggression;
             foreach (var target in view.Theirs.Where(t => Hittable(t) && (defending || !Condemned(t))).OrderByDescending(Threat).ToList()) {
-                var killer = left.Where(a => Hit(a, target) >= HealthLeft(target) && (!Assassin(a) || target.Worth >= 6 || Threat(target) >= 6))
+                var killer = left.Where(a => Reaches(a, target.Slot) && Hit(a, target) >= HealthLeft(target) && (!Assassin(a) || target.Worth >= 6 || Threat(target) >= 6))
                     .OrderBy(a => Assassin(a) ? 100 : DamageOf(a)).FirstOrDefault();
+                var open = killer != null ? Open(killer) : null;
                 if (killer != null && open != null) {
                     float face = DamageOf(killer) * Style.Face;
                     // A harmless creature isn't worth an attack that could go at the player instead; racing, only a real threat is
@@ -71,7 +87,8 @@ namespace Zeitgeist {
                 }
                 if (Threat(target) * Style.Removal < 6 && !defending) continue;
                 var pair = (from a in left from b in left
-                            where DamageOf(a) <= DamageOf(b) && a != b && Hit(a, target) + Hit(b, target) >= HealthLeft(target)
+                            where DamageOf(a) <= DamageOf(b) && a != b && Reaches(a, target.Slot) && Reaches(b, target.Slot)
+                                  && Hit(a, target) + Hit(b, target) >= HealthLeft(target)
                             orderby DamageOf(a) + DamageOf(b) select (a, b)).FirstOrDefault();
                 if (pair.a == null) continue;
                 foreach (var attacker in new[] { pair.a, pair.b }) {
@@ -80,9 +97,10 @@ namespace Zeitgeist {
                 }
             }
 
-            // The rest at the player; with no way through, at the creature where the damage counts most
+            // The rest at the player; with no way through, at the creature in reach where the damage counts most
             foreach (var attacker in left.ToList()) {
-                var chip = view.Theirs.Where(t => Hittable(t) && !Condemned(t)).OrderByDescending(t => ChipValue(attacker, t)).FirstOrDefault();
+                var chip = view.Theirs.Where(t => Hittable(t) && !Condemned(t) && Reaches(attacker, t.Slot)).OrderByDescending(t => ChipValue(attacker, t)).FirstOrDefault();
+                var open = Open(attacker);
                 if (open != null) AttackSlot(attacker, open, DamageOf(attacker));
                 else if (chip != null && ChipValue(attacker, chip) > 0) AttackSlot(attacker, chip.Slot, Hit(attacker, chip));
                 else continue;

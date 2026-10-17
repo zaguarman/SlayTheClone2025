@@ -62,7 +62,7 @@ namespace Zeitgeist {
         private static readonly (Faction Faction, string[] Cards) Workbench = (Faction.Statecraft, new[] {
             "Legal Department", "Civil Servant", "Bomb Squad", "Sleepwalker", "Riot Police", "One-Trick Pony", "Drill Sergeant", "Clingy Ex",
             "Empath", "Berserker", "Backup Dancer", "EMP Drone", "Tutankhamun", "Teflon Don", "Sapper", "Anti-Vaxxer",
-            "Mutually Assured Destruction", "Holy Pigeon", "Tithe", "Job Rotation" });
+            "Mutually Assured Destruction", "Holy Pigeon", "Tithe", "Job Rotation", "Drone Operator" });
         private static string WorkbenchName => Workbench.Cards.Length <= 3 ? $"Workbench - {string.Join(", ", Workbench.Cards)}" : "Workbench - New Cards";
 
         // The decks being worked on now, the most important first: the menus list them right after the Workbench, in this
@@ -557,6 +557,11 @@ namespace Zeitgeist {
                 "Bomb Disposal (Pokémon's Rapid Spin): the Slot Effect on a slot it enters is cleared before it goes off: Landmines, Snares, Checkpoints, a Shield, Scorched Earth, a Prayer.")
                 .With(CreatureAbility.BombDisposal)
                 .Picture("A technician in a bulky green bomb suit kneeling over a cartoon landmine with wire cutters, a tiny sweat drop, a robot on tank treads holding a torch for him, the rest of the squad watching from very far away through binoculars."),
+            Creature("Drone Operator", 2, 3, speed: 2, deploy: 1,
+                "Nine to five. Nevada. Twelve time zones from the target.",
+                "Artillery (the formation's reach, GDD 2.4; the user, 2026-10-17): it attacks at a distance of exactly 4, never nearer: their Headquarters from a Flank, their Flanks from Headquarters. The one way to hit Headquarters with an attack.")
+                .With(CreatureAbility.Artillery)
+                .Picture("A drone pilot in a headset in an air-conditioned trailer in the desert, a coffee and a family photo on the console, the screen showing a tiny palace under a targeting reticle twelve time zones away, a DAY SHIFT rota pinned to the wall."),
             Creature("Riot Police", 3, 5, speed: 1, deploy: 0,
                 "Protecting the public from the public.",
                 "Riot Gear (Pokémon's Assault Vest): each Dawn, +2 Armor. Armor fades 1 at each Dusk, so it keeps a plate on.")

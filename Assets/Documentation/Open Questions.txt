@@ -50,7 +50,7 @@ STILL OPEN
       decides the reach: the Vanguard melees (distance 1: their Vanguard); the Flanks and Headquarters shoot (distance 2-3:
       the Flanks reach their Vanguard and Flanks, Headquarters their Vanguard). Artillery, a creature keyword, overrides it:
       exactly distance 4, never less (Flanks to their Headquarters, Headquarters to their Flanks). Bonuses: Vanguard +1
-      Armor each Dawn (at most 2), Flanks +1 Attack and +1 Speed while there, Headquarters none. Being built in stages.
+      Armor each Dawn (at most 2), Flanks +1 Attack and +1 Speed while there, Headquarters none. Built 2026-10-17 (GDD 2.4).
 
 43. Speed ties: what the order numbers show, and who wins a tie (the user, 2026-10-15)
     • Now (GDD 3.7, ActionsQueue.CompareInLayer): in a layer, higher Speed first (Rush Hour: lower). At the same Speed, one

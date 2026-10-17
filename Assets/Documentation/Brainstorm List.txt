@@ -9,7 +9,6 @@ sections below stay as the two halves of it: the culture itself, and the interne
 			Backpack
 			Barcode
 			Board Game
-			Bomber Drone
 			Chainsaw
 			Coffee
 			Double Headed Coin

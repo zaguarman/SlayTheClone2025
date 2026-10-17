@@ -127,9 +127,9 @@ namespace Zeitgeist.Tests {
             // Shield is a creature's (the user: a slot can't have one): no combat damage for its Days, counting this one, wherever it goes
             var shielded = game.Summon(p1, game.Creature("Shielded", 0, 10), 1);
             game.Run(new ApplyStatusEffectAction(shielded, StatusEffectType.Shielded, 2, 0));
-            game.Run(new MoveCreatureAction(shielded, p1.Battlefield[1], p1.Battlefield[3], p1));
-            var brute = game.Summon(p2, game.Creature("Brute", 3, 10), 0);
-            game.Attack(brute, p1.Battlefield[3]);
+            game.Run(new MoveCreatureAction(shielded, p1.Battlefield[1], p1.Battlefield[2], p1)); // Flank to Flank: the brute reaches it there
+            var brute = game.Summon(p2, game.Creature("Brute", 3, 10), 2);
+            game.Attack(brute, p1.Battlefield[2]);
             Assert.AreEqual(10, shielded.Health, "A Shield stops combat damage, and goes with its creature");
             game.Run(new DamageCreatureAction(shielded, 2));
             Assert.AreEqual(8, shielded.Health, "...not other damage");
@@ -137,8 +137,8 @@ namespace Zeitgeist.Tests {
             Assert.IsTrue(game.ModifierManager.HasStatusEffect(shielded, StatusEffectType.Shielded), "2 Days: this one and the next");
             game.StartTurn();
             Assert.IsFalse(game.ModifierManager.HasStatusEffect(shielded, StatusEffectType.Shielded));
-            game.Attack(brute, p1.Battlefield[3]);
-            Assert.AreEqual(5, shielded.Health);
+            game.Attack(brute, p1.Battlefield[2]);
+            Assert.AreEqual(8 - brute.Attack, shielded.Health, "Its 3 and its Flank's +1");
 
             Place(p2.Battlefield[3], SlotEffectType.Landmine, 2);
             Place(p2.Battlefield[3], SlotEffectType.ScorchedEarth);
@@ -156,7 +156,7 @@ namespace Zeitgeist.Tests {
         public void ScorchedEarth_StopsTriggeredEffects_AndTheAbility_EntryOnesWaitTillItsOff_ItCanStillMove() {
             var spiky = game.Summon(p1, game.Creature("Spiky", 0, 10, 1, Effect(EffectTrigger.OnDamage, ActionType.Damage, 1, TargetType.Enemy)), 0);
             spiky.Ability = CreatureAbility.Spite;
-            var hitter = game.Summon(p2, game.Creature("Hitter", 2, 10), 0);
+            var hitter = game.Summon(p2, game.Creature("Hitter", 2, 10), 1); // A Flank: it reaches their Vanguard and, later, the Flank Spiky moves to
             Place(p1.Battlefield[0], SlotEffectType.ScorchedEarth);
             game.Attack(hitter, p1.Battlefield[0]);
             Assert.AreEqual(10, hitter.Health, "Its retaliation doesn't trigger");

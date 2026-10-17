@@ -97,9 +97,10 @@ namespace Zeitgeist.Tests {
             Assert.AreEqual(2, game.QueuedArrows(p1).Max(a => a.Branches), "The two attacks on the same slot merge into one arrow");
             Assert.AreEqual(1, game.QueuedArrows(p2).Count, "The other side's attack has its own arrow");
             // Numbered by Speed: every attack at the same Speed shares a number, both sides, so it never shows the planned order
+            // The Flanks add +1 Speed: the striker (2 + 1) first, the flanker (1 + 1) second, the brute and the mouse (1) tied third
             CollectionAssert.AreEquivalent(new[] { "1" }, game.QueuedArrows(p1).Single(a => a.Branches == 1).Labels, "The faster striker first...");
-            CollectionAssert.AreEquivalent(new[] { "2", "2" }, game.QueuedArrows(p1).Single(a => a.Branches == 2).Labels, "...then the brute and the flanker, tied...");
-            CollectionAssert.AreEquivalent(new[] { "2" }, game.QueuedArrows(p2).Single().Labels, "...and the mouse ties with them: all 2");
+            CollectionAssert.AreEquivalent(new[] { "2", "3" }, game.QueuedArrows(p1).Single(a => a.Branches == 2).Labels, "...then the flanker, then the brute...");
+            CollectionAssert.AreEquivalent(new[] { "3" }, game.QueuedArrows(p2).Single().Labels, "...and the mouse ties with the brute: both 3");
             Assert.IsTrue(game.QueuedArrows(p1).All(a => a.Color.b > a.Color.r), "Your attack arrows are blue...");
             Assert.IsTrue(game.QueuedArrows(p2).All(a => a.Color.r > a.Color.b), "...the enemy's red");
             game.Queue.CancelDeclaredAction(flanker.TargetId);
@@ -135,7 +136,7 @@ namespace Zeitgeist.Tests {
             Assert.IsTrue(mouse.IsDead);
             Assert.IsNull(game.CardIn(p2.Battlefield[0]), "The dead creature's card is still on the board");
             Assert.AreEqual(4, brute.Health, "At equal Speed the mouse, with less Health, strikes first");
-            Assert.AreEqual(Player.StartingHealth - 3, p2.Health);
+            Assert.AreEqual(Player.StartingHealth - striker.Attack, p2.Health, "The striker's 3 and its Flank's +1");
             game.AssertViewsMatchRules(); // Including the new hands, the survivor's damage and player 2's health
 
             // God's Grace lies over the player's plaque, counting down to the Dusk it ends
@@ -221,7 +222,7 @@ namespace Zeitgeist.Tests {
             var sleeper = game.Summon(p2, stealthy, 2);
             game.Queue.AddAction(new ApplyStatusEffectAction(sneak, StatusEffectType.Concealed, 2, 0));
             game.Queue.ResolveActions();
-            game.Attack(sneak, p1.Battlefield[4]);
+            game.Attack(sneak, p1.Battlefield[0]); // From Headquarters it reaches their Vanguard alone
             var incoming = game.GiveCard(p2, game.Cards.Creature("Test Incoming", 1, 5));
             game.Play(incoming, p2, p2.Battlefield[3]);
             yield return null;

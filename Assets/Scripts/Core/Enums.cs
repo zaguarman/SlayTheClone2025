@@ -49,7 +49,8 @@ namespace Zeitgeist {
             // The second batch (the user, 2026-10-17): Rocky Helmet, Protect, Rapid Spin, Sleep Talk, Assault Vest, the Choice items, Shadow Tag,
             // Synchronize, Berserk, Dancer, Neutralizing Gas, Perish Body, Good as Gold, Toxic Debris, and healing that hurts
             Litigious, HunkerDown, BombDisposal, Autopilot, RiotGear, Fixated, Clingy, Empathy, Berserk, BackupDancer, JammingField,
-            PharaohsCurse, Teflon, Shrapnel, DoYourOwnResearch
+            PharaohsCurse, Teflon, Shrapnel, DoYourOwnResearch,
+            Artillery // The formation's reach (the user, 2026-10-17): it attacks at a distance of exactly 4, never nearer
         }
 
         // Watchdogs (GDD 3.11): what they watch, whose, what they do, and when they look

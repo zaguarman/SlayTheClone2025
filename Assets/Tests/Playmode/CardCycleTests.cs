@@ -139,7 +139,7 @@ namespace Zeitgeist.Tests {
             // Prophecy (Myth): played now, it comes true at the Dawn so many Days later, and the queue lists it meanwhile
             var floodData = game.Spell("Flood", TargetType.Enemy, TestGame.Effect(EffectTrigger.OnPlay, ActionType.Damage, 2, TargetType.EnemyCreatures, TargetModifier.AllSameTypeTargets));
             floodData.prophecy = 2;
-            var foe = game.Summon(p2, game.Creature("Foe", 1, 5), 0);
+            var foe = game.Summon(p2, game.Creature("Foe", 1, 5), 0); // The Vanguard (a Flank would face the Doomed bull's last strike): its Dawn plate takes 1 of each flood
             var flood = game.GiveCard(p1, floodData);
             game.ActionsQueue.AddAction(new PlayCardAction(flood, p1, p2));
             game.Resolve();
@@ -148,7 +148,7 @@ namespace Zeitgeist.Tests {
             game.StartTurn();
             Assert.AreEqual(5, foe.Health, "Not at the next Dawn...");
             game.StartTurn();
-            Assert.AreEqual(3, foe.Health, "...but at the Dawn two Days on");
+            Assert.AreEqual(4, foe.Health, "...but at the Dawn two Days on (2, less the 1 Armor the Vanguard put on that Dawn)");
             CollectionAssert.IsEmpty(p1.Prophecies);
 
             // Prophecy 1-3 (Margin Call): it comes on a Dawn in that window, rolled in secret; the queue only tells the window
@@ -163,7 +163,7 @@ namespace Zeitgeist.Tests {
             string foretoldLine = string.Join("\n", QueueView.Lines(p1, game.ActionsQueue, game.ModifierManager));
             StringAssert.Contains($"from Day {due.EarliestTurn} to Day {due.LatestTurn}", foretoldLine, "Everyone knows the window, not the Day");
             for (int day = 0; day < 3 && p1.Prophecies.Count > 0; day++) game.StartTurn();
-            Assert.AreEqual(1, foe.Health, "It came within three Dawns");
+            Assert.AreEqual(3, foe.Health, $"It came within three Dawns, 2 less the Dawn's 1 Armor again (hits on the foe: {string.Join(", ", game.History.DamageTo(foe))})");
 
             // A part that waits (Dead Cat Bounce): it heals now, and the crash lands on the same creature at the next Dawn
             var bounce = TestGame.Effect(EffectTrigger.OnPlay, ActionType.Heal, 2, TargetType.AllCreatures);

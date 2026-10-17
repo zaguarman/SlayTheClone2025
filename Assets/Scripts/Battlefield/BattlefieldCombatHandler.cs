@@ -31,6 +31,12 @@ namespace Zeitgeist {
                 Log($"{attackerCreature.Name} can't attack (Bodyguard)", LogTag.Creatures | LogTag.Combat);
                 return;
             }
+            // The formation's reach (the user, 2026-10-17): checked when the attack is planned. Moved by the enemy before it
+            // resolves, the creature still hits where it aimed
+            if (!Abilities.InReach(attackerCreature, targetSlot)) {
+                Log($"{attackerCreature.Name} can't reach {targetSlot} from {Formation.Describe(attackerCreature.Slot?.Index ?? -1)}", LogTag.Creatures | LogTag.Combat);
+                return;
+            }
 
             // Check if the target is valid (basic check, can be expanded)
             bool isValidTarget = targetSlot != null; // Basic check

@@ -74,8 +74,8 @@ namespace Zeitgeist.Tests {
             game.SetDecks(game.Fillers(5), game.Fillers(5));
             var condemned = game.Summon(p1, game.Creature("Condemned", 2, 5, 1,
                 Effect(EffectTrigger.OnAboutToDie, ActionType.Heal, 5, TargetType.Self),
-                Effect(EffectTrigger.OnDeath, ActionType.Damage, 1, TargetType.Enemy)), 1);
-            var opposite = game.Summon(p2, game.Creature("Opposite", 0, 10), 1);
+                Effect(EffectTrigger.OnDeath, ActionType.Damage, 1, TargetType.Enemy)), 3); // Headquarters, facing: no Flank bonus in the numbers
+            var opposite = game.Summon(p2, game.Creature("Opposite", 0, 10), 3);
             game.Run(new ApplyStatusEffectAction(condemned, StatusEffectType.Burned, 3, 1));
             game.Run(new ApplyStatusEffectAction(condemned, StatusEffectType.Doomed, 2, 0));
             Assert.IsFalse(game.ModifierManager.HasStatusEffect(condemned, StatusEffectType.Burned), "Doomed removes every other status");
@@ -307,7 +307,7 @@ namespace Zeitgeist.Tests {
             var clerkData = game.Creature("Clerk", 3, 5);
             clerkData.turnsUntilOperative = 1;
             var clerk = game.Summon(p1, clerkData, 0);
-            var hero = game.Summon(p1, game.Creature("Hero", 1, 5), 1);
+            var hero = game.Summon(p1, game.Creature("Hero", 1, 5), 3); // Headquarters: no Flank bonus in the numbers
             var redTape = game.GiveCard(p2, game.Spell("Red Tape", TargetType.EnemyCreatures,
                 Effect(EffectTrigger.OnPlay, ActionType.DelayDeployment, 1, TargetType.EnemyCreatures)));
             game.Play(redTape, p2, p1.Battlefield[0]);
@@ -386,24 +386,25 @@ namespace Zeitgeist.Tests {
 
             // Looping (Groundhog Day): the plan it has as the spell lands is its plan each Day the loop lasts
             Fresh();
-            var wall = game.Summon(p1, game.Creature("Wall", 0, 30), 0);
+            var wall = game.Summon(p1, game.Creature("Wall", 0, 30), 1); // Flank against Flank: in reach, and no Vanguard Armor at Dawn
             var looper = game.Summon(p2, game.Creature("Looper", 3, 10), 1);
             var loop = Effect(EffectTrigger.OnPlay, ActionType.ApplyStatus, 0, TargetType.EnemyCreatures);
             loop.actions[0].statusEffectToApply = StatusEffectType.Looping;
             loop.actions[0].statusDuration = 2;
             var groundhogDay = game.GiveCard(p1, game.Spell("Groundhog Day", TargetType.EnemyCreatures, loop));
-            game.Declare(looper, p1.Battlefield[0]);
+            game.Declare(looper, p1.Battlefield[1]);
             game.Play(groundhogDay, p1, p2.Battlefield[1]);
             game.Resolve(); // The spell lands before the attack: the loop closes on the attack
-            Assert.AreEqual(27, wall.Health);
+            int hit = looper.Attack; // Its 3 and its Flank's +1
+            Assert.AreEqual(30 - hit, wall.Health);
             game.StartTurn();
             Assert.IsTrue(game.ActionsQueue.HasActiveAction(looper.TargetId), "At Dawn its plan is made for it");
             Assert.IsFalse(game.ActionsQueue.CancelDeclaredAction(looper.TargetId), "...and can't be taken back");
             game.Resolve();
-            Assert.AreEqual(24, wall.Health, "The same attack on the same slot");
+            Assert.AreEqual(30 - 2 * hit, wall.Health, "The same attack on the same slot");
             game.StartTurn();
             game.Resolve();
-            Assert.AreEqual(21, wall.Health, "Looping 2: the next 2 Days");
+            Assert.AreEqual(30 - 3 * hit, wall.Health, "Looping 2: the next 2 Days");
             game.StartTurn();
             Assert.IsFalse(game.ActionsQueue.HasActiveAction(looper.TargetId), "Then the loop is over");
 

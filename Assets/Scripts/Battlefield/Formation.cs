@@ -28,6 +28,12 @@ namespace Zeitgeist {
         public const int Size = 5;
         public const int Vanguard = 0;
 
+        // The slots' bonuses (the user, 2026-10-15; built 2026-10-17): the Vanguard puts on Armor each Dawn, up to this much;
+        // the Flanks shoot, +1 Attack and +1 Speed while a creature stands there; Headquarters has none (being hard to reach is its guard)
+        public const int VanguardArmorCap = 2;
+        public const int FlankAttack = 1;
+        public const int FlankSpeed = 1;
+
         // Which slots are one step from each slot
         private static readonly int[][] Steps = {
             new[] { 1, 2 },    // Vanguard: both Flanks
