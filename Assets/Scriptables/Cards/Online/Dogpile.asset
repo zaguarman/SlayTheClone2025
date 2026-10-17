@@ -39,9 +39,9 @@ MonoBehaviour:
     oncePerCombat: 0
     actions:
     - actionType: 0
-      value: 2
+      value: 3
       targetType: 4
-      targetModifier: 1
+      targetModifier: 0
       modifyAttack: 1
       modifyHealth: 1
       modifySpeed: 0
@@ -69,8 +69,9 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'Mechanics test: several hits at once: Exposed adds +1 to each, retaliation
-    fires once per hit, Armor takes hits first.'
+  designNotes: 'The mob piles onto one target: 3 damage to it (2026-10-17, the meta
+    rebalance: it was 2 damage to a target and its neighbours and dealt 47 a game,
+    the Swarm''s second engine). Mechanics test it was: several hits at once.'
   artDescription: A huge, happy pile of dogs (corgis, labradors, a confused pug on
     top) burying one person, of whom only a waving hand sticks out.
   defaultTargetType: 4

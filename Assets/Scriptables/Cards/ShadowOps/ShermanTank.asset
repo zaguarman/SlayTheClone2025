@@ -34,8 +34,10 @@ MonoBehaviour:
   combo: 0
   setUpBy: []
   effects: []
-  designNotes: 'Never a real card: the face a Ghost Army decoy shows the enemy until
-    it''s revealed.'
+  designNotes: 'Two things at once: the face a Ghost Army decoy (Inflatable Tank)
+    shows the enemy until it''s revealed, and a real Statecraft creature (Shock and
+    Awe plays two; it deploys 1 since 2026-10-17, as every 4+ Attack creature does).
+    It lives in the Shadow Ops. file so the decoy finds it written first.'
   artDescription: A heavy tank rolling out of the morning fog, cannon level, mud
     spraying from its tracks.
   attack: 6

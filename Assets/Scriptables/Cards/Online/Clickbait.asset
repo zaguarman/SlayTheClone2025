@@ -23,7 +23,7 @@ MonoBehaviour:
   singleUse: 0
   sacrifice: 0
   doomCost: 0
-  prophecy: 0
+  prophecy: 1
   prophecyLatest: 0
   gamble: 0
   homing: 0
@@ -69,7 +69,10 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'Future: Clickbait taunts (enemy creatures must attack it).'
+  designNotes: 'Everyone clicks, a Day later (2026-10-17, the meta rebalance: it
+    dealt 65 damage a game as an instant wrath, the Swarm''s engine; as a Prophecy
+    1 the enemy sees it coming and can spread out). Future: Clickbait taunts (enemy
+    creatures must attack it).'
   artDescription: 'A video thumbnail: a man with a hugely shocked face, a big red
     arrow and a red circle around absolutely nothing.'
   defaultTargetType: 4

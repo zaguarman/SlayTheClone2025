@@ -61,11 +61,11 @@
     {
       "name": "Dogpile", "type": "spell", "target": "EnemyCreatures",
       "flavor": "Nobody read the post. Everybody has an opinion.",
-      "notes": "Mechanics test: several hits at once: Exposed adds +1 to each, retaliation fires once per hit, Armor takes hits first.",
+      "notes": "The mob piles onto one target: 3 damage to it (2026-10-17, the meta rebalance: it was 2 damage to a target and its neighbours and dealt 47 a game, the Swarm's second engine). Mechanics test it was: several hits at once.",
       "picture": "A huge, happy pile of dogs (corgis, labradors, a confused pug on top) burying one person, of whom only a waving hand sticks out.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
-          { "action": "Damage", "value": 2, "target": "EnemyCreatures", "modifier": "WithAdjacent" }
+          { "action": "Damage", "value": 3, "target": "EnemyCreatures" }
         ] }
       ]
     },
@@ -116,9 +116,9 @@
       "picture": "A man in a tinfoil hat pointing at a cork board of photos joined by red string, the biggest photo a pigeon labelled DRONE."
     },
     {
-      "name": "Clickbait", "type": "spell", "target": "EnemyCreatures",
+      "name": "Clickbait", "type": "spell", "target": "EnemyCreatures", "prophecy": 1,
       "flavor": "Number 7 will shock you. Number 8 is an ad.",
-      "notes": "Future: Clickbait taunts (enemy creatures must attack it).",
+      "notes": "Everyone clicks, a Day later (2026-10-17, the meta rebalance: it dealt 65 damage a game as an instant wrath, the Swarm's engine; as a Prophecy 1 the enemy sees it coming and can spread out). Future: Clickbait taunts (enemy creatures must attack it).",
       "picture": "A video thumbnail: a man with a hugely shocked face, a big red arrow and a red circle around absolutely nothing.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
