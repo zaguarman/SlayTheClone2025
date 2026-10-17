@@ -202,3 +202,11 @@ So Hard's extras cost it against Medium in a meta where boards win (Midrange and
 the fix is a rebuilt Hard, measured one piece at a time with this run, not another heuristic. The order to try: Medium's
 greedy attacks as the base with the lethal check and the defending mode kept (E4 keeps those), then add back each reading
 branch only if the run says it pays. Very Hard isn't in the levels run; it inherits whatever Hard becomes.
+
+HARD REBUILT FROM MEDIUM'S CORE (2026-10-17, later that night, with the decks rebuilt from the numbers)
+AttackHard: lethal if it has it; about to die next Day (their damage next Day reaches our Health), the by-threat planner
+kills the threats as before; otherwise Medium's greedy attacks, the strongest first where its hit is worth the most. The
+same seeds, the rebuilt decks: before, Medium 296 - Hard 204; after, Hard 251 - Medium 249 (Hard 67% of its games, Medium
+65%, Easy 18%). The rest of Hard (card reading in the values, moving out of harm, spell holding, the Day-ahead look) stays
+as it was; each is still a candidate for the same A/B. Very Hard inherits the new core. The 0-Health creatures the run
+reports (Hedonic Treadmillionaire 4/0) are Open Questions 46, not the AI.

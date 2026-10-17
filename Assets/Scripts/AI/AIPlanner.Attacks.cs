@@ -50,12 +50,12 @@ namespace Zeitgeist {
         }
 
         /// <summary>
-        /// Hard: lethal if it has it. Otherwise the race: ahead (we'd bring them to 0 in fewer Days than they would us, as
-        /// eager as its style is), it only stops real threats; behind, it kills the most threatening creatures, each with the
-        /// smallest attacker (or two, for a big threat or when it could die next Day) that does it. The rest go at the player.
-        /// It doesn't waste an attack on what can't be hurt (Untouchable, a Shield) and weighs Counterattacks.
+        /// Hard, rebuilt from Medium's core (AI Design.txt, "Hard loses to Medium", 2026-10-17): lethal if it has it; about to
+        /// die next Day, it kills the threats (<see cref="AttackByThreat"/>); otherwise it attacks as Medium does, the strongest
+        /// first where its hit is worth the most. The by-threat race ("the smallest attacker that kills, the rest at the player")
+        /// cost Hard about 25 games in 500 against Medium in a meta where boards win; the levels run measures each piece.
         /// </summary>
-        private List<SeenCreature> AttackByThreat(List<SeenCreature> ready) {
+        private List<SeenCreature> AttackHard(List<SeenCreature> ready) {
             var left = ready.Where(CanAttack).ToList();
             // Lethal: everyone with an empty slot in reach goes at the player (the user, 2026-10-17: each from where it stands)
             var through = left.Where(a => Open(a) != null).ToList();
@@ -63,7 +63,17 @@ namespace Zeitgeist {
                 foreach (var attacker in through) AttackSlot(attacker, Open(attacker), DamageOf(attacker));
                 return ready.Where(c => !CanAttack(c)).ToList();
             }
+            return TheirDamageNextDay() >= view.MyHealth ? AttackByThreat(ready) : AttackGreedily(ready);
+        }
 
+        /// <summary>
+        /// The by-threat planner, now Hard's defending mode only: it kills the most threatening creatures, each with the
+        /// smallest attacker (or two, for a big threat or when it could die next Day) that does it; the rest go at the player.
+        /// It doesn't waste an attack on what can't be hurt (Untouchable, a Shield) and weighs Counterattacks.
+        /// </summary>
+        private List<SeenCreature> AttackByThreat(List<SeenCreature> ready) {
+            var left = ready.Where(CanAttack).ToList();
+            var through = left.Where(a => Open(a) != null).ToList();
             bool defending = TheirDamageNextDay() >= view.MyHealth; // Hard: with the creatures of theirs ready by then
             int ours = System.Math.Max(1, view.Mine.Where(c => c.Operative && CanAttack(c)).Sum(DamageOf));
             int theirs = System.Math.Max(1, TheirDamageNextDay());

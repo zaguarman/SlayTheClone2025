@@ -96,7 +96,7 @@ namespace Zeitgeist {
             var idle = Level switch {
                 AILevel.Easy => AttackInFront(ready),
                 AILevel.Medium => AttackGreedily(ready),
-                _ => AttackByThreat(ready)
+                _ => AttackHard(ready)
             };
             if (Hard) idle.ForEach(MoveOutOfHarm);
         }
