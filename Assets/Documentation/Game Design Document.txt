@@ -988,6 +988,8 @@ From Pokémon's Stealth Rock: a Slot Effect placed on every slot of a side.
   replaces the old. Gear-only abilities: Hover (Slot Effects don't touch it: Heavy-Duty Boots) and Self-Repair (heals 2 each
   Dawn: Leftovers); the others are abilities you know (Recoil as a Life Orb, Unbothered as an Assault Vest, Insider Job).
   Cards: Hovercraft (Tech), Nanobots (Utopia), Q Branch (Shadow Ops.), Smartwatch (Corporate), Exoskeleton (Statecraft).
+  Shelved as a maybe (the user, 2026-10-17, wary of scope creep): the five cards are out of the decks and the game, kept in
+  ShelvedCards() in the deck generator; the rules stay in the code, unused.
 • Provoked X (Taunt, Follow Me): for the rest of the Day it lands and the next X Days, its attacks go to the creature facing
   it (or that player), whatever it aimed at, and it can't use its Active ability. Cards: U Mad Bro? (Digital Society),
   Calm Your Tits (Zeitgeist).
