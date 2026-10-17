@@ -28,6 +28,8 @@ namespace Zeitgeist {
         public bool combo; // Combo: +1 to its numbers for each other spell you play the same Day
         public string[] setUpBy; // The cards that set it up (an intended combo): it glows in the hand once one is played
         [SerializeField] protected List<CardEffect> effects = new List<CardEffect>();
+        /// <summary>Its effects as written (the card files read them back, see CardFiles); a game reads a copy through <see cref="ToCardData"/>.</summary>
+        public IReadOnlyList<CardEffect> Effects => effects;
         [TextArea(2, 6)] public string designNotes; // Editor only: what the card should become once the GDD mechanics it stands in for exist
         [TextArea(2, 6)] public string artDescription; // What the card's picture shows: the brief for its art
 

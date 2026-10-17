@@ -1,0 +1,61 @@
+{
+  "mod": "Shelved",
+  "author": "Shelved as a maybe (the user, 2026-10-17: 'I may be going into scope creep territory'): Gear, held items as a creature's second ability. Not loaded by Cards > Generate Faction Decks; the rules (Equip, Hover, Self-Repair) stay in the code, so bringing one back is moving it into its subfaction's file.",
+  "cards": [
+    {
+      "name": "Smartwatch", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Tracks your steps, your sleep, your heart rate and your productivity. Reports three of them to HR.",
+      "notes": "Gear (Pokémon's Life Orb): Recoil while it stays in play, +2 damage on its attacks and 1 damage to itself after each. A megacorp's subscription device, the hustle strapped to a wrist. Corporate.",
+      "picture": "A sleek smartwatch on a sweating wrist, its screen flashing 'Stand up! Productivity -3%', a subscription renewal notice sliding in underneath.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Equip", "target": "FriendlyCreatures", "ability": "Recoil" }
+        ] }
+      ]
+    },
+    {
+      "name": "Exoskeleton", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Standard issue. Batteries not included. Batteries never included.",
+      "notes": "Gear (Pokémon's Assault Vest): Unbothered while it stays in play, enemy effects can't lower its stats. On top of the creature's own ability. Statecraft.",
+      "picture": "A soldier in a powered military exoskeleton standing guard at a checkpoint, an extension cord trailing from his back to a wall socket in the guard booth.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Equip", "target": "FriendlyCreatures", "ability": "Unbothered" }
+        ] }
+      ]
+    },
+    {
+      "name": "Q Branch", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Now pay attention, 007.",
+      "notes": "Gear: Insider Job while it stays in play, its damage ignores Armor. The quartermaster's gadgets, for the faction of glass cannons that meets walls. Shadow Ops.",
+      "picture": "An old quartermaster in a lab coat demonstrating an exploding briefcase to a bored agent, a test dummy in the background missing its head.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Equip", "target": "FriendlyCreatures", "ability": "InsiderJob" }
+        ] }
+      ]
+    },
+    {
+      "name": "Hovercraft", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Floats over the problem. Never solves it.",
+      "notes": "Gear (Pokémon's Heavy-Duty Boots): Hover while it stays in play, Slot Effects don't touch it (no Landmine, Barbed Snare or Checkpoint as it enters or leaves). Tech.",
+      "picture": "A sleek hovercraft gliding over a minefield, every mine underneath it blinking red and doing nothing, a deminer watching with his mouth open.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Equip", "target": "FriendlyCreatures", "ability": "Hover" }
+        ] }
+      ]
+    },
+    {
+      "name": "Nanobots", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Billions of tiny repairmen. One tiny union.",
+      "notes": "Gear (Pokémon's Leftovers): Self-Repair while it stays in play, it heals 2 each Dawn. Utopia.",
+      "picture": "A swarm of glittering nanobots stitching a robot's torn arm back together, a few of them on a tiny picket line holding 'Fair Wages' signs.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Equip", "target": "FriendlyCreatures", "ability": "SelfRepair" }
+        ] }
+      ]
+    }
+  ]
+}

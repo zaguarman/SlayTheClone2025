@@ -1,0 +1,93 @@
+{
+  "mod": "Potions",
+  "cards": [
+    {
+      "name": "Nicotine", "type": "spell", "target": "Player", "potion": true,
+      "flavor": "Calms the nerves. Shortens the rest.",
+      "notes": "Potion: draw 2 next Day.",
+      "picture": "A crumpled pack of cigarettes on a café table, one lit in the ashtray, a ribbon of smoke curling into a question mark.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 2, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Stimulant Drug", "type": "spell", "target": "FriendlyCreatures", "potion": true,
+      "flavor": "Focus, energy, and a heart rate of 190.",
+      "notes": "Potion: target creature +2 Attack this Day.",
+      "picture": "A pill organizer with every compartment full of the same blue pill, a student's desk behind it buried in energy drink cans at 4 a.m.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 2, "target": "FriendlyCreatures", "days": 1, "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Superglue", "type": "spell", "target": "FriendlyCreatures", "potion": true,
+      "flavor": "Holds anything together. Fingers, mostly.",
+      "notes": "Potion: target creature +5 Armor.",
+      "picture": "A tube of superglue squeezed over a cracked vase, two fingers already stuck to it.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Armor", "value": 5, "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Soylent", "type": "spell", "target": "Player", "potion": true,
+      "flavor": "All the nutrients. None of the joy.",
+      "notes": "Potion: heal 6 to you.",
+      "picture": "A beige bottle of meal-replacement drink on an empty dining table, a lonely fork beside it.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Heal", "value": 6, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Flamethrower", "type": "spell", "target": "EnemyCreatures", "potion": true,
+      "flavor": "Not a flamethrower. Legally.",
+      "notes": "Potion: 4 damage to target creature or player.",
+      "picture": "A flamethrower with a novelty-store price tag, a jet of fire roaring out of it across a garden barbecue.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 4, "target": "EnemyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Eject Button", "type": "spell", "target": "FriendlyCreatures", "potion": true,
+      "flavor": "Do not press. Unless.",
+      "notes": "Potion: target creature of yours goes back to your hand, with the next Day's.",
+      "picture": "A big red button under a flip-up cover on a cockpit panel, a pilot's seat already rocketing out of the frame.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ReturnToHand", "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Stealth Suit", "type": "spell", "target": "Player", "potion": true,
+      "flavor": "Comes in black, darker black, and invisible.",
+      "notes": "Potion: Conceal 2 on your creatures.",
+      "picture": "An empty mannequin in a shop window wearing a suit you can only see by its outline, the price tag floating in mid-air.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "status": "Concealed", "days": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Creatine", "type": "spell", "target": "FriendlyCreatures", "potion": true,
+      "flavor": "Gains. Water weight, but gains.",
+      "notes": "Potion: target creature +1 Attack and +1 Health.",
+      "picture": "A giant tub of white powder with a flexing cartoon bicep on its label, a scoop sticking out of it.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "attackStat": true, "healthStat": true }
+        ] }
+      ]
+    }
+  ]
+}

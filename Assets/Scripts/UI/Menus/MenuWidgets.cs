@@ -348,6 +348,16 @@ namespace Zeitgeist {
             return go;
         }
 
+        /// <summary>A line of text shown beside the pointer while this is hovered (a relic's effect on the adventure map).</summary>
+        public static void AddHoverTip(GameObject target, string text) => target.AddComponent<HoverTip>().text = text;
+
+        private class HoverTip : MonoBehaviour, UnityEngine.EventSystems.IPointerEnterHandler, UnityEngine.EventSystems.IPointerExitHandler {
+            public string text;
+            public void OnPointerEnter(UnityEngine.EventSystems.PointerEventData eventData) => Tooltip.Shared.ShowTooltip(text);
+            public void OnPointerExit(UnityEngine.EventSystems.PointerEventData eventData) => Tooltip.Existing?.HideText();
+            private void OnDisable() => Tooltip.Existing?.HideText();
+        }
+
         /// <summary>
         /// What a right click on this does. The menus' key language (the user, 2026-10-17): a left click decides (picks, adds,
         /// opens), a right click takes back (removes, cancels, undoes), Escape goes back.

@@ -1,0 +1,471 @@
+{
+  "mod": "Offline",
+  "cards": [
+    {
+      "name": "One-Trick Pony", "type": "creature", "attack": 5, "health": 3, "speed": 2, "deploy": 0, "ability": "Fixated",
+      "flavor": "It does the one thing. Ask it for the other thing and watch it do the one thing.",
+      "notes": "Fixated (Pokémon's Choice items): once it attacks, it repeats that attack every Day until it leaves: the same slot, whatever moves there. Big numbers for no choices.",
+      "picture": "A pony in a tiny circus hat standing on its hind legs on a stool, doing the exact same trick in three frames in a row, the ringmaster's cue cards for other tricks piling up ignored on the sawdust."
+    },
+    {
+      "name": "Clingy Ex", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 0, "ability": "Clingy",
+      "flavor": "We're not done talking. We'll never be done talking.",
+      "notes": "Clingy (Pokémon's Shadow Tag): the enemy creature facing it can't move, and nothing moves it: Rooted as long as the Ex faces it.",
+      "picture": "A person clamped around the leg of someone trying to walk away, dragged along the pavement, phone in hand showing 47 missed calls, the other one staring straight ahead with dead eyes."
+    },
+    {
+      "name": "Backup Dancer", "type": "creature", "attack": 2, "health": 3, "speed": 2, "deploy": 0, "ability": "BackupDancer",
+      "flavor": "Three steps behind the star, five steps ahead of the choreography.",
+      "notes": "Backup Dancer (Pokémon's Dancer): when a friendly creature beside it attacks, it attacks the same slot too, if it planned nothing. Once a Day.",
+      "picture": "A pop star mid-high-kick on a stage, and beside her a backup dancer in sequins doing the exact same kick a half-beat behind, both kicks landing on a stagehand's face at the edge of the stage."
+    },
+    {
+      "name": "Anti-Vaxxer", "type": "creature", "attack": 3, "health": 5, "speed": 2, "deploy": 0, "ability": "DoYourOwnResearch",
+      "flavor": "I've done my own research. It was a video.",
+      "notes": "Do Your Own Research: healing damages it instead. Hand it a cure and it takes the hit; the enemy's healing on it hurts it too.",
+      "picture": "A woman in a SPIRITUAL NOT MEDICAL t-shirt slapping a syringe out of a doctor's hand, a crystal pendant swinging, while a tiny cartoon virus on her shoulder gives a thumbs up."
+    },
+    {
+      "name": "Groundhog Day", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Okay, campers, rise and shine! And don't forget your booties, 'cause it's cold out there today.",
+      "notes": "Encore (the user, 2026-10-17): target enemy creature repeats today's action for the next 2 Days: the same attack on the same slot, the same move or ability, and nothing else. Its plan is made for it at Dawn, so everyone sees it coming. Did nothing today: it does nothing for 2 Days.",
+      "picture": "A man in a hotel bed slapping an alarm clock that reads 6:00, the same clock, the same bed, the same groundhog in a tiny top hat on the windowsill, three identical frames of it stacked like a film strip, his face more desperate in each.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Looping", "days": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Freaky Friday", "type": "spell", "target": "AllCreatures",
+      "flavor": "Mom, I have your job today. Also your knees.",
+      "notes": "Trick, turned to stats (the user, 2026-10-17): target creature and the creature facing it trade Attack and Health, each waking up in the other's body. Aim it at their glass cannon facing your wall, or the other way round.",
+      "picture": "A mother and her teenage daughter facing each other across a breakfast table, a broken fortune cookie between them, their faces swapped: the mother with a nose ring and headphones, the daughter in reading glasses holding a mug reading WORLD'S BEST MOM, both screaming.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "TradeStats", "target": "AllCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Florida Man", "type": "creature", "attack": 3, "health": 4, "speed": 2, "deploy": 0, "ability": "WildCard",
+      "flavor": "Florida Man does something. Again. Nobody knows what until it's done.",
+      "notes": "Wild Card (the user, 2026-10-17, Pokémon's Metronome): its attack on a creature does one of these, at random: hits twice, Burns it 2 instead, Exhausts it instead, or nothing at all. Against the player, a plain hit.",
+      "picture": "A sunburnt shirtless man with a mullet and jorts wrestling an alligator in a supermarket car park, a beer can in his free hand, a shopping trolley on fire behind him, a news ticker at the bottom reading FLORIDA MAN STRIKES AGAIN."
+    },
+    {
+      "name": "Multipass", "type": "spell", "target": "Player",
+      "flavor": "Leeloo Dallas. Multipass.",
+      "notes": "Zeitgeist's logistics, a film everyone quotes: send for any card from your deck; it joins your next hand. Was Multi Passport, the Shadow Ops. creature (its Ambush went to Femme Fatale).",
+      "picture": "The Multipass shown to the camera, as in the film: on the left the cab driver with buzzed fair hair and stubble, an orange shirt under a dark vest; on the right the young woman with the bright orange bob and fringe, in a white top with orange suspenders, holding the Multipass up beside her face; a dim, crowded hall behind them.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SendFor", "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Drug Smuggler", "type": "creature", "attack": 1, "health": 2, "speed": 2, "deploy": 0,
+      "flavor": "Just a backpacker. With a very full backpack.",
+      "notes": "Zeitgeist's logistics: when it arrives, send for any card among the top 3 of your deck; it joins your next hand.",
+      "picture": "A sunburnt backpacker with dreadlocks grinning at an airport security gate, his enormous backpack bulging with cards poking out of every zip.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SendFor", "value": 3, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Not on My Watch", "type": "creature", "attack": 1, "health": 5, "speed": 1, "deploy": 1, "ability": "SafeSpace",
+      "flavor": "Feelings are valid. Statuses are not.",
+      "notes": "Mechanics test: Safe Space. Each Dawn, it and the friendly creatures beside it gain Bless (a ward that stops the next status).",
+      "picture": "A fierce grandma in a crossing-guard vest holding up a stop sign, nervous creatures huddled behind her in a blanket fort."
+    },
+    {
+      "name": "One for the Road", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Last one. Then one more.",
+      "notes": "Mechanics test: an ability as a spell. Target creature gains Double Tap (it attacks twice), replacing its own until its card is reshuffled.",
+      "picture": "A pub regular raising two pints at once under a CLOSING TIME sign, the barman already putting chairs on tables.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "GrantAbility", "target": "FriendlyCreatures", "ability": "DoubleTap" }
+        ] }
+      ]
+    },
+    {
+      "name": "Chain Smoker", "type": "creature", "attack": 4, "health": 6, "speed": 2, "deploy": 1, "ability": "Recoil",
+      "flavor": "My grandfather smoked a pack a day his whole life and lived to 90.",
+      "notes": "Recoil: +2 damage on its attacks, and it takes 1 damage after each one. A mood that burns it out.",
+      "picture": "A man chained by the neck to a giant cigarette pack like a dog on a leash, and happy about it: grinning, a cigarette in his mouth, a cloud of smoke around his head. The pack is a classic red-and-white one (a red chevron lid over a white body, a small gold crest, \"FILTER CIGARETTES\" on the red band), no brand name."
+    },
+    {
+      "name": "Karen", "type": "creature", "attack": 4, "health": 5, "speed": 1, "deploy": 0, "ability": "MoodSwings",
+      "flavor": "Would like to speak to your manager. And theirs. And God's.",
+      "notes": "Mood Swings (the user, 2026-10-17, Pokémon's Moody): each Dawn, +2 to one of its stats and -1 to another, at random. Future: Impatient. Escalates every Day nobody gives it an intent.",
+      "effects": [
+        { "trigger": "OnDamage", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "Self", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Boomer", "type": "creature", "attack": 4, "health": 6, "speed": 1, "deploy": 0,
+      "flavor": "Bought a house at 22. Recommends you stop buying coffee.",
+      "notes": "Future: OLD MAN YELLS AT CLOUD. Hits a random creature that moved this Day.",
+      "effects": [
+        { "trigger": "EndOfTurn", "actions": [
+          { "action": "Damage", "value": 2, "target": "AllCreatures", "modifier": "Random" }
+        ] }
+      ]
+    },
+    {
+      "name": "Hipster", "type": "creature", "attack": 4, "health": 4, "speed": 2, "deploy": 0, "ability": "TooMainstream",
+      "flavor": "Liked this battlefield before it got so crowded.",
+      "notes": "Too Mainstream: immune to effects that affect more than one creature. Future: Hipster status. Hurts only creatures that share a name with another creature.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 1, "target": "AllCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Underdog", "type": "creature", "attack": 1, "health": 1, "speed": 3, "deploy": 0,
+      "flavor": "Nobody believed in him. Correctly. Still, very inspiring.",
+      "notes": "Future: Underdog. A bonus while you have fewer creatures or less Health than the enemy.",
+      "effects": [
+        { "trigger": "OnDeath", "actions": [
+          { "action": "ModifyStat", "value": 2, "target": "FriendlyCreatures", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Hikikomori", "type": "creature", "attack": 1, "health": 7, "speed": 1, "deploy": 0,
+      "flavor": "Hasn't left the room since 2019. Neither will you.",
+      "notes": "Future: Slacking Off. Can't be given an intent, but can't be targeted either.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Stun", "value": 2, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Reality TV Star", "type": "creature", "attack": 5, "health": 4, "speed": 2, "deploy": 0, "ability": "MoodSwings",
+      "flavor": "Famous for being famous. Unbearable for free.",
+      "notes": "Mood Swings (the user, 2026-10-17: 'and others'): famous for the drama; each Dawn, +2 to one of its stats and -1 to another, at random. Future: Plot Armor. Survives a lethal hit once (OnAboutToDie).",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 2, "target": "Self", "attackStat": true, "healthStat": true },
+          { "action": "Damage", "value": 1, "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Scam Artist", "type": "creature", "attack": 2, "health": 2, "speed": 3, "deploy": 0,
+      "flavor": "Sells a course on how to sell courses.",
+      "notes": "Future: steals a Temporary buff from an enemy creature instead.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": -2, "target": "EnemyCreatures", "modifier": "Random", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Football Hooligans", "type": "creature", "attack": 5, "health": 3, "speed": 2, "deploy": 0,
+      "flavor": "Lost the match. Won the street.",
+      "notes": "Future: a riot that spreads to adjacent creatures each Dusk.",
+      "effects": [
+        { "trigger": "OnDeath", "actions": [
+          { "action": "Damage", "value": 1, "target": "AllCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Antihero", "type": "creature", "attack": 5, "health": 4, "speed": 2, "deploy": 0,
+      "flavor": "Not a good guy. Just a better-written bad one.",
+      "notes": "Future: picks its own target among the creatures that hurt you last Day.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "AllCreatures", "modifier": "Random" }
+        ] }
+      ]
+    },
+    {
+      "name": "Bodybuilder", "type": "creature", "attack": 5, "health": 3, "speed": 3, "deploy": 0,
+      "flavor": "Natural. Definitely natural. Don't check.",
+      "notes": "Future: Coffeinated, then Burnout. Never skips leg day, skips every rest day.",
+      "effects": [
+        { "trigger": "EndOfTurn", "actions": [
+          { "action": "Damage", "value": 1, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Plot Armor", "type": "creature", "attack": 2, "health": 2, "speed": 2, "deploy": 0,
+      "flavor": "The hero can't die. It's only the second act.",
+      "notes": "Mechanics test: once per combat, when it would die (OnAboutToDie, resolving at once), it heals 1 and survives. The use is gone for the rest of the combat, even after the card is reshuffled.",
+      "picture": "A close-up of a chest: two hands hold an open jacket wide, Superman style, showing a steel breastplate stamped PLOT.",
+      "effects": [
+        { "trigger": "OnAboutToDie", "once": true, "actions": [
+          { "action": "Heal", "value": 1, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "YOLO", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Look Mom, no hands... Look Mom, no teef!",
+      "notes": "+4 Attack for this Day only, paid with 2 of your Health. Future: the creature is Banished at Dusk.",
+      "picture": "A shirtless guy mid-backflip off a garage roof toward a tiny inflatable pool, filming himself with a selfie stick, while his friends below are already dialing for an ambulance.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 4, "target": "FriendlyCreatures", "days": 1, "attackStat": true, "healthStat": false },
+          { "action": "Damage", "value": 2, "target": "Player", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "This Is Fine", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Everything is on fire. The coffee is still warm, though.",
+      "notes": "Future: a Trend (Location). Each Dusk, every creature takes 1 damage and yours shrug it off.",
+      "picture": "The meme dog in a little bowler hat at a table with his coffee, the room on fire around him, saying THIS IS FINE.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 2, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "attackStat": false, "healthStat": true },
+          { "action": "Damage", "value": 3, "target": "AllCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Strike", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Nobody works. Not them. Especially not us.",
+      "notes": "Future: a Strike. Stops Each Dawn triggers (engines) on both sides for 2 Days.",
+      "picture": "A corrupt head of the works council in a lobster bib, a WORKS COUNCIL badge on his lapel, feasting on a lobster with champagne at the company's boardroom table; the beaming CEO pats him on the shoulder. Through the window behind them, the striking workers stand in the rain with their placards, each handed a single soggy biscuit.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Stun", "value": 1, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets" },
+          { "action": "Stun", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Russian Roulette", "type": "spell", "target": "AllCreatures",
+      "flavor": "Five empty chambers. Your odds are great. Probably.",
+      "notes": "Future: you pick the first slot; each Dawn it moves to the next one until it fires.",
+      "picture": "A Russian woman in a fur ushanka spinning a roulette wheel of six slices, one of them a skull, onion domes in the snow behind her.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 5, "target": "AllCreatures", "modifier": "Random" }
+        ] }
+      ]
+    },
+    {
+      "name": "Toxic Positivity", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Good vibes only. Bad vibes get one damage.",
+      "notes": "Future: a Temporary buff that turns into Burnout when it wears off.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 2, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "attackStat": true, "healthStat": false },
+          { "action": "Damage", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Mental Health Day", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Unpaid, unscheduled, unbelievably necessary.",
+      "notes": "Future: Cleanse every mood from the creature instead of the stun.",
+      "picture": "A smiling politician cuts the ribbon on a MENTAL HEALTH DAY banner in front of a boarded-up mental health clinic (CLOSED: BUDGET CUTS). The only help on offer: a reiki-and-ayurveda lady in crystals and a shawl waving burning sage over an exhausted office worker, a price list beside her (AURA CLEANSE 90 EUROS).",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 3, "target": "FriendlyCreatures", "attackStat": false, "healthStat": true },
+          { "action": "Stun", "value": 1, "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Delivery Cyclist", "type": "creature", "attack": 1, "health": 3, "speed": 3, "deploy": 0, "movement": "Leapfrog",
+      "flavor": "Your food is 4 minutes away. It has been 4 minutes away for 40 minutes.",
+      "notes": "Mechanics test: Leapfrog jumps over creatures to an empty slot; if its landing slot is taken, it stops at the closest empty slot on the way.",
+      "picture": "A rider with a huge square thermal backpack, mid-hop over a gridlocked row of cars, phone strapped to the handlebars showing a 1-star rating."
+    },
+    {
+      "name": "Zeitgeist", "type": "spell", "target": "Player",
+      "flavor": "Everyone agrees. Nobody remembers deciding.",
+      "notes": "Trend for 3 Days: each Day, whoever has fewer creatures draws 1 more card. The mood of the times backs the underdog (Zeitgeist's comebacks).",
+      "picture": "A huge friendly ghost made of hashtags and likes floating over a crowd whose faces are lit blue by their phones.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SetTrend", "target": "Player", "days": 3, "trend": "Zeitgeist" }
+        ] }
+      ]
+    },
+    {
+      "name": "Rush Hour", "type": "spell", "target": "Player",
+      "flavor": "Fastest way home: don't.",
+      "notes": "Trend for 3 Days: the slowest act first, wherever Speed decides the order (like a room where the order is flipped).",
+      "picture": "Gridlocked traffic at dusk, every car honking, while a snail with a briefcase glides past in the empty bus lane.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SetTrend", "target": "Player", "days": 3, "trend": "RushHour" }
+        ] }
+      ]
+    },
+    {
+      "name": "No Glove, No Love", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Protect yourself. Everyone else is.",
+      "notes": "Protection: target friendly creature gets Blessed (the next status that would land is negated) and 2 Armor.",
+      "picture": "A woman wagging her index finger: no, no. In her other hand, a little foil packet held up: this first.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "Blessed", "potency": 1 },
+          { "action": "Armor", "value": 2, "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "We Are Not The Same", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "I copy whoever's in front of me. You copy whoever's in front of you. We are not the same.",
+      "notes": "Your creature copies the Attack, Health and Speed of the enemy creature facing it, while it stays in play. Shrinks a giant into your nobody, or your nobody into a giant.",
+      "picture": "The meme: two identical masked heroes in red suits with web lines, pointing at each other in a dim warehouse.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "CopyStats", "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Generational Trauma", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Your grandfather's, your father's, and now yours. A family heirloom.",
+      "notes": "Mechanics test: Health Loss is permanent and stays on the card until it's reshuffled. It only affects creatures, so it fizzles on an empty slot. Zeitgeist since 2026-10-15 (the user): the generations are the mood of the times.",
+      "picture": "The swimming-pool meme: the Silent Generation stands in the pool holding a smiling Boomer high above the water, while on the bottom Gen X and the generations after them sit as skeletons, still waiting.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": -4, "target": "EnemyCreatures", "attackStat": false, "healthStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Listen Kid", "type": "creature", "attack": 2, "health": 5, "speed": 1, "deploy": 0,
+      "flavor": "Back in my day we had one channel and we liked it.",
+      "notes": "A sturdy body: Arrival: the creature facing it is Exhausted (it gets a lecture). An old-timer's unasked-for life advice.",
+      "picture": "An old man on a porch rocking chair pointing his cane at a terrified teenager, a speech bubble filled with tiny drawings of horses, rotary phones and a nickel.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Stun", "value": 1, "target": "EnemyCreatures", "modifier": "Opposite" }
+        ] }
+      ]
+    },
+    {
+      "name": "Ol' Reliable", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "The one thing that always works. Used again.",
+      "notes": "Plain removal for Zeitgeist: 2 damage to target creature or player, and you draw 1 next Day.",
+      "picture": "A worn-out frying pan hanging alone on a kitchen wall with a halo around it, a dented shape of a burglar's head in its bottom.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures" },
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Weaponized Incompetence", "type": "spell", "target": "Enemy",
+      "flavor": "Oh no, I did the dishes wrong again. Guess you'll have to do them forever.",
+      "notes": "Shuts down an engine (Zeitgeist's strikes): the strongest enemy creature is Exhausted.",
+      "picture": "A man holding a plate he has 'washed' that is still covered in food, looking helpless, while his partner behind him quietly takes over the whole sink.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Stun", "value": 1, "target": "EnemyCreatures", "modifier": "Strongest" }
+        ] }
+      ]
+    },
+    {
+      "name": "Absentee Parents", "type": "creature", "attack": 4, "health": 4, "speed": 2, "deploy": 0,
+      "flavor": "Gone for cigarettes. Back for the inheritance.",
+      "notes": "An honest body: 4/4, ready at once, Speed 2. Last Will: you draw 1 next Day.",
+      "picture": "A family portrait on a mantelpiece with two parent-shaped holes cut out of it, a postcard from Ibiza tucked into the frame.",
+      "effects": [
+        { "trigger": "OnDeath", "actions": [
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "The Friends We Made Along the Way", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "We lost the treasure. We kept each other. Mostly.",
+      "notes": "Every friendly creature gets +1 Attack and +2 Health, for good: Zeitgeist's swarm finally sticks around.",
+      "picture": "A ragtag group of adventurers around a campfire laughing, an empty treasure chest behind them, a map with the X scribbled out.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "attackStat": true, "healthStat": false },
+          { "action": "ModifyStat", "value": 2, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "attackStat": false, "healthStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Spite Voter", "type": "creature", "attack": 3, "health": 3, "speed": 2, "deploy": 0,
+      "flavor": "Didn't like either of them. Voted for the worst one, out of principle.",
+      "notes": "Laid Off: when it's discarded from your hand, 2 damage to a random enemy creature. Zeitgeist reacts: even the creatures it doesn't play hit back.",
+      "picture": "A grumpy man in a voting booth gleefully ticking the box of a clown candidate, a 'Don't Blame Me' badge pinned to his cardigan.",
+      "effects": [
+        { "trigger": "OnDiscarded", "actions": [
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures", "modifier": "Random" }
+        ] }
+      ]
+    },
+    {
+      "name": "Fidget Spinner", "type": "creature", "attack": 2, "health": 3, "speed": 3, "deploy": 0,
+      "flavor": "2017's must-have. 2018's landfill.",
+      "notes": "Arrival: the enemy's Vanguard and Flanks spin clockwise, one slot round. Arriving the Day it's played, it scrambles where that Day's attacks land.",
+      "picture": "A giant fidget spinner whirling on a school desk, sparks flying off its bearings, a crowd of kids staring at it hypnotized, a teacher's 'Confiscated' box in the corner.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Spin", "target": "Enemy" }
+        ] }
+      ]
+    },
+    {
+      "name": "Camper Van", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 0, "ability": "HitAndRun",
+      "flavor": "Van life: no rent, no fixed address, no witnesses.",
+      "notes": "Hit and Run (U-turn): after its attack it goes back to your hand, fresh, with the next Day's, and its slot is free for the next summon.",
+      "picture": "A painted hippie camper van speeding away from a dented mailbox, a dreamcatcher swinging from the mirror, the couple inside filming the getaway for their followers."
+    },
+    {
+      "name": "Lost Generation", "type": "creature", "attack": 2, "health": 4, "speed": 1, "deploy": 0, "ability": "Grudge",
+      "flavor": "Born into one crisis, graduated into the next.",
+      "notes": "Grudge: +1 Attack for each friendly creature that died this combat, up to +5. What makes Zeitgeist's swarm stick: every friend lost makes it angrier.",
+      "picture": "Tired millennials in graduation gowns sitting on the steps of a closed bank, their diplomas folded into paper boats floating down the gutter."
+    },
+    {
+      "name": "Universal Basic Income", "type": "spell", "target": "Player", "policy": true,
+      "flavor": "Free money. Everyone's furious about it.",
+      "notes": "Policy: draw a card, and again at each Dawn, for the rest of the combat. Zeitgeist's engine: more cards, every Day.",
+      "picture": "A long line of citizens at an ATM spitting out identical small banknotes, a politician in the background tearing his hair out, a man in the line buying a lottery ticket with his.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Calm Your Tits", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Said nobody, ever, successfully.",
+      "notes": "Provoke 2 (Taunt, Follow Me) on target creature: for the rest of this Day and the next 2, it attacks the creature facing it and can't use its Active ability; and you draw a card next Day. Put a wall in front of it.",
+      "picture": "A man at a family barbecue telling his furious aunt to calm down, everyone around them freezing mid-bite, the aunt's face going from red to purple.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Provoked", "days": 2 },
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Tourist Trap", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Authentic local cuisine. Twenty-two euros a coffee.",
+      "notes": "Disruption Maneuver: pull target enemy creature a step forward (Headquarters to its Flank, a Flank to the Vanguard); a creature already there trades places with it. Drags their important people into reach.",
+      "picture": "A sunburnt tourist in socks and sandals lured off the beach by a neon sign reading AUTHENTIC, into a beach restaurant where a waiter already holds out a bill a metre long, a palm and a parasol behind.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Pull", "target": "EnemyCreatures" }
+        ] }
+      ]
+    }
+  ]
+}

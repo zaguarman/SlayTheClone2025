@@ -3,6 +3,18 @@ MODDING (2026-10-17)
 The game loads cards and decks from JSON files outside the project and offers them beside its own: in the deck list, the
 card gallery, the glossary's "On cards", and as opponents. No build, no editor: write a file, start the game.
 
+The game's own cards are written in the same format (cards as data, the user, 2026-10-17): Assets/Cards/<Subfaction>.json
+(Corporate, Statecraft, Offline, Online, ShadowOps, Tech, Myth, Mind, Utopia), Potions.json for the adventure's potions and
+Shelved.json for cards kept out of the game. Cards > Generate Faction Decks reads them and writes the card assets (keeping
+their ids and art); Cards > Export Cards To Files writes them back from the assets. The format is CardFiles.cs; those files
+are the fullest examples of it. A card's fields beyond the ones below: "picture" (the brief its art is drawn from),
+"rooted" (Rooted while it deploys), "token" and "disguise" (a token and the card the other side sees it as), "faction" on a
+card that wears another subfaction's frame, "prophecyLatest", "doom", "discardChosen", "gamble", "homing", "ripening",
+"policy", "combo", "potion", "setUpBy" (the cards that set it up); an effect's "once" (once per combat); an action's
+"cleanse", "purge", "sendFor", "fromDiscard", "delay", "onlyIfTargetDies", "decoy" (the token SummonDecoys makes) and
+"watchdog" { "watches", "side", "effect", "charges", "atMost", "timing", "pick", "moveEarlier", "damaging" }. A fake face or a
+token that another card names must come before it in the file.
+
 WHERE
   • Mods/ next to the project folder (in the editor and a desktop build). The game ships Mods/Example/example.json as a model.
   • Mods/ under the game's data folder (Application.persistentDataPath: on Windows,

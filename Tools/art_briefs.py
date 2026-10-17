@@ -1,6 +1,6 @@
 """Writes Assets/Documentation/Card Art Briefs.txt: every card's picture brief, by faction.
 
-The brief is the card's .Picture(...) in FactionDecksGenerator.cs; for cards without one, the comment that opens its
+The brief is the card's "picture" in Assets/Cards/<Subfaction>.json; for cards without one, the comment that opens its
 drawing in generate_card_art.py. Descriptions the user gave for a card's art are kept in USER_NOTES below and shown with
 the brief: they win over it when the picture is redrawn (pixel art included).
 
@@ -16,7 +16,7 @@ OUT = os.path.join(ROOT, "Assets", "Documentation", "Card Art Briefs.txt")
 
 # What the user asked for, in their words (dated), per card name. Add to it whenever the user describes a card's art.
 USER_NOTES = {
-    "Spite Voter": ["2026-10-17: the user's reference, the Raiders of the Lost Ark idol-swap meme: VOTERS (Indiana Jones, weighing it up at the temple pedestal) swapping the golden idol, labelled CORRUPT POLITICIAN, for another golden idol labelled CORRUPT POLITICIAN.", "2026-10-17: write CORRUPT POLITICIAN on each idol; the characters on the same spots and the same camera angle as the reference (the lower panel: the adventurer behind the pedestal, centre, the swapped idol in his left hand, the pedestal's to the right)."],
+    "Spite Voter": ["2026-10-17: the user's reference, the Raiders of the Lost Ark idol-swap meme: VOTERS (Indiana Jones, weighing it up at the temple pedestal) swapping the golden idol, labelled CORRUPT POLITICIAN, for another golden idol labelled CORRUPT POLITICIAN.", "2026-10-17: write CORRUPT POLITICIAN on each idol; the characters on the same spots and the same camera angle as the reference (the lower panel: the adventurer behind the pedestal, centre, the swapped idol in his left hand, the pedestal's to the right).", "2026-10-17: that version, with the head lowered; no 'Not Me' badge."],
     "White Dwarf": ["2026-10-17: a dwarf like in The Lord of the Rings."],
     "Blessing in Disguise": ["2026-10-17: something that references the story: a farmer's horse runs away; his neighbours say 'What bad luck!'; the farmer replies 'Maybe.'"],
     "The Friends We Made Along the Way": ["2026-10-17: Jesus with two guns instead of the cultist."],
@@ -182,26 +182,23 @@ ART_RULES = [
     "  kept (Assets/Art/PixelCards, ArtArchive/RetroDiffusion) but not assigned.",
 ]
 
-FACTION_NAMES = {"Corporate": "Corporate", "Statecraft": "Statecraft", "Zeitgeist": "Offline",
-                 "DigitalSociety": "Online", "ShadowOps": "Shadow Ops.", "Tech": "Tech", "Myth": "Myth",
+FACTION_NAMES = {"Corporate": "Corporate", "Statecraft": "Statecraft", "Offline": "Offline", "Online": "Online", "ShadowOps": "Shadow Ops.", "Tech": "Tech", "Myth": "Myth",
                  "Mind": "Mind", "Utopia": "Utopia"}
 
 
-def cards_by_faction(source):
-    sections = list(re.finditer(r"private static List<CardDef> (\w+)Cards\(\)", source))
+CARDS_DIR = os.path.join(ROOT, "Assets", "Cards")
+CARD_FILES = ["Corporate", "Statecraft", "Offline", "Online", "ShadowOps", "Tech", "Myth", "Mind", "Utopia", "Shelved", "Potions"]
+
+
+def cards_by_faction():
+    """Each card file's cards (cards as data, 2026-10-17): (name, Creature or Spell, the picture brief or None)."""
+    import json
     result = []
-    for i, section in enumerate(sections):
-        end = sections[i + 1].start() if i + 1 < len(sections) else len(source)
-        body = source[section.start():end]
-        starts = list(re.finditer(r'^\s*(Creature|Spell)\("((?:[^"\\]|\\.)*)"', body, re.M))
-        cards = []
-        for j, card in enumerate(starts):
-            stop = starts[j + 1].start() if j + 1 < len(starts) else len(body)
-            chunk = body[card.start():stop]
-            picture = re.search(r'\.Picture\("((?:[^"\\]|\\.)*)"\)', chunk)
-            name = card.group(2).replace('\\"', '"')
-            cards.append((name, card.group(1), picture.group(1).replace('\\"', '"') if picture else None))
-        result.append((FACTION_NAMES.get(section.group(1), section.group(1)), cards))
+    for stem in CARD_FILES:
+        with open(os.path.join(CARDS_DIR, stem + ".json"), encoding="utf-8") as f:
+            data = json.load(f)
+        cards = [(c["name"], "Spell" if c.get("type", "creature") == "spell" else "Creature", c.get("picture") or None) for c in data["cards"]]
+        result.append((FACTION_NAMES.get(stem, stem), cards))
     return result
 
 
@@ -234,17 +231,16 @@ def function_name(card):
 
 
 def main():
-    source = open(GENERATOR, encoding="utf-8").read()
     art = open(ART, encoding="utf-8").read()
     comments = drawing_comments(art)
     drawings = drawing_of(art)
     lines = ["Card Art Briefs", "",
              "Every card's picture: the brief it's drawn from, and the user's own notes where they gave some (those win when",
-             "the picture is redrawn). Written by Tools/art_briefs.py from the deck generator's .Picture(...) briefs and the",
+             "the picture is redrawn). Written by Tools/art_briefs.py from the card files' 'picture' briefs and the",
              "drawing comments in generate_card_art.py; the user's notes live in that script. Rerun it after any card or art",
              "change.", "", "RULES", ""] + [f"  {rule}" for rule in ART_RULES] + [""]
     missing = 0
-    factions = cards_by_faction(source)
+    factions = cards_by_faction()
     unchecked = [(faction, name) for faction, cards in factions for name, _, _ in cards
                  if name not in USER_NOTES and name not in SUPERVISED]
     lines += ["TO SUPERVISE", "",

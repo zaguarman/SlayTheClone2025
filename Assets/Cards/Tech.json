@@ -1,0 +1,235 @@
+{
+  "mod": "Tech",
+  "cards": [
+    {
+      "name": "EMP Drone", "type": "creature", "attack": 1, "health": 4, "speed": 2, "deploy": 0, "ability": "JammingField",
+      "flavor": "No signal. No abilities. No complaints: nobody can call to complain.",
+      "notes": "Jamming Field (Pokémon's Neutralizing Gas): every other creature's ability is switched off while it stands, on either side. Yours too.",
+      "picture": "A quadcopter drone hovering over the battlefield emitting concentric rings of static, every creature below holding a phone with no bars, their glowing ability icons flickering out one by one."
+    },
+    {
+      "name": "Buffering", "type": "spell", "target": "Player",
+      "flavor": "99%. 99%. 99%. 99%.",
+      "notes": "Trend for 3 Days (Trick Room, Tech's flavour): Rush Hour, the slowest act first.",
+      "picture": "A battlefield frozen under a giant spinning loading wheel, every creature caught mid-leap with a BUFFERING 99% label, the one dial-up modem in the corner going first.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SetTrend", "target": "Player", "days": 3, "trend": "RushHour" }
+        ] }
+      ]
+    },
+    {
+      "name": "Web Scraping", "type": "spell", "target": "Player",
+      "flavor": "We respect your robots.txt. We read it, anyway.",
+      "notes": "Tech's scouting: send for any card among the top 5 of your deck; it joins your next hand.",
+      "picture": "A cat scratching at a laptop screen, claw marks tearing the web page open and spilling out cards and data.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SendFor", "value": 5, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "DDOS Attack", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Ten thousand requests a second. All of them from fridges.",
+      "notes": "2 damage, and Exhausted: it cancels the target's planned actions (spells land before attacks), lasts the rest of the Day and all of the next, turns its abilities off and adds +1 to every hit (Exposed). Aimed at an enemy slot it's Fixed: the enemy can dodge by moving.",
+      "picture": "A server rack melting under an avalanche of tiny envelope icons, smart fridges and toasters in the background, each with a red glowing eye.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Stun", "value": 1, "target": "EnemyCreatures" },
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Antivirus", "type": "spell", "target": "Player",
+      "flavor": "1 threat blocked. 37 offers to upgrade to Premium.",
+      "notes": "Mechanics test: a Watchdog (GDD 3.11). It's created when the spell resolves and, Monitored, nullifies the next enemy spell before it resolves, even one planned before it existed. 1 charge.",
+      "picture": "A panda in shining knight's armor, an antivirus logo on its shield, blocking a glowing spell scroll at a castle gate, while the castle walls behind it are plastered with its own pop-ups: \"RENEW NOW - 60% OFF\".",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "CreateWatchdog", "target": "Enemy", "watchdog": { "watches": "Spell", "side": "Enemy", "effect": "Nullify", "charges": 1 } }
+        ] }
+      ]
+    },
+    {
+      "name": "Script Kiddie", "type": "creature", "attack": 3, "health": 3, "speed": 3, "deploy": 0, "ability": "ZeroDay",
+      "flavor": "Doesn't know how it works. Doesn't need to.",
+      "notes": "Mechanics test: Zero-Day. Its attacks and effects ignore the target's defensive abilities (Unbothered, No U, Return to Sender...), except Cold Storage.",
+      "picture": "A twelve-year-old in an oversized gaming chair, hoodie up, double-clicking \"H4CK3R T00L.exe\" while a bank vault door swings open on his second monitor."
+    },
+    {
+      "name": "Legacy Code", "type": "creature", "attack": 2, "health": 7, "speed": 1, "deploy": 1, "ability": "Unpatchable",
+      "flavor": "Written in 1987. Nobody knows how it works. Nobody dares touch it.",
+      "notes": "Mechanics test: Cold Storage. Enemy effects can't lower its stats, and Zero-Day can't get around it.",
+      "picture": "A beige mainframe held together with duct tape in a dusty basement, a yellowed sticky note on it: \"DO NOT TOUCH - Gary (retired 1999)\", and cobwebs over an \"Update available\" pop-up."
+    },
+    {
+      "name": "End-to-End Encryption", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Not even we can read your messages. Pinky promise.",
+      "notes": "Mechanics test: Encrypted for 2 Days on a friendly creature. Watchdogs ignore its actions and spend no charge on them.",
+      "picture": "Two carrier pigeons passing a sealed envelope covered in padlocks, while a government agent below swings a butterfly net and waves a \"Backdoor Request\" form.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "Encrypted", "days": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "SysAdmin", "type": "creature", "attack": 2, "health": 5, "speed": 1, "deploy": 1,
+      "flavor": "Have you tried turning it off and on again?",
+      "notes": "Each Dawn it cleanses your creatures' statuses, all of them (Tech owns Cleanse; since 2026-10-15 a Cleanse takes the good ones too).",
+      "picture": "A bearded sysadmin in socks and sandals yanking the power cable out of a smoking server rack, a coffee mug in his other hand.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Cleanse", "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Meatproxy As A Service", "type": "creature", "attack": 1, "health": 4, "speed": 1, "deploy": 1,
+      "flavor": "Powered by AI. The AI is Dave. Dave copies and pastes.",
+      "notes": "A draw each Dawn, paid with 1 of your Health. Future: Technical Debt (fewer draws next Day).",
+      "picture": "A raw steak sitting at a desk, copy-pasting text from one window to another on a computer screen, a price tag on the monitor: $9.99/MONTH.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Draw", "value": 1, "target": "Player" },
+          { "action": "Damage", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Ransomware Attack", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Your files are safe. With us.",
+      "notes": "Exhausted, 2 damage, and you draw a card (the ransom).",
+      "picture": "A computer screen with a grinning skull and a padlock demanding 1 BTC, while a grandma cries into her knitting.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Stun", "value": 1, "target": "EnemyCreatures" },
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures" },
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Man-in-the-Middle", "type": "spell", "target": "Player",
+      "flavor": "Hi, it's your bank. Also, it's not.",
+      "notes": "A Monitored Watchdog: the next enemy spell is redirected to a random creature. 1 charge.",
+      "picture": "A man squeezed on a park bench between two lovers, holding both of their phones and reading their texts.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "CreateWatchdog", "target": "Enemy", "watchdog": { "watches": "Spell", "side": "Enemy", "effect": "Redirect", "charges": 1 } }
+        ] }
+      ]
+    },
+    {
+      "name": "Technical Debt", "type": "creature", "attack": 4, "health": 5, "speed": 2, "deploy": 0,
+      "flavor": "Ship it now. Someone will fix it later. You are someone.",
+      "notes": "Decay 1: strong today, it pays for it every Dusk.",
+      "picture": "A laptop held together with duct tape and a TODO sticky note, beside an empty, cracked piggy bank, the dashed outlines of the missing banknotes floating above.",
+      "effects": [
+        { "trigger": "EndOfTurn", "actions": [
+          { "action": "Damage", "value": 1, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Scope Creep", "type": "creature", "attack": 2, "health": 3, "speed": 1, "deploy": 0,
+      "flavor": "Just one more small feature. And one more.",
+      "notes": "Grow 1: it gets bigger every Dawn, like the project.",
+      "picture": "A Gantt chart on an office whiteboard whose bars have outgrown it: they run off the board, across the wall and out of the window, past the DEADLINE line drawn in red, while a smiling manager sticks on one more note: \"+1 small feature\".",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "Self", "attackStat": true, "healthStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Sex Clanker", "type": "creature", "attack": 2, "health": 7, "speed": 1, "deploy": 0,
+      "flavor": "Batteries not included. Feelings not included either.",
+      "notes": "Arrival: Heat Signature 3 on itself. It draws every random effect and redirected attack: a decoy too attractive to ignore.",
+      "picture": "Candlelight and satin: a figure in full shining plate reclines on a red heart-shaped bed, propped on one elbow, a rose in the visor and one knee up, rose petals everywhere, a heart shield leaning against the bed.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "Self", "status": "HeatSignature", "days": 1, "potency": 3 }
+        ] }
+      ]
+    },
+    {
+      "name": "Threat Hunter", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 1, "homing": true,
+      "flavor": "Assume breach. Then go looking for it.",
+      "notes": "Homing (the user, 2026-10-16): its attacks lock on the enemy creature in the slot it's aimed at and follow it if it moves. Arrival: Heat Signature 1 on a random enemy creature, which then pulls every Homing effect, its own included: aim at anything and the hottest one takes it. Tech's Heat and Homing in one card.",
+      "picture": "A security analyst in a headlamp crawling on hands and knees through a tunnel of server cables with a magnifying glass, following a trail of glowing red footprints to a tiny hooded hacker hiding behind a rack.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "modifier": "Random", "status": "HeatSignature", "days": 1, "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Ctrl + Z", "type": "spell", "target": "FriendlyCreatures", "setUpBy": ["Threat Hunter", "Sex Clanker"],
+      "flavor": "Undo. Undo. Undo. Undo the undo.",
+      "notes": "A friendly creature goes back to your hand (with the next Day's hand), and you draw 1 more next Day. Played again, its Arrival happens again, and it comes back fresh: a reset for a hurt creature, a second Arrival for one with a good one (Threat Hunter, Sex Clanker). Unlike Shadow Ops.' Extraction, no new face, a card instead.",
+      "picture": "A huge curved UNDO arrow pulling a startled knight backwards off a battlefield into a playing card held up by a hand, the keys CTRL and Z glowing on a keyboard below.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ReturnToHand", "target": "FriendlyCreatures" },
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Pair Programming", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "One types, one watches. Both bill the hours.",
+      "notes": "A swapper: target friendly creature trades places with its partner in the formation, then it and the creatures beside it where it lands get +1 Attack this Day. Lines up a pair on one lane, or pulls a hurt creature out of one.",
+      "picture": "Two developers squeezed at one tiny desk sharing a single keyboard: one types with a coffee in his other hand, the other leans over his shoulder pointing at a bug on the screen, a timesheet pinned between them billing 16 hours.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SwapPositions", "target": "FriendlyCreatures" },
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "WithAdjacent", "days": 1, "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Suspicious USB Stick in the Parking Lot", "type": "creature", "attack": 0, "health": 1, "speed": 1, "deploy": 0, "gift": true,
+      "flavor": "SALARIES 2026. Do not open. Definitely open.",
+      "notes": "A Gift (Stuxnet reportedly got into Iran's nuclear plant on USB sticks): you play it into an empty enemy slot and it joins their side. On arrival, a random other creature of its new side is Exhausted (infected), and it carries Heat Signature 1, pulling their random effects and your Homing ones.",
+      "picture": "A lone USB stick lying on the asphalt of an empty parking lot under a streetlight, labelled SALARIES 2026 in marker, an employee in a lanyard bending down to pick it up, a nuclear plant's cooling tower behind the fence.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Stun", "value": 1, "target": "FriendlyCreatures", "modifier": "Random|Others" },
+          { "action": "ApplyStatus", "target": "Self", "status": "HeatSignature", "days": 1, "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Code Review", "type": "spell", "target": "Player",
+      "flavor": "LGTM. (Didn't read it.)",
+      "notes": "The sweeper (Rapid Spin, Defog): clears the Slot Effects on every one of your slots (Border Crossing, Landmines, Scorched Earth), and you draw a card next Day.",
+      "picture": "Two developers at a desk, one pointing at a screen full of red warning markers, the other shrugging and clicking 'Approve' with a coffee in hand.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "CleanseSlot", "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" },
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Bomber Drone", "type": "creature", "attack": 3, "health": 2, "speed": 3, "deploy": 0, "ability": "HitAndRun",
+      "flavor": "Delivered in 30 minutes, or your village is free.",
+      "notes": "Hit and Run: after its attack it goes back to your hand, fresh, with the next Day's. It strikes and is gone before the answer comes.",
+      "picture": "A quadcopter drone with a delivery company's logo dropping a small bomb on a tank and zipping away, a 5-star rating popping up on its operator's phone below."
+    },
+    {
+      "name": "Ctrl + Y", "type": "spell", "target": "EnemyCreatures", "combo": true,
+      "flavor": "Redo. And again. And again.",
+      "notes": "Combo: 1 damage to target creature or player, 1 more for each other spell you play this Day. Tech's spells pile up into a finisher.",
+      "picture": "A keyboard with the Y key worn down to a nub, a hand mashing Ctrl + Y while the same explosion repeats on the screen behind it.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 1, "target": "EnemyCreatures" }
+        ] }
+      ]
+    }
+  ]
+}

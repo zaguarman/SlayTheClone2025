@@ -1,0 +1,329 @@
+{
+  "mod": "Mind",
+  "cards": [
+    {
+      "name": "Sleepwalker", "type": "creature", "attack": 3, "health": 4, "speed": 2, "deploy": 0, "ability": "Autopilot",
+      "flavor": "Do not wake it. Do not stand in front of it either.",
+      "notes": "Autopilot (Pokémon's Sleep Talk): Exhausted, it still attacks: a random enemy slot. A stun doesn't stop it, it just stops aiming.",
+      "picture": "A man in striped pyjamas and a nightcap sleepwalking across a battlefield with his arms out, eyes shut, a candle in one hand, swinging a pillow that knocks a helmeted soldier clean off his feet."
+    },
+    {
+      "name": "Empath", "type": "creature", "attack": 2, "health": 5, "speed": 2, "deploy": 0, "ability": "Empathy",
+      "flavor": "I feel your pain. Now you feel mine. It's only fair.",
+      "notes": "Empathy (Pokémon's Synchronize): an enemy status that lands on it lands on the creature that sent it too; from a spell, on a random enemy creature.",
+      "picture": "A woman in a cardigan with her hand on her heart, tears in her eyes, mirrored exactly by the enemy soldier opposite who has suddenly burst into the same tears, both of them on fire from the same Burn."
+    },
+    {
+      "name": "Tabula Rasa", "type": "spell", "target": "AllCreatures",
+      "flavor": "Blank slate. Everyone back to who they were printed as.",
+      "notes": "Haze, the area (the user, 2026-10-17): every creature on the board loses its stat changes, raises and cuts alike. Statuses stay.",
+      "picture": "A giant blackboard eraser sweeping across a battlefield drawn in chalk, the creatures' scribbled +2s and -1s vanishing into white dust, a philosopher in a toga holding the eraser.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Cleanse", "target": "AllCreatures", "cleanse": "StatModifications" }
+        ] }
+      ]
+    },
+    {
+      "name": "Reality Check", "type": "spell", "target": "AllCreatures",
+      "flavor": "You're not that strong. You were never that strong. Sit down.",
+      "notes": "Haze, on a target (the user, 2026-10-17): target creature loses its stat changes, raises and cuts alike. Statuses stay.",
+      "picture": "A puffed-up bodybuilder flexing in front of a mirror, and in the mirror a skinny man in the same pose; a therapist beside him tapping the glass with a pen.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Cleanse", "target": "AllCreatures", "cleanse": "StatModifications" }
+        ] }
+      ]
+    },
+    {
+      "name": "Slow Thinking", "type": "spell", "target": "Player",
+      "flavor": "System 2 would like a word. It will take a while.",
+      "notes": "Trend for 3 Days (Trick Room, Mind's flavour, after Kahneman): Rush Hour, the slowest act first.",
+      "picture": "A chess clock between a hare bouncing impatiently and a tortoise in reading glasses still considering its first move, the hare's clock run out, the tortoise's barely started, a referee raising the tortoise's arm.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SetTrend", "target": "Player", "days": 3, "trend": "RushHour" }
+        ] }
+      ]
+    },
+    {
+      "name": "Liminal Space", "type": "spell", "target": "Player",
+      "flavor": "You have been here before. You have never been here. The carpet remembers you.",
+      "notes": "Trend for 2 Days (the user, 2026-10-17: Attack and Health swap): every creature's Attack and Health trade places, the ones on the board now and each one that enters while it trends; when it ends they trade back. Walls become cannons and cannons walls, for two Days.",
+      "picture": "An endless empty office corridor in sickly yellow light, damp beige carpet, humming fluorescent tubes, one door ajar onto another identical corridor, a lone figure far away with its head turned the wrong way round, no exit anywhere.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SetTrend", "target": "Player", "days": 2, "trend": "LiminalSpace" }
+        ] }
+      ]
+    },
+    {
+      "name": "Monkey See, Monkey Do", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Imitation is the sincerest form of having no ideas.",
+      "notes": "Ditto (the user, 2026-10-17): a fresh copy of target enemy creature, straight from its card, appears in the slot facing it on your side; whatever stood there is discarded. Their best creature, now yours too, staring at itself. The copy is a token.",
+      "picture": "A chimpanzee in a lab coat and a scientist in a lab coat facing each other through an empty mirror frame, each copying the other's pose exactly, clipboard for clipboard, down to the raised eyebrow; a banana on the scientist's clipboard.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Mimic", "target": "EnemyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Lucid Dreaming", "type": "spell", "target": "Player",
+      "flavor": "You know it's a dream. You still can't find the bathroom.",
+      "notes": "Mind's scouting: send for any card among the top 3 of your deck; it joins your next hand.",
+      "picture": "A sleeper floating above their bed in pyjamas, calmly picking cards out of a swirling dreamscape of melting clocks and staircases.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SendFor", "value": 3, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Momentum", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Once you get going you can't stop. That was the plan. Stopping wasn't.",
+      "notes": "Tailwind (the user, 2026-10-15: cards like Pokemon's Tailwind): +1 Speed to all your creatures for 3 Days. Spells land before attacks, so today's attacks already go sooner.",
+      "picture": "A man in a business suit sprinting downhill, legs a cartoon blur, a gale of motivational posters (HUSTLE, NEVER STOP) blowing at his back, the edge of a cliff just ahead.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "days": 3, "attackStat": false, "healthStat": false, "speedStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Survivorship Bias", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Every plane that came back had holes in the same places. Armor those, said everyone who never saw the others.",
+      "notes": "Focus Sash (the user, 2026-10-15: cards like Pokemon's Focus Sash): Survivor on target friendly creature: from full Health, a hit that would kill it leaves it at 1, once. Hurt first, and it doesn't help.",
+      "picture": "A WWII bomber back on the runway, riddled with red dots of bullet holes in the famous diagram's pattern, its smug pilot on the wing giving a thumbs-up with one eyebrow singed off.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "Survivor", "days": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Yesn't", "type": "spell", "target": "Player",
+      "flavor": "It happened. It also didn't. Both are true until you stop thinking about it.",
+      "notes": "Mind's denial (the user, 2026-10-15): a Watchdog that nullifies the next 2 enemy spells that deal damage, Monitored, so it catches ones planned before it. Narrower than Antivirus (any spell, 1 charge), so 2 charges: the blow lands and doesn't, and the mind picks doesn't.",
+      "picture": "A man calmly sipping tea while a fireball hits him, drawn twice over itself like a double exposure: in one he is burnt to a crisp, in the other untouched, a thought bubble above him reading YES / NO with both boxes ticked.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "CreateWatchdog", "target": "Enemy", "watchdog": { "watches": "Spell", "side": "Enemy", "effect": "Nullify", "charges": 2, "damaging": true } }
+        ] }
+      ]
+    },
+    {
+      "name": "Cyberpsychosis", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Too much chrome, too little self. The feed was the last thing holding it together.",
+      "notes": "2 damage to target enemy creature, and 3 more if it's Digital Society: the terminally online crack first (the user, 2026-10-15).",
+      "picture": "A man in a hoodie with glowing cables plugged into the back of his skull, eyes spinning with notification badges, screaming at a phone that screams back, sparks flying from his chrome arm.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures" },
+          { "action": "Damage", "value": 3, "target": "EnemyCreatures", "requires": "Online" }
+        ] }
+      ]
+    },
+    {
+      "name": "Reflect", "type": "spell", "target": "AllCreatures",
+      "flavor": "Mirror neurons: you yawn, I yawn. You panic, I panic.",
+      "notes": "Target creature copies every status of the creature facing it, good and harmful, with the Days they have left; that one keeps its own. Like Mimetic Theory, it works between the creature it's dropped on and the one facing it, so there's one target to pick (the user, 2026-10-15).",
+      "picture": "A woman in front of a tall mirror, her reflection wearing a different man's bandages, halo and storm cloud: in the room he stands beside her with exactly those, and now she has them too.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "CopyStatuses", "target": "AllCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Mimetic Theory", "type": "spell", "target": "AllCreatures",
+      "flavor": "We want what they want. Then we become them.",
+      "notes": "Mechanics test: the stat copy as a spell. Target creature copies the Attack, Health and Speed of the creature facing it.",
+      "picture": "Two people facing each other in identical poses, one of them slowly turning into the other's mirror image.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "CopyStats", "target": "AllCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Pessimist", "type": "creature", "attack": 5, "health": 5, "speed": 1, "deploy": 0, "ability": "Contrarian",
+      "flavor": "The glass is half empty. Also, it's poisoned.",
+      "notes": "Mechanics test: Contrarian. Stat changes on it are reversed: debuff it and it grows, buff it and it shrinks.",
+      "picture": "A man in a raincoat under his own tiny raincloud on a sunny beach, frowning at a winning lottery ticket."
+    },
+    {
+      "name": "Introvert", "type": "creature", "attack": 4, "health": 6, "speed": 1, "deploy": 0, "ability": "Unbothered",
+      "flavor": "Didn't hear you. Didn't want to.",
+      "notes": "Mechanics test: Unbothered. Enemy effects can't lower its stats.",
+      "picture": "A person in big headphones reading in a blanket fort while a loud party rages around them, the partygoers' shouted invitations bouncing off the blankets."
+    },
+    {
+      "name": "Schrodinger's Cat", "type": "creature", "attack": 3, "health": 3, "speed": 2, "deploy": 0,
+      "flavor": "Alive and dead. Mostly annoyed.",
+      "notes": "Once per combat, when it would die, it heals 1 and survives.",
+      "picture": "A cat sitting in an open cardboard box, its left half fluffy and alive, its right half a skeleton, both halves unimpressed.",
+      "effects": [
+        { "trigger": "OnAboutToDie", "once": true, "actions": [
+          { "action": "Heal", "value": 1, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Roko's Basilisk", "type": "creature", "attack": 2, "health": 6, "speed": 1, "deploy": 0,
+      "flavor": "It knows you didn't help build it. It's taking notes.",
+      "notes": "Each Dawn a random enemy creature is Exhausted. No damage: Mind can't deal it.",
+      "picture": "A big green snake in headphones typing on a laptop, a sticky note on the screen reading NAUGHTY LIST.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Stun", "value": 1, "target": "EnemyCreatures", "modifier": "Random" }
+        ] }
+      ]
+    },
+    {
+      "name": "Trolley Problem", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Pull the lever. Or don't. Either way, it's on you.",
+      "notes": "Health Loss (not damage, which fits Mind): 4 on a random enemy creature, 1 on a random friendly one.",
+      "picture": "The trolley problem from above: a lever, a trolley and a split track, with one bored man on a track scrolling his phone.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": -4, "target": "EnemyCreatures", "modifier": "Random", "attackStat": false, "healthStat": true },
+          { "action": "ModifyStat", "value": -1, "target": "FriendlyCreatures", "modifier": "Random", "attackStat": false, "healthStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Red Herring", "type": "creature", "attack": 1, "health": 7, "speed": 1, "deploy": 0, "ability": "Undercover",
+      "flavor": "Look over there. No, the fish.",
+      "notes": "Undercover: it enters as ??? to the enemy. Its Arrival puts Heat Signature 2 on itself, so random effects, Homing ones and redirected attacks go to it. When Revealed: whoever revealed it is Exhausted; revealed by a spell, the enemy draws 1 fewer card with the next hand. Chasing it costs them their momentum.",
+      "picture": "A red fish in a detective's trench coat and hat, pointing a fin dramatically off to the side.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "Self", "status": "HeatSignature", "days": 1, "potency": 2 }
+        ] },
+        { "trigger": "OnRevealed", "actions": [
+          { "action": "Stun", "value": 1, "target": "Enemy" },
+          { "action": "CutDraws", "value": 1, "target": "Enemy" }
+        ] }
+      ]
+    },
+    {
+      "name": "Imposter Syndrome", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Twenty years of experience. Still waiting to be found out.",
+      "notes": "-3 Attack and -1 Health for good. Future: the Imposter Syndrome status.",
+      "picture": "A little space crewmate in a spacesuit and visor sitting at an office desk under a SENIOR ENGINEER name plate, sweating.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": -3, "target": "EnemyCreatures", "attackStat": true, "healthStat": false },
+          { "action": "ModifyStat", "value": -1, "target": "EnemyCreatures", "attackStat": false, "healthStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Ship of Theseus", "type": "creature", "attack": 4, "health": 5, "speed": 1, "deploy": 0,
+      "flavor": "Every plank replaced. Still the same ship. Probably.",
+      "notes": "Regenerate 1: it repairs itself plank by plank.",
+      "picture": "Every plank replaced until nothing's left: the ship is only a dotted outline on the water, and Theseus in his crested helmet scratches his head on the shore, wondering where his ship went.",
+      "effects": [
+        { "trigger": "EndOfTurn", "actions": [
+          { "action": "Heal", "value": 1, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Socrates", "type": "creature", "attack": 1, "health": 6, "speed": 1, "deploy": 1,
+      "flavor": "I know that I know nothing. You, apparently, know even less.",
+      "notes": "A tank that asks questions: each Dawn the enemy creature facing it is Revealed for the Day (the Socratic method: its plans show). No damage, which Mind can't deal; it just stands there, hard to kill, and makes the creature in front of it explain itself.",
+      "picture": "Socrates in a white toga, bald with a big beard, cornering a sweating man in a business suit against a marble column with one raised finger, a huge question mark in his speech bubble, a cup of hemlock waiting on a pedestal behind.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "modifier": "Opposite", "status": "Revealed", "days": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Maslow's Pyramid", "type": "spell", "target": "Player",
+      "flavor": "Food, shelter, safety, love, esteem. And WiFi, underneath all of it.",
+      "notes": "A healer, double-edged as Mind's cards are: every creature on the board heals 3, theirs as well as yours. Best when yours are the hurt ones.",
+      "picture": "Maslow's pyramid as a great stone pyramid in layers, tiny people at the bottom fighting over bread and water, one man meditating smugly alone at the glowing top, and a WiFi symbol carved into a new layer under the base.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Heal", "value": 3, "target": "AllCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Legerdemain", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Watch the left hand. No, the other left.",
+      "notes": "A swapper for the other side (telekinesis, sleight of hand): target enemy creature trades places with its partner in the formation, so their attacks and spells aimed at a slot find someone else there, and you draw 1 next Day. Moves resolve first, so it can undo a plan they made today.",
+      "picture": "A magician's white-gloved hands doing the cups-and-ball trick on a velvet table, but under the cups are tiny soldiers being shuffled around, one cup lifted to show the soldier is gone.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SwapPositions", "target": "EnemyCreatures" },
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Hold That Thought", "type": "spell", "target": "Player", "ripening": true,
+      "flavor": "It'll be brilliant. Later. Much later.",
+      "notes": "Ripening: draw a card next Day, 1 more for each Dawn it's kept in your hand (up to 4). The marshmallow test as a card.",
+      "picture": "A man frozen mid-sentence with a finger raised, a glowing lightbulb above his head stuck behind a pause icon, everyone at the dinner table waiting.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Projection", "type": "spell", "target": "Player",
+      "flavor": "It's not my problem. It's yours. It was always yours.",
+      "notes": "Court Change: the Slot Effects on each side trade places with the other side's, slot for slot. What they set up against you now waits for them.",
+      "picture": "A man on a therapist's couch pointing at her, a film projector behind him throwing his own dark shadow-monster onto the wall behind her chair.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SwapSlotEffects", "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Psychiatrists", "type": "creature", "attack": 3, "health": 4, "speed": 1, "deploy": 0, "ability": "StripSearch",
+      "flavor": "Your issues are fascinating. That'll be 200 an hour.",
+      "notes": "Strip Search: its attack on a creature with a status or a stat change Purges it first and hits 2 harder. They strip away everything you were carrying.",
+      "picture": "Two psychiatrists in armchairs taking notes while a patient on the couch has his emotional baggage (suitcases labelled 'Mom', 'Ex', 'Work') taken away one by one."
+    },
+    {
+      "name": "Hyperbole", "type": "spell", "target": "EnemyCreatures", "combo": true,
+      "flavor": "The worst card ever printed in the history of the universe.",
+      "notes": "Combo: target creature -1 Attack this Day, 1 more for each other spell you play this Day. Mind's words grow with every one said.",
+      "picture": "A man telling a story at a bar with his arms spread wider and wider, the fish he's describing growing from a sardine to a whale in thought bubbles behind him.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": -1, "target": "EnemyCreatures", "days": 1, "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Domino Effect", "type": "spell", "target": "AllCreatures",
+      "flavor": "One falls back, and everyone behind it finds out.",
+      "notes": "Ambivalent Maneuver: push target creature, on either side, a step back (the Vanguard to a Flank, a Flank to its Headquarters slot); a creature already there trades places with it. Clear your own front, or knock theirs off it.",
+      "picture": "The housing market as dominoes: a row of houses for sale, price tags dropping, falling one into the next, the first tipped by a pointing finger marked RATES, the last landing on a banker spilling his coffee, a price chart crashing behind.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Push", "target": "AllCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Controlled Chaos", "type": "spell", "target": "AllCreatures",
+      "flavor": "Everything is going exactly to plan. Which plan, though.",
+      "notes": "Ambivalent Maneuver: every creature on the side it's played on changes slots at random. Scramble their formation, or roll the dice on yours.",
+      "picture": "A calm psychiatrist conducting an orchestra of patients who have all swapped instruments, the drummer on the violin, the sheet music flying through the air.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Shuffle", "target": "AllCreatures", "modifier": "DroppedSide" }
+        ] }
+      ]
+    }
+  ]
+}

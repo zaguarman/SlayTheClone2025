@@ -1,0 +1,230 @@
+{
+  "mod": "Online",
+  "cards": [
+    {
+      "name": "Its Been 84 Years...", "type": "creature", "attack": 4, "health": 5, "speed": 1, "deploy": 0, "ability": "SorryImLate",
+      "flavor": "Sorry I'm late. Traffic was terrible. And the century.",
+      "notes": "Sorry I'm Late (the user, 2026-10-16, a meme ability): played onto a friendly creature, it arrives after the attacks, so the creature it replaces takes the Day's hits first. A big body that walks in fresh.",
+      "picture": "A very old lady in a cardigan wheeled in on a hospital bed through a doorway, a tiny party hat on, a wall clock behind her covered in cobwebs, a dusty birthday cake on the table with 84 candles burnt down to stubs."
+    },
+    {
+      "name": "Good Boi", "type": "creature", "attack": 1, "health": 6, "speed": 1, "deploy": 0, "ability": "HeProtec",
+      "flavor": "He protec. He attac. But most importantly, he gets snac.",
+      "notes": "He Protec (the user, 2026-10-16, a meme ability): when a summon replaces it, it stays through the attacks and takes the Day's hits, and the newcomer arrives after them. Sturdy, to soak the Day before it hands over.",
+      "picture": "A fluffy shiba dog in a tiny knight's helmet holding up a pot lid as a shield, standing in front of a crying smaller creature, a dog biscuit tucked behind its ear."
+    },
+    {
+      "name": "Console Memory Card", "type": "spell", "target": "Player",
+      "flavor": "Your console has the memory of a goldfish. 8 MB of remembering, sold separately.",
+      "notes": "Load your save (the user, 2026-10-15, after the PS2 memory card meme): send for any card from your discard pile; it joins your next hand. The first Send For that reaches the discard pile instead of the deck.",
+      "picture": "A chunky black console memory card, 8 MB MEMORY CARD on its label, with a goldfish in a tiny bowl taped on top for the console's memory, a glowing save icon floating out of the card.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SendFor", "target": "Player", "fromDiscard": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Doomscrolling", "type": "spell", "target": "Player", "doom": 3,
+      "flavor": "Just one more. Just one more. Just one more.",
+      "notes": "Digital Society's scouting: send for any card among the top 4 of your deck; it joins your next hand. Costs Doom 3: your weakest creature not yet Doomed is Doomed first (the feed eats someone).",
+      "picture": "The Living the Dream wojak, MS Paint style: bald, shirtless, baggy-eyed and expressionless at 3AM, holding up a phone (we see its black back) where the meme had a computer, its glow on his face, cards drifting up out of the feed.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SendFor", "value": 4, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Crypto \"Entrepreneur\"", "type": "creature", "attack": 3, "health": 3, "speed": 2, "deploy": 0, "ability": "ChainMail",
+      "flavor": "Funds are safu.",
+      "notes": "Mechanics test: Chain Mail. Its attacks jump on to the next 2 creatures in line, half the damage each jump.",
+      "picture": "A guy in sunglasses and a hoodie on top of a human pyramid of recruits, a glowing coin passed down from hand to hand."
+    },
+    {
+      "name": "Digital Nomad", "type": "creature", "attack": 3, "health": 2, "speed": 2, "deploy": 0, "movement": "Leapfrog",
+      "flavor": "Works from Bali. Works from Lisbon. Works, allegedly.",
+      "notes": "Mechanics test: Leapfrog on a cheap, fast creature.",
+      "picture": "A Tuareg nomad in a white turban and face veil, sitting cross-legged on a sand dune, typing on a laptop on his knees."
+    },
+    {
+      "name": "Keyboard Warrior", "type": "creature", "attack": 2, "health": 3, "speed": 2, "deploy": 0, "ability": "NoU",
+      "flavor": "Has never lost an argument. Has never left the house.",
+      "notes": "Mechanics test: Counterattack answers every attack that lands, even one Armor absorbs or a killing blow, for its Attack, and still lands when it dies; spells and abilities aren't answered. Exhausted turns it off. No U: enemy effects that would lower its stats bounce back.",
+      "picture": "A heavyset warrior in a stained hoodie and a cape, holding a mechanical keyboard over his head like a greatsword, a gaming headset for a helmet and energy drinks hanging from his belt.",
+      "effects": [
+        { "trigger": "OnDamage", "actions": [
+          { "action": "Damage", "target": "Enemy" }
+        ] }
+      ]
+    },
+    {
+      "name": "Dogpile", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Nobody read the post. Everybody has an opinion.",
+      "notes": "Mechanics test: several hits at once: Exposed adds +1 to each, retaliation fires once per hit, Armor takes hits first.",
+      "picture": "A huge, happy pile of dogs (corgis, labradors, a confused pug on top) burying one person, of whom only a waving hand sticks out.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures", "modifier": "WithAdjacent" }
+        ] }
+      ]
+    },
+    {
+      "name": "Rage Bait", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "You won't BELIEVE what they said about you.",
+      "notes": "Mechanics test: Status Timing. Burn does nothing at the Dusk of the Day it's applied, then ticks for 2 Days.",
+      "picture": "A phone screen with a glowing red notification, reflected in the furious eyes of the person holding it.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Burned", "days": 2, "potency": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Its A Trap", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "FREE PHONE! Just click here. And here. And give us your mother's maiden name.",
+      "notes": "Mechanics test: a hidden Barbed Snare (2 damage) on a slot. The first creature to leave it, on its own, pushed or swapped, takes the damage. Dying or being replaced isn't leaving.",
+      "picture": "The free-boat sting: a bald, stubbled Homer Simpson strolls into a police station waving a letter, \"CONGRATULATIONS! YOU'VE WON A FREE BOAT!\", while the grinning police chief behind the counter slides him a pile of unpaid fines instead. A \"FREE BOAT PICKUP\" banner hangs over the open door of a holding cell.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "PlaceSlotEffect", "value": 2, "target": "EnemyCreatures", "slotEffect": "BarbedSnare" }
+        ] }
+      ]
+    },
+    {
+      "name": "NPC", "type": "creature", "attack": 2, "health": 3, "speed": 2, "deploy": 0, "ability": "Copypasta",
+      "flavor": "Has opinions. All of them yours.",
+      "notes": "Mechanics test: Copypasta. When ready, and each Dawn after that, it copies the ability of the creature opposite it (and loses Copypasta).",
+      "picture": "A crowd of identical grey, featureless NPC Wojak faces, every speech bubble repeating the same sentence, one of them proudly holding a \"Think For Yourself\" sign."
+    },
+    {
+      "name": "Chronically Online", "type": "creature", "attack": 3, "health": 3, "speed": 2, "deploy": 0, "ability": "Extremist",
+      "flavor": "Read one post. Now has a manifesto.",
+      "notes": "Mechanics test: Extremist. Stat changes on it are doubled, buffs and debuffs alike.",
+      "picture": "A pale figure in a dark room lit only by three monitors, a cork board of red strings and printed memes behind them, an energy-drink pyramid on the desk."
+    },
+    {
+      "name": "Catfish", "type": "creature", "attack": 3, "health": 2, "speed": 3, "deploy": 0, "ability": "Undercover",
+      "flavor": "Six foot, a doctor, loves dogs. Is a fish.",
+      "notes": "Undercover: its plans are Concealed Actions, and it stays ??? to the other side until revealed.",
+      "picture": "A cat and a goldfish in love: the cat presses its face to the fishbowl, the fish kisses the glass back, hearts all around."
+    },
+    {
+      "name": "Conspiracy Theorist", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 0, "ability": "Unbothered",
+      "flavor": "Did his own research. For eleven minutes.",
+      "notes": "Unbothered: enemy effects can't lower its stats (the tinfoil works). Future: Doxxing, reveals.",
+      "picture": "A man in a tinfoil hat pointing at a cork board of photos joined by red string, the biggest photo a pigeon labelled DRONE."
+    },
+    {
+      "name": "Clickbait", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Number 7 will shock you. Number 8 is an ad.",
+      "notes": "Future: Clickbait taunts (enemy creatures must attack it).",
+      "picture": "A video thumbnail: a man with a hugely shocked face, a big red arrow and a red circle around absolutely nothing.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Cancelled", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "One tweet from 2011. Career over by lunch.",
+      "notes": "Exhausted, and Heat Signature 2: random and redirected attacks find it first. Future: Ostracised.",
+      "picture": "A man at a podium facing a crowd that holds torches, pitchforks and phones up to film him.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Stun", "value": 1, "target": "EnemyCreatures" },
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "HeatSignature", "days": 1, "potency": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Meta Group Chat", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 0,
+      "flavor": "If you aren't in it, you're not on the jury, you're on trial.",
+      "notes": "Each Dawn the in-group gets louder (+1 Attack on a random friendly creature) and someone outside it gets a target on their back (Heat Signature 1 on a random enemy creature). Future: Ostracised.",
+      "picture": "A messenger group chat in the familiar green-and-beige look: THE JURY (47 members), gavels and skulls with blue read ticks under a blurry photo of one guy, while the guy himself sweats alone outside the phone.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "Random|Others", "attackStat": true, "healthStat": false },
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "modifier": "Random", "status": "HeatSignature", "days": 1, "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Social Panopticon", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Nobody is watching you. Everybody is.",
+      "notes": "Every enemy creature is Revealed for 2 Days (its plans can be seen, Watchdogs can match them) and gets Heat Signature 1. Future: a Trend where nothing can be Concealed.",
+      "picture": "A real panopticon seen from inside: a ring of barred cells on two floors around a central watchtower with a single recording eye, every inmate lit by their own phone.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "modifier": "AllSameTypeTargets", "status": "Revealed", "days": 2 },
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "modifier": "AllSameTypeTargets", "status": "HeatSignature", "days": 1, "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Short King", "type": "creature", "attack": 2, "health": 2, "speed": 3, "deploy": 0, "movement": "Leapfrog",
+      "flavor": "Five foot four. Six foot in the bio.",
+      "notes": "A leaper: Leapfrog, it jumps over creatures to an empty slot. Arrival: +2 Attack this Day, a big entrance. Fast and cheap, it hops to the target the rest of the swarm is piling on (Dogpile).",
+      "picture": "A short man wearing a paper crown standing on a stack of phone books to take a selfie at arm's length, the profile on his phone screen reading 6 FT.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 2, "target": "Self", "days": 1, "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Content Creator", "type": "creature", "attack": 1, "health": 3, "speed": 2, "deploy": 0, "movement": "Swap",
+      "flavor": "Smash that like button. Smash it. Please.",
+      "notes": "A swapper: Swap, it trades places with a friendly creature however far. Each Dawn it goes live: Heat Signature 1 on itself, for good (Digital Society pays with exposure), so random effects and Homing ones come to it. Swap it next to the creature you want spared, or in front of the hit.",
+      "picture": "A streamer in a headset under a ring light screaming at the camera with a shocked face and a giant red arrow pointing at nothing, the thumbnail on the monitor behind showing the same face, 100K in gold letters.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ApplyStatus", "target": "Self", "status": "HeatSignature", "days": 1, "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Thirst Trap", "type": "creature", "attack": 1, "health": 5, "speed": 1, "deploy": 0,
+      "flavor": "Not looking for attention. Posted it 14 times.",
+      "notes": "A tank: Arrival: Heat Signature 2 on itself, so random effects and Homing ones go to it rather than to the others. Each Dawn a random other friendly creature gets +1 Attack this Day (its simps fight harder).",
+      "picture": "A steel bear trap open on a beach towel, a ring light and a phone on a tripod set up in front of it, the phone screen filling with hearts, and a glass of water standing beside it.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "Self", "status": "HeatSignature", "days": 1, "potency": 2 }
+        ] },
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "Random|Others", "days": 1, "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Selfie Esteem", "type": "spell", "target": "FriendlyCreatures", "ripening": true,
+      "flavor": "Forty takes. One filter. Zero self-worth.",
+      "notes": "Ripening: target creature +1 Attack and +1 Health, 1 more of each for each Dawn it's kept in your hand (up to +4/+4).",
+      "picture": "A girl holding a selfie stick at arm's length, the phone screen showing a perfect filtered face while the real one is crying, a ring light glowing.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "attackStat": true, "healthStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Influencer", "type": "creature", "attack": 2, "health": 3, "speed": 2, "deploy": 0, "ability": "OnTrend",
+      "flavor": "Partnered with whatever's trending. Allergic to whatever isn't.",
+      "notes": "On Trend: +2 Attack while a Trend is on. Digital Society lives on what's trending.",
+      "picture": "An influencer posing in front of a melting glacier with a branded water bottle, an assistant holding a reflector, the caption 'so grateful' on the phone."
+    },
+    {
+      "name": "U Mad Bro?", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 0,
+      "flavor": "Didn't read your argument. Disagrees anyway. Has posted the trollface.",
+      "notes": "Arrival: Provoke 2 on the creature facing it (Taunt): it has to attack this troll for the next Days, and can't use its Active ability. A sturdy body that pulls the hits.",
+      "picture": "A smug teenager in a gaming chair, trollface on his hoodie, typing 'u mad bro?' while a wall of furious replies piles up on his screen.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "modifier": "Opposite", "status": "Provoked", "days": 2 }
+        ] }
+      ]
+    }
+  ]
+}

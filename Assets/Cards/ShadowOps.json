@@ -1,0 +1,668 @@
+{
+  "mod": "Shadow Ops.",
+  "cards": [
+    {
+      "name": "Hostage Situation", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Nobody move, or the creature gets it. And then you get it.",
+      "notes": "Destiny Bond: Mutually Assured for 2 Days and Heat Signature 2 on target friendly creature: their random and redirected attacks go to it, and the creature that kills it is destroyed too.",
+      "picture": "A masked agent holding a very calm creature hostage in a bank lobby, a dead man's switch in his hand wired to every other creature in the room, a negotiator outside with a megaphone and a sandwich.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "MutuallyAssured", "days": 2 },
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "HeatSignature", "days": 1, "potency": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Plausible Deniability", "type": "spell", "target": "Player",
+      "flavor": "I have no recollection of that creature, that Day, or this conversation.",
+      "notes": "Wide Guard (the user, 2026-10-17): this Day, effects that hit more than one creature skip your creatures (area spells, Spray and Pray, a Hipster's arrival), like Too Mainstream for the whole side.",
+      "picture": "A man in a grey suit at a hearing shrugging with both palms up in front of a wall of documents so redacted they are solid black bars, a speech bubble reading I DON'T RECALL, the committee's questions bouncing off him as little paper planes.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "status": "Deniable", "days": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Cleaner", "type": "creature", "attack": 2, "health": 3, "speed": 3, "deploy": 0, "ability": "DoubleTap",
+      "flavor": "Two shots. One invoice.",
+      "notes": "Mechanics test: Double Tap. It attacks twice: a second hit right after the first.",
+      "picture": "A calm man in a cleaning company jumpsuit, a mop in one hand and a silenced pistol in the other, two neat holes in a target behind him."
+    },
+    {
+      "name": "Political Decoy", "type": "creature", "attack": 1, "health": 6, "speed": 1, "deploy": 0, "movement": "Swap",
+      "flavor": "The real one is in a bunker. Or is he?",
+      "notes": "Mechanics test: Swap trades places with a friendly creature at any distance, over the creatures in between, even one that can't act.",
+      "picture": "Two identical politicians in matching suits: one waves from a balcony, the other ducks behind the curtain."
+    },
+    {
+      "name": "Burn Notice", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "You're no longer one of us. You never were.",
+      "notes": "Mechanics test: Scorched Earth on a slot. The creature there can't trigger its effects (entry, retaliation, Dawn and Dusk, death) or use its ability while it stands on it. It can still move and attack.",
+      "picture": "The Banksy auction stunt: a spy's portrait, painted in the style of Girl with Balloon, has just sold at auction, and the canvas is sliding down through a shredder hidden in its gilded frame, the strips stamped BURN NOTICE. In the audience, the spy himself watches his face being shredded.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "PlaceSlotEffect", "target": "EnemyCreatures", "slotEffect": "ScorchedEarth" }
+        ] }
+      ]
+    },
+    {
+      "name": "Counter-Intelligence", "type": "spell", "target": "Player",
+      "flavor": "We knew you knew we knew.",
+      "notes": "A counter (the user, 2026-10-17): the first enemy attack this Day is redirected to a random creature (the one with the most Heat first). A Briefing Watchdog, online the Day it's played, for that Day only.",
+      "picture": "A remake of the first Counter-Strike box cover: a counter-terrorist and a terrorist in a tense standoff in a dusty corridor, but both are accountants in thick glasses, aiming pocket calculators at each other like rifles, ledgers fluttering around them.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "CreateWatchdog", "target": "Enemy", "days": 1, "watchdog": { "watches": "Attack", "side": "Enemy", "effect": "Redirect", "charges": 1, "timing": "Briefing" } }
+        ] }
+      ]
+    },
+    {
+      "name": "Mole", "type": "creature", "attack": 3, "health": 3, "speed": 2, "deploy": 0, "ability": "Underground",
+      "flavor": "Twenty years with the company. Twenty-one with the other one.",
+      "notes": "Mechanics test: Underground (both ways). When it's attacked, the attacker's buffs and debuffs are ignored; when it attacks, the defender's temporary Health changes are.",
+      "picture": "A mild office clerk in a cardigan and lanyard at his desk, a mole's snout and claws poking out of his sleeves, a tunnel opening under his chair that leads to a foreign embassy's flag."
+    },
+    {
+      "name": "Signal Jammer", "type": "creature", "attack": 2, "health": 5, "speed": 1, "deploy": 0, "ability": "SignalJammer",
+      "flavor": "No bars. No calls. No witnesses.",
+      "notes": "Mechanics test: Signal Jammer. The enemy creature directly opposite has its ability switched off (its triggered effects still work).",
+      "picture": "An agent in a black suit with a backpack bristling with antennas, standing in a busy street where everyone stares in horror at phones showing \"No Service\"."
+    },
+    {
+      "name": "Deep Cover", "type": "creature", "attack": 2, "health": 3, "speed": 2, "deploy": 0, "ability": "IdentityTheft",
+      "flavor": "Undercover so long he forgot whose side he's on. So did they.",
+      "notes": "Mechanics test: Identity Theft, an active ability: hold Shift while dragging it onto a creature to swap abilities with it. It's its action for the Day. It arrives Concealed for 3 Days.",
+      "picture": "Two men facing each other in front of a mirror, each peeling off a latex mask of the other's face.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "Self", "status": "Concealed", "days": 3 }
+        ] }
+      ]
+    },
+    {
+      "name": "Sleeper Agent", "type": "creature", "attack": 0, "health": 3, "speed": 1, "deploy": 0, "gift": true,
+      "flavor": "Eleven years next door. Waters your plants. Waiting for a phone call.",
+      "notes": "Gift, a poisoned one: you plant it in an empty enemy slot and it joins their side. Each Dusk it sabotages: 1 damage to every creature on its side, itself included, so it lasts three Dusks. It's still your card: it comes back to your discard pile. They can get rid of it sooner by summoning over it.",
+      "picture": "A suburban dad mowing his lawn in a polo shirt, an earpiece coiled behind his ear, while his shadow on the grass wears a trench coat and holds a sniper rifle.",
+      "effects": [
+        { "trigger": "EndOfTurn", "actions": [
+          { "action": "Damage", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Human Intelligence", "type": "spell", "target": "Player",
+      "flavor": "Coffee, a smile, a USB stick. The oldest tradecraft there is.",
+      "notes": "Shadow Ops.' logistics: send for any card from your deck; it joins your next hand. HUMINT: a source on the inside fetches it.",
+      "picture": "Two spies on a park bench back to back, one reading a newspaper with eye holes cut in it, the other slipping a card into his coat pocket behind the paper, pigeons watching.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SendFor", "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Wet Work", "type": "creature", "attack": 1, "health": 4, "speed": 3, "deploy": 0, "ability": "ExtremePrejudice",
+      "flavor": "Nothing personal. Strictly a line item.",
+      "notes": "Extreme Prejudice: its attack destroys the creature it hits, whatever its Health or Armor, and then it's gone too: one hit, one roadblock. Untouchable or a Shield stops the hit; an empty slot, it just hits the player for 1.",
+      "picture": "A hitman in a dripping raincoat under a black umbrella in the rain, pressing a red TERMINATED stamp onto a personnel file with a photo clipped to it."
+    },
+    {
+      "name": "Perfectly Timed Camera Malfunction", "type": "spell", "target": "EnemyCreatures", "setUpBy": ["Tapped Communications"],
+      "flavor": "Tragic. The one minute the cameras were down.",
+      "notes": "Destroy target enemy creature if it's Revealed, whatever its Health or Armor (Untouchable still saves it). Set it up with Tapped Communications, which Reveals at once.",
+      "picture": "A security monitor showing static and SIGNAL LOST at 02:13, while at the edge of the frame a gloved hand pulls the camera's cable out of the wall.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Destroy", "target": "EnemyCreatures", "requires": "Revealed" }
+        ] }
+      ]
+    },
+    {
+      "name": "Smoke And Mirrors", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Look over there. No, the other there.",
+      "notes": "Mechanics test: Concealed for 2 Days on a friendly creature. Its plans show as ??? to the other side until it's Revealed.",
+      "picture": "A stage magician in a tuxedo vanishing a tank behind a cloud of smoke, while a row of mirrors shows a dozen identical tanks to a baffled general.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "Concealed", "days": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Eavesdrop", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "We're not listening. We're just... hearing.",
+      "notes": "Mechanics test: Reveal, instant. Played on an enemy slot, it resolves at once (during Planning) and shows its caster the slot's hidden Slot Effect and what the creature there plans this Day.",
+      "picture": "A spy in the next diner booth pressing a drinking glass to the partition, a tower of empty glasses beside him and a waitress refilling his coffee without looking.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Reveal", "target": "EnemyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Tapped Communications", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Your call is important to us. Very important. We're recording it twice.",
+      "notes": "Mechanics test: Revealed for 2 Days, instant. It cancels Concealed and Undercover: the creature's plans can be seen, and Watchdogs can match them.",
+      "picture": "Split in two by a lightning bolt: on one side a man chatting happily on his phone, on the other side of the call a blinking server.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Revealed", "days": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Whistleblower", "type": "creature", "attack": 2, "health": 2, "speed": 3, "deploy": 0,
+      "flavor": "Leaked everything. Now lives in an embassy closet.",
+      "notes": "Dead Man's Switch: when it dies, every enemy creature is Revealed for 2 Days.",
+      "picture": "A man in a hoodie blowing a sports whistle, classified documents spilling out of every pocket.",
+      "effects": [
+        { "trigger": "OnDeath", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Revealed", "days": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Involuntary Free Polonium Giveaway", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "A gift from an old friend. Do not open indoors.",
+      "notes": "1 damage now, then Burned for 3 Days. Future: Spontaneous Combustion.",
+      "picture": "A gentleman in a bowler hat at a bus stop, the tip of his black umbrella dripping glowing green drops that sizzle on the pavement.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 1, "target": "EnemyCreatures" },
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Burned", "days": 3, "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Control Room", "type": "creature", "attack": 1, "health": 5, "speed": 1, "deploy": 0,
+      "flavor": "Forty screens, all on. Nobody watching the one that matters.",
+      "notes": "Each Dawn it Reveals a random enemy slot: its hidden Slot Effect and what the creature there plans that Day. Future: chooses the slot.",
+      "picture": "A dark room with a wall of surveillance monitors, two operators asleep in their chairs with headsets on, cold coffee.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Reveal", "target": "EnemyCreatures", "modifier": "Random" }
+        ] }
+      ]
+    },
+    {
+      "name": "Humanitarian Trafficking Action", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "The crates say MEDICINE. The crates say a lot of things.",
+      "notes": "An aid package with a tracker inside: heals an enemy creature 2, and gives it Heat Signature 2, so random and redirected attacks find it first.",
+      "picture": "On a dusty airstrip, a crate stencilled MEDICINE with its lid slid open on rifles: the aid official waves at the camera flashes while, behind the crate, a man in sunglasses counts the cash.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Heal", "value": 2, "target": "EnemyCreatures" },
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "HeatSignature", "days": 1, "potency": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Dead Man's Switch", "type": "creature", "attack": 1, "health": 2, "speed": 2, "deploy": 0,
+      "flavor": "If I stop checking in, the files go to every newspaper. So does the bomb.",
+      "notes": "Last Will: destroy the strongest enemy creature, whatever killed it, even itself (He Didn't Kill Himself, False Flag Operation).",
+      "picture": "A sweating man in a cheap hotel room, his thumb pressed down on a big red button wired to his wrist, a briefcase of documents and dynamite at his feet, a DO NOT DISTURB sign on the door.",
+      "effects": [
+        { "trigger": "OnDeath", "actions": [
+          { "action": "Destroy", "target": "EnemyCreatures", "modifier": "Strongest" }
+        ] }
+      ]
+    },
+    {
+      "name": "Fell Out of a Window", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Tragic. Third one this month. Must be the windows.",
+      "notes": "Destroy the strongest enemy creature if a slot beside it is empty: it has a window. Make room first.",
+      "picture": "A grand apartment window flung open, curtains billowing over onion domes in the snow, a tiny man in a suit falling past outside, while a man in a tracksuit inside calmly closes the window.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Destroy", "target": "EnemyCreatures", "modifier": "Strongest", "requires": "NextToEmptySlot" }
+        ] }
+      ]
+    },
+    {
+      "name": "Coup d'État", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "The General thanks the President for his service. Effective immediately.",
+      "notes": "Take control of the strongest enemy creature if you have more creatures than they do. It changes sides for good, to the slot facing it.",
+      "picture": "A general in a peaked cap and mirrored sunglasses settling into the presidential chair, still warm, while two soldiers swap the president's portrait on the wall for his own; tanks through the window.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "TakeControl", "target": "EnemyCreatures", "modifier": "Strongest", "requires": "Outnumbered" }
+        ] }
+      ]
+    },
+    {
+      "name": "Operation Paperclip", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "We didn't take their soldiers. We took their scientists. And their pensions.",
+      "notes": "Take control of target enemy creature with 2 Attack or less. It changes sides for good, to the slot facing it.",
+      "picture": "A giant paperclip hooking a bespectacled scientist in a lab coat by the collar and lifting him from one flag onto another, rocket blueprints fluttering out of his pockets.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "TakeControl", "value": 2, "target": "EnemyCreatures", "requires": "AttackAtMost" }
+        ] }
+      ]
+    },
+    {
+      "name": "False Flag Operation", "type": "spell", "target": "AllCreatures",
+      "flavor": "They attacked us. Well, someone did. Same thing.",
+      "notes": "Destroy target creature (its Last Will happens); the other creatures on its side get +2 Attack while they stay in play, rallied by the outrage (the user, 2026-10-15: only the side where it was destroyed). Your own, to rally your side; theirs, to remove a threat at a price. If it doesn't die (the Destroy stopped or denied), no rally either (the user, 2026-10-16).",
+      "picture": "A soldier in an enemy uniform two sizes too small, its flag sewn on upside down, setting fire to his own side's outpost while a film crew records it and a general reads an outrage speech from a card.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Destroy", "target": "AllCreatures" },
+          { "action": "ModifyStat", "value": 2, "target": "AllCreatures", "modifier": "AlliesOfTarget", "attackStat": true, "healthStat": false, "onlyIfTargetDies": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Never Let Them Know Your Next Move", "type": "spell", "target": "FriendlyCreatures", "setUpBy": ["False Flag Operation"],
+      "flavor": "Everyone gets a medal. He gets all of them.",
+      "notes": "Every other friendly creature hands its stat raises to target friendly creature (the timed, the lasting and the ones for good), and it's Concealed for 2 Days: the fatal blow nobody sees coming. After False Flag Operation, it's +2/+2 from each.",
+      "picture": "A row of agents in identical grey suits passing their pistols, knives and grenades down the line to one man at the end, who disappears under a mountain of weapons with only his sunglasses showing.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Funnel", "target": "FriendlyCreatures" },
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "Concealed", "days": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Frame Job", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "The fingerprints were his. We checked. We put them there.",
+      "notes": "Target friendly creature passes every status it has (Revealed, Heat Signature, Burned, Doomed... and its good ones too: no status is good or bad by itself, the user, 2026-10-15) to the enemy creature facing it, with the Days they have left. Nothing faces it: nothing happens.",
+      "picture": "A smiling agent pressing a sleeping man's thumb onto a smoking gun with tweezers, a police lineup board behind them already labelled with the sleeper's name.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "PassHarmfulStatuses", "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Devil's Breath", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "One puff of scopolamine and he helped carry his own safe to our van.",
+      "notes": "Target friendly creature takes the stat raises and every status of the enemy creature facing it (all of them since 2026-10-15: no status is good or bad by itself, so a Burn or a Doom comes along too). Its victims hand everything over, smiling.",
+      "picture": "A woman blowing a puff of glittering white powder off her palm into a businessman's face; dazed and smiling, he hands her his watch, his wallet and the keys to an armored car.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "StealStatChanges", "target": "FriendlyCreatures" },
+          { "action": "StealGoodStatuses", "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "He Didn't Kill Himself", "type": "spell", "target": "FriendlyCreatures", "setUpBy": ["Dead Man's Switch"],
+      "flavor": "Officially: suicide. Unofficially: on a beach in Belize, rereading the files.",
+      "notes": "Target friendly creature fakes its death: its Last Will happens (Dead Man's Switch destroys their strongest), then it goes back to your hand, in the next Day's hand.",
+      "picture": "A sheet pulled over a body on a morgue gurney, but the toes sticking out wear flip-flops with a fresh tan line, and the toe tag is a postcard from a tropical island.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "FakeDeath", "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Extraction", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Mission accomplished. Or aborted. Details are classified.",
+      "notes": "Target friendly creature goes back to your hand, in the next Day's hand. Extracted while Revealed, it comes back with a new face: played again, it arrives Concealed for 2 Days.",
+      "picture": "A black helicopter at night hoisting an agent off a rooftop on a rope ladder, searchlights sweeping, his trench coat flapping and a briefcase handcuffed to his wrist.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ReturnToHand", "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Witness Protection Program", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "New name, new town, new moustache. Same bad feeling.",
+      "notes": "Target friendly creature goes dark until the next Dawn: whatever lands this Day misses it (board-wide damage included), but its slot is empty meanwhile. It comes back with a new identity: Concealed for 2 Days, unknown to the enemy, its old statuses gone.",
+      "picture": "A man in a terrible fake moustache and a Hawaiian shirt mowing a lawn in a quiet cul-de-sac, his old mugshot pinned to a corkboard behind the window, a federal agent in a parked car pretending to read a newspaper.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Vanish", "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Death By \"Natural Causes\"", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Heart attack. At 34. While jogging. Twice.",
+      "notes": "Kill Order 2 on target enemy creature: at the Dusk two Days later, it's destroyed (Untouchable saves it). It's secret: the other side doesn't see the spell played nor the Kill Order on their creature. A Cleanse removes it, knowingly or not.",
+      "picture": "A coroner signing a death certificate marked NATURAL CAUSES with a flourish, while on the gurney beside him a tiny dart with a red feather sticks out of the dead man's neck.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "KillOrder", "days": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Asset Recruitment", "type": "spell", "target": "EnemyCreatures", "setUpBy": ["Tapped Communications"],
+      "flavor": "We'll double your salary. Or tell your wife. Your choice.",
+      "notes": "Brainwashed 2 on target enemy creature: when it runs out, at Dusk, it changes sides for good, its ability lost. Revealed, it's turned faster: Brainwashed 1. Set it up with Tapped Communications.",
+      "picture": "A handler in a dim bar sliding a thick envelope and a photograph across the table to a nervous soldier; the photo shows the soldier with a woman who isn't his wife.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Brainwashed", "days": 2 },
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Brainwashed", "days": 1, "requires": "Revealed" }
+        ] }
+      ]
+    },
+    {
+      "name": "If I Told You, I'd Have to Kill You", "type": "creature", "attack": 3, "health": 4, "speed": 2, "deploy": 0, "ability": "AllergicToLight",
+      "flavor": "It's classified. So are you, now.",
+      "notes": "When Revealed (Revealed, or a Reveal shows it): 4 damage to whoever revealed it, the creature whose effect it was or else its player. Allergic to Light: each time, it takes 2 damage itself.",
+      "picture": "A spy in a dark suit leaning in at a cocktail party to whisper into an eager journalist's ear, while under the table his other hand quietly screws a silencer onto a pistol.",
+      "effects": [
+        { "trigger": "OnRevealed", "actions": [
+          { "action": "Damage", "value": 4, "target": "Enemy" }
+        ] }
+      ]
+    },
+    {
+      "name": "Lone Gunman", "type": "creature", "attack": 2, "health": 3, "speed": 1, "deploy": 0, "ability": "FallGuy",
+      "flavor": "Acted alone. Says he didn't. Officially, that settles it.",
+      "notes": "Fall Guy: when an enemy effect would make another friendly creature Revealed or destroy it (Perfectly Timed Camera Malfunction, Extreme Prejudice...), it lands on the Lone Gunman instead: the official story needs one man who did it all. (Was Scapegoat, too close to Mind's Escape Goat.)",
+      "picture": "A bewildered young man in a cheap suit shoved in front of flashing press cameras, holding a rifle he has clearly never seen before, a LONE GUNMAN placard hung round his neck, while two men in dark suits and hats slip away behind a picket fence on a grassy knoll."
+    },
+    {
+      "name": "Glomar Response", "type": "spell", "target": "Enemy",
+      "flavor": "We can neither confirm nor deny the existence of this card.",
+      "notes": "A Watchdog: the next 2 enemy reveals (a Reveal, Revealed, or a spell that does either, even an instant one) are nullified, and they learn nothing. Monitored: it acts the moment they try.",
+      "picture": "A press officer at a podium with a perfectly blank face, every line on his teleprompter blacked out with thick redaction bars, reporters raising their hands in vain.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "CreateWatchdog", "target": "Enemy", "watchdog": { "watches": "Intelligence", "side": "Enemy", "effect": "Nullify", "charges": 2 } }
+        ] }
+      ]
+    },
+    {
+      "name": "Sabotage", "type": "spell", "target": "Enemy",
+      "flavor": "Someone filled the cannon with sand. Someone else lit it.",
+      "notes": "A Briefing Watchdog: from the Day it's set, the strongest enemy attack backfires: it doesn't happen, and the attacker takes its own Attack as damage. 1 charge.",
+      "picture": "A tank that has just fired, its barrel peeled back like a banana and the crew blackened and blinking, while a saboteur in coveralls tiptoes away with an empty sack marked SUGAR - FOR THE FUEL TANK.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "CreateWatchdog", "target": "Enemy", "watchdog": { "watches": "Attack", "side": "Enemy", "effect": "Backfire", "charges": 1, "timing": "Briefing", "pick": "Strongest" } }
+        ] }
+      ]
+    },
+    {
+      "name": "Ghost Army", "type": "spell", "target": "Player",
+      "flavor": "Ten thousand men, four hundred tanks. Some assembly required. Do not inflate near cacti.",
+      "notes": "Put 2 Inflatable Tanks (0/1 decoys) in your empty slots: until a Reveal or Revealed shows them, the enemy sees each as a Sherman Tank, 6/6. Big attacks and Destroys get wasted on balloons. Tokens: gone when they leave play.",
+      "picture": "Two soldiers carrying a full-size rubber tank over their heads like a canoe across a muddy field at dawn, a third pumping up another with a bicycle pump, while an enemy spotter plane circles above.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SummonDecoys", "value": 2, "target": "Player", "decoy": "Inflatable Tank" }
+        ] }
+      ]
+    },
+    {
+      "name": "Inflatable Tank", "type": "creature", "attack": 0, "health": 1, "speed": 1, "deploy": 0, "token": true, "disguise": "Sherman Tank",
+      "flavor": "Pressure: 2 bar. Threat level: classified.",
+      "notes": "A Ghost Army decoy (a token): to the enemy it's a Sherman Tank until it's revealed.",
+      "picture": "A rubber tank half-deflated on a field, its barrel drooping, a soldier patching a hole with a bicycle repair kit."
+    },
+    {
+      "name": "Sherman Tank", "type": "creature", "faction": "Statecraft", "attack": 6, "health": 6, "speed": 1, "deploy": 0,
+      "flavor": "Thirty tons of steel. Allegedly.",
+      "notes": "Never a real card: the face a Ghost Army decoy shows the enemy until it's revealed.",
+      "picture": "A heavy tank rolling out of the morning fog, cannon level, mud spraying from its tracks."
+    },
+    {
+      "name": "HAARP", "type": "spell", "target": "Player",
+      "flavor": "Weather forecast: 100% chance of lightning, localized, on purpose.",
+      "notes": "Earthquake: from a random slot, a zigzag across the whole board, crossing sides at each column, 1 damage each hit. Every column is hit once, on one side or the other: it finishes off the wounded, and it can shake yours. Nobody's attack: nothing answers it or redirects it. Was the Survival of the Fittest Trend (that Trend has no card now).",
+      "picture": "A field of antennas in the Alaskan tundra under a purple sky, a single bolt of lightning forking down onto one tiny enemy tent miles away, a technician in a parka sipping coffee by the control panel.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Earthquake", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Social Engineering", "type": "spell", "target": "Player", "discard": 1,
+      "flavor": "Tell them one secret and they'll tell you two.",
+      "notes": "Discard 1 (a random other card from your hand, given up to play this), then draw 2 with the next Day's hand.",
+      "picture": "A smiling man in a hi-vis vest with a clipboard and a fake lanyard holding a door open for a whole office of employees, each one handing him their badge and password on a sticky note as they pass.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 2, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Bilderberg Membership", "type": "spell", "target": "Player", "discard": 2,
+      "flavor": "Membership fee: one secret a year. Benefits: all of theirs.",
+      "notes": "Discard 2 (random other cards from your hand, given up to play this), then draw 4 with the next Day's hand.",
+      "picture": "A candlelit dining hall in an alpine hotel, a long table of old men in dinner jackets trading sealed envelopes across the silverware, a doorman outside the window turning away the press.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 4, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Dead Drop", "type": "spell", "target": "Player", "discard": 3, "discardChosen": true,
+      "flavor": "Leave the package under the third bench. Take the other one. Don't look inside either.",
+      "notes": "Discard 3 (random other cards from your hand, given up to play this), then draw 4 with the next Day's hand.",
+      "picture": "A park bench in autumn, a man in a trench coat feeding pigeons while sliding a hollowed-out brick behind him with his heel, another man on the next bench reading an upside-down newspaper.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 4, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "The Golden Gun", "type": "spell", "target": "EnemyCreatures", "singleUse": true,
+      "flavor": "A million a shot. He only ever needs the one.",
+      "notes": "Destroy target enemy creature, whatever its Health or Armor (Untouchable still saves it). Single Use: one golden bullet; once played, the card is gone for the rest of the combat.",
+      "picture": "A gold pistol pieced together from a cigarette case, a lighter, a cufflink and a fountain pen, lying on black velvet beside a single golden bullet engraved with a name.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Destroy", "target": "EnemyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Die Another Day", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Not today. Probably not tomorrow. Ask again on Thursday.",
+      "notes": "Borrowed Time on target friendly creature (the user, 2026-10-16): this Day it can't die (damage leaves it at 0 Health, a Destroy fails); at this Day's Dusk, at 0 Health, it's brought back to 1 and Borrowed Time ends. Not two Days of attacks.",
+      "picture": "A spy in a torn tuxedo surfing a towering wave on a car door past a collapsing ice palace, checking his wristwatch.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "BorrowedTime", "days": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Licence to Kill", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Paperwork for murder, signed in triplicate. Valid until used.",
+      "notes": "Licensed: target friendly creature's next attack on a creature destroys it, whatever its Health or Armor (Untouchable or a Shield stops the hit, and spends the licence). It keeps it until it's used.",
+      "picture": "A civil servant in sleeve garters at a cluttered desk stamping a laminated LICENCE TO KILL card with a smirking agent's passport photo, a tray of forms marked 00 beside him.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "Licensed", "days": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Shaken, Not Stirred", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Three measures of gin, one of vodka, half of Kina Lillet. Nerves: none.",
+      "notes": "Target friendly creature gets +2 Attack this Day, and it's Composed this Day: stuns (Exhausted) don't land on it, and it shakes off one it has.",
+      "picture": "A bartender shaking a cocktail shaker while explosions rock the casino behind him, an agent in a tuxedo calmly waiting at the bar for his martini, not a hair out of place.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 2, "target": "FriendlyCreatures", "days": 1, "attackStat": true, "healthStat": false },
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "Composed", "days": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "GoldenEye", "type": "spell", "target": "Enemy",
+      "flavor": "One pulse. Every screen, every pacemaker, every smart fridge. Off.",
+      "notes": "An electromagnetic pulse on the enemy side: Blackout on every enemy creature (its ability and effects are off until the Dusk of the next Day), and every enemy Watchdog is wiped out.",
+      "picture": "A satellite dish shaped like a golden eye in orbit firing a ripple of light at a city at night; below, every window goes dark at once and a man's toaster pops out smoking.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "modifier": "AllSameTypeTargets", "status": "Blackout", "days": 1 },
+          { "action": "WipeWatchdogs", "target": "Enemy" }
+        ] }
+      ]
+    },
+    {
+      "name": "Supply Chain Attack", "type": "spell", "target": "Enemy",
+      "flavor": "Every router they bought this year came with a free extra. It phones home.",
+      "notes": "Disrupts the big organizations most: every enemy creature still deploying (Deployment Time left: Statecraft's slow bodies) waits 2 more Days, and the enemy draws 2 fewer cards with their next hand (Corporate's draw engine).",
+      "picture": "A cheerful delivery driver unloading crates of identical routers at a ministry's loading dock, each box with a tiny skull sticker under the barcode, while a line of bureaucrats in grey suits signs for them.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "DelayDeployment", "value": 2, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets", "requires": "Deploying" },
+          { "action": "CutDraws", "value": 2, "target": "Enemy" }
+        ] }
+      ]
+    },
+    {
+      "name": "Hollowed-Out Volcano Lair", "type": "spell", "target": "Player",
+      "flavor": "Monorail, piranha pool, self-destruct button. Planning permission: pending.",
+      "notes": "Trend for 3 Days, Volcano Lair: each Day (from the Day it's set), on each side the strongest creature hides in a lair: it's Untouchable that Day, as long as another creature of its side stands. Every villain gets one: play it when your boss is the one worth hiding.",
+      "picture": "A cutaway of a volcano with a sleek steel base inside: a monorail, a rocket on its launch pad, henchmen in matching jumpsuits, and at the top a bald man in a grey tunic stroking a white cat on a throne behind armored glass.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SetTrend", "target": "Player", "days": 3, "trend": "VolcanoLair" }
+        ] }
+      ]
+    },
+    {
+      "name": "Femme Fatale", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 0, "ability": "Ambush",
+      "flavor": "She didn't kill him. She just held him very, very close.",
+      "notes": "Each Dusk she squeezes the enemy creature facing her: 1 damage to it, and she heals 1. Nothing facing her: nothing happens. Ambush: she arrives as ??? and deals double while nobody knows who she is.",
+      "picture": "A glamorous woman in a black evening gown smiling over her cocktail at a casino table, while the red-faced general in the chair beside her is squeezed between her crossed legs, his medals popping off.",
+      "effects": [
+        { "trigger": "EndOfTurn", "actions": [
+          { "action": "Damage", "value": 1, "target": "EnemyCreatures", "modifier": "Opposite" },
+          { "action": "Heal", "value": 1, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "MK Ultra Test Subject", "type": "creature", "attack": 3, "health": 3, "speed": 1, "deploy": 0,
+      "flavor": "Volunteered for a Harvard study in 1959. Doesn't remember the rest.",
+      "notes": "Each Dawn it attacks a random creature, on either side (never itself): strong, cheap, uncontrolled. It can still attack as you plan.",
+      "picture": "Ted Kaczynski as the young Harvard math prodigy, before the woods: clean-cut, short neat hair, white shirt and narrow tie, strapped into a 1950s lab chair with electrodes taped to his temples, a blackboard of equations behind him and a psychologist with a clipboard in the corner.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Attack", "target": "AllCreatures", "modifier": "Random" }
+        ] }
+      ]
+    },
+    {
+      "name": "Exploding Pen", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Click once to write. Click three times to stop writing forever.",
+      "notes": "Reliable damage at last: 3 to target creature or player, and 2 more if it's Revealed. Shadow Ops. had only conditional kills; this is its plain answer, and its starter deck's.",
+      "picture": "A fountain pen lying on a desk with its cap off and a lit fuse curling out of the nib, a spy's hand sliding it across to a villain who is already reaching for it.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 3, "target": "EnemyCreatures" },
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures", "requires": "Revealed" }
+        ] }
+      ]
+    },
+    {
+      "name": "Drug Pigeon", "type": "creature", "attack": 2, "health": 2, "speed": 3, "deploy": 0, "movement": "Leapfrog",
+      "flavor": "Coo. Coo. Cocaine.",
+      "notes": "A leaper (Leapfrog wins 60% in the study): it jumps over creatures to an empty slot, and its Arrival sends for a card among the top 3 of your deck. An old prison-smuggling trick.",
+      "picture": "A pigeon in tiny aviator goggles flying over a prison wall, a little backpack strapped to its chest bulging with white packets, a guard in the watchtower looking the other way.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SendFor", "value": 3, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Embassy", "type": "creature", "attack": 0, "health": 8, "speed": 1, "deploy": 1, "ability": "Unbothered",
+      "flavor": "Sovereign soil. Bulletproof glass. Excellent canapés.",
+      "notes": "A wall for a faction of glass cannons: Unbothered (enemy effects can't lower its stats), and each Dawn a random other friendly creature is Concealed for the Day (diplomatic cover).",
+      "picture": "A grand embassy building with a flag over the door, a man in a trench coat climbing in through a back window while the ambassador smiles for photographers on the front steps.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "modifier": "Random|Others", "status": "Concealed", "days": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Secret Anthrax Laboratory", "type": "spell", "target": "Enemy",
+      "flavor": "Rebirth Island. The sea dried up. The anthrax didn't.",
+      "notes": "Shadow Ops.' board damage: 2 to every enemy creature, and they're Revealed for the Day, so Perfectly Timed Camera Malfunction and Asset Recruitment can follow up. Vozrozhdeniya, the Soviet bioweapons island.",
+      "picture": "An abandoned concrete lab on a cracked dry seabed, rusty ships stranded in the sand around it, a lone scientist in a gas mask locking the door and pocketing the key.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets" },
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "modifier": "AllSameTypeTargets", "status": "Revealed", "days": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Tracking Beacon", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "It's not a bug. It's a feature.",
+      "notes": "Revealed 2 and Heat Signature 1 on target creature, and you draw 1 next Day: it lights it up for Perfectly Timed Camera Malfunction, Exploding Pen and every random hit.",
+      "picture": "A tiny blinking red device stuck to the back of a henchman's collar, a map on a laptop screen in the background showing his dot moving through the city.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Revealed", "days": 2 },
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "HeatSignature", "days": 1, "potency": 1 },
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Arsonist", "type": "creature", "attack": 3, "health": 3, "speed": 2, "deploy": 0,
+      "flavor": "Insurance fraud is a team sport.",
+      "notes": "A body that hits on arrival: 2 damage to the creature facing it. Shadow Ops.' creatures were 1/3s and 1/4s; this one trades.",
+      "picture": "A man in a suit holding a briefcase and a lit match in front of a failing shop, a fire insurance policy sticking out of his breast pocket.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures", "modifier": "Opposite" }
+        ] }
+      ]
+    },
+    {
+      "name": "Counter-Surveillance", "type": "spell", "target": "Player",
+      "flavor": "We watch the people who watch the people.",
+      "notes": "A Monitored Watchdog (Watchdogs win 63% in the study): the next enemy attack backfires, nullified, and the attacker takes its own Attack. 1 charge. Sabotage does it with a Briefing; this one catches attacks already planned.",
+      "picture": "A spy in a dark room watching a wall of monitors, every screen showing another spy watching him back, one of them waving.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "CreateWatchdog", "target": "Enemy", "watchdog": { "watches": "Attack", "side": "Enemy", "effect": "Backfire", "charges": 1 } }
+        ] }
+      ]
+    },
+    {
+      "name": "Compromised Agent", "type": "creature", "attack": 2, "health": 2, "speed": 2, "deploy": 0,
+      "flavor": "Her cover's blown. Her friends' covers aren't. Yet.",
+      "notes": "Laid Off: when it's discarded from your hand, a random friendly creature is Concealed 2 Days. A burned agent covers the ones still out there.",
+      "picture": "A spy in a trench coat mobbed by paparazzi in a train station, while behind her three other agents slip away unnoticed in the confusion.",
+      "effects": [
+        { "trigger": "OnDiscarded", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "modifier": "Random", "status": "Concealed", "days": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Polonium Umbrella", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "A quick jab at a bus stop. A slow week in hospital.",
+      "notes": "Burn 3 for 3 Days on target creature: 9 damage in all. Plain, slow removal with a spy's flair (the Markov umbrella).",
+      "picture": "A gentleman in a bowler hat at a London bus stop pressing the tip of his black umbrella into a stranger's calf, a faint green glow at the tip, the stranger reading his newspaper.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Burned", "days": 3, "potency": 3 }
+        ] }
+      ]
+    },
+    {
+      "name": "Nonchalant Agent", "type": "creature", "attack": 3, "health": 2, "speed": 1, "deploy": 0, "ability": "SuckerPunch",
+      "flavor": "Never draws first. Never draws second either.",
+      "notes": "Sucker Punch: its attack on a creature goes before every other, but only if that creature planned an attack; otherwise it holds back. Read their plans (Fog of War makes it a gamble) and punch first.",
+      "picture": "An agent in a tuxedo leaning on a casino bar sipping a martini without looking, his free hand already flicking a pistol from his sleeve at a henchman who has only half drawn."
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 Card Art Briefs
 
 Every card's picture: the brief it's drawn from, and the user's own notes where they gave some (those win when
-the picture is redrawn). Written by Tools/art_briefs.py from the deck generator's .Picture(...) briefs and the
+the picture is redrawn). Written by Tools/art_briefs.py from the card files' 'picture' briefs and the
 drawing comments in generate_card_art.py; the user's notes live in that script. Rerun it after any card or art
 change.
 
@@ -16,7 +16,7 @@ RULES
 
 TO SUPERVISE
 
-  343 cards whose art direction Claude decided alone: no note from the user and no sign-off yet. Once
+  344 cards whose art direction Claude decided alone: no note from the user and no sign-off yet. Once
   the user has checked one, its approval goes into SUPERVISED in Tools/art_briefs.py (or their changes into USER_NOTES).
 
   Corporate (54): Legal Department, Job Rotation, Resignation Letter, Teflon Don, Insurance Policy, Seniority Priority, DMCA, 3rd Parallel Job, Overtime, Peace the Frontier, Casino, Headhunter, Counterfeit, Private Equity, Shell Company, Golden Parachute, Work Shift Rotation, Unpaid Intern, Inhuman Resources, Micromanager, Multilevel Marketing Seller, Day Trader, Pluriemployed Hustler, Satoshi Nakamoto, Multimillionaire Philanthropist, Charles Ponzi, Margin Call, Mass Layoffs, Team Building Exercise, Dead Cat Bounce, Business Operating Expenses, Taxpayer Funds Venture Capital Profits, Tax-Exempt Corruption, Solidarity Towards The Small Businessman, Inheritance, NDA, Inflation, Escape Goat, Laissez-Faire, The Invisible Hand, C-Suite, Venture Capital, Corporate Bailouts, Flash Crash, Just in Time, Hedonic Treadmillionaire, Moral Bankruptcy, Usury, Middle Manager, Big Four, Bloomberg Terminal, Internal Protocol: Quota Crusher Mindset, High-Frequency Trading Scam, Valet
@@ -27,9 +27,9 @@ TO SUPERVISE
   Tech (17): EMP Drone, Buffering, Web Scraping, DDOS Attack, End-to-End Encryption, SysAdmin, Meatproxy As A Service, Ransomware Attack, Man-in-the-Middle, Technical Debt, Threat Hunter, Ctrl + Z, Pair Programming, Suspicious USB Stick in the Parking Lot, Code Review, Bomber Drone, Ctrl + Y
   Myth (46): Tithe, Berserker, Tutankhamun, Holy Pigeon, The Last Shall Be First, Novena, Holy Ghost, Taqiyya, Memento Mori, Martyr, Exorcism, Mummy, Omniscient Space-Time Bending Bearded Wizard, Cultist, Phoenix, Excess of Bread and Wine, Sacrificial Ritual, Reincarnation, Holy War, The Great Flood, Lance Of Longinus, Necronomicon, The Wicker Man, Thoughts and Prayers, Religious Instrumentalization, Deus Vult, Curse Of Hubris, Zealot, Vampire, Living Dead, Buddy Christ, Pope, The Lobster Professor, Amen, Pyramids, Horsemen Of Apocalypse, God's Grace, The Omen, Grim Reaper, Die by the Sword, Mithril, Here Be Dragons, Gracias Jesús, Heretic, Ambrosia, Publicly Funded Faith Schools
   Mind (27): Sleepwalker, Empath, Tabula Rasa, Reality Check, Slow Thinking, Liminal Space, Monkey See, Monkey Do, Lucid Dreaming, Momentum, Survivorship Bias, Yesn't, Cyberpsychosis, Reflect, Mimetic Theory, Pessimist, Introvert, Roko's Basilisk, Imposter Syndrome, Ship of Theseus, Socrates, Maslow's Pyramid, Legerdemain, Hold That Thought, Projection, Psychiatrists, Hyperbole, Controlled Chaos
-  Utopia (39): Parabiosis, Peer Review, Geomagnetic Reversal, Research Lab, Clone, Hypermetamorphosis, Extremophile, Philosophy PhD, Mathematician, Quantum Physicist, Perpetual Motion Machine, Genetically Modified Organism, Pioneer, Vaccine, Climate Change, Overpopulation, Black Hole, Stasis Field, Absolute Zero, Splitting The Atom, Gene Editing, Cold Fusion, Antimatter, Biohacking, Blood Transfusion, Evolution Theory, Mutation, Exponential Growth, Scientific Method, Chimera, Resurrected T-Rex, Longevity Hub, Femtosecond Laser, Quark, Seasteading, Ankylorhiza, Biohacker, Prion Disease, Heimlich Maneuver
+  Utopia (40): Parabiosis, Peer Review, Geomagnetic Reversal, Research Lab, Clone, Hypermetamorphosis, Extremophile, Philosophy PhD, Mathematician, Quantum Physicist, Perpetual Motion Machine, Genetically Modified Organism, Pioneer, Vaccine, Climate Change, Overpopulation, Black Hole, Stasis Field, Absolute Zero, Splitting The Atom, Gene Editing, Accelerationism, Cold Fusion, Antimatter, Biohacking, Blood Transfusion, Evolution Theory, Mutation, Exponential Growth, Scientific Method, Chimera, Resurrected T-Rex, Longevity Hub, Femtosecond Laser, Quark, Seasteading, Ankylorhiza, Biohacker, Prion Disease, Heimlich Maneuver
   Shelved (5): Smartwatch, Exoskeleton, Q Branch, Hovercraft, Nanobots
-  Potion (8): Nicotine, Stimulant Drug, Superglue, Soylent, Flamethrower, Eject Button, Stealth Suit, Creatine
+  Potions (8): Nicotine, Stimulant Drug, Superglue, Soylent, Flamethrower, Eject Button, Stealth Suit, Creatine
 
 
 CORPORATE
@@ -469,9 +469,10 @@ The Friends We Made Along the Way (spell)
     A ragtag group of adventurers around a campfire laughing, an empty treasure chest behind them, a map with the X scribbled out.
     USER: 2026-10-17: Jesus with two guns instead of the cultist.
 Spite Voter (creature)
-    The Raiders of the Lost Ark idol swap (the user's reference, 2026-10-17): the meme's lower panel, head-on: the adventurer in his fedora and leather jacket behind a temple pedestal, centre, leaning in at us, his right hand closing on the golden idol on the pedestal (a grinning politician's head in a red tie), his left holding the identical golden politician he swaps in, lower left; CORRUPT POLITICIAN in white block letters over each idol; a 'Don't Blame Me' badge on the jacket.
+    A grumpy man in a voting booth gleefully ticking the box of a clown candidate, a 'Don't Blame Me' badge pinned to his cardigan.
     USER: 2026-10-17: the user's reference, the Raiders of the Lost Ark idol-swap meme: VOTERS (Indiana Jones, weighing it up at the temple pedestal) swapping the golden idol, labelled CORRUPT POLITICIAN, for another golden idol labelled CORRUPT POLITICIAN.
     USER: 2026-10-17: write CORRUPT POLITICIAN on each idol; the characters on the same spots and the same camera angle as the reference (the lower panel: the adventurer behind the pedestal, centre, the swapped idol in his left hand, the pedestal's to the right).
+    USER: 2026-10-17: that version, with the head lowered; no 'Not Me' badge.
 Fidget Spinner (creature)
     A giant fidget spinner whirling on a school desk, sparks flying off its bearings, a crowd of kids staring at it hypnotized, a teacher's 'Confiscated' box in the corner.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
@@ -1196,6 +1197,9 @@ Splitting The Atom (spell)
 Gene Editing (spell)
     A pair of scissors cutting a DNA double helix, a strip of tape sticking a unicorn horn onto it.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
+Accelerationism (spell)
+    A tech founder in a hoodie flooring the accelerator of a rocket-powered car toward a cliff edge, the road on fire behind him, a bridge of glowing circuit boards assembling itself in mid-air just ahead of the wheels.
+    TO SUPERVISE: Claude's own art direction, not checked by the user yet
 Cold Fusion (creature)
     A tabletop fusion reactor glowing white-hot in a jar on a garage workbench, the warning gauge in the red, two engineers in sunglasses giving a thumbs-up.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
@@ -1275,7 +1279,7 @@ Nanobots (spell)
     A swarm of glittering nanobots stitching a robot's torn arm back together, a few of them on a tiny picket line holding 'Fair Wages' signs.
     TO SUPERVISE: Claude's own art direction, not checked by the user yet
 
-POTION
+POTIONS
 
 Nicotine (spell)
     A crumpled pack of cigarettes on a café table, one lit in the ashtray, a ribbon of smoke curling into a question mark.

@@ -1,0 +1,619 @@
+{
+  "mod": "Corporate",
+  "cards": [
+    {
+      "name": "Legal Department", "type": "creature", "attack": 2, "health": 7, "speed": 1, "deploy": 0, "ability": "Litigious",
+      "flavor": "You'll be hearing from us. Repeatedly. At your home address.",
+      "notes": "Litigious (Pokémon's Rocky Helmet): a creature that attacks it takes 2 damage. A wall that sues.",
+      "picture": "A phalanx of identical lawyers in grey suits behind a long desk, each holding up a thick folder like a riot shield, a fist that punched the desk recoiling with a CEASE AND DESIST stapled to it."
+    },
+    {
+      "name": "Job Rotation", "type": "spell", "target": "AllCreatures",
+      "flavor": "Everyone will now be doing someone else's job, badly. It builds character.",
+      "notes": "Skill Swap: target creature and the creature facing it swap abilities, for the combat. Their Signal Jammer on your Bodyguard's side of the table, and the other way round.",
+      "picture": "An office where the surgeon in scrubs is fixing the printer, the IT guy in a hoodie is holding a scalpel over a patient, and the HR woman is piloting a forklift through the open-plan floor, an EMPLOYEE ROTATION WEEK banner above them.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SwapAbilities", "target": "AllCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Resignation Letter", "type": "spell", "target": "EnemyCreatures", "sacrifice": 1,
+      "flavor": "I quit. Effective immediately. Also I took the client list.",
+      "notes": "Memento: your weakest creature is sacrificed (an additional cost), and target enemy creature gets -3 Attack until it leaves play. Its exit takes the wind out of them.",
+      "picture": "A man walking out of a glass tower with a cardboard box of his things and a huge grin, a letter fluttering behind him, while through the window his former boss sits slumped at a desk buried under the work he left.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": -3, "target": "EnemyCreatures", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Teflon Don", "type": "creature", "attack": 4, "health": 5, "speed": 2, "deploy": 1, "ability": "Teflon",
+      "flavor": "Charged forty times. Convicted of being fabulous.",
+      "notes": "Teflon (Pokémon's Good as Gold): enemy statuses don't land on it. Every Mafia theme is Corporate: legality is a business with a high entry price.",
+      "picture": "A silver-haired mob boss in a camel coat and pinstripes strolling out of a courthouse waving to cameras, indictment papers sliding off his coat like water off a non-stick pan, two lawyers scooping them up behind him."
+    },
+    {
+      "name": "Insurance Policy", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "In the event of death, the beneficiary receives the killer.",
+      "notes": "Destiny Bond: Mutually Assured for 3 Days on target friendly creature: the creature that kills it is destroyed too. The policy pays out in kind.",
+      "picture": "An insurance agent in a beige suit sliding a policy across the desk to a nervous creature, the fine print magnified under a glass reading WHOEVER KILLS YOU, WE KILL, a tiny coffin-shaped paperweight on the desk.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "MutuallyAssured", "days": 3 }
+        ] }
+      ]
+    },
+    {
+      "name": "Seniority Priority", "type": "spell", "target": "Player",
+      "flavor": "The slowest to adapt go first. It's called experience.",
+      "notes": "Trend for 3 Days (Trick Room, Corporate's flavour): Rush Hour, the slowest act first.",
+      "picture": "A boardroom where a very old executive with a walking frame is being ushered to the head of the table past a queue of young employees frozen mid-stride, a plaque on the wall reading 40 YEARS OF SERVICE.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SetTrend", "target": "Player", "days": 3, "trend": "RushHour" }
+        ] }
+      ]
+    },
+    {
+      "name": "DMCA", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "This creature has been claimed by its rights holder. Your appeal has been automatically denied.",
+      "notes": "Imprison (the user, 2026-10-17): target enemy creature is destroyed (taken down), and for 2 Days the enemy can't play a card that shares its name with a creature on the board, either side's (every deck runs two copies: the second waits while a copy stands).",
+      "picture": "A lawyer in a sharp suit slapping a huge red COPYRIGHT STRIKE sticker over the face of a creature on a giant video thumbnail, a second identical thumbnail beside it greyed out with CLAIMED across it, a tiny APPEAL button crossed out.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Destroy", "target": "EnemyCreatures" },
+          { "action": "Seal", "value": 2, "target": "Enemy" }
+        ] }
+      ]
+    },
+    {
+      "name": "3rd Parallel Job", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Sleep is for people with one income.",
+      "notes": "Belly Drum (the user, 2026-10-17): target friendly creature loses half its Health and its Attack doubles. The hustle: its Health for a monster.",
+      "picture": "A hollow-eyed man at three desks pushed together, a laptop and a different lanyard on each, three video calls on mute, an IV drip of coffee into his arm, the wall clock at 3:00, his biceps absurdly huge from typing.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "DoubleDown", "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Overtime", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Just this once. Every week.",
+      "notes": "The user, 2026-10-16: a creature still deploying of yours comes in up to 2 Days sooner, and pays for it with Burnout: it's destroyed at the end of the first Day it's ready, so it gets that one Day to act. A Cleanse saves it. Corporate's tempo: a big body now, for one Day.",
+      "picture": "An office worker at a desk late at night, surrounded by empty coffee cups and energy drink cans, typing furiously with smoke rising from the keyboard, eyes bloodshot and wide open, a wall clock showing 3 a.m. and a calendar with every weekend crossed out.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Rush", "value": 2, "target": "FriendlyCreatures", "requires": "Deploying" }
+        ] }
+      ]
+    },
+    {
+      "name": "Peace the Frontier", "type": "spell", "target": "Enemy",
+      "flavor": "Please, regulate us. Only us can afford it. Also, could someone lend us a few billion?",
+      "notes": "The user, 2026-10-16: frontier AI labs lobbying the government for rules strict enough that no newcomer can compete, while they burn through cash and play the victim. Regulatory capture: every enemy creature still deploying waits 1 more Day; the lobbying isn't free, you take 2 damage.",
+      "picture": "Two tech executives in hoodies at a congressional hearing table, one tearfully holding up a sign reading REGULATE US (ONLY), the other quietly sliding a rulebook titled BARRIERS TO ENTRY across to a smiling senator, a burning pile of cash under the table.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "DelayDeployment", "value": 1, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets", "requires": "Deploying" },
+          { "action": "Damage", "value": 2, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Casino", "type": "spell", "target": "Player",
+      "flavor": "The house always wins. Except the houses he owned.",
+      "notes": "A Trend for 3 Days: each Dawn the house's wheel spins the Day's weather for both sides (Heatwave, Rain, Hail, Tailwind, Rush Hour, Windfall), like the weather in a Pokemon battle. Corporate bets on tempo: whoever adapts best to the Day wins.",
+      "picture": "A caricature of Donald Trump in a dark suit and an overlong red tie, his blond hair swept over, grinning and throwing a fistful of casino chips in the air, in front of his gaudy gold-and-purple casino with onion domes and a giant neon sign, a red BANKRUPT stamp across the sign.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SetTrend", "target": "Player", "days": 3, "trend": "Casino" }
+        ] }
+      ]
+    },
+    {
+      "name": "Headhunter", "type": "spell", "target": "Player", "discard": 1, "discardChosen": true,
+      "flavor": "We found you on LinkedIn. We found everyone on LinkedIn.",
+      "notes": "Corporate's recruiting: Discard 1, then send for a creature from your deck; it joins your next hand.",
+      "picture": "A slick recruiter in a sharp suit reeling in a startled employee from a rival's office tower with a fishing rod baited with a stock-options contract.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SendFor", "target": "Player", "sendFor": "Creature" }
+        ] }
+      ]
+    },
+    {
+      "name": "Counterfeit", "type": "creature", "attack": 1, "health": 2, "speed": 2, "deploy": 0, "ability": "Wannabe",
+      "flavor": "Genuine replica. 100% authentic copy.",
+      "notes": "Mechanics test: Wannabe (Active, hold Shift as you drag it onto a creature): its Attack, Health and Speed become that creature's.",
+      "picture": "A knockoff superhero in a cheap costume with a misspelled logo on the chest, flexing proudly in front of a mirror that shows a real muscled hero."
+    },
+    {
+      "name": "Private Equity", "type": "creature", "attack": 3, "health": 4, "speed": 1, "deploy": 1, "ability": "CreditGrab",
+      "flavor": "We don't buy companies. We buy what they used to be worth.",
+      "notes": "Mechanics test: Credit Grab (Active, once per combat): steals target creature's stat raises. Buff an enemy, or let them, then take it.",
+      "picture": "A vampire banker in a pinstripe suit sucking gold coins out of a little family shop through a long straw."
+    },
+    {
+      "name": "Shell Company", "type": "creature", "attack": 1, "health": 4, "speed": 2, "deploy": 0, "ability": "ShellGame",
+      "flavor": "Registered in four countries. Exists in none.",
+      "notes": "Mechanics test: Shell Game (Active, hold Shift as you drag it onto a creature): that creature trades places with the one to its right. Moves an enemy into a planned attack, or out of the way of one.",
+      "picture": "A street hustler playing the shell game with three walnut shells, each stamped with a different tax haven's flag, a gold coin under one."
+    },
+    {
+      "name": "Golden Parachute", "type": "creature", "attack": 3, "health": 3, "speed": 1, "deploy": 0,
+      "flavor": "Ousted with a forty-million bonus. Failing upward, gently.",
+      "notes": "Replaced (the user, 2026-10-15: a new trigger, being replaced isn't dying): when a summon takes its slot, you draw 2. The executive leaves with the payout; send in the next one.",
+      "picture": "A grinning CEO floating down on a golden parachute stitched from banknotes, a briefcase overflowing with cash in hand, while the company tower he leaves behind burns and the staff watch from the windows.",
+      "effects": [
+        { "trigger": "OnReplaced", "actions": [
+          { "action": "Draw", "value": 2, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Work Shift Rotation", "type": "creature", "attack": 3, "health": 3, "speed": 1, "deploy": 1, "ability": "Handover",
+      "flavor": "Same job, new face. The vest is still warm.",
+      "notes": "Handover: when a summon replaces it, the newcomer takes over its stat changes and statuses. Buff it, then send in the next shift.",
+      "picture": "Two warehouse workers at the clocking-in machine: the exhausted one hands his hi-vis vest, still warm, to the fresh one."
+    },
+    {
+      "name": "Unpaid Intern", "type": "creature", "attack": 1, "health": 2, "speed": 3, "deploy": 0,
+      "flavor": "Paid in experience. The experience is this.",
+      "notes": "Future: a Worker token created by other cards rather than drafted. Fodder for sacrifice costs.",
+      "effects": [
+        { "trigger": "OnDeath", "actions": [
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Inhuman Resources", "type": "creature", "attack": 1, "health": 4, "speed": 1, "deploy": 1,
+      "flavor": "We're here for you. \"You\" meaning the company.",
+      "notes": "Future: Layoffs. Destroy a friendly Worker as an additional cost; schedule 2 draws.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Damage", "value": 1, "target": "FriendlyCreatures", "modifier": "Random" },
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Micromanager", "type": "creature", "attack": 3, "health": 3, "speed": 1, "deploy": 1,
+      "flavor": "Per my last email. And the one before. And the meeting about the emails.",
+      "notes": "Future: gives a friendly Worker Coffeinated instead of a plain attack buff.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "Random|Others", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Multilevel Marketing Seller", "type": "creature", "attack": 2, "health": 2, "speed": 2, "deploy": 0,
+      "flavor": "It's not a pyramid. It's a triangle of opportunity.",
+      "notes": "Future: summons an Unpaid Intern token. Each recruit pays a share of its draws upward.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Summon", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Day Trader", "type": "creature", "attack": 3, "health": 2, "speed": 3, "deploy": 0, "ability": "InsiderJob",
+      "flavor": "Time is money, friend. Up 300% by noon, rent due at five.",
+      "notes": "Insider Job (insider trading): its damage ignores Armor. Future: Investment. Pays out or loses cards depending on the Day.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] },
+        { "trigger": "OnDeath", "actions": [
+          { "action": "Draw", "value": 1, "target": "Enemy" }
+        ] }
+      ]
+    },
+    {
+      "name": "Pluriemployed Hustler", "type": "creature", "attack": 3, "health": 3, "speed": 2, "deploy": 0, "ability": "PennyStock",
+      "flavor": "Three jobs, two side hustles, one kidney left.",
+      "notes": "Penny Stock: small bets that pay double, so hits of 3 or less are doubled. Future: Coffeinated, then Burnout (the Hustle Culture pairing with Zeitgeist).",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 2, "target": "Player" }
+        ] },
+        { "trigger": "EndOfTurn", "actions": [
+          { "action": "Damage", "value": 1, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Satoshi Nakamoto", "type": "creature", "attack": 0, "health": 5, "speed": 1, "deploy": 1, "ability": "Undercover",
+      "flavor": "Mined a million coins. Never spent one. Never seen again.",
+      "notes": "Number go up: each Dawn, +1 Attack while it stays in play. Nobody knows who he is (Undercover: his plans show as ??? to the enemy). Starts harmless; leave him alone and he's a whale (the user, 2026-10-15).",
+      "picture": "A figure in a grey hoodie whose face is only a swirl of fog with a question mark in it, sitting cross-legged on a mountain of gold coins, a laptop glowing on his knees and a price chart behind him shooting straight up.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "Self", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Unicorn", "type": "creature", "attack": 1, "health": 8, "speed": 1, "deploy": 1,
+      "flavor": "Valued at a billion. Burns a million a day. Profitable next year, every year.",
+      "notes": "Future: Unicorn (Enterprise) from the card examples. Burn rate stays: Corporate can't heal it.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] },
+        { "trigger": "EndOfTurn", "actions": [
+          { "action": "Damage", "value": 1, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Multimillionaire Philanthropist", "type": "creature", "attack": 2, "health": 6, "speed": 1, "deploy": 1,
+      "flavor": "Gave away 0.01% of his fortune. Wrote off 100% of it.",
+      "notes": "Future: a Contract. The enemy gets the gift now, you get the tax break on a later Day.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "EnemyCreatures", "attackStat": false, "healthStat": true },
+          { "action": "Draw", "value": 2, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Fat Tony", "type": "creature", "attack": 4, "health": 5, "speed": 1, "deploy": 1,
+      "flavor": "Nothing personal. It's just business. Mostly the personal kind.",
+      "notes": "Future: An Offer You Can't Refuse. Recruits a damaged enemy creature instead of hurting it.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures", "modifier": "Random" }
+        ] }
+      ]
+    },
+    {
+      "name": "Charles Ponzi", "type": "creature", "attack": 2, "health": 3, "speed": 2, "deploy": 1,
+      "flavor": "Early investors were extremely satisfied.",
+      "notes": "Future: pays draws from your next Days until it collapses, then takes them all back.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] },
+        { "trigger": "OnDeath", "actions": [
+          { "action": "Damage", "value": 3, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Margin Call", "type": "spell", "target": "AllCreatures", "prophecy": 1, "prophecyLatest": 3,
+      "flavor": "Your position has been liquidated. Everyone's has. Have a nice day.",
+      "notes": "Prophecy 1-3 (the user, 2026-10-15): it comes in 1 to 3 Days, nobody knows which. Future: Capital cost, discard your hand; each creature takes damage equal to the cards discarded.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "AllCreatures", "modifier": "AllSameTypeTargets" },
+          { "action": "Draw", "value": 2, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Hostile Takeover", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "We're not buying your company. We're buying its funeral.",
+      "notes": "Future: Capital cost, discard 2 cards. Placeholder cost: the enemy draws a card.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 4, "target": "EnemyCreatures" },
+          { "action": "Draw", "value": 1, "target": "Enemy" }
+        ] }
+      ]
+    },
+    {
+      "name": "Mass Layoffs", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "We were never a family. Please return your badge.",
+      "notes": "Future: as an additional cost, destroy any number of your Workers; draw 1 per Worker next Day.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" },
+          { "action": "Draw", "value": 3, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Team Building Exercise", "type": "spell", "target": "AllCreatures",
+      "flavor": "Attendance is voluntary. Attendance is tracked.",
+      "notes": "Target side, yours or theirs (the user, 2026-10-15): every creature there takes 1 damage and gets +1 Attack. Everyone goes, management included. Future: Coffeinated, followed by Burnout.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 1, "target": "AllCreatures", "modifier": "AllSameTypeTargets|DroppedSide" },
+          { "action": "ModifyStat", "value": 1, "target": "AllCreatures", "modifier": "AllSameTypeTargets|DroppedSide", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Dead Cat Bounce", "type": "spell", "target": "AllCreatures",
+      "flavor": "It's recovering! It's recovering! It's... no.",
+      "notes": "Target creature, either side (the user, 2026-10-15): it heals 2 now, the bounce, and takes 5 damage at the next Dawn, the crash.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Heal", "value": 2, "target": "AllCreatures" },
+          { "action": "Damage", "value": 5, "target": "AllCreatures", "delay": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Business Expense", "type": "spell", "target": "Player",
+      "flavor": "The yacht was a business expense. So was the lawyer. So is the appeal.",
+      "notes": "Draw 2 next Day, and pay the fine now: 2 damage to you. Future: Capital cost, discard a card instead.",
+      "picture": "A CEO in a full three-piece suit, briefcase still in hand, being walked into a jail cell by a guard, while he hands the guard a receipt stamped BUSINESS EXPENSE.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 2, "target": "Player" },
+          { "action": "Damage", "value": 2, "target": "Player", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Business Operating Expenses", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Two years in a federal prison camp. Priced in. The stock went up.",
+      "notes": "Jail time as overhead (the user, 2026-10-15): target friendly creature goes dark until the next Dawn (it does its time) and you draw 2 next Day. Business Expense is the perks and the fine; this is the cell, written off.",
+      "picture": "A smiling executive in an orange jumpsuit with a silk tie, checking into a cushy white-collar prison camp with a tennis court and a golf green, an assistant wheeling his luggage behind him; a sign over the gate reads COST OF DOING BUSINESS.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Vanish", "target": "FriendlyCreatures" },
+          { "action": "Draw", "value": 2, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Taxpayer Funds Venture Capital Profits", "type": "spell", "target": "Player",
+      "flavor": "Privatize the gains. Socialize the bill.",
+      "notes": "The gains are yours alone: draw 2 with the next Day's hand. The bill is everyone's: 1 damage to every creature on the board, yours included.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 2, "target": "Player" },
+          { "action": "Damage", "value": 1, "target": "AllCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Cleaning Robot", "type": "creature", "attack": 3, "health": 7, "speed": 1, "deploy": 1,
+      "flavor": "Cleans 30% of your floor. The other 70% is a Premium feature.",
+      "notes": "Mechanics test: a sturdy pusher. Pushing (every creature can), no chain pushes, blocked pushes (\"needs Swap\") and the automatic move order.",
+      "picture": "A smart-home robot vacuum in the style of a Google Nest (a soft fabric puck with four coloured light dots: blue, red, yellow, green), its single camera eye glowing, sucking up a family's photos, letters and diary from the living-room floor while a beam uploads a floor plan of the house to a cloud. A pop-up on it reads \"Free cleaning. You're the product.\""
+    },
+    {
+      "name": "Tax-Exempt Corruption", "type": "spell", "target": "Player",
+      "flavor": "Thou shalt not pay taxes.",
+      "notes": "Future: Capital cost (discard 2 cards). Placeholder cost: the enemy draws a card. Plays in Prosperity Gospel.",
+      "picture": "A megachurch whose cross is a giant gold dollar sign, a private jet parked by the door and a big red TAX EXEMPT stamp across the sky.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 3, "target": "Player" },
+          { "action": "Draw", "value": 1, "target": "Enemy" }
+        ] }
+      ]
+    },
+    {
+      "name": "Solidarity Towards The Small Businessman", "type": "spell", "target": "Player",
+      "flavor": "He's just a little guy. With seven yachts. Every coin helps.",
+      "notes": "Draw 2, paid for by your workers: 1 damage to each friendly creature. Future: Capital cost.",
+      "picture": "A fan-subscription website called ONLYFUNDS: the board-game tycoon (top hat, white moustache) poses in a pink bathrobe on a live webcam, a SUBSCRIBE button and a pile of tips beside him, while tired workers in hi-vis vests and scrubs send him their coins.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 2, "target": "Player" },
+          { "action": "Damage", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Inheritance", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Self-made. Grandma did the making.",
+      "notes": "Old money: target friendly creature gets +2 Attack and +2 Health for good, for doing nothing. Future: when a friendly creature dies, another inherits its stats.",
+      "picture": "Grandma at peace in an open coffin, hands folded on lilies, while her grandson in his best suit grins over her, fanning out the banknotes from her will.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 2, "target": "FriendlyCreatures", "attackStat": true, "healthStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "NDA", "type": "spell", "target": "EnemyCreatures", "discard": 1, "discardChosen": true,
+      "flavor": "You saw nothing. You'll say nothing. Initial here, here and here.",
+      "notes": "Non-Disclosure Agreement. Discard 1 (Corporate pays with capital), then Blackout for 2 Days on target enemy creature: its ability and its effects (arrival, Dawn and Dusk, retaliation, Last Will) are switched off. Silences the Shadow Ops. tricks and the Myth sacrifices alike.",
+      "picture": "A smiling corporate lawyer holding out a gold pen to a nervous employee whose mouth is closed with a big brass zipper, a towering stack of contracts between them stamped CONFIDENTIAL.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Blackout", "days": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Inflation", "type": "spell", "target": "EnemyCreatures", "prophecy": 2,
+      "flavor": "Same price. Less creature.",
+      "notes": "Everyone's money is worth less, theirs more so: 2 damage to every enemy creature and 1 to each of yours. Prophecy 2 (the user, 2026-10-15): it hits two Days later, as prices catch up.",
+      "picture": "A chocolate bar in its old-size wrapper, the bar inside visibly half as big, and a supermarket price tag re-stickered three times, each price higher.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets" },
+          { "action": "Damage", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Escape Goat", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "It wasn't us. It was the goat. Everyone agrees it was the goat.",
+      "notes": "Heat Signature 2 on target creature (random effects and redirected attacks go to it), and draw a card. Corporate since 2026-10-15 (the user): when something goes wrong, someone else takes the blame, and the damage finds the goat.",
+      "picture": "The escape goat: a white goat scrambling over a wooden fence, front legs over the top rail, looking back in a sweat.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "HeatSignature", "days": 1, "potency": 2 },
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Laissez-Faire", "type": "spell", "target": "AllCreatures",
+      "flavor": "Let the market decide. The market decided: whoever already had the most.",
+      "notes": "Hands off: the strongest creature on the board, on either side, takes 1 Attack from every other creature. Nobody steers it, so play it when the biggest is yours. The Invisible Hand does the same, quietly, on your own side each Dusk.",
+      "picture": "A boxing referee lounging in a deck chair in the corner of the ring, reading the business pages, whistle unused, while a giant in a top hat sits on a heap of flattened small boxers and pockets their belts.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Consolidate", "value": 1, "target": "AllCreatures", "modifier": "Strongest" }
+        ] }
+      ]
+    },
+    {
+      "name": "The Invisible Hand", "type": "creature", "attack": 1, "health": 4, "speed": 1, "deploy": 1, "ability": "Undercover",
+      "flavor": "Nobody has ever seen it. Everybody has felt it in their pocket.",
+      "notes": "Each Dusk your strongest creature takes 1 Attack from each of your other creatures, this one too: the market sorts itself out. Undercover: you never see it coming. Laissez-Faire does the same once, to the whole board.",
+      "picture": "An empty white glove floating over a busy market stall, nobody inside it, quietly lifting coins out of the shoppers' pockets and dropping them into a fat banker's top hat.",
+      "effects": [
+        { "trigger": "EndOfTurn", "actions": [
+          { "action": "Consolidate", "value": 1, "target": "FriendlyCreatures", "modifier": "Strongest" }
+        ] }
+      ]
+    },
+    {
+      "name": "C-Suite", "type": "creature", "attack": 4, "health": 4, "speed": 1, "deploy": 1, "ability": "CollateralDamage", "discard": 1,
+      "flavor": "Record profits this quarter. The savings will trickle down to you shortly.",
+      "notes": "Collateral Damage (trample): when its attack is more than a creature's Health, the rest goes on to that creature's player. The top of Corporate's hierarchy; it costs capital: discard a card.",
+      "picture": "A champagne tower of glasses: five executives in suits at the top glass, toasting, the champagne overflowing past them down the tiers, until a line of workers at the bottom catch the last drips in paper cups."
+    },
+    {
+      "name": "Venture Capital", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "We're not investing in you. We're investing in your exit.",
+      "notes": "Persistent growth (Corporate's secondary): target creature +2 Attack/Health for good, and you draw 1 next Day.",
+      "picture": "A man in a fleece vest pouring a bucket of gold coins into a lanky startup founder's head through a funnel, the founder growing taller and more delusional.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 2, "target": "FriendlyCreatures", "attackStat": true, "healthStat": true },
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Corporate Bailouts", "type": "spell", "target": "FriendlyCreatures", "discard": 1,
+      "flavor": "Losses are public. Profits are private. Simple.",
+      "notes": "Discard 1 (Corporate's cost): Armor 3 on every friendly creature and you heal 3. Too big to fail.",
+      "picture": "A sinking cruise ship branded MEGABANK being lifted out of the sea by a giant hand made of taxpayers' wallets, the executives on deck popping champagne.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Armor", "value": 3, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" },
+          { "action": "Heal", "value": 3, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Flash Crash", "type": "spell", "target": "Enemy", "discard": 1,
+      "flavor": "Down 1,000 points in 36 minutes. The robots apologise.",
+      "notes": "Board damage (it wins 55%): 2 damage to every enemy creature. Discard 1. The 2010 crash.",
+      "picture": "A stock chart dropping off a cliff into a canyon, tiny traders in suits falling with it, a trading robot at the top shrugging.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Just in Time", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Zero inventory. Zero slack. Zero idea what happens when the ship gets stuck.",
+      "notes": "Tempo (Corporate is a timing faction): target creature still deploying is ready 1 Day sooner, and you draw 1 next Day. Unlike Overtime it costs no Burnout.",
+      "picture": "A delivery van screeching up to a factory door exactly as the last box on the assembly line runs out, a manager holding a stopwatch at 0:00.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Rush", "value": 1, "target": "FriendlyCreatures", "requires": "Deploying" },
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Hedonic Treadmillionaire", "type": "creature", "attack": 4, "health": 6, "speed": 1, "deploy": 1,
+      "flavor": "Third yacht. Still not happy. Buying a fourth.",
+      "notes": "A big body for a faction of small ones (Day Trader 3/1, Unpaid Intern 1/1): Arrival: you draw 1 next Day.",
+      "picture": "A billionaire in a gold tracksuit running on a treadmill that is itself on a yacht on a bigger yacht, sweating, his smile not moving.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Moral Bankruptcy", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Ethics is a cost centre.",
+      "notes": "Removal: destroy target creature with 3 Attack or less. Corporate had damage but no clean kill.",
+      "picture": "A banker stamping BANKRUPT across a smiling worker's portrait, the worker's chair already being carried away by movers.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Destroy", "value": 3, "target": "EnemyCreatures", "requires": "AttackAtMost" }
+        ] }
+      ]
+    },
+    {
+      "name": "Usury", "type": "spell", "target": "Enemy", "ripening": true,
+      "flavor": "Interest on the interest on the interest. Compounded daily, forgiven never.",
+      "notes": "Ripening board damage: 1 to every enemy creature, 1 more for each Dawn it's kept in your hand (up to 4). Corporate's patience pays (Slay the Spire's Retain cards that grow).",
+      "picture": "A loan shark in a pinstripe suit feeding coins into a piggy bank swollen to the size of a house, a tiny debtor pinned under its trotter.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 1, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Middle Manager", "type": "creature", "attack": 2, "health": 3, "speed": 1, "deploy": 0,
+      "flavor": "Restructured. Again. Still somehow on the payroll.",
+      "notes": "Laid Off (creatures leave the hand at every Dawn now): when it's discarded from your hand, draw a card. Unplayed, it still pays; a discard cost paid with it costs nothing.",
+      "picture": "A middle manager carrying a cardboard box of desk things out of the office, a 'Synergy' mug on top, already on the phone to get rehired as a consultant.",
+      "effects": [
+        { "trigger": "OnDiscarded", "actions": [
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Big Four", "type": "creature", "attack": 2, "health": 4, "speed": 1, "deploy": 0, "ability": "Grudge",
+      "flavor": "Four firms. Every audit. No findings.",
+      "notes": "Grudge (Kingambit's Supreme Overlord): +1 Attack for each friendly creature that died this combat, up to +5. The workers Corporate spends become its leader's raise.",
+      "picture": "Four identical accountants in grey suits shoulder to shoulder at a long table, the shredder behind them overflowing, a fifth chair empty with a name card reading 'Arthur Andersen'."
+    },
+    {
+      "name": "Bloomberg Terminal", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 0, "ability": "OnTrend",
+      "flavor": "Twenty-five grand a year to watch other people's money move.",
+      "notes": "On Trend (Protosynthesis): +2 Attack while a Trend is on. With Casino it rides the house's weather.",
+      "picture": "A black two-screen trading terminal with its keyboard of colored keys, every chart spiking green, a trader's sweaty finger hovering over the yellow BUY key."
+    },
+    {
+      "name": "Internal Protocol: Quota Crusher Mindset", "type": "spell", "target": "Player", "policy": true,
+      "flavor": "Crush it. Then crush it again. The quota is a feeling.",
+      "notes": "Policy (Slay the Spire's Powers): your creatures +1 Attack this Day, and again at each Dawn, for the rest of the combat. An engine for Corporate's wide boards.",
+      "picture": "A motivational poster over a cubicle farm, a lone runner on a mountain top under the words QUOTA CRUSHER, the workers below asleep on their keyboards.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "days": 1, "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "High-Frequency Trading Scam", "type": "spell", "target": "Player", "combo": true,
+      "flavor": "Buy at a millisecond, sell at the next. Repeat until regulated. Nobody ever regulates.",
+      "notes": "Combo (Slay the Spire's Finisher): draw a card next Day, 1 more for each other spell you play this Day. Corporate's spells feed its draw.",
+      "picture": "A server rack in a basement next to the stock exchange, cables running under the street, a trader's face reflected in a screen of numbers moving too fast to read.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Valet", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Premium parking, billed monthly. Your car has been moved for your convenience.",
+      "notes": "Logistics Maneuver: target friendly creature trades places with its partner in the formation (Flank with Flank, Headquarters with Headquarters, the Vanguard with the left Flank). A megacorp's valet subscription, moving your pieces.",
+      "picture": "A valet in a gold-trimmed uniform with a megacorp logo swapping two parked cars with a forklift, under a sign reading PREMIUM PARKING - SUBSCRIBERS ONLY.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SwapPositions", "target": "FriendlyCreatures" }
+        ] }
+      ]
+    }
+  ]
+}

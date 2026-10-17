@@ -1,0 +1,520 @@
+{
+  "mod": "Utopia",
+  "cards": [
+    {
+      "name": "Parabiosis", "type": "spell", "target": "AllCreatures",
+      "flavor": "Two mice, one bloodstream. Neither was consulted.",
+      "notes": "Pain Split (the user, 2026-10-17): target creature and the creature facing it share their Health out equally (the odd point to the one that had less). Not damage, not healing: nothing answers it.",
+      "picture": "Two hospital beds facing each other with a single blood bag hung between them, the tube running from a huge glowing-pink healthy creature to a grey wilted one, both ending up the same shade of medium pink.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SplitPain", "target": "AllCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Peer Review", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Interesting results. Shame they don't replicate.",
+      "notes": "The user, 2026-10-17 (Peer Review kept for another archetype: a reveal plus an effect): reveal target enemy creature's slot, its plans and what hides there, and its findings are retracted: Blackout 2, its ability and effects switched off.",
+      "picture": "Three reviewers in lab coats with magnifying glasses peering at a scientist's poster, red RETRACTED stamps hammering onto it, the scientist's hidden second poster behind it dragged into the light.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Reveal", "target": "EnemyCreatures" },
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Blackout", "days": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Geomagnetic Reversal", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "North is south now. The compass apologises. The pigeons do not.",
+      "notes": "The user, 2026-10-16: target creature's Attack and Health trade places, on either side. Its Attack becomes its Health as it is now, and its Health its Attack: a glass cannon becomes a wall, a wall a glass cannon, and a creature with no Attack is left with no Health and dies.",
+      "picture": "A globe with its magnetic field lines flipping over, the N and S labels swapping places mid-air, a scientist staring at a compass whose needle spins wildly, and a flock of birds flying in confused loops.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SwapStats", "target": "EnemyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Research Lab", "type": "spell", "target": "Player",
+      "flavor": "Results in five years. Funding for two.",
+      "notes": "Utopia's research: send for a spell from your deck; it joins your next hand.",
+      "picture": "A gleaming laboratory with scientists in white coats pulling glowing cards out of test tubes and a centrifuge, a grant deadline clock ticking on the wall.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SendFor", "target": "Player", "sendFor": "Spell" }
+        ] }
+      ]
+    },
+    {
+      "name": "Clone", "type": "creature", "attack": 3, "health": 3, "speed": 2, "deploy": 1,
+      "flavor": "Twice the sheep. Half the soul.",
+      "notes": "When it enters, summon a random creature from your deck. Future: Clone (copies a friendly creature).",
+      "picture": "Dolly the sheep in a lab coat and goggles proudly presenting a row of identical sheep behind her.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Summon", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Hypermetamorphosis", "type": "creature", "attack": 2, "health": 3, "speed": 1, "deploy": 1,
+      "flavor": "Caterpillar, cocoon, middle manager. Nature is healing.",
+      "notes": "+1/+1 for good each Dawn. Future: Evolution (each step unlocks an ability).",
+      "picture": "Left to right: a caterpillar, a cocoon, and a hatched office worker in a tie with butterfly wings, briefcase in hand, dead inside.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "Self", "attackStat": true, "healthStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Extremophile", "type": "creature", "attack": 2, "health": 5, "speed": 1, "deploy": 1, "ability": "Unbothered",
+      "flavor": "Survived five mass extinctions. Your opinion won't be the sixth.",
+      "notes": "Unbothered, and it heals 1 each Dusk.",
+      "picture": "A chubby tardigrade lounging in a pool of lava in sunglasses, a tiny cocktail in its claw.",
+      "effects": [
+        { "trigger": "EndOfTurn", "actions": [
+          { "action": "Heal", "value": 1, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Philosophy PhD", "type": "creature", "attack": 0, "health": 4, "speed": 1, "deploy": 1,
+      "flavor": "Eight years of Kant. Would you like fries with that?",
+      "notes": "A draw each Dawn; the student debt costs it 1 Health each Dusk.",
+      "picture": "A graduate in cap and gown flipping burgers at a fast-food grill, the diploma pinned up next to the menu.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] },
+        { "trigger": "EndOfTurn", "actions": [
+          { "action": "Damage", "value": 1, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Mathematician", "type": "creature", "attack": 1, "health": 4, "speed": 1, "deploy": 1,
+      "flavor": "Showed her work. Nobody checked it.",
+      "notes": "Each Dawn a random enemy creature gets -1 Attack for good.",
+      "picture": "The confused math lady meme: a woman squinting while equations, triangles and integrals float around her head.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ModifyStat", "value": -1, "target": "EnemyCreatures", "modifier": "Random", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Quantum Physicist", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 1, "movement": "Swap",
+      "flavor": "In two places at once. Late to both.",
+      "notes": "Swap. Whoever hits it is Exhausted: observing it collapses them.",
+      "picture": "A physicist split down the middle, one half of him see-through, holding two coffees and checking two watches.",
+      "effects": [
+        { "trigger": "OnDamage", "actions": [
+          { "action": "Stun", "value": 1, "target": "Enemy" }
+        ] }
+      ]
+    },
+    {
+      "name": "Perpetual Motion Machine", "type": "creature", "attack": 0, "health": 6, "speed": 1, "deploy": 2,
+      "flavor": "Runs forever. The patent office stopped answering in 1911.",
+      "notes": "A draw each Dawn, and it heals 1 each Dusk.",
+      "picture": "A hamster running in a wheel that powers a fan, which blows on the hamster, which keeps running.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Draw", "value": 1, "target": "Player" }
+        ] },
+        { "trigger": "EndOfTurn", "actions": [
+          { "action": "Heal", "value": 1, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Particle Accelerator", "type": "creature", "attack": 3, "health": 7, "speed": 1, "deploy": 2,
+      "flavor": "Found the God particle. Lost the car keys.",
+      "notes": "Each Dawn, 2 damage to a random creature on either side (side effects).",
+      "picture": "A huge ring-shaped tunnel seen from above, a tiny scientist on a bicycle racing around it after a glowing dot.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Damage", "value": 2, "target": "AllCreatures", "modifier": "Random" }
+        ] }
+      ]
+    },
+    {
+      "name": "Genetically Modified Organism", "type": "creature", "attack": 3, "health": 3, "speed": 2, "deploy": 1,
+      "flavor": "Organic. Gluten-free. Bench-presses 200.",
+      "notes": "+2/+2 for good when it enters; the side effects cost it 1 Health each Dusk.",
+      "picture": "A ripe tomato with huge bodybuilder arms, flexing, a NON-GMO sticker peeling off its skin.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 2, "target": "Self", "attackStat": true, "healthStat": true }
+        ] },
+        { "trigger": "EndOfTurn", "actions": [
+          { "action": "Damage", "value": 1, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Surveillance Giraffe", "type": "creature", "attack": 2, "health": 7, "speed": 1, "deploy": 1,
+      "flavor": "Heart the size of a TV. Still can't reach its own feet.",
+      "notes": "When it enters, Reveal a random enemy creature's slot: it sees over the fog.",
+      "picture": "A giraffe whose neck runs out of the top of the picture and comes back in from the top further along, its head hanging upside down, peeking.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Reveal", "target": "EnemyCreatures", "modifier": "Random" }
+        ] }
+      ]
+    },
+    {
+      "name": "Pioneer", "type": "creature", "attack": 2, "health": 2, "speed": 3, "deploy": 1, "movement": "Leapfrog",
+      "flavor": "First human on Mars. First eviction on Mars.",
+      "notes": "Leapfrog: it jumps over creatures to an empty slot.",
+      "picture": "An astronaut planting a flag on a red desert next to a sign: FOR RENT $9999."
+    },
+    {
+      "name": "Placebo", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Clinically proven to work on people who believe it works.",
+      "notes": "+3 Health for good.",
+      "picture": "A sugar pill the size of a melon labelled MIRACLE on a spoonful of sugar, and a skinny man next to it flexing a non-existent bicep, very proud.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 3, "target": "FriendlyCreatures", "attackStat": false, "healthStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Vaccine", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Side effects include not dying, and 5G.",
+      "notes": "Cleanses its statuses, all of them; side effect: -1 Attack for this Day (sore arm).",
+      "picture": "A syringe with a tiny Wi-Fi antenna on its plunger and full signal bars above it.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Cleanse", "target": "FriendlyCreatures" },
+          { "action": "ModifyStat", "value": -1, "target": "FriendlyCreatures", "days": 1, "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Climate Change", "type": "spell", "target": "AllCreatures",
+      "flavor": "The scientists agreed. The weather didn't wait.",
+      "notes": "Every creature is Burned for 2 Days and gets Heat Signature 1.",
+      "picture": "A polar bear standing on a single ice cube floating in a cocktail glass, a paper umbrella beside it.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "AllCreatures", "modifier": "AllSameTypeTargets", "status": "Burned", "days": 2, "potency": 1 },
+          { "action": "ApplyStatus", "target": "AllCreatures", "modifier": "AllSameTypeTargets", "status": "HeatSignature", "days": 1, "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Overpopulation", "type": "spell", "target": "Player",
+      "flavor": "Eight billion people and nobody to cover my shift.",
+      "notes": "Summon 2 random creatures from your deck.",
+      "picture": "A tiny Earth with people crammed all over it like a full elevator, one man balancing on top on one foot.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Summon", "value": 2, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Black Hole", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "What goes in doesn't come out. Like your tax refund.",
+      "notes": "4 damage to the creature and its neighbors; 2 damage to you (side effects). Future: Black Hole repositioning.",
+      "picture": "A swirling black hole sucking in a cow, a sofa, a single sock and a tax form.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 4, "target": "EnemyCreatures", "modifier": "WithAdjacent" },
+          { "action": "Damage", "value": 2, "target": "Player", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Stasis Field", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Frozen in time. Like your salary.",
+      "notes": "Shield 3 on target creature: for 3 Days, counting this one, it takes no combat damage. It goes with the creature (the user, 2026-10-16: a slot can't have a shield).",
+      "picture": "A man frozen mid-sneeze inside a giant block of green jelly, the droplets hanging in the air.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "Shielded", "days": 3 }
+        ] }
+      ]
+    },
+    {
+      "name": "Absolute Zero", "type": "spell", "target": "AllCreatures",
+      "flavor": "Minus 273. The office AC, as set by Gary.",
+      "notes": "Every creature is Exhausted.",
+      "picture": "A man frozen solid at his desk holding a frozen cup of coffee, the thermostat on the wall reading -273.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Stun", "value": 1, "target": "AllCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Splitting The Atom", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Science's greatest achievement: a really big bang.",
+      "notes": "6 damage to a random enemy creature; 2 damage to you (side effects).",
+      "picture": "A lumberjack in a flannel shirt splitting a glowing atom on a tree stump with an axe, a mushroom cloud rising behind him.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 6, "target": "EnemyCreatures", "modifier": "Random" },
+          { "action": "Damage", "value": 2, "target": "Player", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Gene Editing", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Bigger, stronger, slightly radioactive.",
+      "notes": "+2/+2 for good; side effect: Burned for 2 Days. Future: gene editing as Persistent Stat Modifications.",
+      "picture": "A pair of scissors cutting a DNA double helix, a strip of tape sticking a unicorn horn onto it.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 2, "target": "FriendlyCreatures", "attackStat": true, "healthStat": true },
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "Burned", "days": 2, "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Accelerationism", "type": "spell", "target": "Player", "gamble": true,
+      "flavor": "Whatever the problem, more technology. Whatever the cost, faster.",
+      "notes": "Gamble, accelerationism's way: every outcome pays and every one costs (the user: drawbacks, 2026-10-16). Your creatures take 2 and get +3 Attack for good (on the brink, then boom); or progress for everyone, +2/+2 for good to every creature, the enemy's too; or Borrowed Time this Day, then 3 damage to each: on the brink they deal double, and any left at 0 are back to 1 at Dusk (the user's Borrowed Time, 2026-10-16).",
+      "picture": "A tech founder in a hoodie flooring the accelerator of a rocket-powered car toward a cliff edge, the road on fire behind him, a bridge of glowing circuit boards assembling itself in mid-air just ahead of the wheels.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" },
+          { "action": "ModifyStat", "value": 3, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "attackStat": true, "healthStat": false }
+        ] },
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 2, "target": "AllCreatures", "modifier": "AllSameTypeTargets", "attackStat": true, "healthStat": true }
+        ] },
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "status": "BorrowedTime", "days": 1 },
+          { "action": "Damage", "value": 3, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Cold Fusion", "type": "creature", "attack": 5, "health": 6, "speed": 1, "deploy": 1, "ability": "Brink",
+      "flavor": "Clean, limitless energy. Slight meltdown risk. Mostly fine.",
+      "notes": "On the Brink: at 2 Health or less it deals double. The reactor runs hot: 1 damage to itself each Dusk.",
+      "picture": "A tabletop fusion reactor glowing white-hot in a jar on a garage workbench, the warning gauge in the red, two engineers in sunglasses giving a thumbs-up.",
+      "effects": [
+        { "trigger": "EndOfTurn", "actions": [
+          { "action": "Damage", "value": 1, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Antimatter", "type": "creature", "attack": 5, "health": 5, "speed": 2, "deploy": 1, "ability": "Brink",
+      "flavor": "One gram costs 62 trillion dollars. Worth it.",
+      "notes": "On the Brink: at 2 Health or less it deals double. When ready, 2 damage to itself: it starts on the brink.",
+      "picture": "A tiny shimmering particle in a magnetic bottle, its mirror image annihilating the lab bench around it, a physicist ducking behind a clipboard.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Biohacking", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Ten thousand volts and a nootropic smoothie.",
+      "notes": "Target friendly creature takes 3 damage, then gets +4 Attack for good. Too weak for it, it dies trying.",
+      "picture": "A shirtless tech bro in a garage strapped to car batteries, LED implants glowing under his skin, a smoothie in one hand and a soldering iron in the other.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 3, "target": "FriendlyCreatures" },
+          { "action": "ModifyStat", "value": 4, "target": "FriendlyCreatures", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Blood Transfusion", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Young blood, old money.",
+      "notes": "Heal target friendly creature 6: back from the brink, just in time.",
+      "picture": "An old billionaire in a recliner hooked up to an IV bag labelled TEEN, reading the stock prices, his skin looking twenty years younger.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Heal", "value": 6, "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Evolution Theory", "type": "spell", "target": "Player",
+      "flavor": "Only the fittest survive. We've been making ours fitter.",
+      "notes": "Trend for 3 Days, Survival of the Fittest: each Dusk the creature with the least Health on the board, either side, takes 3. Utopia's creatures are the ones that grow.",
+      "picture": "Darwin in a lab coat at a chalkboard, the classic march of progress drawn on it from ape to man to a huge muscled lab-grown superman, and a tiny weak creature at the start of the line being crossed out.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SetTrend", "target": "Player", "days": 3, "trend": "SurvivalOfTheFittest" }
+        ] }
+      ]
+    },
+    {
+      "name": "Mutation", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Three extra arms. One fewer kidney.",
+      "notes": "+3 Attack for good on target friendly creature; side effect: it loses 1 Health for good.",
+      "picture": "A lab rat in a cage flexing three muscular arms, a scientist taking notes and quietly sliding a fourth arm onto the clipboard.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 3, "target": "FriendlyCreatures", "attackStat": true, "healthStat": false },
+          { "action": "ModifyStat", "value": -1, "target": "FriendlyCreatures", "attackStat": false, "healthStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Exponential Growth", "type": "spell", "target": "Player",
+      "flavor": "It doubles every day. That's what worries us.",
+      "notes": "+1/+1 for good on each of your creatures; side effect: they're Burned for 2 Days.",
+      "picture": "A petri dish overflowing onto the lab bench, the colony spilling over the edge and climbing up the wall, a scientist backing away holding the lid.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "attackStat": true, "healthStat": true },
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "status": "Burned", "days": 2, "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Scientific Method", "type": "creature", "attack": 1, "health": 5, "speed": 1, "deploy": 1,
+      "flavor": "Hypothesis, experiment, grant renewal.",
+      "notes": "Each Dawn, +1 Attack for good on a random friendly creature (peer reviewed).",
+      "picture": "A scientist in goggles carefully pouring a glowing liquid into a beaker on a bench crowded with labelled flasks, a whiteboard behind her reading HYPOTHESIS → EXPERIMENT → GRANT.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "Random|Others", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Frankenstein", "type": "creature", "attack": 3, "health": 6, "speed": 1, "deploy": 1,
+      "flavor": "It's alive! It's ALIVE! It's suing.",
+      "notes": "An abomination that grows: +1/+1 for good each Dawn. Side effect: it arrives Burned for 2 Days (the lightning).",
+      "picture": "A towering stitched-together monster sitting up on a lab table under a lightning bolt, bolts in its neck smoking, the mad scientist cheering with both arms up.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "Self", "status": "Burned", "days": 2, "potency": 1 }
+        ] },
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "Self", "attackStat": true, "healthStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Chimera", "type": "creature", "attack": 4, "health": 5, "speed": 2, "deploy": 1,
+      "flavor": "Lion, goat, snake. The ethics committee was on holiday.",
+      "notes": "When ready: +2/+2 for good on a random friendly creature, maybe itself (a graft); side effect: it loses 2 Health for good.",
+      "picture": "A lion with a goat's head sprouting from its back and a snake for a tail, all three wearing hospital ID wristbands, in a lab enclosure with a sticky note: DO NOT FEED AFTER MIDNIGHT.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 2, "target": "FriendlyCreatures", "modifier": "Random|Others", "attackStat": true, "healthStat": true },
+          { "action": "ModifyStat", "value": -1, "target": "Self", "attackStat": false, "healthStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Resurrected T-Rex", "type": "creature", "attack": 6, "health": 7, "speed": 1, "deploy": 1, "ability": "Brink",
+      "flavor": "Sixty-six million years asleep. Woke up hungry.",
+      "notes": "A huge abomination, On the Brink. Side effect: its cloned DNA is unstable, it loses 1 Health for good each Dusk, until it hits twice as hard.",
+      "picture": "A T-Rex skeleton half covered in new flesh breaking out of a museum display, the DNA sequencer that brought it back still beeping, a guide pointing at the exit.",
+      "effects": [
+        { "trigger": "EndOfTurn", "actions": [
+          { "action": "ModifyStat", "value": -1, "target": "Self", "attackStat": false, "healthStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Longevity Hub", "type": "creature", "attack": 2, "health": 6, "speed": 1, "deploy": 1,
+      "flavor": "Live forever. Subscription renews monthly.",
+      "notes": "Utopia's healer (its primary mechanic): each Dawn every other friendly creature heals 2. Pairs with Brink creatures that hurt themselves.",
+      "picture": "A gleaming white clinic in the desert where billionaires lie in pods drinking smoothies through tubes, a young intern on a treadmill in the corner wired to them by a blood line.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Heal", "value": 2, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets|Others" }
+        ] }
+      ]
+    },
+    {
+      "name": "Femtosecond Laser", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Faster than a thought. Cleaner than a scalpel.",
+      "notes": "Clean removal for Utopia: 4 damage to target creature or player, with no cost to you (Black Hole and Splitting The Atom both hurt you).",
+      "picture": "A laser beam the thickness of a hair slicing a falling apple into perfect quarters in mid-air, a physicist in safety goggles timing it with a stopwatch.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 4, "target": "EnemyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Quark", "type": "creature", "attack": 2, "health": 3, "speed": 2, "deploy": 0, "movement": "Leapfrog",
+      "flavor": "Up, down, charm, strange. Mostly strange.",
+      "notes": "A leaper that grows: Leapfrog, and Grow 1 (+1/+1 each Dawn, for good: persistent growth, Utopia's primary). Cheap, ready at once.",
+      "picture": "Three tiny glowing particles in colored hats bouncing on a trampoline inside an atom, one of them flipping off the edge with a grin.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "Self", "attackStat": true, "healthStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Seasteading", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "No taxes. No laws. No lifeboats.",
+      "notes": "Armor 3 on every friendly creature (Armor wins 65% in the study; Utopia's primary). A libertarian floating city.",
+      "picture": "A floating hexagonal platform city in the middle of the ocean, tech-bros sunbathing on the deck while one corner quietly sinks and a lone lifeguard chair stands empty.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Armor", "value": 3, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Ankylorhiza", "type": "creature", "attack": 5, "health": 7, "speed": 1, "deploy": 2,
+      "flavor": "Twenty-five million years extinct. Still holds a grudge.",
+      "notes": "A big body for a faction whose bodies burn out: Arrival: Armor 3 on itself. An extinct toothed whale, de-extinct.",
+      "picture": "A huge prehistoric whale with a crocodile's teeth bursting out of a lab aquarium tank, water and glass everywhere, a scientist in a lab coat clutching a sign reading DE-EXTINCTION: PHASE 1.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Armor", "value": 3, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "White Dwarf", "type": "creature", "attack": 2, "health": 6, "speed": 1, "deploy": 0, "ability": "Unbothered",
+      "flavor": "Small. Very white. Incredibly dense.",
+      "notes": "A dense wall: Unbothered (enemy effects can't lower its stats; the study's best ability, 65%). Ready at once.",
+      "picture": "A dwarf like those of The Lord of the Rings standing in space, glowing white like the star: a long braided beard, a winged helm, a double-bladed axe, chain mail, the planets around him bending toward him, unbothered."
+    },
+    {
+      "name": "Biohacker", "type": "creature", "attack": 3, "health": 4, "speed": 1, "deploy": 0, "ability": "Hormesis",
+      "flavor": "Microdoses, cold plunges, and a chip in his hand that opens the fridge.",
+      "notes": "Hormesis (Poison Heal): Burn heals it instead of hurting it. Its Arrival gives it Burn 2 for 3 Days, so it heals 2 each Dusk. Utopia's self-harm becomes fuel.",
+      "picture": "A shirtless tech bro in an ice bath full of glowing green sludge, sensors taped all over his chest, his smartwatch showing 'biological age: 19'.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "Self", "status": "Burned", "days": 3, "potency": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Prion Disease", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Misfolded, contagious, and in no hurry.",
+      "notes": "Burn 3 for 3 Days on target creature: 9 damage in all. Slow removal.",
+      "picture": "A cow in a lab coat staring blankly into a microscope while its own brain, full of holes like Swiss cheese, floats in a jar beside it.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Burned", "days": 3, "potency": 3 }
+        ] }
+      ]
+    },
+    {
+      "name": "Heimlich Maneuver", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Science saves lives. Ribs, less so.",
+      "notes": "Logistics Maneuver: push target friendly creature a step back (the Vanguard to a Flank, a Flank to its Headquarters slot); a creature already there trades places with it. Gets a hurt one out of the front line.",
+      "picture": "A scientist in a lab coat performing the Heimlich maneuver on a robot, a glowing chip flying out of its mouth across the lab while a colleague times it on a clipboard.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Push", "target": "FriendlyCreatures" }
+        ] }
+      ]
+    }
+  ]
+}

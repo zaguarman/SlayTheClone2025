@@ -201,6 +201,14 @@ namespace Zeitgeist {
         /// on it for a moment (<see cref="HoverDelay"/>). Leaving the card before that shows nothing.
         /// </summary>
         public void ShowTooltip(CardController card) {
+            // Just dropped on (the user, 2026-10-17): the card under the pointer doesn't lift until the pointer has left it and
+            // come back, or every play would open a preview
+            if (card != null && (card == skippedCard || Time.unscaledTime < skipDropsUntil)) {
+                skippedCard = card;
+                skipDropsUntil = 0f;
+                Refused(card, "it was just dropped on: it shows once the pointer has left and come back");
+                return;
+            }
             // A card tucked under a creature (the user): the creature's roulette opens, by the creature, turned to this card
             if (card != null && card.TuckedUnder != null && TuckedIndex(card) is int at && at > 0) {
                 var front = card.TuckedUnder;
@@ -543,7 +551,17 @@ namespace Zeitgeist {
         public TMP_Text KeywordText(string key) => keywordPopups.FirstOrDefault(p => p.Key == key)?.Body;
 
         /// <summary>The pointer left the card: the tooltip stays while the pointer goes on to the preview or its popups.</summary>
+        /// <summary>A card was just dropped on the board: whatever card the pointer rests on next doesn't lift until the pointer leaves it (the user, 2026-10-17).</summary>
+        public void SkipHoverAfterDrop() {
+            skipDropsUntil = Time.unscaledTime + 0.5f;
+            if (activeCard != null) HideTooltip();
+        }
+
+        private CardController skippedCard;
+        private float skipDropsUntil;
+
         public void ReleaseCard(CardController card) {
+            if (card != null && card == skippedCard) skippedCard = null; // Left: it lifts again next time
             if (card != null && card == hoveredTucked) {
                 hoveredTucked = null;
                 if (card.TuckedUnder == pendingCard) CancelPending();

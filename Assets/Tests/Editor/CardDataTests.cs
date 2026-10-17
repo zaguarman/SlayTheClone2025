@@ -42,16 +42,14 @@ namespace Zeitgeist.Tests {
 
             Assert.IsEmpty(problems, "Card effects that can't work:\n" + string.Join("\n", problems));
 
-            // Every definition in the generator is one card, once (the user, 2026-10-17: three names were defined twice and the
-            // later card overwrote the earlier's file), and every asset comes from a definition
-            string generator = File.ReadAllText(Path.Combine(Application.dataPath, "Scripts", "Generators", "FactionDecksGenerator.cs"));
-            generator = System.Text.RegularExpressions.Regex.Replace(generator, @"#region Shelved.*?#endregion", "", System.Text.RegularExpressions.RegexOptions.Singleline); // Kept out of the game on purpose
-            var defined = System.Text.RegularExpressions.Regex.Matches(generator, @"(?:Creature|Spell)\(""((?:[^""\\]|\\.)+)""").Cast<System.Text.RegularExpressions.Match>()
-                .Select(m => m.Groups[1].Value.Replace("\\\"", "\"")).ToList();
-            CollectionAssert.IsEmpty(defined.GroupBy(n => n).Where(g => g.Count() > 1).Select(g => g.Key).ToList(), "Cards defined twice in the generator");
+            // Every card in the card files is one card, once (the user, 2026-10-17: three names were defined twice and the
+            // later card overwrote the earlier's file), and every asset comes from a card file (Shelved.json is kept out on purpose)
+            var defined = Directory.GetFiles(Path.Combine(Application.dataPath, "Cards"), "*.json").Where(f => Path.GetFileNameWithoutExtension(f) != "Shelved")
+                .SelectMany(f => CardFiles.Read(File.ReadAllText(f)).cards.Select(c => c.name)).ToList();
+            CollectionAssert.IsEmpty(defined.GroupBy(n => n).Where(g => g.Count() > 1).Select(g => g.Key).ToList(), "Cards defined twice in the card files");
             var names = assets.Select(a => a.cardName).ToList();
             Assert.IsTrue(defined.Count == names.Count && !defined.Except(names).Any() && !names.Except(defined).Any(),
-                $"The card assets are the generator's definitions, one each (regenerate: Cards > Generate Faction Decks). Defined but no asset: {string.Join(", ", defined.Except(names))}. Asset but not defined: {string.Join(", ", names.Except(defined))}");
+                $"The card assets are the card files' cards, one each (regenerate: Cards > Generate Faction Decks). Defined but no asset: {string.Join(", ", defined.Except(names))}. Asset but not defined: {string.Join(", ", names.Except(defined))}");
 
             // A card with effects or an ability says what they do: flavour alone (the user: Curfew read as a blank spell) is a formatter gap
             var mute = new List<string>();
@@ -91,7 +89,7 @@ namespace Zeitgeist.Tests {
             // ...and the font draws every character of it, and every faction's coin: its fallback is baked (static), so it
             // doesn't rewrite itself at each run. A new sign goes into "LiberationSans SDF - Fallback" (TryAddCharacters)
             var shown = string.Concat(printed.Keys.Concat(printed.Values).Concat(Keywords.All.Select(k => k.Title + Keywords.Plain(k.Text)))
-                .Concat(System.Enum.GetValues(typeof(Faction)).Cast<Faction>().Select(UITheme.FactionGlyph)));
+                .Concat(System.Enum.GetValues(typeof(Faction)).Cast<Faction>().Select(UITheme.FactionGlyph)).Concat(Umbrellas.All.Select(UITheme.UmbrellaGlyph)));
             TMPro.TMP_Settings.defaultFontAsset.HasCharacters(shown, out uint[] undrawable, searchFallbacks: true);
             CollectionAssert.IsEmpty((undrawable ?? new uint[0]).Distinct().Where(c => !char.IsControl((char)c)).Select(c => (char)c), "Characters the font can't draw");
             Assert.AreEqual("Exhaust all creatures", printed["Strike"], "All enemy and all friendly creatures: all creatures");

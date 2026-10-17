@@ -222,6 +222,7 @@ namespace Zeitgeist {
             else {
                 HandleCardFromBattlefield(card, targetSlot);
             }
+            Tooltip.Existing?.SkipHoverAfterDrop(); // The card under the pointer doesn't lift until the pointer leaves it (the user)
         }
 
         private bool IsCardFromHand(CardController card) => FromHand(card);

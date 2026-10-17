@@ -280,6 +280,7 @@ namespace Zeitgeist {
 
             var mapColumn = AddColumn(screen.columns, null);
             mapColumn.gameObject.AddComponent<LayoutElement>().flexibleWidth = 1;
+            AddRelicChips(mapColumn);
             var content = AddList(mapColumn, out mapScroll);
             var contentRect = (RectTransform)content;
             DestroyImmediate(content.GetComponent<VerticalLayoutGroup>()); // Rooms are placed by hand, by row and column
@@ -420,12 +421,43 @@ namespace Zeitgeist {
         }
 
         // The relics and potions you carry, under the map's status
+        // Your relics as chips at the top left of the map (the user, 2026-10-17: to hover them and see what you have); each
+        // says what it does while the pointer rests on it
+        public const string RelicChip = "Relic: ";
+        private void AddRelicChips(Transform mapColumn) {
+            var row = NewObject("Relics", mapColumn);
+            var layout = row.AddComponent<HorizontalLayoutGroup>();
+            layout.spacing = 8;
+            layout.padding = new RectOffset(4, 4, 2, 2);
+            layout.childAlignment = TextAnchor.MiddleLeft;
+            layout.childControlWidth = layout.childControlHeight = true;
+            layout.childForceExpandWidth = layout.childForceExpandHeight = false;
+            row.AddComponent<LayoutElement>().preferredHeight = 42;
+            if (AdventureRun.Relics.Count == 0) {
+                var none = AddText(row.transform, "<i>No relics yet</i>", 18, UITheme.Hex(0xC9C0AE), FontStyles.Normal, height: -1);
+                none.alignment = TextAlignmentOptions.MidlineLeft;
+                return;
+            }
+            foreach (var relic in AdventureRun.Relics) {
+                string name = Zeitgeist.Relics.NameOf(relic);
+                var chip = NewObject(RelicChip + name, row.transform);
+                var image = UITheme.Round(chip.AddComponent<Image>(), ButtonColor, 1.5f);
+                image.raycastTarget = true;
+                UITheme.AddTrim(chip.transform, UITheme.GoldDim, 1.5f);
+                var label = AddText(chip.transform, name, 18, TextColor, FontStyles.Bold, height: -1);
+                Stretch(label.gameObject, 10f);
+                label.alignment = TextAlignmentOptions.Midline;
+                label.textWrappingMode = TextWrappingModes.NoWrap;
+                var element = chip.AddComponent<LayoutElement>();
+                element.preferredHeight = 36;
+                element.preferredWidth = label.GetPreferredValues(name).x + 24f;
+                AddHoverTip(chip, $"<b>{name}</b>\n{Zeitgeist.Relics.Describe(relic)}");
+            }
+        }
+
         private void AddKit(Transform side) {
-            string relics = AdventureRun.Relics.Count == 0 ? "<color=#C9C0AE>none yet</color>"
-                : string.Join("\n", AdventureRun.Relics.Select(r => $"<b>{Zeitgeist.Relics.NameOf(r)}</b> <size=85%><color=#C9C0AE>{Zeitgeist.Relics.Describe(r)}</color></size>"));
             string potions = AdventureRun.Potions.Count == 0 ? "<color=#C9C0AE>none</color>" : string.Join(", ", AdventureRun.Potions.Select(p => p.cardName));
-            var kit = AddText(side, $"Relics:\n{relics}\nPotions ({AdventureRun.Potions.Count}/{AdventureRun.MaxPotions}): {potions}", 20, TextColor, FontStyles.Normal,
-                height: 60 + 30 * Math.Max(1, AdventureRun.Relics.Count));
+            var kit = AddText(side, $"Potions ({AdventureRun.Potions.Count}/{AdventureRun.MaxPotions}): {potions}", 20, TextColor, FontStyles.Normal, height: 60);
             kit.textWrappingMode = TextWrappingModes.Normal;
         }
 

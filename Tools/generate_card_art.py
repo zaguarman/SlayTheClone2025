@@ -8393,7 +8393,7 @@ def spite_voter():
     # The user's reference (2026-10-17), the Raiders of the Lost Ark idol-swap meme, its lower panel: the adventurer behind the
     # pedestal, centre, leaning in at us; his right hand on the golden idol on the pedestal (right of centre), his left holding
     # the identical idol he swaps in (left of centre, lower); both idols labelled CORRUPT POLITICIAN in the meme's white block
-    # letters. A dark temple seen head-on: a doorway at the left, stone blocks, creepers. The 'Don't Blame Me' badge stays
+    # letters. A dark temple seen head-on: a doorway at the left, stone blocks, creepers. No badge (the user)
     defs = lin("bg", ["#2c2616", "#0c0a06"]) + lin("gold", ["#fff0a0", "#e0b030", "#9a6a10"])
     body = rect(0, 0, W, H, "url(#bg)")
     for i in range(7):
@@ -8427,11 +8427,10 @@ def spite_voter():
         return lettering("CORRUPT", cx, top, 7 * k, "#ffffff", width=1.6 * k, outline="#111111") + lettering("POLITICIAN", cx, top + 9 * k, 7 * k, "#ffffff", width=1.6 * k, outline="#111111")
 
     # The adventurer behind the pedestal, leaning in at us: the hat high in the middle, the jacket's shoulders wide
-    hx, hy, r = 156, 72, 26
-    body += path("M96 200 C 96 130 216 130 216 200 Z", "#4a3018")  # Shoulders
+    hx, hy, r = 156, 90, 26  # The head low, leaning in over the pedestal (the user, 2026-10-17)
+    body += path("M96 200 C 96 118 216 118 216 200 Z", "#4a3018")  # Shoulders
     body += rect(hx - 7, hy + r - 6, 14, 16, SKIN[1])
-    body += path("M134 200 L148 118 L164 118 L178 200 Z", "#d8cfa8")  # The shirt in the open jacket
-    body += path("M134 200 L148 118 L126 150 Z", "#3a2410") + path("M178 200 L164 118 L186 150 Z", "#3a2410")  # Lapels
+    body += path("M118 192 L144 122 L168 122 L194 192 Z", "#d8cfa8")  # The shirt in the open jacket
     body += circle(hx, hy, r, SKIN[1])
     body += path(f"M{hx - 13} {hy + 14} C {hx - 6} {hy + 22} {hx + 6} {hy + 22} {hx + 13} {hy + 14} L{hx + 13} {hy + 19} C {hx + 4} {hy + 26} {hx - 4} {hy + 26} {hx - 13} {hy + 19} Z", "#3a2410", 'opacity="0.45"')  # Stubble
     body += circle(hx - 9, hy - 2, 3, "#222") + circle(hx + 9, hy - 2, 3, "#222")
@@ -8440,7 +8439,6 @@ def spite_voter():
     body += ellipse(hx, hy - r * 0.62, r * 1.8, 8, "#6a4a22", 'stroke="#3a2810" stroke-width="1.5"')
     body += path(f"M{hx - r * 0.95:.1f} {hy - r * 0.62:.1f} L{hx - r * 0.85:.1f} {hy - r * 1.75:.1f} Q {hx:.1f} {hy - r * 1.45:.1f} {hx + r * 0.85:.1f} {hy - r * 1.75:.1f} L{hx + r * 0.95:.1f} {hy - r * 0.62:.1f} Z", "#6a4a22", 'stroke="#3a2810" stroke-width="1.5"')
     body += rect(hx - r * 0.95, hy - r * 0.92, r * 1.9, 6, "#2a1a0a")
-    body += circle(196, 170, 11, "#ffd23a", 'stroke="#8a6a1a" stroke-width="2"') + lettering("NOT", 196, 163, 4, "#333", width=1) + lettering("ME", 196, 170, 4, "#333", width=1)
     # The arms: his right down to the pedestal's idol, his left holding the one he brought
     body += stroke("M196 150 C 216 150 232 144 244 136", "#4a3018", 14)
     body += stroke("M118 152 C 110 160 118 170 134 166", "#4a3018", 14)
@@ -8457,7 +8455,7 @@ def spite_voter():
     body += politician(240, 112, 0.82)
     body += circle(252, 128, 9, SKIN[1], 'stroke="#8a5a30" stroke-width="1.5"') + stroke("M246 120 l -4 -10 M252 118 l 0 -11 M258 120 l 5 -10 M262 128 l 8 -4", SKIN[1], 4)
     # The meme's labels, over each idol
-    body += label(136, 96, 0.9)
+    body += label(100, 104, 0.8)
     body += label(240, 56, 1.0)
     return svg(defs, body)
 

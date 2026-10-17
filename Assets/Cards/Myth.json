@@ -1,0 +1,636 @@
+{
+  "mod": "Myth",
+  "cards": [
+    {
+      "name": "Tithe", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Ten percent, every Sunday, forever. God's own subscription.",
+      "notes": "Leech Seed (the user, 2026-10-17): Leech 1 for 3 Days on target enemy creature: at each Dusk it takes 1 and you heal 1.",
+      "picture": "A collection plate on a very long pole reaching from a gilded pulpit all the way across the battlefield into an enemy creature's pocket, coins flowing back along it into a fat bishop's lap.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Leeched", "days": 3, "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Berserker", "type": "creature", "attack": 3, "health": 6, "speed": 2, "deploy": 0, "ability": "Berserk",
+      "flavor": "Pain is just the body's way of asking for more.",
+      "notes": "Berserk: +3 Attack at half Health or less. The worse it gets, the better he does.",
+      "picture": "A bare-chested Norse warrior with a bear pelt over his head, arrows sticking out of him like a pincushion, grinning wider with each one, swinging an axe in each hand, foam on his beard."
+    },
+    {
+      "name": "Tutankhamun", "type": "creature", "attack": 2, "health": 7, "speed": 1, "deploy": 1, "ability": "PharaohsCurse",
+      "flavor": "Death shall come on swift wings to him who disturbs the peace of the king. Swift-ish.",
+      "notes": "Pharaoh's Curse (Pokémon's Perish Body): a creature that attacks it is Doomed 3, and so is the pharaoh (the Carnarvon curse: Mummy, the Hive Mind test creature, keeps its name). Three Days of growing dread for both.",
+      "picture": "A bandaged mummy sitting up in its sarcophagus pointing a bony finger at a tomb raider in a pith helmet, both of them with a little hourglass over their heads showing the same three grains of sand."
+    },
+    {
+      "name": "Holy Pigeon", "type": "creature", "attack": 1, "health": 3, "speed": 3, "deploy": 0, "movement": "Leapfrog",
+      "flavor": "The Holy Spirit, as depicted. Please do not feed it.",
+      "notes": "Leapfrog (the user, 2026-10-17: 'make also the holy pigeon'): it flies over creatures to an empty slot. Arrival: Bless 1 on every friendly creature: a ward against the next status.",
+      "picture": "A fat grey city pigeon with a golden halo and two tiny angel wings perched on a cathedral gargoyle, a beam of holy light on it, a crumb of communion wafer in its beak, a saint's statue below it freshly anointed.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "status": "Blessed", "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "The Last Shall Be First", "type": "spell", "target": "Player",
+      "flavor": "And the first shall wait their turn, like everyone else.",
+      "notes": "Trend for 3 Days (Trick Room, Myth's flavour, after the verse): Rush Hour, the slowest act first.",
+      "picture": "The pearly gates with a velvet rope and a bouncer angel waving through a line of old beggars, cripples and a snail while a procession of kings and CEOs with golden tickets is held at the back.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SetTrend", "target": "Player", "days": 3, "trend": "RushHour" }
+        ] }
+      ]
+    },
+    {
+      "name": "Novena", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Nine days of prayer. Delivery on the tenth.",
+      "notes": "Wish (the user, 2026-10-17): a Prayer on target friendly creature's slot for 2 Days: when they run out, at the end of the next Day, whoever stands in that slot heals 6. Help that arrives late, for whoever is still there to receive it.",
+      "picture": "A hospital bed with a bandaged creature in it, a GET WELL SOON balloon drifting in through the window two days late, and outside, a crowd of politicians with their hands clasped and eyes closed, each holding a phone showing the hashtag #thoughtsandprayers.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "PlaceSlotEffect", "value": 6, "target": "FriendlyCreatures", "days": 2, "slotEffect": "Prayer" }
+        ] }
+      ]
+    },
+    {
+      "name": "Holy Ghost", "type": "creature", "attack": 3, "health": 1, "speed": 2, "deploy": 1, "ability": "Immaculate",
+      "flavor": "Thou canst not touch what thou canst not see. Thou canst, however, light a candle.",
+      "notes": "Wonder Guard (the user, 2026-10-17: 'would be better for holy'): Immaculate. Attacks and effects do nothing to it; only a status (Burn) hurts it, and with 1 Health any Burn is the end. Doomed and Destroy still take it.",
+      "picture": "A translucent white sheet-ghost with a golden halo and two round eye holes, hovering serenely in a church aisle while arrows and bullets pass straight through it and clatter on the floor behind, a dove on its head, and in the corner a single lit match it eyes with real fear."
+    },
+    {
+      "name": "Taqiyya", "type": "creature", "attack": 2, "health": 2, "speed": 1, "deploy": 2, "ability": "Turncoat",
+      "flavor": "The smile is sincere. The rest is between me and God.",
+      "notes": "The user, 2026-10-16: a poisoned gift. Played on your side, it deploys for 2 Days; on arrival it goes over to the enemy, into the slot opposite, and whatever stands there is discarded. There it's a Turncoat: no summon can replace it and they can't order it to attack; each Dawn it attacks a random other creature of its new side, Reveals another (you see its plans) and takes 1 Attack off another. Low Health: they can knock it out easily (Friendly Fire, an effect).",
+      "picture": "A serene robed figure bowing slightly and offering an ornate gift box tied with a gold ribbon, both hands extended in welcome; on the wall behind, the box's shadow is a coiled snake.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Defect", "target": "Self" }
+        ] },
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Attack", "target": "FriendlyCreatures", "modifier": "Random|Others" },
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "modifier": "Random|Others", "status": "Revealed", "days": 1 },
+          { "action": "ModifyStat", "value": -1, "target": "FriendlyCreatures", "modifier": "Random|Others", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Omen Reading", "type": "spell", "target": "Player", "sacrifice": 1,
+      "flavor": "The entrails say Tuesday. The goat disagreed.",
+      "notes": "Myth's ritual: Sacrifice 1, then send for any card from your deck; it joins your next hand.",
+      "picture": "A robed augur reading the entrails of a goat on a stone altar by candlelight, squinting at a calendar pinned to the wall, an assistant taking notes.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SendFor", "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Memento Mori", "type": "spell", "target": "AllCreatures",
+      "flavor": "Remember that you will die. Preferably on schedule.",
+      "notes": "Mechanics test: Doomed on either side. It wipes other statuses and blocks new ones, gives +1 permanent Attack each Dawn (it stays on the card), then Last Rites strike the opposite slot even if the creature Cannot Act, and it dies for real.",
+      "picture": "A skull on an office desk beside an hourglass, and a wall calendar with three days crossed out in red.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "AllCreatures", "status": "Doomed", "days": 3 }
+        ] }
+      ]
+    },
+    {
+      "name": "Martyr", "type": "creature", "attack": 2, "health": 4, "speed": 1, "deploy": 1,
+      "flavor": "He died for your sins. Your sins are on backorder.",
+      "notes": "Mechanics test: its entry effect waits for Deployment Time; dooming itself makes a planned sacrifice that grows stronger; its OnDied effect fires when the sentence is carried out.",
+      "picture": "A long-haired, bearded Jesus-like figure in white robes, arms outstretched, a price sticker on his halo. An online-store banner beside him reads \"Salvation: Add to Cart (ships in 3 days)\".",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "Self", "status": "Doomed", "days": 2 }
+        ] },
+        { "trigger": "OnDeath", "actions": [
+          { "action": "Heal", "value": 3, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "The Holy Grail", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Drink from it and live forever. Terms and conditions apply.",
+      "notes": "Mechanics test: Blessed 2. Each stack negates the next status that would land, friendly or not, Doomed included. Persistent, up to 3 stacks.",
+      "picture": "A gilded chalice on a velvet cushion behind museum glass. A queue of knights in dented armor stretches out the door, each holding a numbered ticket, and a gift shop by the exit sells plastic replicas at 3 for 2.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "Blessed", "potency": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Exorcism", "type": "spell", "target": "AllCreatures",
+      "flavor": "The power of Christ compels you. The invoice follows.",
+      "notes": "Mechanics test: Cleanse (statuses) on any creature. Blessed loses all its stacks. On a Doomed creature it's Heresy: the sentence passes to the weakest creature on its side, or is carried out if it's alone.",
+      "picture": "A priest in full vestments holding a crucifix over a teenager on a bed, whose smartphone floats above them, glowing red, demonic notification bubbles pouring out of it.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Cleanse", "target": "AllCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Mummy", "type": "creature", "attack": 2, "health": 6, "speed": 1, "deploy": 1, "ability": "HiveMind",
+      "flavor": "Touch the tomb, get the curse. It was in the fine print.",
+      "notes": "Mechanics test: Hive Mind. A creature that attacks it gains Hive Mind, replacing its own ability.",
+      "picture": "A museum mummy shaking hands with a smiling tourist, its bandages unravelling and winding up the tourist's arm, a \"Please Do Not Touch\" sign knocked to the floor."
+    },
+    {
+      "name": "Omniscient Space-Time Bending Bearded Wizard", "type": "creature", "attack": 3, "health": 9, "speed": 1, "deploy": 2,
+      "flavor": "Works in mysterious ways. Mostly late.",
+      "notes": "Each Dawn, Blessed on a random friendly creature.",
+      "picture": "An old bearded man on a cloud in a bathrobe and slippers, lazily pointing a TV remote at a tiny spinning universe.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "modifier": "Random|Others", "status": "Blessed", "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Cultist", "type": "creature", "attack": 2, "health": 2, "speed": 2, "deploy": 0,
+      "flavor": "The end is near. Brunch is at eleven.",
+      "notes": "Fodder: when it dies, every friendly creature gets +1 Attack for good. The first to go when a Sacrifice is paid.",
+      "picture": "A hooded cultist holding a THE END IS NEAR sign in one hand and a pumpkin spice latte in the other.",
+      "effects": [
+        { "trigger": "OnDeath", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Phoenix", "type": "creature", "attack": 3, "health": 2, "speed": 2, "deploy": 1,
+      "flavor": "Dies, comes back, posts about it.",
+      "notes": "Revive: once per combat it rises again at the next Dawn.",
+      "picture": "A flaming bird rising from the smoking ashes of a burnt toaster, wings spread wide.",
+      "effects": [
+        { "trigger": "OnDeath", "once": true, "actions": [
+          { "action": "Revive", "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Excess of Bread and Wine", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Turned water into wine. Then wine into a hangover.",
+      "notes": "Heals your creatures; one of them is Exhausted (the hangover).",
+      "picture": "The Last Supper as a frat party: the apostles playing beer pong along the long table while Jesus refills everyone's cups from a jug.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Heal", "value": 2, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" },
+          { "action": "Stun", "value": 1, "target": "FriendlyCreatures", "modifier": "Random" }
+        ] }
+      ]
+    },
+    {
+      "name": "Monkey Hand", "type": "spell", "target": "Player",
+      "flavor": "Your wish is granted. Read the fine print.",
+      "notes": "Draw 3, and a random friendly creature is Doomed.",
+      "picture": "A shriveled, mummified monkey's paw held up in a purple room, like the cursed paw of the old horror story: long knobbly grey-green fingers with pointed nails, a tuft of black fur at the wrist. Three fingers still up, one already curled into the palm: three wishes left.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 3, "target": "Player" },
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "modifier": "Random", "status": "Doomed", "days": 3 }
+        ] }
+      ]
+    },
+    {
+      "name": "Sacrificial Ritual", "type": "spell", "target": "Player", "sacrifice": 1,
+      "flavor": "Somebody has to go. Ideally the intern.",
+      "notes": "Sacrifice 1: draw 3. The weakest goes, so a Cultist pays for it and leaves its blessing behind.",
+      "picture": "Hooded figures chanting around a chalk pentagram, offering a rubber chicken on the altar.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Draw", "value": 3, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Reincarnation", "type": "creature", "attack": 1, "health": 1, "speed": 2, "deploy": 0,
+      "flavor": "Last life, a worm. This life, a good boy. Next life: depends how this one goes.",
+      "notes": "Rebirth (once per combat it survives death with 1 Health) and Grow 1: each life a little better.",
+      "picture": "The Buddhist wheel of rebirth glowing in a temple: a pink worm on the left, a happy brown dog on the right, a dashed arrow arching from the worm's life to the dog's, a lotus between them.",
+      "effects": [
+        { "trigger": "OnAboutToDie", "once": true, "actions": [
+          { "action": "Heal", "value": 1, "target": "Self" }
+        ] },
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "Self", "attackStat": true, "healthStat": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Holy War", "type": "spell", "target": "Enemy",
+      "flavor": "God is on our side. He's on theirs too. He's very busy.",
+      "notes": "Myth's wrath: every enemy creature takes 2 damage; yours take 1 (holy wars have no bystanders).",
+      "picture": "Two armies of medieval knights charging each other across a field, both under identical banners with the same golden cross, a bewildered angel in the clouds above holding a scorecard.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets" },
+          { "action": "Damage", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "The Great Flood", "type": "spell", "target": "Enemy", "prophecy": 2,
+      "flavor": "Forty days of rain. You were warned. Twice.",
+      "notes": "Prophecy 2: in two Days, every enemy creature takes 3 damage. They see it coming; you'd better be ready to float.",
+      "picture": "A wooden ark riding a huge wave, the animals two by two waving from the deck, while a line of enemy soldiers on a hilltop holds umbrellas as the water reaches their chins.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 3, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Mox Nox", "type": "spell", "target": "Enemy", "prophecy": 2,
+      "flavor": "Soon it will be night.",
+      "notes": "Prophecy 2: at the Dawn two Days on, the strongest enemy creature (picked then) is destroyed.",
+      "picture": "An old sundial in a ruined cloister at dusk, the shadow of its gnomon falling across the Latin words MOX NOX carved in the stone, a black candle burning beside it.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Destroy", "target": "EnemyCreatures", "modifier": "Strongest" }
+        ] }
+      ]
+    },
+    {
+      "name": "Holy Hand Grenade of Antioch", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Count to three. Not four. Not two. Five is right out.",
+      "notes": "5 damage to target enemy creature and 2 to the creatures beside it (the user, 2026-10-15).",
+      "picture": "A golden orb with a jewelled cross on top, its pin pulled, held up by a monk reading from an enormous book, three fingers raised, knights ducking behind him.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 5, "target": "EnemyCreatures" },
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures", "modifier": "Beside" }
+        ] }
+      ]
+    },
+    {
+      "name": "Lance Of Longinus", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Pierced the side of a god. Your creature is not a problem.",
+      "notes": "3 damage to target enemy creature.",
+      "picture": "An ancient iron spearhead on a long wooden shaft, glowing faintly, pinned through a spy's trench coat to a brick wall, the spy wriggling out of the sleeves.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 3, "target": "EnemyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Necronomicon", "type": "spell", "target": "EnemyCreatures", "sacrifice": 1, "setUpBy": ["Phoenix Feather"],
+      "flavor": "Bound in human skin. The reviews are mixed.",
+      "notes": "Destroy target enemy creature; your weakest creature is sacrificed to play it. Black magic always takes something. With a Phoenix Feather the same Day, the feathered creature pays (one offering, every rite), and still rises.",
+      "picture": "A heavy book bound in stitched leather with a screaming face on its cover, lying open on a stone altar, a hooded figure reading from it while a shadowy hand rises out of the pages.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Destroy", "target": "EnemyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "The Wicker Man", "type": "spell", "target": "Enemy", "sacrifice": 1,
+      "flavor": "For a good harvest. Nothing personal, Sergeant.",
+      "notes": "Sacrifice 1: every enemy creature takes 2 damage. The film's ending, as a sweeper.",
+      "picture": "A giant wicker figure burning on a cliff at sunset, villagers in animal masks dancing around it and singing, a small policeman in uniform visible inside its chest.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Thoughts and Prayers", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Sent. Nothing else will be.",
+      "notes": "Blessed 1 on every friendly creature. A politician's answer: it changes nothing, except the next status.",
+      "picture": "A politician at a podium covered in microphones, eyes closed and hands pressed together in prayer, while behind him an aide quietly shreds a stack of papers labelled REFORM.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "status": "Blessed", "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Religious Instrumentalization", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Holding the book upside down. It's the gesture that counts.",
+      "notes": "Conversion: take control of target enemy creature with 2 Attack or less. It joins you, for good.",
+      "picture": "A politician in a suit posing for cameras in front of a church, holding a bible upside down over his head, while a confused small creature from the other side shuffles over to stand behind him.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "TakeControl", "value": 2, "target": "EnemyCreatures", "requires": "AttackAtMost" }
+        ] }
+      ]
+    },
+    {
+      "name": "Deus Vult", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "God wills it. God was not consulted.",
+      "notes": "Every friendly creature gets +2 Attack this Day.",
+      "picture": "A crusader in a bucket helmet and white tabard with a red cross shouting with a raised sword, a meme caption bar at the bottom of the picture.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 2, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "days": 1, "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Curse Of Hubris", "type": "spell", "target": "Enemy",
+      "flavor": "Flew too close to the sun. Landed in the comments.",
+      "notes": "The strongest enemy creature gets -3 Attack, for as long as it's in play.",
+      "picture": "Icarus with melting wax wings falling past a mountain top, a crowd of Greek gods on a cloud filming him on their phones.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": -3, "target": "EnemyCreatures", "modifier": "Strongest", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Genesis", "type": "spell", "target": "Player",
+      "flavor": "Let there be light. And two more creatures.",
+      "notes": "Summon 2 creatures from your deck.",
+      "picture": "A huge bearded hand reaching out of the clouds and pointing at the ground, where two small creatures pop out of the earth blinking, a sun switching on above them like a lamp.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Summon", "value": 2, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "The Lost Ark", "type": "spell", "target": "Enemy",
+      "flavor": "Don't look at it. Seriously, don't.",
+      "notes": "Every enemy creature takes 3 damage; yours close their eyes (Exhausted).",
+      "picture": "A golden chest with two winged angels on its lid, opened in a desert camp, ghostly light pouring out and melting the faces of enemy officers while an adventurer in a fedora keeps his eyes shut.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 3, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets" },
+          { "action": "Stun", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Templar Knight", "type": "creature", "attack": 3, "health": 5, "speed": 1, "deploy": 1,
+      "flavor": "Took a vow of poverty. Owns half of Europe.",
+      "notes": "When ready: Blessed 2 on itself, so the next two statuses aimed at it are wasted.",
+      "picture": "A knight in chainmail and a white mantle with a red cross, sword raised, standing in front of a medieval bank counter piled with gold coins and promissory notes.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "Self", "status": "Blessed", "potency": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Zealot", "type": "creature", "attack": 4, "health": 3, "speed": 2, "deploy": 0,
+      "flavor": "Will die for the cause. Will tell you about it first.",
+      "notes": "When ready: Doomed 3 on itself. It grows +1 Attack each Dawn, then its Last Rites strike and it dies for the cause.",
+      "picture": "A wild-eyed hermit in sackcloth with a long beard, waving a burning torch and a hand-painted REPENT sign on a busy city sidewalk.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "Self", "status": "Doomed", "days": 3 }
+        ] }
+      ]
+    },
+    {
+      "name": "Vampire", "type": "creature", "attack": 2, "health": 4, "speed": 1, "deploy": 1, "ability": "AllergicToLight",
+      "flavor": "Doesn't drink. Just takes a little off the top. Every night.",
+      "notes": "Strength Sap (the user, 2026-10-15), kept fair: each Dawn the enemy creature facing it loses 1 Attack while it stays in play, and the Vampire heals 1. Only the one in front of it, so stepping out of its lane stops it; Allergic to Light, the Reveal it fears.",
+      "picture": "A pale aristocrat in a cape at a blood-donation clinic, sipping from a sleeping gym bro's arm through a bendy straw, the bro's bicep visibly deflating like a balloon.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ModifyStat", "value": -1, "target": "EnemyCreatures", "modifier": "Opposite", "attackStat": true, "healthStat": false },
+          { "action": "Heal", "value": 1, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Living Dead", "type": "creature", "attack": 3, "health": 3, "speed": 1, "deploy": 0,
+      "flavor": "Died on Friday. Back on Monday. Still not answering emails.",
+      "notes": "Revive: once per combat it rises again at the next Dawn.",
+      "picture": "A grey zombie in a business suit climbing out of a cemetery grave with its briefcase, a sunrise behind the tombstones.",
+      "effects": [
+        { "trigger": "OnDeath", "once": true, "actions": [
+          { "action": "Revive", "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "The Chosen One", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 1, "ability": "SprayAndPray",
+      "flavor": "This time he brought backup.",
+      "notes": "Spray and Pray: its attacks also hit the creatures beside its target. The second coming, armed.",
+      "picture": "Jesus in white robes and sandals with a halo, firing two golden submachine guns akimbo, doves scattering; nothing behind him but the temple light, he steals the show."
+    },
+    {
+      "name": "Killer Rabbit of Caerbannog", "type": "creature", "attack": 3, "health": 2, "speed": 3, "deploy": 0,
+      "flavor": "Look at the bones!",
+      "notes": "A harmless-looking bunny that strikes first and hard.",
+      "picture": "A small fluffy white rabbit sitting innocently in front of a cave mouth littered with bones and dented helmets, a tiny drop of red on its whiskers, knights fleeing in the distance."
+    },
+    {
+      "name": "Black Knight", "type": "creature", "attack": 2, "health": 6, "speed": 1, "deploy": 0, "ability": "Unbothered",
+      "flavor": "'Tis but a scratch.",
+      "notes": "Unbothered: enemy effects can't lower its stats. Arms off, legs off: it's only a flesh wound.",
+      "picture": "A knight in black armor standing defiantly at a forest bridge with no arms left, sword on the ground, shouting at a bemused king who rides an invisible horse to the sound of coconuts."
+    },
+    {
+      "name": "Buddy Christ", "type": "creature", "attack": 2, "health": 5, "speed": 1, "deploy": 0,
+      "flavor": "Winks. Points. Forgives.",
+      "notes": "Each Dawn, every friendly creature heals 1.",
+      "picture": "A smiling plastic Jesus statue winking and giving a big thumbs up and a finger point, on a church lawn next to a sign reading CATHOLICISM: WOW!",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Heal", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets|Others" }
+        ] }
+      ]
+    },
+    {
+      "name": "Pope", "type": "creature", "attack": 1, "health": 7, "speed": 1, "deploy": 1,
+      "flavor": "Infallible. Bulletproof glass, just in case.",
+      "notes": "Each Dawn, Blessed 1 on your strongest creature.",
+      "picture": "The Pope waving from a glass-domed popemobile, sprinkling holy water from a garden hose over a crowd of creatures.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "modifier": "Strongest|Others", "status": "Blessed", "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "The Lobster Professor", "type": "creature", "attack": 1, "health": 6, "speed": 1, "deploy": 1,
+      "flavor": "Clean your room, bucko. Then buy the seminar.",
+      "notes": "Each Dawn, your strongest creature gets +1 Attack for as long as it's in play: the dominance hierarchy, as preached.",
+      "picture": "A gaunt professor in a three-piece suit lecturing tearfully at a lectern, pointing at a projected slide of a lobster sitting on a throne, the audience taking notes, a messy bedroom visible through a door behind him.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "Strongest|Others", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Amen", "type": "spell", "target": "Player", "singleUse": true,
+      "flavor": "And so it is. Go in peace. Now.",
+      "notes": "Amen (the user, 2026-10-16): it ends the Day when it resolves, with the spells: every other action still in the queue, both sides', is discarded (their cards go to the discard pile), so no attack lands that Day. Single Use: it burns out.",
+      "picture": "A choir of robed monks in a stone chapel snapping a giant hymn book shut with a thunderclap, every candle in the room blowing out at once, a single wisp of smoke curling up from each.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "EndDay", "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Pyramids", "type": "creature", "attack": 0, "health": 10, "speed": 1, "deploy": 2, "ability": "SafeSpace", "rooted": true,
+      "flavor": "Built by aliens, apparently. Or by paid workers on beer rations.",
+      "notes": "Pyramids (the user, 2026-10-16): a monument, not a fighter. 0 Attack, 10 Health, two Days to build. Safe Space: each Dawn it and the friendly creatures beside it gain Bless, the pharaoh's eternal protection. Myth holds the status quo.",
+      "picture": "The three pyramids of Giza at golden sunset, the biggest one's capstone glowing with a holy light that rains down on two tiny knights standing beside it, a bored camel in the foreground."
+    },
+    {
+      "name": "Horsemen Of Apocalypse", "type": "creature", "attack": 3, "health": 5, "speed": 2, "deploy": 2,
+      "flavor": "Four riders. One group chat.",
+      "notes": "When ready (the end was foretold): every enemy creature takes 2 damage.",
+      "picture": "Four horsemen galloping out of storm clouds, War, Famine, Pestilence and Death, one of them checking a smartphone map, a lightning bolt behind.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 2, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "God's Grace", "type": "spell", "target": "Player",
+      "flavor": "Not today, my child. Thursday, maybe.",
+      "notes": "Die Another Day for the player, holy: Grace until the Dusk of the next Day, your Health can hit 0 and you don't lose. At that Dusk, still at 0 or less, you do. If both players fall to 0 at once, the one in Grace wins.",
+      "picture": "A battered knight at 0 Health, a red health bar empty above his head, held upright by a beam of light from parted clouds, two cherubs propping him up by the armpits, a choir of angels singing behind.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Grace", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Phoenix Feather", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "It burns. It rises. It invoices you for the ashes.",
+      "notes": "Target friendly creature is sacrificed (its Last Will happens; a Blessing can't stop it) and rises again at the Dawn 3 Days later, ready, full Health. Three days, as the scripture says. Myth's loophole: its offering pays a Necronomicon's Sacrifice the same Day, one death for both.",
+      "picture": "Only the feather, watercolour on paper: red at the quill through orange to a yellow heart, its barbs licking out like flames, a glowing eye near the top, the tip burning out lilac, sparks all round.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Resurrect", "value": 3, "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "The Omen", "type": "creature", "attack": 1, "health": 4, "speed": 1, "deploy": 2,
+      "flavor": "He's not a bad kid. He's the Antichrist.",
+      "notes": "When ready: Doomed 2 on the strongest enemy creature.",
+      "picture": "A small boy in a neat suit on a tricycle in a long mansion hallway, staring straight at the viewer, a black dog sitting beside him and a 666 birthmark peeking from his hairline.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "modifier": "Strongest", "status": "Doomed", "days": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Grim Reaper", "type": "creature", "attack": 4, "health": 5, "speed": 2, "deploy": 1,
+      "flavor": "Not today. Probably.",
+      "notes": "A body that kills on arrival: 3 damage to the creature facing it. Myth's creatures were slow and soft; this one isn't.",
+      "picture": "The Grim Reaper in his black hood waiting in a hospital corridor, checking his watch, a number ticket in his bony hand, a sign above him reading NOW SERVING 42.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 3, "target": "EnemyCreatures", "modifier": "Opposite" }
+        ] }
+      ]
+    },
+    {
+      "name": "Blessing in Disguise", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "It looked like a disaster. It was a disaster. But a blessed one.",
+      "notes": "Myth holds the board (a status quo faction): every friendly creature heals 3 and gains Bless 1.",
+      "picture": "The farmer's story: his horse has run away and the neighbours cry WHAT BAD LUCK!; the old farmer in a straw hat shrugs, MAYBE, a soft halo over him, while over the hill his horse is already coming back with a herd of wild horses.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Heal", "value": 3, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" },
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "status": "Blessed", "days": 1, "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Die by the Sword", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Live by it, too, if you can.",
+      "notes": "Removal with a reward: 4 damage to target creature, and if it dies, you heal 3.",
+      "picture": "A knight run through by his own sword which bounced back off a mirror, a smug monk holding the mirror.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 4, "target": "EnemyCreatures" },
+          { "action": "Heal", "value": 3, "target": "Player", "onlyIfTargetDies": true }
+        ] }
+      ]
+    },
+    {
+      "name": "Mithril", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Light as a feather. Hard as dragon scales. Worth a Shire.",
+      "notes": "Armor 4 and Bless 1 on target creature: Myth's knights, made to last.",
+      "picture": "A silver chain-mail shirt glittering on a velvet cushion in a dwarven forge, a tiny hobbit trying it on and a dragon peering in through the window.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Armor", "value": 4, "target": "FriendlyCreatures" },
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "Blessed", "days": 1, "potency": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Here Be Dragons", "type": "creature", "attack": 5, "health": 7, "speed": 1, "deploy": 2,
+      "flavor": "The map ends here. The dragon doesn't.",
+      "notes": "A big body: Arrival: 1 damage to every enemy creature. The edge of the old maps; its art is an ASCII dragon.",
+      "picture": "An old parchment sea map ending in a ragged edge, beyond it a big dragon drawn in green ASCII characters on a black terminal screen, breathing fire made of # signs.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 1, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Gracias Jesús", "type": "spell", "target": "Player",
+      "flavor": "He brought the food in from the fields. You're welcome.",
+      "notes": "You heal 3 and draw 2 next Day: the meme of Jesus carrying the harvest in.",
+      "picture": "Jesus in a straw hat carrying two big baskets of vegetables in from the fields at sunset, a family at the farmhouse table clapping.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Heal", "value": 3, "target": "Player" },
+          { "action": "Draw", "value": 2, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Heretic", "type": "creature", "attack": 3, "health": 5, "speed": 2, "deploy": 0, "ability": "Martyrdom",
+      "flavor": "Said the Earth was round. Got the stake. Said it louder.",
+      "notes": "Martyrdom: while Doomed, everything it deals is doubled. Its Arrival Dooms it 3 Days: three Days of double hits, growing each Dawn, then it burns. Doomed finally has an owner who wants it.",
+      "picture": "A heretic tied to a stake on a pile of firewood, laughing, swinging a broken chain at the inquisitors as the first flames catch, a placard reading 'The Earth is round' nailed above him.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "Self", "status": "Doomed", "days": 3 }
+        ] }
+      ]
+    },
+    {
+      "name": "Ambrosia", "type": "spell", "target": "FriendlyCreatures", "ripening": true,
+      "flavor": "Food of the gods. Gluten-free, apparently.",
+      "notes": "Ripening: heal 2 and +1 Attack to target creature, 1 more of each for each Dawn it's kept in your hand (up to heal 5 and +4). Myth's patience.",
+      "picture": "A golden bowl of glowing honey on an Olympus banquet table, Zeus in sunglasses dipping a finger in, the jar's label reading 'Organic, Artisanal, Divine'.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Heal", "value": 2, "target": "FriendlyCreatures" },
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Publicly Funded Faith Schools", "type": "spell", "target": "Player", "policy": true,
+      "flavor": "Taxpayers fund the prayers. God funds nothing.",
+      "notes": "Policy: Bless 1 on a random friendly creature, and again at each Dawn, for the rest of the combat. Blessed (it wards off the next status or destroy) finally piles up.",
+      "picture": "A classroom of kids in uniforms praying over their exam papers instead of writing, a nun at the front under a 'Funded by your taxes' banner hung over the crucifix.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "modifier": "Random", "status": "Blessed", "days": 1, "potency": 1 }
+        ] }
+      ]
+    }
+  ]
+}

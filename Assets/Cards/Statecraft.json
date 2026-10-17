@@ -1,0 +1,412 @@
+{
+  "mod": "Statecraft",
+  "cards": [
+    {
+      "name": "Civil Servant", "type": "creature", "attack": 2, "health": 6, "speed": 1, "deploy": 0, "ability": "HunkerDown",
+      "flavor": "Not my department. Not my desk. Not my problem.",
+      "notes": "Hunker Down (Pokémon's Protect): on a Day it plans nothing, it takes no damage. The wall that works by not working.",
+      "picture": "A clerk behind a counter whose window has just slammed shut with a CLOSED sign, arms folded, a cup of tea steaming, a queue of furious citizens' fists bouncing off the glass as if it were a force field."
+    },
+    {
+      "name": "Bomb Squad", "type": "creature", "attack": 2, "health": 5, "speed": 1, "deploy": 0, "ability": "BombDisposal",
+      "flavor": "Cut the red wire. Or the blue one. It's a coin toss with a pension.",
+      "notes": "Bomb Disposal (Pokémon's Rapid Spin): the Slot Effect on a slot it enters is cleared before it goes off: Landmines, Snares, Checkpoints, a Shield, Scorched Earth, a Prayer.",
+      "picture": "A technician in a bulky green bomb suit kneeling over a cartoon landmine with wire cutters, a tiny sweat drop, a robot on tank treads holding a torch for him, the rest of the squad watching from very far away through binoculars."
+    },
+    {
+      "name": "Drone Operator", "type": "creature", "attack": 2, "health": 3, "speed": 2, "deploy": 1, "ability": "Artillery",
+      "flavor": "Nine to five. Nevada. Twelve time zones from the target.",
+      "notes": "Artillery (the formation's reach, GDD 2.4; the user, 2026-10-17): it attacks at a distance of exactly 4, never nearer: their Headquarters from a Flank, their Flanks from Headquarters. The one way to hit Headquarters with an attack.",
+      "picture": "A drone pilot in a headset in an air-conditioned trailer in the desert, a coffee and a family photo on the console, the screen showing a tiny palace under a targeting reticle twelve time zones away, a DAY SHIFT rota pinned to the wall."
+    },
+    {
+      "name": "Riot Police", "type": "creature", "attack": 3, "health": 5, "speed": 1, "deploy": 0, "ability": "RiotGear",
+      "flavor": "Protecting the public from the public.",
+      "notes": "Riot Gear (Pokémon's Assault Vest): each Dawn, +2 Armor. Armor fades 1 at each Dusk, so it keeps a plate on.",
+      "picture": "A line of riot police in black armour and helmets behind transparent shields, each shield plastered with a different sticker: HAVE A NICE DAY, BABY ON BOARD, I BRAKE FOR PROTESTS."
+    },
+    {
+      "name": "Drill Sergeant", "type": "creature", "attack": 3, "health": 4, "speed": 2, "deploy": 0,
+      "flavor": "I can't HEAR you. Good. Stay that way.",
+      "notes": "Intimidate: Arrival: -2 Attack to the enemy creature facing it, until it leaves play.",
+      "picture": "A drill sergeant in a campaign hat screaming an inch from the face of a huge enemy brute who has shrunk to half his size, knees knocking, his club drooping, spit flying in an arc.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": -2, "target": "EnemyCreatures", "modifier": "Opposite", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Sapper", "type": "creature", "attack": 2, "health": 5, "speed": 1, "deploy": 0, "ability": "Shrapnel",
+      "flavor": "Where there's a hole, there's a way.",
+      "notes": "Shrapnel (Pokémon's Toxic Debris): when an attack hits it, a Landmine 2 lands on a random empty enemy slot. Hitting it seeds their side.",
+      "picture": "A soldier with a shovel and a satchel of mines diving out of a trench as a shell bursts beside him, mines flying out of the satchel in a lazy arc toward the enemy's side of the field, each with a little parachute."
+    },
+    {
+      "name": "Mutually Assured Destruction", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "If we go, you go. That's the whole plan. There is no other plan.",
+      "notes": "Destiny Bond (the user, 2026-10-17): Mutually Assured for 2 Days on target friendly creature: the creature that kills it is destroyed too.",
+      "picture": "Two generals at either end of a war room table, each with a finger on a big red button, wired to the same bomb between them, both smiling politely, a Cold War map glowing behind them.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "MutuallyAssured", "days": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Due Process", "type": "spell", "target": "Player",
+      "flavor": "Justice will be served. In the order the forms were received.",
+      "notes": "Trend for 3 Days (Trick Room, Statecraft's flavour): Rush Hour, the slowest act first.",
+      "picture": "A courthouse corridor where a snail with a briefcase is called into court first while a sprinter in running gear waits on a bench with a ticket reading 8,241, the wall clock with no hands.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SetTrend", "target": "Player", "days": 3, "trend": "RushHour" }
+        ] }
+      ]
+    },
+    {
+      "name": "Filibuster", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "The senator will now read the phone book. All of it. Slowly.",
+      "notes": "Quash (the user, 2026-10-17: Take a Number, renamed): target enemy creature acts last this Day, after every other creature's attack, move or ability. Your hits land before its.",
+      "picture": "An old senator at a podium reading from a phone book as thick as a pillow, hour 14 on the chamber clock, the benches full of sleeping politicians, one with a newspaper over his face, a clerk's eyes rolled back.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "EnemyCreatures", "status": "Stalled", "days": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Curfew", "type": "spell", "target": "AllCreatures",
+      "flavor": "Everyone indoors by ten. Yes, you too. Especially you.",
+      "notes": "Gravity (the user, 2026-10-17: a logistics shutdown): for 2 Days nobody moves: every creature on the board is Rooted. Moves, swaps and Maneuvers all stop; a Spin or a Shuffle leaves everyone where they are.",
+      "picture": "An empty city street at night under a CURFEW 22:00 sign, every window lit with a face pressed to the glass, a lone police car's light sweeping the road, and one cat sitting in the middle of it, the only one allowed out.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "AllCreatures", "status": "Rooted", "days": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Spin Doctor", "type": "creature", "attack": 2, "health": 5, "speed": 2, "deploy": 0, "ability": "NextQuestion",
+      "flavor": "That's a great question. Here's the answer to a different one.",
+      "notes": "Next Question (the user, 2026-10-17: the politician dodging the uncomfortable question): once a Day, when an attack is about to hit it, it steps into an empty slot of its side and the attack hits nothing. A tank that keeps its Health as long as it has room to sidestep.",
+      "picture": "A press secretary in a tight suit leaning sideways out of frame at a podium as a forest of microphones lunges at where his head was, a NEXT QUESTION speech bubble, the reporters' notepads reading WHERE IS THE MONEY."
+    },
+    {
+      "name": "Supply Depot", "type": "spell", "target": "Player",
+      "flavor": "Requisition form 27-B, in triplicate. Approved by Thursday.",
+      "notes": "Statecraft's logistics: send for a creature from your deck; it joins your next hand.",
+      "picture": "A huge military warehouse with endless shelves of crates, a forklift carrying a soldier in a crate labelled REINFORCEMENTS, a clerk stamping a form at the front desk.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SendFor", "target": "Player", "sendFor": "Creature" }
+        ] }
+      ]
+    },
+    {
+      "name": "Golden Dome", "type": "creature", "attack": 0, "health": 6, "speed": 2, "deploy": 1, "ability": "Bodyguard",
+      "flavor": "Protects everyone. Some of everyone more than others.",
+      "notes": "Mechanics test: Bodyguard. It can't attack; drag it onto another friendly creature and that one is Untouchable this Day (no damage at all), then it rests a Day (Cooldown).",
+      "picture": "A shimmering golden dome of light over one fat senator on a deckchair, while missiles rain on the rest of the city outside it."
+    },
+    {
+      "name": "Presidential Pardon", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Whatever it did, it didn't.",
+      "notes": "Mechanics test: the protection as a spell. Untouchable this Day: target creature takes no damage at all.",
+      "picture": "A smiling president signing a giant pardon with a huge flourish for a creature in an orange jumpsuit still holding a smoking gun.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "Untouchable", "days": 1 }
+        ] }
+      ]
+    },
+    {
+      "name": "Congruent Use of Force", "type": "creature", "attack": 2, "health": 4, "speed": 1, "deploy": 1, "ability": "SprayAndPray",
+      "flavor": "Proportionate. To something, surely.",
+      "notes": "Mechanics test: Spray and Pray. Its attacks also hit the creatures beside its target, a cone of three slots.",
+      "picture": "A soldier firing a huge gatling gun at a single mosquito, the whole street behind it riddled with holes."
+    },
+    {
+      "name": "Weapons of Mass Distraction", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Look over there. No, over there.",
+      "notes": "Mechanics test: the swap as a spell. Target creature trades places with the one to its right (or to its left at the end of the row).",
+      "picture": "A giant public screen holds a crowd: on one half a blocky-game YouTuber screams at his pickaxe, on the other a grinning giveaway YouTuber in a hoodie waves a giant FREE check. Behind it, soldiers quietly shuffle the enemy's tents around.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "SwapPositions", "target": "EnemyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "King Emeritus", "type": "creature", "attack": 1, "health": 7, "speed": 1, "deploy": 1,
+      "flavor": "Abdicated in disgrace. Kept the yacht, the pension and the Swiss account.",
+      "notes": "Future: Diplomatic Immunity. Can't be targeted by enemy spells.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Heal", "value": 1, "target": "Player" }
+        ] }
+      ]
+    },
+    {
+      "name": "Spite-Elected President", "type": "creature", "attack": 3, "health": 5, "speed": 2, "deploy": 1, "ability": "Spite",
+      "flavor": "Voted in to make everyone else miserable. Delivered on day one.",
+      "notes": "Spite: when an effect lowers its stats, friendly or enemy, it gains +2 Attack. Future: a Law (Location) for 3 Days that hurts both sides each Dawn.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 1, "target": "AllCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Police Officer Productivity Target", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 0,
+      "flavor": "Ten arrests a week. Guilt is optional.",
+      "notes": "Future: double damage against creatures that moved this Day.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Damage", "value": 1, "target": "EnemyCreatures", "modifier": "Random" }
+        ] }
+      ]
+    },
+    {
+      "name": "Internal Revenue Service", "type": "creature", "attack": 1, "health": 6, "speed": 1, "deploy": 0,
+      "flavor": "We've noticed some irregularities. Specifically, you.",
+      "notes": "Future: taxes enemy card plays instead of plain damage (Red Tape on the economy).",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Damage", "value": 1, "target": "Enemy" }
+        ] }
+      ]
+    },
+    {
+      "name": "Mercenaries", "type": "creature", "attack": 4, "health": 5, "speed": 3, "deploy": 0,
+      "flavor": "Loyal to whoever pays next.",
+      "notes": "Future: Recruitment bait. When it dies, the enemy may Recruit it instead.",
+      "effects": [
+        { "trigger": "OnDeath", "actions": [
+          { "action": "Draw", "value": 1, "target": "Enemy" }
+        ] }
+      ]
+    },
+    {
+      "name": "Man o' War", "type": "creature", "attack": 5, "health": 8, "speed": 1, "deploy": 1,
+      "flavor": "Gunboat diplomacy, minus the diplomacy.",
+      "notes": "Future: multi-slot (takes 2 slots) and Heavy.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 1, "target": "EnemyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Ministry for Equality", "type": "creature", "attack": 1, "health": 6, "speed": 1, "deploy": 1, "rooted": true,
+      "flavor": "We love everybody. Please stop resisting our love.",
+      "notes": "Rooted while deploying (the user, 2026-10-16): a building going up can't be moved, which keeps its strong Dawn stun in check. Future: Red Tape every Dawn: +1 Deployment Time on a random enemy creature.",
+      "effects": [
+        { "trigger": "StartOfTurn", "actions": [
+          { "action": "Stun", "value": 1, "target": "EnemyCreatures", "modifier": "Random" }
+        ] }
+      ]
+    },
+    {
+      "name": "Supreme Court", "type": "creature", "attack": 0, "health": 7, "speed": 1, "deploy": 1, "ability": "ReturnToSender",
+      "flavor": "Appointed for life. Accountable for nothing.",
+      "notes": "Return to Sender: enemy statuses bounce back to whoever sent them. Future: Fortifying. Adjacent friendly creatures can't be moved by enemy effects.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Armor", "value": 2, "target": "FriendlyCreatures", "modifier": "Others" }
+        ] }
+      ]
+    },
+    {
+      "name": "Protocol Enforcers", "type": "creature", "attack": 2, "health": 5, "speed": 1, "deploy": 0,
+      "flavor": "Please stand behind the line. Which line? This line. Now that line.",
+      "notes": "Future: Keep Calm on friendly creatures each time it's hit.",
+      "effects": [
+        { "trigger": "OnDamage", "actions": [
+          { "action": "Armor", "value": 1, "target": "FriendlyCreatures", "modifier": "Others" }
+        ] }
+      ]
+    },
+    {
+      "name": "Demagogue", "type": "creature", "attack": 2, "health": 4, "speed": 2, "deploy": 1, "ability": "Irreplaceable",
+      "flavor": "Says what you think. Thinks what he's told.",
+      "notes": "The user, 2026-10-16: +2 Attack to the other friendly creatures when ready, not itself; 1 Day to deploy, and Irreplaceable, its drawback: no summon can take its slot. Future: Loaded Language.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": 2, "target": "FriendlyCreatures", "modifier": "Others", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Red Tape", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "Your request is being processed. Please hold. Forever.",
+      "notes": "Adds 1 Day to an enemy creature's Deployment Time: it sits out the rest of this Day and all of the next, its planned action is cancelled, and its abilities are off until it's ready again. Its entry effects don't happen twice.",
+      "picture": "A soldier at a deployment checkpoint wrapped head to toe in red tape, while a bored clerk behind the window stamps \"FORM 27-B MISSING\" and a take-a-number display reads \"Now serving: 0001. Yours: 9847\".",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "DelayDeployment", "value": 1, "target": "EnemyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Preemptive Strike", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "They were going to attack us. Probably. Eventually. Somebody said so.",
+      "notes": "Future: an extra effect against creatures that planned an attack this Day.",
+      "picture": "A general in a war room proudly pointing at a map where a missile hits a quiet village labelled \"Possible Future Threat\", a MISSION ACCOMPLISHED banner behind him and an intelligence report on the table: \"Source: trust me bro\".",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 4, "target": "EnemyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Martial Law", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "For your safety, nobody moves. Ever.",
+      "notes": "Future: a Law (Location) for 3 Days. The stun stands in for the bureaucracy drawback.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Armor", "value": 3, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" },
+          { "action": "Stun", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Kakistocracy", "type": "spell", "target": "AllCreatures",
+      "flavor": "Elect the least competent. What could go wrong?",
+      "notes": "Future: the Kakistocracy Now! Law. Creatures entering with 3+ Attack or Health get -1 of each for 3 Days.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ModifyStat", "value": -1, "target": "AllCreatures", "modifier": "AllSameTypeTargets", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Doomsday Clock", "type": "spell", "target": "AllCreatures",
+      "flavor": "Everybody loses. Fairly, for once.",
+      "notes": "Future: a countdown everyone can see coming, like a Prophecy.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Damage", "value": 3, "target": "AllCreatures", "modifier": "AllSameTypeTargets" },
+          { "action": "Damage", "value": 3, "target": "Player", "modifier": "AllSameTypeTargets" },
+          { "action": "Damage", "value": 3, "target": "Enemy", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Panem Et Circenses", "type": "spell", "target": "Player",
+      "flavor": "Free bread, free games, free of questions.",
+      "notes": "Future: a Law that also adds 1 Deployment Time to your next creature (the paperwork).",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Heal", "value": 3, "target": "Player", "modifier": "AllSameTypeTargets" },
+          { "action": "ModifyStat", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets", "attackStat": true, "healthStat": false }
+        ] }
+      ]
+    },
+    {
+      "name": "Diplomat", "type": "creature", "attack": 3, "health": 6, "speed": 1, "deploy": 1,
+      "flavor": "Third-generation ambassador. Qualifications: his surname.",
+      "notes": "Mechanics test: Deployment Time 2 counts down at Dusk, never at the Dusk of the Day it arrived; its entry effect waits until it's ready. Armor fades by 1 each Dusk on every creature.",
+      "picture": "A young heir lounging in a leather chair at a summit table, feet up, a gold name plate reading \"AMBASSADOR (BY BIRTH)\". Behind him, a wall of portraits of his father and grandfather in the very same chair.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Armor", "value": 2, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets|Others" }
+        ] }
+      ]
+    },
+    {
+      "name": "Raised Security Level", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "The threat level is now Orange. Nobody knows what Orange means.",
+      "notes": "Mechanics test: Armor is capped at twice max Health, fades by 1 each Dusk and is lost when the creature leaves play. Aimed at your own creature, it follows it if it moves first (Homing).",
+      "picture": "A bureaucrat solemnly flipping a color-coded threat sign from yellow to orange, while one guard in comically oversized armor blocks a door.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Armor", "value": 6, "target": "FriendlyCreatures" }
+        ] }
+      ]
+    },
+    {
+      "name": "Lost Landmine", "type": "spell", "target": "EnemyCreatures",
+      "flavor": "The war ended decades ago. Nobody told the mine.",
+      "notes": "Mechanics test: a hidden Landmine (3 damage) on a slot. The first creature to enter it, summoned or moved in, sets it off; it resolves before anything else (environment action), then it's gone. Only its controller sees it.",
+      "picture": "A rusty landmine half-buried in a children's sandbox, next to a faded government sign: \"AREA CLEARED. PROBABLY. - Ministry of Defence, 1998\".",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "PlaceSlotEffect", "value": 3, "target": "EnemyCreatures", "slotEffect": "Landmine" }
+        ] }
+      ]
+    },
+    {
+      "name": "Ceasefire", "type": "spell", "target": "FriendlyCreatures",
+      "flavor": "Both sides agree to stop shooting. Starting right after this last volley.",
+      "notes": "Mechanics test: Shield 2 on target creature (was a slot's, as Temporal Shield; the user, 2026-10-16: a slot can't have a shield, only a creature): for 2 Days, counting this one, it takes no combat damage, but spells and abilities still hurt it. It goes with the creature.",
+      "picture": "Two generals shaking hands for the cameras in front of a CEASEFIRE banner, each hiding a grenade behind his back.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "ApplyStatus", "target": "FriendlyCreatures", "status": "Shielded", "days": 2 }
+        ] }
+      ]
+    },
+    {
+      "name": "Violence Monopoly", "type": "spell", "target": "Player",
+      "flavor": "Only one of us is allowed to hit people. Guess which.",
+      "notes": "The state's monopoly on violence: a Monitored Watchdog nullifies the next 2 enemy attacks before they land.",
+      "picture": "The board-game tycoon (top hat, white moustache, tailcoat) as the police: a badge on his chest, a baton raised in his white glove, glaring straight at you from beside the GO TO JAIL corner.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "CreateWatchdog", "target": "Enemy", "watchdog": { "watches": "Attack", "side": "Enemy", "effect": "Nullify", "charges": 2 } }
+        ] }
+      ]
+    },
+    {
+      "name": "Border Crossing", "type": "spell", "target": "Enemy",
+      "flavor": "Papers. Purpose of visit. Papers again.",
+      "notes": "A side hazard (Pokémon's Stealth Rock): Checkpoint 2 on every enemy slot for 3 Days, so every creature that enters their side takes 2. Statecraft's slow, sure clock; Code Review and Projection answer it.",
+      "picture": "A border checkpoint at night: a striped barrier, a bored officer in a booth stamping passports, a queue of strange creatures waiting under the floodlights, a 'Welcome' sign half fallen off.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "PlaceSlotEffect", "value": 2, "target": "EnemyCreatures", "modifier": "AllSameTypeTargets", "days": 3, "slotEffect": "Checkpoint" }
+        ] }
+      ]
+    },
+    {
+      "name": "Peace Force", "type": "creature", "attack": 2, "health": 5, "speed": 1, "deploy": 0, "ability": "ShieldBash",
+      "flavor": "We come in peace. Mostly with shields.",
+      "notes": "Shield Bash (Body Press): its Attack goes up by its Armor. Its Arrival gives it 3 Armor, so it hits for 5 on its first Day and less as the Armor fades.",
+      "picture": "A line of blue-helmeted peacekeepers behind riot shields, the front one shoving his shield into a protester's face, a banner reading 'PEACE' behind them.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Armor", "value": 3, "target": "Self" }
+        ] }
+      ]
+    },
+    {
+      "name": "Security Guard", "type": "creature", "attack": 3, "health": 4, "speed": 1, "deploy": 0, "ability": "StripSearch",
+      "flavor": "Please remove your shoes, your belt and your dignity.",
+      "notes": "Strip Search (Knock Off): its attack on a creature with a status or a stat change Purges it first, good and bad alike, and hits 2 harder. An answer to buffed and Blessed creatures.",
+      "picture": "An airport security guard snapping on a blue latex glove with a grin, a traveler in socks with arms raised in the body scanner, a bin of confiscated water bottles overflowing behind."
+    },
+    {
+      "name": "Si Vis Pacem, Para Bellum", "type": "spell", "target": "Player", "policy": true,
+      "flavor": "If you want peace, prepare for war. If you want war, also prepare for war.",
+      "notes": "Policy: your creatures +1 Armor, and again at each Dawn, for the rest of the combat (Armor wins in the balance study).",
+      "picture": "A Roman general signing a peace treaty with one hand while the other points at a row of catapults being built behind the tent.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Armor", "value": 1, "target": "FriendlyCreatures", "modifier": "AllSameTypeTargets" }
+        ] }
+      ]
+    },
+    {
+      "name": "Mass Emigration", "type": "spell", "target": "Enemy",
+      "flavor": "The best and brightest left. The rest are rearranging the furniture.",
+      "notes": "Disruption Maneuver: every enemy creature changes slots at random. Their formation scattered: the Vanguard may end up at the back, Headquarters in front.",
+      "picture": "A crowd with suitcases running in every direction at once past a signpost pointing every way, while a minister at a podium announces that the economy has never been stronger; behind them, Istanbul's Hagia Sophia over the Bosphorus at sunset.",
+      "effects": [
+        { "trigger": "OnPlay", "actions": [
+          { "action": "Shuffle", "target": "Enemy" }
+        ] }
+      ]
+    }
+  ]
+}
