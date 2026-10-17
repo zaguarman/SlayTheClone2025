@@ -14,9 +14,9 @@
       "picture": "A technician in a bulky green bomb suit kneeling over a cartoon landmine with wire cutters, a tiny sweat drop, a robot on tank treads holding a torch for him, the rest of the squad watching from very far away through binoculars."
     },
     {
-      "name": "Drone Operator", "type": "creature", "attack": 2, "health": 3, "speed": 2, "deploy": 1, "ability": "Artillery",
+      "name": "Drone Operator", "type": "creature", "attack": 2, "health": 3, "speed": 2, "deploy": 1, "homing": true,
       "flavor": "Nine to five. Nevada. Twelve time zones from the target.",
-      "notes": "Artillery (the formation's reach, GDD 2.4; the user, 2026-10-17): it attacks at a distance of exactly 4, never nearer: their Headquarters from a Flank, their Flanks from Headquarters. The one way to hit Headquarters with an attack.",
+      "notes": "Homing (since 2026-10-17, when the formation's reach and its Artillery were rolled back): its attacks lock on the enemy creature in the slot it's aimed at and follow it if it moves. The drone finds you.",
       "picture": "A drone pilot in a headset in an air-conditioned trailer in the desert, a coffee and a family photo on the console, the screen showing a tiny palace under a targeting reticle twelve time zones away, a DAY SHIFT rota pinned to the wall."
     },
     {

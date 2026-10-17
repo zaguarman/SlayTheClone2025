@@ -49,9 +49,10 @@ namespace Zeitgeist {
                 Shortcut("Drag", "a card onto a slot or a creature; Shift + drag uses an ability; right-drag attacks your own"),
                 Shortcut("Escape", "back, or the pause menu in a game"),
                 Shortcut("F", "playback speed"), Shortcut("Space (held)", "skips the beats"),
-                Shortcut("V", "Fog of War on or off (debugging)"), Shortcut("S", "the seat the screen shows (debugging)"),
-                Shortcut("1, 2", "the AI playing each seat: off, Easy, Medium, Hard, Very Hard"),
-                Shortcut("Up, Down", "walk the glossary's keywords"),
+                Shortcut("D", "the debugging tools on or off: the key list under End Turn, the adventure's autopilot"),
+                Shortcut("V", "Fog of War on or off (with D)"), Shortcut("S", "the seat the screen shows (with D)"),
+                Shortcut("1, 2", "the AI playing each seat: off, Easy, Medium, Hard, Very Hard (with D)"),
+                Shortcut("Up, Down", "walk a list; the wheel moves an item, three on a list's right edge"),
                 Shortcut("-, =, P", "the adventure autopilot's speed and pause"),
             }), 20, TextColor, FontStyles.Normal, height: -1);
             keys.textWrappingMode = TextWrappingModes.Normal;

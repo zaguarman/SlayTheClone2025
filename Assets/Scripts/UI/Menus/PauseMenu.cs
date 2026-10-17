@@ -46,7 +46,7 @@ namespace Zeitgeist {
 
         private void ShowAutoplayButton() {
             if (autoplayButton == null) return;
-            autoplayButton.gameObject.SetActive(AdventureRun.Fighting != null);
+            autoplayButton.gameObject.SetActive(AdventureRun.Fighting != null && (DebugTools.On || AdventureAutopilot.On)); // A debug tool (D); Stop stays while it runs
             if (autoplayLabel != null) autoplayLabel.text = AdventureAutopilot.On ? "Stop autoplay" : "Autoplay";
         }
 

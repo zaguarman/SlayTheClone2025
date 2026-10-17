@@ -10,11 +10,10 @@ namespace Zeitgeist {
         #region Attacks
         private bool CanAttack(SeenCreature attacker) => Abilities.CanAttack(attacker.Creature) && AttackOf(attacker) > 0 && !IsStunned(attacker);
 
-        // The formation's reach (the user, 2026-10-17): from where it stands, which of their slots it can attack
-        private static bool Reaches(SeenCreature attacker, SeenSlot slot) =>
-            Formation.InReach(attacker.Slot.Index, slot.Index, attacker.Ability == CreatureAbility.Artillery);
+        // Any creature attacks any enemy slot (the formation's reach went 2026-10-17); kept as the one place to say so
+        private static bool Reaches(SeenCreature attacker, SeenSlot slot) => true;
 
-        private IEnumerable<SeenSlot> InReach(SeenCreature attacker) => view.TheirSlots.Where(s => Reaches(attacker, s));
+        private IEnumerable<SeenSlot> InReach(SeenCreature attacker) => view.TheirSlots;
 
         // An empty slot of theirs it can hit the player through, if any
         private SeenSlot Open(SeenCreature attacker) => InReach(attacker).FirstOrDefault(s => s.IsEmpty);

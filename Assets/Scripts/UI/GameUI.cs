@@ -206,6 +206,8 @@ namespace Zeitgeist {
             if ((resolving && !wasResolving) || turn != lastTurn) CloseMenus();
             wasResolving = resolving;
             lastTurn = turn;
+            if (DebugTools.On != shownDebugTools) ShowFogOfWarState(); // D switched the tools (DebugTools)
+            if (!DebugTools.On) return; // The debug keys work only with the tools shown
             if (GameInput.KeyPressed(FogOfWar.ToggleKey)) FogOfWar.Toggle();
             if (GameInput.KeyPressed(FogOfWar.SwitchSidesKey)) FogOfWar.SwitchSides();
             if (GameInput.KeyPressed(AIController.Player1Key)) {
@@ -227,14 +229,18 @@ namespace Zeitgeist {
             gameMediator.NotifyActionsQueueChanged();
         }
 
-        /// <summary>The note under the End Turn button: the debug switches' state, the seats the AI plays, and the keyboard shortcuts.</summary>
+        /// <summary>The note under the End Turn button: with the debug tools on (D), the switches' state and the seats the AI
+        /// plays; always the keyboard shortcuts a player needs.</summary>
         /// Every line reads the same way: the key, then what it switches and how it's set now.
         public string ShortcutsText =>
-            Shortcut(KeyName(FogOfWar.ToggleKey), $"Fog of War: {(FogOfWar.Enabled ? "On" : "Off")}") + "\n" +
-            Shortcut(KeyName(FogOfWar.SwitchSidesKey), $"Playing as: Player {(FogOfWar.PlaysAsPlayer1 ? 1 : 2)}") + "\n" +
-            Shortcut(KeyName(AIController.Player1Key), $"AI Player 1: {AIController.SeatText(AISeats.Player1)}") + "\n" +
-            Shortcut(KeyName(AIController.Player2Key), $"AI Player 2: {AIController.SeatText(AISeats.Player2)}") + "\n" +
+            (DebugTools.On
+                ? Shortcut(KeyName(FogOfWar.ToggleKey), $"Fog of War: {(FogOfWar.Enabled ? "On" : "Off")}") + "\n" +
+                  Shortcut(KeyName(FogOfWar.SwitchSidesKey), $"Playing as: Player {(FogOfWar.PlaysAsPlayer1 ? 1 : 2)}") + "\n" +
+                  Shortcut(KeyName(AIController.Player1Key), $"AI Player 1: {AIController.SeatText(AISeats.Player1)}") + "\n" +
+                  Shortcut(KeyName(AIController.Player2Key), $"AI Player 2: {AIController.SeatText(AISeats.Player2)}") + "\n"
+                : "") +
             $"<size=85%>{Shortcut("Esc", "Menu")}    {Shortcut("Shift + drag", "Use an ability")}\n{Shortcut("Right-drag", "Attack your own")}</size>";
+        private bool shownDebugTools;
 
         private static string KeyName(UnityEngine.InputSystem.Key key) => key.ToString().Replace("Digit", "");
 
@@ -255,6 +261,7 @@ namespace Zeitgeist {
             }
             shortcutsLabel.text = ShortcutsText;
             shortcutsLabel.gameObject.SetActive(true);
+            shownDebugTools = DebugTools.On;
         }
         #endregion
 

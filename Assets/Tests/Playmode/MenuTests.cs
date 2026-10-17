@@ -147,16 +147,6 @@ namespace Zeitgeist.Tests {
             var exhausting = glossary.CardsWith("Exhausted").Select(c => c.cardName).ToList();
             CollectionAssert.Contains(exhausting, "DDOS Attack", "The cards that print it are read from the cards themselves");
             CollectionAssert.IsSubsetOf(exhausting.Select(n => "card:" + n), Keywords.LinksIn(glossary.UsedBy.text), "...and listed as links");
-            glossary.ShowCardPreview("DDOS Attack", new Vector2(200f, 200f));
-            Assert.AreEqual("DDOS Attack", glossary.CardPreview?.GetBaseCardData().cardName, "Hovering a card's name shows the card");
-            Canvas.ForceUpdateCanvases(); // Laid out now: the next frame, the pointer isn't on the name any more
-            var preview = (RectTransform)glossary.CardPreview.transform;
-            Assert.Greater(preview.rect.height, preview.rect.width * 1.2f, "...as a card, not stretched across the menu");
-            var corners = new Vector3[4];
-            preview.GetWorldCorners(corners);
-            Assert.IsTrue(corners.All(c => c.x >= 0 && c.y >= 0 && c.x <= Screen.width && c.y <= Screen.height), "...and all of it on screen");
-            glossary.ShowCardPreview(null);
-            Assert.IsNull(glossary.CardPreview);
             Click(GalleryButton(glossary, KeywordGlossaryMenu.BackButtonName));
             Assert.IsFalse(glossary.IsOpen);
             Click(TitleButton(MainMenu.KeywordsButtonName));
@@ -581,6 +571,12 @@ namespace Zeitgeist.Tests {
                     }
                     yield return null;
                     game.AssertViewsMatchRules(); // Queued plays: ghosts on the boards, spells marked in the hands
+                    // A Send For or a chosen discard asks the screen's seat (these planners aren't seats the AI plays): the first card
+                    var window = Object.FindFirstObjectByType<DeckViewUI>(FindObjectsInactive.Include);
+                    for (int picks = 0; DeckViewUI.PickPending && picks < 8; picks++) {
+                        window.Pick(window.PickChoices[0]);
+                        yield return null;
+                    }
 
                     yield return game.EndTurn();
 

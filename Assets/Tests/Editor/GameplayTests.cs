@@ -167,8 +167,8 @@ namespace Zeitgeist.Tests {
             var cucumber = game.Summon(p2, game.Creature("Cucumber", 0, 4, 1,
                 TestGame.Effect(EffectTrigger.OnDamage, ActionType.ModifyStat, 2, TargetType.FriendlyCreatures)), 1);
             Attack(jackal, p2.Battlefield[1]); // Flank to Flank: in reach
-            Assert.AreEqual(2 + Formation.FlankAttack, cucumber.Attack, "+2 from the hit, and its Flank's +1");
-            Assert.AreEqual(6 - jackal.Attack, cucumber.Health); // Max health 4 + 2, minus the hit (the jackal's 1 and its Flank's +1)
+            Assert.AreEqual(2, cucumber.Attack, "+2 from the hit");
+            Assert.AreEqual(6 - jackal.Attack, cucumber.Health); // Max health 4 + 2, minus the hit
 
             // Attacks declared in the same turn resolve by speed: a creature killed first never lands its hit
             var falcon = game.Summon(p1, game.Creature("Falcon", 4, 2, speed: 3), 2);
@@ -281,7 +281,7 @@ namespace Zeitgeist.Tests {
             leaderData.ability = CreatureAbility.Irreplaceable;
             int turtleAttack = turtle.Attack;
             var leader = game.Summon(p1, leaderData, 1);
-            Assert.AreEqual(2 + Formation.FlankAttack, leader.Attack, "Its +2 Attack goes to the other friendly creatures, not itself (its own 2, and its Flank's +1)...");
+            Assert.AreEqual(2, leader.Attack, "Its +2 Attack goes to the other friendly creatures, not itself...");
             Assert.AreEqual(turtleAttack + 2, turtle.Attack, "...the others get it");
             var usurper = (ICreature)game.GiveCard(p1, game.Creature("Usurper", 3, 3));
             game.Play(usurper, p1, p1.Battlefield[1]);

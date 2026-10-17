@@ -92,7 +92,6 @@ namespace Zeitgeist {
             CreatureAbility.JammingField => "Jamming Field",
             CreatureAbility.PharaohsCurse => "Pharaoh's Curse",
             CreatureAbility.DoYourOwnResearch => "Do Your Own Research",
-            CreatureAbility.Artillery => "Artillery",
             _ => ability.ToString()
         };
 
@@ -166,7 +165,6 @@ namespace Zeitgeist {
             CreatureAbility.Teflon => "enemy statuses don't land on it",
             CreatureAbility.Shrapnel => $"when an attack hits it, a Landmine {ShrapnelDamage} lands on a random empty enemy slot",
             CreatureAbility.DoYourOwnResearch => "healing damages it instead",
-            CreatureAbility.Artillery => "it attacks at a distance of exactly 4, never nearer: from a Flank their Headquarters, from Headquarters their Flanks",
             _ => ""
         };
 
@@ -212,28 +210,6 @@ namespace Zeitgeist {
             var slot = creature?.Slot;
             var opposite = slot?.Owner?.Opponent?.Battlefield;
             return opposite != null && slot.Index < opposite.Count ? opposite[slot.Index].OccupyingCreature : null;
-        }
-
-        /// <summary>
-        /// The formation's reach (the user, 2026-10-17, GDD 2.4): whether this creature can attack that slot from where it
-        /// stands. Across the table the slot decides (see <see cref="Formation.InReach"/>); Artillery shoots at exactly 4. A
-        /// slot of its own side (Friendly Fire) is always within reach.
-        /// </summary>
-        public static bool InReach(ICreature attacker, BoardSlot target) {
-            if (attacker?.Slot == null || target == null) return false;
-            if (target.Owner == attacker.Owner) return true;
-            return Formation.InReach(attacker.Slot.Index, target.Index, Has(attacker, CreatureAbility.Artillery));
-        }
-
-        /// <summary>Why a slot is out of this creature's reach, in the words shown over a refused drop.</summary>
-        public static string OutOfReachText(ICreature attacker) {
-            if (attacker?.Slot == null) return "Out of reach";
-            if (Has(attacker, CreatureAbility.Artillery)) return "Artillery: it hits at exactly 4 away, their Headquarters from a Flank, their Flanks from Headquarters";
-            return Formation.PositionOf(attacker.Slot.Index) switch {
-                Formation.Position.Vanguard => "Out of reach: the Vanguard melees their Vanguard alone",
-                Formation.Position.Flanks => "Out of reach: a Flank shoots their Vanguard and Flanks",
-                _ => "Out of reach: Headquarters shoots their Vanguard alone"
-            };
         }
 
         /// <summary>Clingy (Clingy Ex): the enemy creature facing it can't move, and nothing moves it (as if Rooted).</summary>

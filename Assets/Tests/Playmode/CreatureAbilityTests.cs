@@ -53,7 +53,7 @@ namespace Zeitgeist.Tests {
             ChangeAttack(extremist, -1, p2);
             Assert.AreEqual(5, extremist.Attack, "Extremist: +4, then -2");
 
-            int flank = Formation.FlankAttack; // Calm stands on a Flank (the other slots are taken): +1 Attack on top of its numbers
+            int flank = 0; // No slot bonus (the Flanks' +1 went 2026-10-17)
             var calm = With(CreatureAbility.Unbothered, p1, 2);
             ChangeAttack(calm, -2, p2);
             Assert.AreEqual(3 + flank, calm.Attack, "Unbothered: the enemy can't lower its stats");
@@ -166,11 +166,11 @@ namespace Zeitgeist.Tests {
             var target = With(CreatureAbility.None, p2, 2, health: 20);
             int Penny(int attack) => attack <= 3 ? attack * 2 : attack; // A hit of 3 or less doubles
             game.Attack(tech, p2.Battlefield[2]);
-            int afterFirst = 20 - Penny(2 + Formation.FlankAttack);
+            int afterFirst = 20 - Penny(2);
             Assert.AreEqual(afterFirst, target.Health, "Penny Stock: a small hit doubles");
             ChangeAttack(tech, 1, p1);
             game.Attack(tech, p2.Battlefield[2]);
-            Assert.AreEqual(afterFirst - Penny(3 + Formation.FlankAttack), target.Health, "...and one over 3 doesn't");
+            Assert.AreEqual(afterFirst - Penny(3), target.Health, "...and one over 3 doesn't");
 
             // (The reach, GDD 2.4: from Headquarters an attack reaches their Vanguard alone, so the targets below stand there, each replacing the last)
             var insider = With(CreatureAbility.InsiderJob, p1, 3, attack: 3);
@@ -408,7 +408,7 @@ namespace Zeitgeist.Tests {
             var dressed = With(CreatureAbility.None, p2, 1, attack: 1, health: 20);
             ChangeAttack(dressed, 2, p2);
             game.Attack(screener, p2.Battlefield[1]);
-            Assert.AreEqual(1 + Formation.FlankAttack, dressed.Attack, "Strip Search Purged its raise (its Flank's +1 isn't one)");
+            Assert.AreEqual(1, dressed.Attack, "Strip Search Purged its raise");
             Assert.AreEqual(20 - screener.Attack - Abilities.StripBonus, dressed.Health, "...and hit 2 harder");
 
             // Sucker Punch: its attack goes first against a creature that attacks, faster or not; it holds back against one that doesn't

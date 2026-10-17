@@ -43,7 +43,6 @@ namespace Zeitgeist {
         private Transform rows;
         private Button copyButton, deleteButton;
         private GameObject starterHeading;
-        private CardPeek cardPeek;
         private bool deleteArmed; // Delete was clicked once: a second click deletes
         private readonly List<(Button button, DeckScriptableObject deck)> deckButtons = new List<(Button, DeckScriptableObject)>();
         private readonly List<(Button button, Umbrella? umbrella)> umbrellaTabs = new List<(Button, Umbrella?)>();
@@ -213,7 +212,6 @@ namespace Zeitgeist {
                 coins.sizeDelta = new Vector2(DeckCatalog.CoinsFor(OpenDeck).Count * 34f, 30f); // Centered, side by side
             }
 
-            cardPeek.Hide();
             foreach (Transform row in rows.Cast<Transform>().ToList()) Discard(row.gameObject);
             if (!open) return;
             var inDeck = OpenDeck.Cards.Distinct().OrderBy(c => c is CreatureCardScriptableObject ? 0 : 1).ThenBy(c => c.faction).ThenBy(c => c.cardName).ToList();
@@ -258,7 +256,6 @@ namespace Zeitgeist {
             copiesRect.pivot = new Vector2(1f, 0.5f);
             copiesRect.sizeDelta = new Vector2(44f, 0f);
             copiesRect.anchoredPosition = new Vector2(-8f, 0f);
-            CardPeekOnHover.AddTo(row.gameObject, cardPeek, card);
         }
 
         // A badge with the copies in the open deck at the card's corner; the card dims when no more can be added
@@ -298,13 +295,6 @@ namespace Zeitgeist {
             BuildCards(columns);
             BuildDeck(columns);
             AddButton(AddFooter(screen.panel.transform), BackButtonName, "Back", BackWidth, Hide);
-            cardPeek = new CardPeek(screen.panel.transform, Catalog.CardPrefab) { Readable = true }; // Its keywords can be read on it
-            // A right click on the shown card takes a copy out; the card stays up while there are copies left
-            cardPeek.RightClicked = card => {
-                var at = cardPeek.ShownAt;
-                RemoveCard(card);
-                if (PlayerDecks.CopiesOf(OpenDeck, card) > 0) cardPeek.Show(card, at);
-            };
             return screen.panel;
         }
 
@@ -314,7 +304,6 @@ namespace Zeitgeist {
         }
 
         protected override void Forget() {
-            cardPeek?.Hide();
             cards = null;
             deckList = null;
             deckListContent = rows = null;
@@ -323,7 +312,6 @@ namespace Zeitgeist {
             deckFactions = null;
             copyButton = deleteButton = null;
             starterHeading = null;
-            cardPeek = null;
             deleteArmed = false;
             deckButtons.Clear();
             umbrellaTabs.Clear();

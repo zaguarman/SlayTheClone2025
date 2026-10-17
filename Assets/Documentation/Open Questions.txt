@@ -111,6 +111,9 @@ STILL OPEN
       the Flanks reach their Vanguard and Flanks, Headquarters their Vanguard). Artillery, a creature keyword, overrides it:
       exactly distance 4, never less (Flanks to their Headquarters, Headquarters to their Flanks). Bonuses: Vanguard +1
       Armor each Dawn (at most 2), Flanks +1 Attack and +1 Speed while there, Headquarters none. Built 2026-10-17 (GDD 2.4).
+    • Rolled back (the user, 2026-10-17 night: "the slot changes we made making the range and the bonus effects are pretty bad"):
+      any creature attacks any enemy slot again, the slots give nothing, Artillery is gone (Drone Operator has Homing). The
+      names and the steps between slots stay, for moving and for what "beside" means.
 
 43. Speed ties: what the order numbers show, and who wins a tie (the user, 2026-10-15)
     • Now (GDD 3.7, ActionsQueue.CompareInLayer): in a layer, higher Speed first (Rush Hour: lower). At the same Speed, one

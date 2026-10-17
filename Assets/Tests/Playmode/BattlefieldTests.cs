@@ -48,29 +48,20 @@ namespace Zeitgeist.Tests {
             Assert.AreEqual(1, game.ActionsQueue.GetPendingActionsCount(), "...and an attack replaces a move");
             game.Resolve();
             Assert.AreSame(runner, p1.Battlefield[2].OccupyingCreature);
-            CollectionAssert.AreEqual(new[] { 3 }, game.History.DamageTo(target), "Its 2 Attack and a Flank's +1");
+            CollectionAssert.AreEqual(new[] { 2 }, game.History.DamageTo(target), "Its 2 Attack: a slot gives no bonus");
 
-            // The formation (the user, 2026-10-17, GDD 2.4): a Flank gives +1 Attack and +1 Speed and shoots their Vanguard
-            // and Flanks, never Headquarters; Artillery hits at exactly 4; off the Flank the bonus goes
-            Assert.AreEqual((3, runner.BaseSpeed + 1), (runner.Attack, runner.Speed), "On a Flank: +1 Attack and +1 Speed");
+            // The slots are places (the reach by depth and the slots' bonuses were rolled back 2026-10-17): any enemy slot is a target
+            Assert.AreEqual((2, runner.BaseSpeed), (runner.Attack, runner.Speed), "On a Flank: the same numbers");
             game.Declare(runner, p2.Battlefield[3]);
-            Assert.AreEqual(0, game.ActionsQueue.GetPendingActionsCount(), "Their Headquarters is out of a Flank's reach");
-            var gunData = game.Creature("Gun", 1, 5);
-            gunData.ability = CreatureAbility.Artillery;
-            var gun = game.Summon(p1, gunData, 1);
-            game.Declare(gun, p2.Battlefield[0]);
-            Assert.AreEqual(0, game.ActionsQueue.GetPendingActionsCount(), "Artillery never hits nearer than 4");
-            game.Declare(gun, p2.Battlefield[3]);
-            Assert.AreEqual(1, game.ActionsQueue.GetPendingActionsCount(), "...from a Flank it reaches their Headquarters");
-            game.ActionsQueue.CancelDeclaredAction(gun.TargetId);
+            Assert.AreEqual(1, game.ActionsQueue.GetPendingActionsCount(), "Their Headquarters is in reach from anywhere");
+            game.ActionsQueue.CancelDeclaredAction(runner.TargetId);
             game.ActionsQueue.AddAction(new MoveCreatureAction(runner, p1.Battlefield[2], p1.Battlefield[0], p1));
             game.Resolve();
-            Assert.AreEqual((2, runner.BaseSpeed), (runner.Attack, runner.Speed), "Back on the Vanguard, the Flank's bonus is gone");
 
             var bolt = game.Spell("Bolt", TargetType.EnemyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Damage, 3, TargetType.EnemyCreatures));
             var ox = game.Summon(p2, game.Creature("Ox", 0, 10), 1);
             game.Run(new PlayCardAction(game.GiveCard(p1, bolt), p1, p2.Battlefield[1]));
-            Assert.AreEqual(7, target.Health, "A spell hits only the creature it was dropped on");
+            Assert.AreEqual(8, target.Health, "A spell hits only the creature it was dropped on");
             Assert.AreEqual(7, ox.Health);
             game.Run(new PlayCardAction(game.GiveCard(p1, bolt), p1, p2.Battlefield[3]));
             Assert.AreEqual(Player.StartingHealth - 3, p2.Health, "...or that side's player on an empty slot");
@@ -94,15 +85,9 @@ namespace Zeitgeist.Tests {
             game.Resolve();
             Assert.IsTrue(((ICreature)summoned).IsDead, "...and it's hit as it lands");
 
-            // The Vanguard takes the melee: +1 Armor each Dawn, up to 2 (the runner stands there again)
+            // No slot puts on Armor (the Vanguard's Dawn Armor went with the reach, 2026-10-17)
             game.StartTurn();
-            Assert.AreEqual(1, runner.CurrentArmorPool, "The Vanguard puts on 1 Armor at Dawn...");
-            game.StartTurn();
-            Assert.AreEqual(1, runner.CurrentArmorPool, "...Dusk fades 1 and Dawn adds 1: it keeps a plate on...");
-            game.Run(new ModifyArmorAction(runner, 2));
-            game.StartTurn();
-            Assert.AreEqual(2, runner.CurrentArmorPool, "...and adds none at 2 or more");
-            Assert.AreEqual(0, gun.CurrentArmorPool, "A Flank gets none");
+            Assert.AreEqual(0, runner.CurrentArmorPool, "The Vanguard puts on nothing at Dawn");
 
             Fresh();
             var plating = game.Spell("Plating", TargetType.FriendlyCreatures, Effect(EffectTrigger.OnPlay, ActionType.Armor, 2, TargetType.FriendlyCreatures));

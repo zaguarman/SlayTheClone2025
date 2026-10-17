@@ -69,7 +69,7 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'Mind''s scouting: send for any card among the top 3 of your deck;
+  designNotes: 'Mind''s scouting: send for any card among the top 4 of your deck;
     it joins your next hand.'
   artDescription: A sleeper floating above their bed in pyjamas, calmly picking cards
     out of a swirling dreamscape of melting clocks and staircases.

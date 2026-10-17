@@ -69,8 +69,8 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'Digital Society''s scouting: send for any card among the top 4 of
-    your deck; it joins your next hand. Costs Doom 3: your weakest creature not yet
+  designNotes: 'Digital Society''s scouting: send for any card among the top 5 of
+    your deck; it joins your next hand. Costs Doom 2: your weakest creature not yet
     Doomed is Doomed first (the feed eats someone).'
   artDescription: 'The Living the Dream wojak, MS Paint style: bald, shirtless, baggy-eyed
     and expressionless at 3AM, holding up a phone (we see its black back) where the

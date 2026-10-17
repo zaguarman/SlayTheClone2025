@@ -26,7 +26,7 @@ MonoBehaviour:
   prophecy: 0
   prophecyLatest: 0
   gamble: 0
-  homing: 0
+  homing: 1
   ripening: 0
   policy: 0
   upgraded: 0
@@ -34,10 +34,9 @@ MonoBehaviour:
   combo: 0
   setUpBy: []
   effects: []
-  designNotes: 'Artillery (the formation''s reach, GDD 2.4; the user, 2026-10-17):
-    it attacks at a distance of exactly 4, never nearer: their Headquarters from
-    a Flank, their Flanks from Headquarters. The one way to hit Headquarters with
-    an attack.'
+  designNotes: 'Homing (since 2026-10-17, when the formation''s reach and its Artillery
+    were rolled back): its attacks lock on the enemy creature in the slot it''s aimed
+    at and follow it if it moves. The drone finds you.'
   artDescription: A drone pilot in a headset in an air-conditioned trailer in the
     desert, a coffee and a family photo on the console, the screen showing a tiny
     palace under a targeting reticle twelve time zones away, a DAY SHIFT rota pinned
@@ -47,7 +46,7 @@ MonoBehaviour:
   speed: 2
   turnsUntilOperative: 1
   movement: 0
-  ability: 67
+  ability: 0
   gift: 0
   rootedWhileDeploying: 0
   token: 0

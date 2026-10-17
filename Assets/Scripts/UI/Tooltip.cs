@@ -299,8 +299,10 @@ namespace Zeitgeist {
             canvasGroup.alpha = 1;
             gameObject.SetActive(true);
 
-            if (hand != null || InWindow(card)) {
-                preview = card; // The hand raises it, enlarged (a window's cards are big already); its explanations open beside it
+            // No enlarged copy of the hovered card anywhere (the user, 2026-10-17 night): the card reads where it stands and its
+            // explanations open beside it. The one copy left is a creature's roulette, which shows the cards tucked under it
+            if (hand != null || InWindow(card) || card.AttachedCards.Count == 0) {
+                preview = card;
                 previewIsCard = true;
             }
             else {
@@ -446,11 +448,7 @@ namespace Zeitgeist {
         }
 
         // Your hand drops out of the way while a board card is lifted (the user), and comes back when it's put down
-        private static void TuckHands(bool down) {
-            foreach (var hand in FindObjectsByType<HandUI>(FindObjectsSortMode.None)) {
-                if (hand.IsYourHand) hand.SetTucked(down);
-            }
-        }
+        private static void TuckHands(bool down) => HandUI.TuckYours(down);
 
         // To the right of the preview, or to its left when there is no room
         private void PlaceDetailsBesidePreview() {

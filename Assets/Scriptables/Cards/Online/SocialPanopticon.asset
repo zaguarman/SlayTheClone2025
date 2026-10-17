@@ -101,7 +101,7 @@ MonoBehaviour:
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Every enemy creature is Revealed for 2 Days (its plans can be seen,
-    Watchdogs can match them) and gets Heat Signature 1. Future: a Trend where nothing
+    Watchdogs can match them) and gets Heat Signature 2. Future: a Trend where nothing
     can be Concealed.'
   artDescription: 'A real panopticon seen from inside: a ring of barred cells on
     two floors around a central watchtower with a single recording eye, every inmate

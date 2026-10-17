@@ -97,10 +97,10 @@ namespace Zeitgeist.Tests {
             Assert.AreEqual(2, game.QueuedArrows(p1).Max(a => a.Branches), "The two attacks on the same slot merge into one arrow");
             Assert.AreEqual(1, game.QueuedArrows(p2).Count, "The other side's attack has its own arrow");
             // Numbered by Speed: every attack at the same Speed shares a number, both sides, so it never shows the planned order
-            // The Flanks add +1 Speed: the striker (2 + 1) first, the flanker (1 + 1) second, the brute and the mouse (1) tied third
+            // The striker (Speed 2) first; the flanker, the brute and the mouse (1) tied second
             CollectionAssert.AreEquivalent(new[] { "1" }, game.QueuedArrows(p1).Single(a => a.Branches == 1).Labels, "The faster striker first...");
-            CollectionAssert.AreEquivalent(new[] { "2", "3" }, game.QueuedArrows(p1).Single(a => a.Branches == 2).Labels, "...then the flanker, then the brute...");
-            CollectionAssert.AreEquivalent(new[] { "3" }, game.QueuedArrows(p2).Single().Labels, "...and the mouse ties with the brute: both 3");
+            CollectionAssert.AreEquivalent(new[] { "2", "2" }, game.QueuedArrows(p1).Single(a => a.Branches == 2).Labels, "...then the flanker and the brute, tied...");
+            CollectionAssert.AreEquivalent(new[] { "2" }, game.QueuedArrows(p2).Single().Labels, "...and the mouse ties with them: 2 as well");
             Assert.IsTrue(game.QueuedArrows(p1).All(a => a.Color.b > a.Color.r), "Your attack arrows are blue...");
             Assert.IsTrue(game.QueuedArrows(p2).All(a => a.Color.r > a.Color.b), "...the enemy's red");
             game.Queue.CancelDeclaredAction(flanker.TargetId);

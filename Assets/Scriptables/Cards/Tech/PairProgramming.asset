@@ -102,7 +102,8 @@ MonoBehaviour:
       decoy: {fileID: 0}
   designNotes: 'A swapper: target friendly creature trades places with its partner
     in the formation, then it and the creatures beside it where it lands get +1 Attack
-    this Day. Lines up a pair on one lane, or pulls a hurt creature out of one.'
+    and +1 Health for good. Lines up a pair on one lane, or pulls a hurt creature
+    out of one.'
   artDescription: 'Two developers squeezed at one tiny desk sharing a single keyboard:
     one types with a coffee in his other hand, the other leans over his shoulder
     pointing at a bug on the screen, a timesheet pinned between them billing 16 hours.'

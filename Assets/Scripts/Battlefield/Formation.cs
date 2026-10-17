@@ -18,21 +18,14 @@ namespace Zeitgeist {
     /// one with the same index across the table (the same column).
     /// Steps (moving, and what's "beside" a slot): the Vanguard to either Flank, Flank to Flank, each Flank to the
     /// Headquarters slot behind it, and Headquarters to Headquarters: the back rows are never blocked by the ones ahead.
-    /// Reach (an attack): the distance between two slots is how deep each sits (Vanguard 0, Flanks 1, Headquarters 2),
-    /// added, plus 1. The slot decides: the Vanguard melees (distance 1, their Vanguard); the Flanks and Headquarters shoot
-    /// (distance 2 to 3). Artillery overrides it: exactly 4, never less.
+    /// Attacks reach any enemy slot and no slot gives a bonus: the reach by depth and the slots' bonuses (Vanguard Armor,
+    /// Flank Speed, Artillery) were built and rolled back the same day, 2026-10-17 (the user: they played badly).
     /// </summary>
     public static class Formation {
         public enum Position { Vanguard, Flanks, Headquarters }
 
         public const int Size = 5;
         public const int Vanguard = 0;
-
-        // The slots' bonuses (the user, 2026-10-15; built 2026-10-17): the Vanguard puts on Armor each Dawn, up to this much;
-        // the Flanks shoot, +1 Attack and +1 Speed while a creature stands there; Headquarters has none (being hard to reach is its guard)
-        public const int VanguardArmorCap = 2;
-        public const int FlankAttack = 0; // The user, 2026-10-17 (Open Questions 47, knob 3): the Flanks keep their Speed and reach, not the +1 Attack that rewarded a stack of hitters
-        public const int FlankSpeed = 1;
 
         // Which slots are one step from each slot
         private static readonly int[][] Steps = {
@@ -73,19 +66,6 @@ namespace Zeitgeist {
                 if (frontier.Contains(to)) return steps;
             }
             return int.MaxValue;
-        }
-
-        /// <summary>The distance an attack covers, from a slot on one side to a slot on the other.</summary>
-        public static int Distance(int attacker, int target) => Depth(attacker) + Depth(target) + 1;
-
-        /// <summary>
-        /// Whether a creature in this slot can attack that slot across the table: the Vanguard at distance 1 (melee), the
-        /// Flanks and Headquarters at 2 to 3 (they shoot); with Artillery exactly 4.
-        /// </summary>
-        public static bool InReach(int attacker, int target, bool artillery = false) {
-            int distance = Distance(attacker, target);
-            if (artillery) return distance == 4;
-            return PositionOf(attacker) == Position.Vanguard ? distance == 1 : distance >= 2 && distance <= 3;
         }
 
         public static string NameOf(Position position) => position switch {

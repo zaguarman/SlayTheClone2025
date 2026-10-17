@@ -271,19 +271,16 @@ You use Intelligence to figure out and deal with threats from enemy Faction grou
 
 2.4 The Battlefield
 
-• Layout (the user, 2026-10-15): each side has 5 slots in a formation, as in a real war: the Vanguard alone in front (the
-  wall that takes the melee), the two Flanks behind it (the shooters: +1 Speed; the +1 Attack went 2026-10-17, the meta turned towards planning), and Headquarters at the back
-  (the important people, hard to reach). Ours is a Λ, the enemy's a V, Vanguards facing at the middle of the table. A slot
-  faces the one in the same column across the table. A step goes from the Vanguard to either Flank, Flank to Flank, a Flank
-  to the Headquarters slot behind it, and Headquarters to Headquarters: "beside" means a step away. (Formation.cs)
-  Reach: the distance of an attack is how deep each slot sits (Vanguard 0, Flanks 1, Headquarters 2), added, plus 1. The
-  slot decides: the Vanguard melees (1, their Vanguard); the Flanks and Headquarters shoot (2-3); Artillery, a keyword,
-  shoots exactly 4. Bonuses: Vanguard +1 Armor each Dawn (at most 2), Flanks +1 Speed (their +1 Attack went 2026-10-17), Headquarters none.
-  Reach and bonuses built 2026-10-17 (the user): the reach is checked when the attack is planned (the drag shows which
-  enemy slots are in reach, a drop elsewhere says why not; the AI aims only where it reaches); moved by the enemy before
-  the attack resolves, the creature still hits where it aimed. Artillery is a creature ability. The Flanks' +1/+1 is part
-  of the creature's stats while it stands there (it shows on the card); the Vanguard's Armor comes at Dawn, up to 2, and
-  fades at Dusk like any Armor.
+• Layout (the user, 2026-10-15): each side has 5 slots in a formation, as in a real war: the Vanguard alone in front, the
+  two Flanks behind it, and Headquarters at the back. Ours is a Λ, the enemy's a V, Vanguards facing at the middle of the
+  table. A slot faces the one in the same column across the table. A step goes from the Vanguard to either Flank, Flank to
+  Flank, a Flank to the Headquarters slot behind it, and Headquarters to Headquarters: "beside" means a step away.
+  (Formation.cs)
+  Reach and bonuses: none. Any creature attacks any enemy slot (an empty one hits the player) and no slot changes a
+  creature's numbers. A reach by depth (the Vanguard meleeing their Vanguard, the Flanks and Headquarters shooting at 2-3,
+  Artillery at exactly 4) with slot bonuses (Vanguard +1 Armor a Dawn up to 2, Flanks +1 Attack and +1 Speed) was built
+  2026-10-17 and rolled back the same night (the user: it played badly; the AI studies had Hard losing on it and the knobs
+  not moving the meta). The shape stays for movement and for what "beside" means.
 Slot Occupation & Movement
     • Creatures block the slot they're in; other creatures can't normally move into or through an occupied slot, unless an ability specifically says they can (like swapping, pushing, or pulling).
     • Default Movement: A creature moving itself walks step by step through its formation, any distance, along empty slots, to an empty slot. It can't enter or pass through an occupied slot. The back rows are never blocked by the ones ahead (Headquarters to Headquarters is a step). Exception: friendly Ghosted creatures don't block it.

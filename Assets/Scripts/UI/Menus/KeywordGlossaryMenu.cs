@@ -38,9 +38,6 @@ namespace Zeitgeist {
         private readonly Dictionary<string, GameObject> groups = new Dictionary<string, GameObject>(); // A section's keywords, shown while it's open
         private readonly Dictionary<string, (TextMeshProUGUI label, int count)> sectionLabels = new Dictionary<string, (TextMeshProUGUI, int)>();
         private TextMeshProUGUI crumb; // The shown keyword's section, over its title
-        private CardPeek cardPeek;
-        private string hoveredName; // The card whose name the pointer is on, and since when
-        private float hoveredSince;
 
         /// <summary>The keyword shown.</summary>
         public string Shown { get; private set; }
@@ -56,7 +53,6 @@ namespace Zeitgeist {
         /// <summary>The keywords listed now, top to bottom: all of them, or those the filter leaves.</summary>
         public List<string> Listed => order.Where(k => buttons[k].gameObject.activeSelf).ToList();
         /// <summary>The card shown while its name is hovered, if any.</summary>
-        public CardController CardPreview => cardPeek?.Shown;
 
         /// <summary>Shows a keyword's explanation, and which cards print it.</summary>
         public void ShowKeyword(string key) {
@@ -69,7 +65,6 @@ namespace Zeitgeist {
             usedBy.text = cards.Count > 0
                 ? $"<b>On cards:</b> {string.Join(", ", cards.Select(c => $"<link=\"{CardLink}{c.cardName}\"><u>{c.cardName}</u></link>"))}"
                 : "";
-            ShowCardPreview(null);
             foreach (var pair in buttons) ShowChosen(pair.Value, pair.Key == key);
             if (crumb != null) crumb.text = entry.Group;
             if (!Filtering && OpenSection != entry.Group) Open(entry.Group, scrollToIt: false);
@@ -190,27 +185,7 @@ namespace Zeitgeist {
             bool overEntry = title != null && RectTransformUtility.RectangleContainsScreenPoint((RectTransform)title.transform.parent, pointer, null);
             bool overList = list != null && RectTransformUtility.RectangleContainsScreenPoint(list.viewport, pointer, null) && !OnScrollEdge(pointer);
             if (wheel != 0f && (overEntry || overList)) ShowNext(wheel < 0f ? 1 : -1);
-            int link = TMP_TextUtilities.FindIntersectingLink(usedBy, GameInput.PointerPosition, null);
-            string id = link >= 0 ? usedBy.textInfo.linkInfo[link].GetLinkID() : null;
-            string name = id != null && id.StartsWith(CardLink) ? id.Substring(CardLink.Length) : null;
-            // Shown once the pointer rests on the name, like a hovered card; the wheel hides it until it's still again
-            if (Tooltip.WheelMoved) {
-                hoveredSince = Time.unscaledTime;
-                ShowCardPreview(null);
-            }
-            if (name != hoveredName) {
-                hoveredName = name;
-                hoveredSince = Time.unscaledTime;
-                if (name == null) ShowCardPreview(null);
-            }
-            float delay = CardPreview != null ? Tooltip.SwitchDelay : Tooltip.HoverDelay;
-            if (name != null && Time.unscaledTime - hoveredSince >= delay) ShowCardPreview(name, GameInput.PointerPosition);
-        }
-
-        /// <summary>Shows the named card enlarged next to the pointer; null hides it.</summary>
-        public void ShowCardPreview(string cardName, Vector2 near = default) {
-            if (cardPeek == null) return;
-            cardPeek.Show(cardName != null ? Catalog.AllCards.FirstOrDefault(c => c.cardName == cardName) : null, near);
+            else if (wheel != 0f && listWheel != null && OnScrollEdge(pointer)) listWheel.ScrollPixels(wheel * listWheel.ItemHeight() * WheelScroll.EdgeItems); // The fast lane
         }
 
         protected override GameObject Build() {
@@ -219,16 +194,12 @@ namespace Zeitgeist {
             BuildList(columns);
             BuildEntry(columns);
             AddButton(AddFooter(screen.panel.transform), BackButtonName, "Back", BackWidth, Hide);
-            cardPeek = new CardPeek(screen.panel.transform, Catalog.CardPrefab);
             return screen.panel;
         }
 
         protected override void Opened() => ShowKeyword(Keywords.All.First().Key);
 
         protected override void Forget() {
-            cardPeek?.Hide();
-            cardPeek = null;
-            hoveredName = null;
             title = body = usedBy = null;
             buttons.Clear();
             headings.Clear();
@@ -321,17 +292,16 @@ namespace Zeitgeist {
             scroll.content = contentRect;
             scroll.horizontal = false;
             scroll.movementType = ScrollRect.MovementType.Clamped;
-            WheelScroll.AddTo(scroll).ScrollsAt = OnScrollEdge; // Only the list's right edge scrolls it; elsewhere the wheel walks the keywords
+            var wheel = WheelScroll.AddTo(scroll);
+            wheel.ScrollsAt = wheel.OnEdge; // Only the list's right edge scrolls it; elsewhere the wheel walks the keywords
+            wheel.enabled = false; // Its Up and Down would scroll under the keywords' own walk: the glossary drives the wheel itself
+            listWheel = wheel;
             list = scroll;
         }
 
         /// <summary>The pointer is on the list's right edge, its last tenth: where the wheel scrolls the list rather than walk the keywords.</summary>
-        public bool OnScrollEdge(Vector2 pointer) {
-            if (list == null || list.viewport == null) return false;
-            var viewport = list.viewport;
-            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(viewport, pointer, null, out var local)) return false;
-            return (local.x - viewport.rect.xMin) / viewport.rect.width >= 0.9f;
-        }
+        public bool OnScrollEdge(Vector2 pointer) => listWheel != null && listWheel.OnEdge(pointer);
+        private WheelScroll listWheel;
 
         // The chosen keyword: its name, its explanation (links click through), and the cards that print it
         private void BuildEntry(Transform parent) {

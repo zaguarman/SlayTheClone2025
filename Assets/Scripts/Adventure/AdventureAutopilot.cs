@@ -351,7 +351,7 @@ namespace Zeitgeist {
         #endregion
 
         #region The panel
-        private const float PanelWidth = 280f, RowHeight = 34f;
+        private const float PanelWidth = 360f, RowHeight = 36f; // Wide enough for its lines (the user, 2026-10-17: "fix this menu")
 
         // A small panel in the top-left corner, over everything, in every scene (it stays clear of the board and the plaques)
         private void BuildOverlay() {
@@ -365,6 +365,7 @@ namespace Zeitgeist {
             scaler.matchWidthOrHeight = 0.5f;
             canvas.gameObject.AddComponent<GraphicRaycaster>();
 
+            overlay = canvas.gameObject;
             var panel = UITheme.NewImage("Panel", canvas.transform, UITheme.Panel, raycastTarget: true);
             UITheme.StylePanel(panel, trim: UITheme.Gold);
             var rect = panel.rectTransform;
@@ -379,7 +380,7 @@ namespace Zeitgeist {
             column.childForceExpandHeight = false;
             panel.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            statusText = Label(panel.transform, "Status", 18f, 2);
+            statusText = Label(panel.transform, "Status", 18f, 3);
             var speed = Row(panel.transform, "Speed");
             Small(speed, "Slower", "-", 40f, () => ChangeSpeed(-1));
             speedText = UITheme.NewText("Speed", speed, "", 20f, UITheme.Gold);
@@ -390,7 +391,7 @@ namespace Zeitgeist {
             Small(play, "Step", "Step", 70f, StepNow);
             levelText = Small(play, "Level", "AI", 170f, CycleLevel);
             var run = Row(panel.transform, "Run");
-            repeatText = Small(run, "Repeat", "Repeat", 100f, () => Repeat = !Repeat);
+            repeatText = Small(run, "Repeat", "Repeat: off", 130f, () => Repeat = !Repeat);
             Small(run, "Logs", "Logs", 70f, OpenLogs);
             Small(run, "Stop", "Stop", 70f, End);
             lastLine = Label(panel.transform, "Last", 15f, 3);
@@ -429,8 +430,11 @@ namespace Zeitgeist {
             return text;
         }
 
+        private GameObject overlay;
+
         private void RefreshOverlay() {
             if (statusText == null) return;
+            if (overlay != null && overlay.activeSelf != DebugTools.On) overlay.SetActive(DebugTools.On); // The panel is a debug tool (D)
             string where = AdventureRun.Won ? "won" : AdventureRun.Lost ? "lost"
                 : AdventureRun.Fighting != null ? $"fight, row {AdventureRun.Fighting.Row + 1}"
                 : AdventureRun.Current == null ? "at the start" : $"row {AdventureRun.Current.Row + 1}";
@@ -439,7 +443,7 @@ namespace Zeitgeist {
             speedText.text = Paused ? "<color=#E04B3A>paused</color>" : $"{Speed:0.##}x";
             pauseText.text = Paused ? "Resume" : "Pause";
             levelText.text = $"Your AI: {new AIEntrant(Level).Name}";
-            repeatText.text = Repeat ? "<b>Repeat</b>" : "<s>Repeat</s>";
+            repeatText.text = Repeat ? "Repeat: on" : "Repeat: off";
         }
         #endregion
     }

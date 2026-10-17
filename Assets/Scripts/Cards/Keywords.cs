@@ -104,10 +104,9 @@ namespace Zeitgeist {
 
             // ---------------------------------------------------------------- The formation (the user, 2026-10-15; built 2026-10-17)
             group = "Formation";
-            Add("Vanguard", "The slot alone at the front of a side. The wall that takes the melee: it can attack only their Vanguard (its attack hits the player when that slot is empty), and it puts on 1 [Armor] each [Dawn], up to 2. See [Reach].");
-            Add("Flanks", "The two slots in the middle row. The shooters: +1 Speed while a creature stands there, and they can attack their Vanguard and their Flanks. See [Reach].");
-            Add("Headquarters", "The two slots at the back. The important people, hard to reach: no ordinary attack reaches them (only spells, and [Artillery]). From there a creature can attack only their Vanguard. See [Reach].");
-            Add("Reach", "Which enemy slots a creature can attack, decided by where it stands: the distance between two slots is how deep each sits ([Vanguard] 0, [Flanks] 1, [Headquarters] 2), added, plus 1. The Vanguard melees at distance 1; the Flanks and Headquarters shoot at 2 to 3; [Artillery] hits at exactly 4. Checked when the attack is planned: moved before it resolves, the creature still hits where it aimed.");
+            Add("Vanguard", "The slot alone at the front of a side, the point of the wedge. A step takes it to either Flank. Any creature attacks any enemy slot; the slots give no bonus.");
+            Add("Flanks", "The two slots in the middle row. A step takes a Flank to the Vanguard, to the other Flank, or to the Headquarters slot behind it.");
+            Add("Headquarters", "The two slots at the back. A step takes one to its Flank or to the other Headquarters slot; the back rows are never blocked by the ones ahead.");
 
             // ---------------------------------------------------------------- Movement
             group = "Movement";
@@ -206,7 +205,6 @@ namespace Zeitgeist {
 
         // An ability's reminder text, with the keywords it mentions as links
         private static string AbilityText(CreatureAbility ability) => ability switch {
-            CreatureAbility.Artillery => "It attacks at a distance of exactly 4 (see [Reach]), never nearer: from a Flank their [Headquarters], from Headquarters their [Flanks].",
             CreatureAbility.Unpatchable => "Enemy effects can't lower its stats, and [Zero-Day] can't get around it.",
             CreatureAbility.Underground => "In combat it ignores the other creature's stat changes.",
             CreatureAbility.ZeroDay => "Its attacks and effects ignore defensive abilities, except [Cold Storage].",

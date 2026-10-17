@@ -70,7 +70,7 @@ MonoBehaviour:
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Mechanics test: Status Timing. Burn does nothing at the Dusk of the
-    Day it''s applied, then ticks for 2 Days.'
+    Day it''s applied, then ticks for 3 Days.'
   artDescription: A phone screen with a glowing red notification, reflected in the
     furious eyes of the person holding it.
   defaultTargetType: 4

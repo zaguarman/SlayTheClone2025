@@ -70,7 +70,7 @@ MonoBehaviour:
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'A Monitored Watchdog: the next enemy spell is redirected to a random
-    creature. 1 charge.'
+    creature. 2 charges.'
   artDescription: A man squeezed on a park bench between two lovers, holding both
     of their phones and reading their texts.
   defaultTargetType: 0

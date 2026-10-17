@@ -6,10 +6,9 @@ namespace Zeitgeist {
     /// <summary>
     /// The AI's look ahead (a part of AIPlanner; the user, 2026-10-17: Hard and Very Hard "value each action with context and
     /// planning the future"). Hard sees the next Day as far as its seat can: which of their creatures will be able to act
-    /// (the ones deploying now that are ready by then included), where their attacks reach from where they stand, which of our
-    /// slots they can hit and which empty ones they can hit us through (lanes). It weighs its plays against that Day: a
-    /// creature goes where it will reach something once ready and where it isn't killed while it deploys, a lane is closed
-    /// when they could run us down, a threat is one that reaches us, and a removal spell waits a Day for the bigger creature
+    /// (the ones deploying now that are ready by then included), which empty slots of ours they can hit us through (lanes). It weighs its plays against that Day: a
+    /// creature goes where it isn't killed while it deploys, a lane is closed
+    /// when they could run us down, and a removal spell waits a Day for the bigger creature
     /// that is about to be ready when today's best is small. Very Hard also counts two of their attackers ganging up on one of ours.
     /// </summary>
     public partial class AIPlanner {
@@ -26,11 +25,8 @@ namespace Zeitgeist {
         // What they could deal next Day, if nothing stopped them (Hard: with the creatures ready by then)
         private int TheirDamageNextDay() => Hard ? TheirAttackersNextDay().Sum(AttackOf) : TheirPotentialDamage();
 
-        private static bool ReachesSlot(SeenCreature attacker, int slotIndex) =>
-            Formation.InReach(attacker.Slot.Index, slotIndex, attacker.Ability == CreatureAbility.Artillery);
-
-        // Their attackers that can hit this slot of ours next Day, from where they stand
-        private IEnumerable<SeenCreature> TheirAttackersOn(int ourSlotIndex) => TheirAttackersNextDay().Where(a => ReachesSlot(a, ourSlotIndex));
+        // Their attackers that can hit this slot of ours next Day: all of them, any creature attacks any slot
+        private IEnumerable<SeenCreature> TheirAttackersOn(int ourSlotIndex) => TheirAttackersNextDay();
 
         // An empty slot of ours one of them can hit the player through: a lane
         private bool IsLane(SeenSlot ours) => ours.IsFree && TheirAttackersOn(ours.Index).Any();
@@ -40,21 +36,10 @@ namespace Zeitgeist {
         #endregion
 
         #region Where a creature goes
-        // Hard: what landing in this slot is worth to the creature beyond the slot's own effect: the Flanks' +1 Speed (their +1
-        // Attack went 2026-10-17), the Vanguard's Armor, a slot it will reach something from once ready (or nothing: a cannon in the
-        // wrong row), cover while it deploys from attackers that would kill it there, and a lane closed when they could run us down
+        // Hard: what landing in this slot is worth beyond the slot's own effect (no slot gives a bonus or reach since 2026-10-17):
+        // cover while it deploys from attackers that would kill it there, and a lane closed when they could run us down
         private float FormationValue(ICreature creature, SeenSlot slot) {
-            bool artillery = creature.Ability == CreatureAbility.Artillery;
-            bool hits = creature.Attack > 0;
-            float value = Formation.PositionOf(slot.Index) switch {
-                Formation.Position.Flanks => hits ? (0.8f + 0.7f * Formation.FlankAttack) * Style.Board : 0.5f,
-                Formation.Position.Vanguard => 0.8f * Style.Protection,
-                _ => 0f
-            };
-            if (hits) {
-                bool reachesAny = view.TheirSlots.Any(t => Formation.InReach(slot.Index, t.Index, artillery) && (t.Creature != null || t.IsEmpty));
-                value += reachesAny ? 1.5f : -2f;
-            }
+            float value = 0f;
             // Deploying under fire: a creature they can reach and kill before it acts is worth little there; one they can only scratch waits a little
             int deploying = creature.TurnsUntilOperative;
             if (deploying >= 1) {

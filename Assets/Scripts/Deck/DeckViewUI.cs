@@ -30,6 +30,9 @@ namespace Zeitgeist {
         /// look at the table (hovering it works), but not closed (the user, 2026-10-15).
         /// </summary>
         public static bool PickPending { get; private set; }
+        /// <summary>The cards on offer in the pick open now (tests, and the AI's own picks).</summary>
+        public IReadOnlyList<ICard> PickChoices => pickChoices;
+        private List<ICard> pickChoices = new List<ICard>();
         /// <summary>The pick's window is tucked away to see the table; Show brings it back.</summary>
         public bool PickHidden { get; private set; }
         public Button HideButton => hideButton;
@@ -142,6 +145,7 @@ namespace Zeitgeist {
 
             Tooltip.Existing?.HideTooltip();
             deckViewPanel.SetActive(false);
+            HandUI.TuckYours(false);
             ArrowIndicator.Suppressed = false;
             Log("Hiding deck view", LogTag.UI);
         }
@@ -187,6 +191,7 @@ namespace Zeitgeist {
             if (deckViewPanel == null || !IsInitialized) return;
             EndPick();
             ShowCards(player, title, hint, cards);
+            pickChoices = cards;
             onPick = picked;
             onPickClosed = closed;
             PickPending = true;
@@ -305,6 +310,7 @@ namespace Zeitgeist {
 
         private void ShowCards(IPlayer player, string title, string countLabel, List<ICard> cards) {
             ClearCardEntries();
+            HandUI.TuckYours(true); // The hand drops out from under the window (the user, 2026-10-17: it sat in the middle of it)
 
             if (titleText != null) titleText.text = title;
             if (cardsCountText != null) cardsCountText.text = $"{countLabel}: {cards.Count}";

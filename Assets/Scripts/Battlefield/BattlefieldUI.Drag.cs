@@ -25,9 +25,6 @@ namespace Zeitgeist {
             draggedCard = card;
             card.transform.SetAsLastSibling();
             ShowMoveHints(card.GetLinkedCreature());
-            if (card.GetLinkedCreature() is ICreature creature && creature.Owner == Player && GameManager.ModifierManager.CanAct(creature)) {
-                table.GetBattlefield(Player.Opponent)?.ShowReachHints(creature);
-            }
         }
 
         /// <summary>The last reason a creature picked up couldn't act (shown over it), for tests.</summary>
@@ -127,17 +124,7 @@ namespace Zeitgeist {
                 return slotUnderPointer.Owner == Player && slotUnderPointer.Model.IsOccupied() ? BattlefieldArrowManager.DragIntent.Attack : BattlefieldArrowManager.DragIntent.None;
             }
             if (slotUnderPointer.Owner == Player) return BattlefieldArrowManager.DragIntent.Move;
-            // Across the table only what its slot reaches (the user, 2026-10-17); elsewhere the arrow shows nothing to do
-            return Abilities.InReach(card.GetLinkedCreature(), slotUnderPointer.Model) ? BattlefieldArrowManager.DragIntent.Attack : BattlefieldArrowManager.DragIntent.None;
-        }
-
-        /// <summary>While one of the other side's creatures is carried: each slot here says whether it's in that creature's reach.</summary>
-        public void ShowReachHints(ICreature attacker) {
-            if (attacker?.Slot == null) return;
-            foreach (var slot in battlefieldSlots) {
-                bool reaches = Abilities.InReach(attacker, slot.Model);
-                slot.ShowMoveHint(MoveKind.Walk, blocked: !reaches, reaches ? "In reach" : "Out of reach");
-            }
+            return BattlefieldArrowManager.DragIntent.Attack; // Any slot across the table
         }
 
         protected override void OnCardEndDrag(CardController card) {

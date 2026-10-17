@@ -163,13 +163,13 @@ namespace Zeitgeist.Tests {
             game.Run(new DamageCreatureAction(porcupine, 1));
             Assert.AreEqual(10 - porcupine.Attack, hedgehog.Health, "Damage that isn't an attack isn't answered");
 
-            var giantA = game.Summon(p1, game.Creature("Giant A", 25, 5), 1);
-            var giantB = game.Summon(p1, game.Creature("Giant B", 25, 5), 2);
+            var giantA = game.Summon(p1, game.Creature("Giant A", 40, 5), 1); // More than the 30 Health
+            var giantB = game.Summon(p1, game.Creature("Giant B", 40, 5), 2);
             game.Declare(giantA, p2.Battlefield[1]);
             game.Declare(giantB, p2.Battlefield[2]);
             game.Resolve();
             Assert.AreEqual(0, p2.Health);
-            CollectionAssert.AreEqual(new[] { 20 }, game.History.DamageTo(p2), "A player's Health stops at 0, and the game stops there: the other attack never lands");
+            CollectionAssert.AreEqual(new[] { Player.StartingHealth }, game.History.DamageTo(p2), "A player's Health stops at 0, and the game stops there: the other attack never lands");
             CollectionAssert.AreEqual(new[] { p1 }, game.History.Winners, "The game ends once, won by player 1");
             Assert.AreEqual(0, game.ActionsQueue.GetPendingActionsCount(), "Nothing still queued happens");
 
@@ -254,7 +254,7 @@ namespace Zeitgeist.Tests {
 
             game.Declare(poker, p2.Battlefield[0]);
             yield return game.EndTurn();
-            Assert.AreEqual(2, wall.CurrentArmorPool, "The hit takes 1 Armor during the Day, then Dusk fades 1 more, and the Vanguard puts 1 on at Dawn");
+            Assert.AreEqual(1, wall.CurrentArmorPool, "The hit takes 1 Armor during the Day, then Dusk fades 1 more");
             Assert.AreEqual(5, wall.Health, "The hit landed on the full 3 Armor, before it faded");
             Assert.AreEqual(10, torch.Health, "Every status skips the Day it's applied (Status Timing)");
             Assert.IsTrue(pumped.IsDead, "The Health buff wearing off took its Health back: it was all that kept it alive");
@@ -265,7 +265,7 @@ namespace Zeitgeist.Tests {
             yield return game.EndTurn();
             Assert.AreEqual(6, torch.Health);
             Assert.IsFalse(game.ModifierManager.HasStatusEffect(torch, StatusEffectType.Burned), "The burn runs out after 2 ticks");
-            Assert.That(wall.CurrentArmorPool, Is.InRange(1, 2), "Armor never fades below 0 (the Vanguard's Dawn plate keeps it at 1 or 2)");
+            Assert.AreEqual(0, wall.CurrentArmorPool, "Armor never fades below 0");
             yield return game.EndTurn();
             CollectionAssert.AreEqual(new[] { 2, 2 }, game.History.DamageTo(torch));
 

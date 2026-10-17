@@ -101,7 +101,7 @@ MonoBehaviour:
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
   designNotes: 'Tech''s scouting: send for any card among the top 5 of your deck;
-    it joins your next hand.'
+    it joins your next hand, and you draw a card now.'
   artDescription: A cat scratching at a laptop screen, claw marks tearing the web
     page open and spilling out cards and data.
   defaultTargetType: 0

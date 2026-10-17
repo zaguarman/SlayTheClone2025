@@ -56,7 +56,11 @@ namespace Zeitgeist {
             UITheme.StyleHeading(title);
             UITheme.Place(title.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -70f), new Vector2(560f, 90f));
             subtitle = UITheme.NewText("Subtitle", box.transform, "", 26f, UITheme.Parchment);
-            UITheme.Place(subtitle.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -145f), new Vector2(560f, 50f));
+            UITheme.Place(subtitle.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -145f), new Vector2(720f, 80f));
+            subtitle.textWrappingMode = TextWrappingModes.Normal; // Two lines when the sentence is long (the adventure's victory)
+            subtitle.enableAutoSizing = true;
+            subtitle.fontSizeMin = 18f;
+            subtitle.fontSizeMax = 26f;
 
             PlayAgainButton = NewButton("PlayAgain", box.transform, "Play Again", -130f, UITheme.ButtonKind.Primary);
             PlayAgainButton.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.GetActiveScene().name));

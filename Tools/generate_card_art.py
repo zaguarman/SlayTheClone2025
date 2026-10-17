@@ -5294,18 +5294,41 @@ def zealot():
 
 
 def living_dead():
-    # A grey zombie in a business suit climbing out of a cemetery grave with its briefcase, a sunrise behind the tombstones
-    defs = lin("bg", ["#f2b06a", "#5a4a6a"])
-    body = rect(0, 0, W, H, "url(#bg)") + circle(260, 150, 40, "#ffd27a")
-    body += rect(0, 150, W, 50, "#3a4a2a")
-    for x in (40, 290, 330):
-        body += path(f"M{x - 16} 160 L{x - 16} 120 C {x - 16} 100 {x + 16} 100 {x + 16} 120 L{x + 16} 160 Z", "#8a8a90", 'stroke="#5a5a60" stroke-width="2"')
-        body += lettering("RIP", x, 118, 7, "#4a4a50")
-    body += ellipse(176, 180, 70, 16, "#2a1a10")
-    body += person(176, 196, 1.3, "#9ab08a", "#2a2a3a", face="flat", tie="#5a1a1a", hair="#3a3a3a")
-    body += circle(167, 112, 3.5, "#ffffff") + circle(185, 112, 3.5, "#ffffff")
-    body += stroke("M210 170 L250 150", "#9ab08a", 8) + rect(244, 136, 34, 24, "#5a3a1a", 'rx="3"') + rect(254, 130, 14, 8, "none", 'stroke="#5a3a1a" stroke-width="2"')
-    body += stroke("M140 170 L104 150", "#9ab08a", 8)
+    # The user, 2026-10-17: a man working at a computer instead of the zombie. Dead inside: a grey-skinned office worker in a
+    # cubicle at 17:59, a monitor full of spreadsheet cells, dark rings under the eyes, a mug reading STILL HERE, a dying
+    # pothos on the partition, the fluorescent light flat and green
+    defs = lin("bg", ["#c8ccc0", "#8a9088"])
+    body = rect(0, 0, W, H, "url(#bg)")
+    body += rect(0, 0, W, 26, "#e8ece4") + rect(60, 6, 232, 12, "#f4f8f0", 'rx="3"')  # The strip light
+    body += rect(0, 40, W, 120, "#b0b4a8") + rect(0, 40, W, 6, "#9a9e94")  # The cubicle partition
+    for x in (20, 120, 220):
+        body += rect(x, 56, 80, 70, "#bcc0b4", 'stroke="#a0a49a" stroke-width="1"')
+    # A clock at 17:59 and a wilted pothos on the partition
+    body += circle(300, 70, 18, "#f4f4f0", 'stroke="#4a4a50" stroke-width="2"') + stroke("M300 70 L300 58", "#4a4a50", 2) + stroke("M300 70 L311 70", "#4a4a50", 2)
+    body += lettering("17:59", 300, 100, 8, "#4a4a50")
+    body += rect(36, 110, 22, 18, "#8a6a4a") + path("M40 110 C 30 90 44 84 48 100 C 50 86 64 86 56 110 Z", "#7a9a5a")
+    body += path("M44 104 C 36 118 30 126 26 134", "none", 'stroke="#7a9a5a" stroke-width="3" stroke-linecap="round"')
+    # The desk, the monitor with its spreadsheet, the keyboard, the mug
+    body += rect(0, 170, W, 60, "#d8d4c8") + rect(0, 170, W, 6, "#bcb8ac")
+    body += monitor(60, 92, 150, 96, "#f0f4ee")
+    for i in range(5):
+        y = 106 + i * 14
+        body += stroke(f"M70 {y} L198 {y}", "#c8d0c4", 1)
+    for i in range(4):
+        x = 74 + i * 32
+        body += stroke(f"M{x} 102 L{x} 176", "#c8d0c4", 1)
+    body += rect(104, 118, 30, 12, "#9ad0a0") + rect(136, 146, 30, 12, "#f0b0a0")
+    body += rect(90, 196, 100, 14, "#3a3a40", 'rx="3"')
+    for i in range(9):
+        body += rect(94 + i * 10.5, 199, 7, 8, "#5a5a62", 'rx="1"')
+    body += rect(228, 182, 26, 28, "#f4f4f0", 'rx="3"') + path("M254 190 C 266 190 266 206 254 206", "none", 'stroke="#f4f4f0" stroke-width="4"')
+    body += lettering("STILL", 241, 192, 5, "#8a2a2a") + lettering("HERE", 241, 200, 5, "#8a2a2a")
+    # The worker behind the desk: grey skin, a loosened tie, rings under the eyes, hands on the keyboard
+    body += person(140, 206, 1.25, "#aab4a4", "#4a5a7a", face="flat", tie="#6a2a2a", hair="#3a3a3a")
+    body += ellipse(131, 134, 6, 3, "#6a6a78") + ellipse(149, 134, 6, 3, "#6a6a78")
+    body += circle(131, 132, 2, "#ffffff") + circle(149, 132, 2, "#ffffff")
+    body += stroke("M118 178 L104 198", "#aab4a4", 7) + stroke("M162 178 L176 198", "#aab4a4", 7)
+    body += ellipse(102, 199, 8, 5, "#aab4a4") + ellipse(178, 199, 8, 5, "#aab4a4")
     return svg(defs, body)
 
 

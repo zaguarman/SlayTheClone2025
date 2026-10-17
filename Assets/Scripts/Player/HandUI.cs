@@ -46,6 +46,13 @@ namespace Zeitgeist {
             tucked = down;
             Arrange(animate: true);
         }
+
+        /// <summary>Your hand drops out of the way (a window over the table: the user, 2026-10-17) and comes back when it closes.</summary>
+        public static void TuckYours(bool down) {
+            foreach (var hand in FindObjectsByType<HandUI>(FindObjectsSortMode.None)) {
+                if (hand.IsYourHand) hand.SetTucked(down);
+            }
+        }
         private const float PickedScale = 1.15f;  // Picked up, a card grows a little (of its size in the hand)...
         private const float OverBoardReach = 260f; // ...and shrinks to board size as it's carried this far above the hand
         private const float DiscardStagger = 0.06f;

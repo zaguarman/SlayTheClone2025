@@ -399,7 +399,7 @@ namespace Zeitgeist {
                 case ActionType.SetTrend: // "Trend: Rush Hour [sand watch]3" (one word, Trend, everywhere: the user, 2026-10-15)
                     return action.trend == Trend.None
                         ? $"the {Keywords.Link("Trend")} ends"
-                        : $"{Keywords.Link("Trend")}: {Keywords.Link(TrendSystem.NameOf(action.trend))}{DaysTag(action.statusDuration)}";
+                        : $"{Keywords.Link("Trend")}: {Keywords.Link(TrendSystem.NameOf(action.trend))}{DaysTag(action.statusDuration)}, {TrendSystem.RuleOf(action.trend)}"; // The rule on the card (the user, 2026-10-17: "Liminal Space doesn't explain what it does")
                 case ActionType.PlaceSlotEffect:
                     return $"{DescribeSlotEffect(action)} on {SlotTarget(action, isSpell)}";
                 case ActionType.CleanseSlot:

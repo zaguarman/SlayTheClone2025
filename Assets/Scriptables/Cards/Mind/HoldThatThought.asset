@@ -69,8 +69,8 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'Ripening: draw a card next Day, 1 more for each Dawn it''s kept in
-    your hand (up to 4). The marshmallow test as a card.'
+  designNotes: 'Ripening: draw 2 cards next Day, 1 more for each Dawn it''s kept
+    in your hand (up to 4). The marshmallow test as a card.'
   artDescription: A man frozen mid-sentence with a finger raised, a glowing lightbulb
     above his head stuck behind a pause icon, everyone at the dinner table waiting.
   defaultTargetType: 0

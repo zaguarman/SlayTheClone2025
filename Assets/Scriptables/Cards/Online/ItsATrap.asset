@@ -70,7 +70,7 @@ MonoBehaviour:
       delayDays: 0
       onlyIfTargetDies: 0
       decoy: {fileID: 0}
-  designNotes: 'Mechanics test: a hidden Barbed Snare (2 damage) on a slot. The first
+  designNotes: 'Mechanics test: a hidden Barbed Snare (3 damage) on a slot. The first
     creature to leave it, on its own, pushed or swapped, takes the damage. Dying
     or being replaced isn''t leaving.'
   artDescription: 'The free-boat sting: a bald, stubbled Homer Simpson strolls into
