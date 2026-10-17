@@ -491,6 +491,9 @@ namespace SlayTheClone {
         }
 
         private void Update() {
+            if (comboGlow != null && HasComboGlow) { // A slow, soft pulse
+                comboGlow.color = UITheme.WithAlpha(UITheme.Gold, 0.45f + 0.25f * Mathf.Sin(Time.unscaledTime * 2.6f));
+            }
             if (!isDragging) return;
             if (!IsFriendlyFire && GameInput.RightClickedThisFrame) { // A right click calls the drag off (the user)
                 CancelDrag();
@@ -681,6 +684,21 @@ namespace SlayTheClone {
             // Bottom strip, so it stays visible under the raised ghost of the incoming creature
             if (show && replaceBadge == null) replaceBadge = CreateBadge("ReplaceBadge", "Replace", ReplaceLabelColor, 0.02f, 0.22f);
             if (replaceBadge != null) replaceBadge.SetActive(show);
+        }
+
+        /// <summary>Glowing in the hand as set up for a combo (see <see cref="Combo.IsSetUp"/>).</summary>
+        public bool HasComboGlow { get; private set; }
+        private Image comboGlow;
+
+        /// <summary>A soft golden ring just outside the card, pulsing slowly, while what it was made to follow is in place.</summary>
+        public void SetComboGlow(bool on) {
+            if (HasComboGlow == on) return;
+            HasComboGlow = on;
+            if (on && comboGlow == null) comboGlow = UITheme.AddTrim(transform, UITheme.WithAlpha(UITheme.Gold, 0.45f), 1f, -5f, "ComboGlow");
+            if (comboGlow != null) {
+                comboGlow.gameObject.SetActive(on);
+                comboGlow.transform.SetAsLastSibling();
+            }
         }
 
         /// <summary>Fog of War: this creature plans something the screen can't show. A "???" band across its art.</summary>

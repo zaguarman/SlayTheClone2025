@@ -54,6 +54,7 @@ namespace SlayTheClone {
         // Battlefield mats and their slots
         public static readonly Color Mat = Hex(0x0A0F1C, 0.82f);
         public static readonly Color MatValid = Hex(0x15362A, 0.88f); // Under a dragged card that plays on the whole side
+        public static readonly Color MatEligible = Hex(0x0F2420, 0.85f); // A side the carried card can be played on, before the pointer is over it
         public static readonly Color SlotEmpty = Hex(0x000000, 0.28f); // Recessed into the mat
         public static readonly Color SlotCombat = Hex(0xE04B3A, 0.4f);
 

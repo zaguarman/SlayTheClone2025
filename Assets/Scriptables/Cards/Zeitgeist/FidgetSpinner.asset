@@ -32,6 +32,7 @@ MonoBehaviour:
   upgraded: 0
   potion: 0
   combo: 0
+  setUpBy: []
   effects: []
   designNotes: 'On Trend: +2 Attack while a Trend is on. A fad: only as strong as
     the moment it''s in.'

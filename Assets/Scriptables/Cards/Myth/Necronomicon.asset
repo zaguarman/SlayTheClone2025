@@ -32,6 +32,8 @@ MonoBehaviour:
   upgraded: 0
   potion: 0
   combo: 0
+  setUpBy:
+  - Phoenix Feather
   effects:
   - effectType: 1
     trigger: 0

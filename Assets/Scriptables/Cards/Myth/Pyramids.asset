@@ -32,6 +32,7 @@ MonoBehaviour:
   upgraded: 0
   potion: 0
   combo: 0
+  setUpBy: []
   effects: []
   designNotes: 'Pyramids (the user, 2026-10-16): a monument, not a fighter. 0 Attack,
     10 Health, two Days to build. Safe Space: each Dawn it and the friendly creatures

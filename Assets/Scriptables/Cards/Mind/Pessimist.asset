@@ -32,6 +32,7 @@ MonoBehaviour:
   upgraded: 0
   potion: 0
   combo: 0
+  setUpBy: []
   effects: []
   designNotes: 'Mechanics test: Contrarian. Stat changes on it are reversed: debuff
     it and it grows, buff it and it shrinks.'

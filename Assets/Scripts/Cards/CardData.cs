@@ -37,6 +37,8 @@ namespace SlayTheClone {
         public bool upgraded;
         /// <summary>Combo (a spell): +1 to its numbers for each other spell its player plays the same Day (see <see cref="Combo"/>).</summary>
         public bool combo;
+        /// <summary>The cards made to come before this one (the designers' combos): with one of them played today or in play, it glows in the hand (see <see cref="Combo.IsSetUp"/>).</summary>
+        public string[] setUpBy;
         /// <summary>A potion (an adventure's): a Single Use spell carried from fight to fight, in the opening hand, not counted among the spells.</summary>
         public bool potion;
 

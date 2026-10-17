@@ -275,7 +275,17 @@ namespace SlayTheClone {
         public void LightUp(bool lit) {
             matLit = lit;
             var fill = transform.Find(MatFillName)?.GetComponent<ChevronGraphic>();
-            if (fill != null) fill.color = lit ? UITheme.MatValid : UITheme.Mat;
+            if (fill != null) fill.color = lit ? UITheme.MatValid : sideEligible ? UITheme.MatEligible : UITheme.Mat;
+        }
+
+        // A side the carried card can be played on glows softly from the moment it's picked up (the user, 2026-10-17), and
+        // fully under the pointer (see LightUp)
+        private bool sideEligible;
+
+        private void SetSideEligible(bool eligible) {
+            if (sideEligible == eligible) return;
+            sideEligible = eligible;
+            LightUp(matLit);
         }
 
 
@@ -1055,13 +1065,20 @@ namespace SlayTheClone {
                 RefreshIdle();
                 arrowManager?.RefreshArrows(); // The planned arrows go when the Day starts playing out, and the next Day's come back
             }
-            // While an aimed spell is carried, the slots it can be played on glow: what it can be used on
+            // A card picked up from the hand (the user, 2026-10-17): the slots it can be played on glow softly (an aimed spell's
+            // targets, a creature's own slots, a Gift's empty ones on the other side), or the whole side for a spell that plays
+            // anywhere and does something there
             var dragged = CardController.Dragged;
             if (dragged != glowingFor) {
                 glowingFor = dragged;
-                bool aimed = dragged != null && dragged.GetLinkedCardInstance() is Spell spell && EffectResolver.IsAimed(spell)
-                             && (IsCardFromHand(dragged) || dragged.IsQueued);
-                foreach (var slot in battlefieldSlots) slot.SetEligible(aimed && CanAimAt(dragged, slot.Model));
+                bool fromHand = dragged != null && (IsCardFromHand(dragged) || dragged.IsQueued);
+                bool bySlot = fromHand && AimOf(dragged) == DropAim.Slot;
+                bool gift = dragged?.GetLinkedCardInstance() is ICreature { IsGift: true };
+                foreach (var slot in battlefieldSlots) {
+                    slot.SetEligible(bySlot && CanAimAt(dragged, slot.Model) && !(gift && slot.Model.IsOccupied()));
+                }
+                SetSideEligible(fromHand && dragged.GetLinkedCardInstance() is Spell anywhere && !EffectResolver.IsAimed(anywhere)
+                                && dragged.Player != null && EffectResolver.Reaches(anywhere, dragged.Player, Player));
             }
         }
         private bool wasResolving;

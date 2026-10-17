@@ -573,6 +573,34 @@ namespace SlayTheClone.Tests {
             Exit(idle, SlotObject(p1.Battlefield[2]));
             Exit(idle, game.BoardView(p1).gameObject);
 
+            // Picked up, before it's over anything (the user, 2026-10-17): the sides or slots it can be played on glow softly
+            var stormLift = SceneGame.BeginDrag(Shown(storm));
+            yield return null;
+            Assert.AreEqual(UITheme.MatEligible, MatOf(p2), "A spell for the enemy side, picked up: their battlefield glows softly...");
+            Assert.AreEqual(UITheme.Mat, MatOf(p1), "...not yours");
+            SceneGame.EndDrag(Shown(storm), stormLift);
+            yield return null;
+            Assert.AreEqual(UITheme.Mat, MatOf(p2), "Put down, the glow goes");
+            var pupLift = SceneGame.BeginDrag(Shown(pup));
+            yield return null;
+            Assert.IsTrue(game.BoardView(p1).FindSlotView(p1.Battlefield[2]).IsEligible, "A creature picked up: its own side's slots glow softly...");
+            Assert.IsFalse(game.BoardView(p2).FindSlotView(p2.Battlefield[2]).IsEligible, "...not the other side's");
+            SceneGame.EndDrag(Shown(pup), pupLift);
+            yield return null;
+
+            // The combo glow (the user, 2026-10-17): a card in the hand that one played first today sets up glows softly
+            var followUp = bolt;
+            bolt.SourceData.setUpBy = new[] { "Test Storm" }; // Made to follow it
+            yield return new WaitForSecondsRealtime(0.3f);
+            Assert.IsFalse(Shown(followUp).HasComboGlow, "Its setup not played yet: no glow");
+            Assert.IsTrue(SceneGame.DragAndDrop(Shown(storm), game.PlayArea));
+            yield return new WaitForSecondsRealtime(0.3f);
+            Assert.IsTrue(Shown(followUp).HasComboGlow, "Test Storm played first: the card it sets up glows");
+            SceneGame.Click(game.SpellGhost(storm)); // Taken back
+            yield return new WaitForSecondsRealtime(0.3f);
+            Assert.IsFalse(Shown(followUp).HasComboGlow, "...and stops once it's taken back");
+            bolt.SourceData.setUpBy = null;
+
             // A spell whose targets are set (every enemy creature) plays wherever it's dropped on the table
             foreach (var dropOn in new[] { game.PlayArea, game.BoardView(p1).gameObject, game.BoardView(p2).gameObject }) {
                 Assert.IsTrue(SceneGame.DragAndDrop(Shown(storm), dropOn));

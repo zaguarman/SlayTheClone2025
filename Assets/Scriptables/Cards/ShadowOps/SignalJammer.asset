@@ -32,6 +32,7 @@ MonoBehaviour:
   upgraded: 0
   potion: 0
   combo: 0
+  setUpBy: []
   effects: []
   designNotes: 'Mechanics test: Signal Jammer. The enemy creature directly opposite
     has its ability switched off (its triggered effects still work).'

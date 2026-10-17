@@ -33,6 +33,8 @@ MonoBehaviour:
   upgraded: 0
   potion: 0
   combo: 0
+  setUpBy:
+  - Dead Man's Switch
   effects:
   - effectType: 1
     trigger: 0

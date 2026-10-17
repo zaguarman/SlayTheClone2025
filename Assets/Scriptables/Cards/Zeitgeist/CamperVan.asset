@@ -32,6 +32,7 @@ MonoBehaviour:
   upgraded: 0
   potion: 0
   combo: 0
+  setUpBy: []
   effects: []
   designNotes: 'Hit and Run (U-turn): after its attack it goes back to your hand,
     fresh, with the next Day''s, and its slot is free for the next summon.'

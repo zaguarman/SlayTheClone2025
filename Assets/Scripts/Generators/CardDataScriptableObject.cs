@@ -26,6 +26,7 @@ namespace SlayTheClone {
         public bool upgraded; // An upgraded copy made in an adventure (CardUpgrades): never an asset
         public bool potion; // An adventure's potion: Single Use, carried from fight to fight, in the opening hand
         public bool combo; // Combo: +1 to its numbers for each other spell you play the same Day
+        public string[] setUpBy; // The cards that set it up (an intended combo): it glows in the hand once one is played
         [SerializeField] protected List<CardEffect> effects = new List<CardEffect>();
         [TextArea(2, 6)] public string designNotes; // Editor only: what the card should become once the GDD mechanics it stands in for exist
         [TextArea(2, 6)] public string artDescription; // What the card's picture shows: the brief for its art
@@ -62,6 +63,7 @@ namespace SlayTheClone {
             data.upgraded = upgraded;
             data.potion = potion;
             data.combo = combo;
+            data.setUpBy = setUpBy;
             data.effects = CopyEffects();
         }
 

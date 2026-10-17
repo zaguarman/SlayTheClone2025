@@ -1075,6 +1075,7 @@ namespace SlayTheClone {
                 "Tragic. The one minute the cameras were down.",
                 "Destroy target enemy creature if it's Revealed, whatever its Health or Armor (Untouchable still saves it). Set it up with Tapped Communications, which Reveals at once.",
                 Destroy(TargetType.EnemyCreatures, TargetRequisite.Revealed))
+                .SetUpBy("Tapped Communications")
                 .Picture("A security monitor showing static and SIGNAL LOST at 02:13, while at the edge of the frame a gloved hand pulls the camera's cable out of the wall."),
             Spell("Smoke And Mirrors", TargetType.FriendlyCreatures,
                 "Look over there. No, the other there.",
@@ -1148,6 +1149,7 @@ namespace SlayTheClone {
                 "Every other friendly creature hands its stat raises to target friendly creature (the timed, the lasting and the ones for good), and it's Concealed for 2 Days: the fatal blow nobody sees coming. After False Flag Operation, it's +2/+2 from each.",
                 Act(ActionType.Funnel, 0, TargetType.FriendlyCreatures, TargetModifier.None), Status(StatusEffectType.Concealed, 2, TargetType.FriendlyCreatures))
                 .NotInStarterDeck()
+                .SetUpBy("False Flag Operation")
                 .Picture("A row of agents in identical grey suits passing their pistols, knives and grenades down the line to one man at the end, who disappears under a mountain of weapons with only his sunglasses showing."),
             Spell("Frame Job", TargetType.FriendlyCreatures,
                 "The fingerprints were his. We checked. We put them there.",
@@ -1167,6 +1169,7 @@ namespace SlayTheClone {
                 "Target friendly creature fakes its death: its Last Will happens (Dead Man's Switch destroys their strongest), then it goes back to your hand, in the next Day's hand.",
                 Act(ActionType.FakeDeath, 0, TargetType.FriendlyCreatures, TargetModifier.None))
                 .NotInStarterDeck()
+                .SetUpBy("Dead Man's Switch")
                 .Picture("A sheet pulled over a body on a morgue gurney, but the toes sticking out wear flip-flops with a fresh tan line, and the toe tag is a postcard from a tropical island."),
             Spell("Extraction", TargetType.FriendlyCreatures,
                 "Mission accomplished. Or aborted. Details are classified.",
@@ -1192,6 +1195,7 @@ namespace SlayTheClone {
                 Status(StatusEffectType.Brainwashed, 2, TargetType.EnemyCreatures),
                 Requiring(Status(StatusEffectType.Brainwashed, 1, TargetType.EnemyCreatures), TargetRequisite.Revealed))
                 .NotInStarterDeck()
+                .SetUpBy("Tapped Communications")
                 .Picture("A handler in a dim bar sliding a thick envelope and a photograph across the table to a nervous soldier; the photo shows the soldier with a woman who isn't his wife."),
             Creature("If I Told You, I'd Have to Kill You", 3, 4, speed: 2, deploy: 0,
                 "It's classified. So are you, now.",
@@ -1462,6 +1466,7 @@ namespace SlayTheClone {
                 "A friendly creature goes back to your hand (with the next Day's hand), and you draw 1 more next Day. Played again, its Arrival happens again, and it comes back fresh: a reset for a hurt creature, a second Arrival for one with a good one (Threat Hunter, Sex Clanker). Unlike Shadow Ops.' Extraction, no new face, a card instead.",
                 Act(ActionType.ReturnToHand, 0, TargetType.FriendlyCreatures, TargetModifier.None), Draw(1))
                 .NotInStarterDeck()
+                .SetUpBy("Threat Hunter", "Sex Clanker")
                 .Picture("A huge curved UNDO arrow pulling a startled knight backwards off a battlefield into a playing card held up by a hand, the keys CTRL and Z glowing on a keyboard below."),
             Spell("Pair Programming", TargetType.FriendlyCreatures,
                 "One types, one watches. Both bill the hours.",
@@ -1627,6 +1632,7 @@ namespace SlayTheClone {
                 "Destroy target enemy creature; your weakest creature is sacrificed to play it. Black magic always takes something. With a Phoenix Feather the same Day, the feathered creature pays (one offering, every rite), and still rises.",
                 Destroy(TargetType.EnemyCreatures))
                 .Sacrificing(1)
+                .SetUpBy("Phoenix Feather")
                 .Picture("A heavy book bound in stitched leather with a screaming face on its cover, lying open on a stone altar, a hooded figure reading from it while a shadowy hand rises out of the pages."),
             Spell("The Wicker Man", TargetType.Enemy,
                 "For a good harvest. Nothing personal, Sergeant.",
@@ -2353,6 +2359,14 @@ namespace SlayTheClone {
                 return this;
             }
 
+            public string[] SetUpByNames; // The cards made to come before it (an intended combo): it glows in the hand once one is played
+
+            // An intended combo (the user, 2026-10-17): these cards, played first today or in play, set this one up
+            public CardDef SetUpBy(params string[] cards) {
+                SetUpByNames = cards;
+                return this;
+            }
+
             public CardDef Potion() {
                 IsPotion = true;
                 IsSingleUse = true;
@@ -2692,6 +2706,7 @@ namespace SlayTheClone {
             asset.policy = card.IsPolicy;
             asset.potion = card.IsPotion;
             asset.combo = card.IsCombo;
+            asset.setUpBy = card.SetUpByNames;
             asset.SetEffects(card.Effects);
             switch (asset) {
                 case CreatureCardScriptableObject creature:

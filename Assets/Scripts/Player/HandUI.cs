@@ -103,6 +103,21 @@ namespace SlayTheClone {
         // Unity asks before the hand (or a card in it) takes the pointer: at rest as usual, while a card is carried only in the oval
         public bool IsRaycastLocationValid(Vector2 screenPoint, Camera eventCamera) => CardController.Dragged == null || InDropArea(screenPoint);
 
+        // The combo glow (the user, 2026-10-17): in your hand, a card that what's already played or in play sets up glows softly
+        // (see Combo.IsSetUp). Checked a few times a second, while you plan
+        private float nextComboCheck;
+
+        private void RefreshComboGlow() {
+            if (Time.unscaledTime < nextComboCheck) return;
+            nextComboCheck = Time.unscaledTime + 0.2f;
+            bool planning = IsYourHand && Player != null && FogOfWar.CanControl(Player) && !IsHidden && !(GameManager?.TurnManager?.IsResolving ?? false);
+            foreach (var card in cards) {
+                if (card == null) continue;
+                card.SetComboGlow(planning && !card.IsQueued
+                                  && Combo.IsSetUp(card.GetLinkedCardInstance(), Player, GameManager?.ActionsQueue, GameManager?.TrendSystem));
+            }
+        }
+
         // The oval, faint while a card that can go back is carried, a little brighter with the pointer in it
         private void UpdateDropGlow() {
             var carried = CardController.Dragged;
@@ -418,6 +433,7 @@ namespace SlayTheClone {
             }
             RefreshVisibility(); // Fog of War switched (F9), the seats (F8), or the tuning's button
             UpdateDropGlow();
+            RefreshComboGlow();
             RaiseNearPointer();
             // The hand's area only takes the pointer while a card is carried (a drop back into the hand): at rest it would
             // cover the bottom of the board, the cards in the back row (the hand's own cards take the pointer themselves)
