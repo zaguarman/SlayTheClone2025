@@ -2,9 +2,9 @@
 # free for playing (the user: long AI runs block manual testing): the balance report (Debug > AI Balance Report) and the
 # shuffled tournament (Debug > AI Shuffled Tournament), then copies their reports and scores back into the project.
 #   powershell -ExecutionPolicy Bypass -File Tools/ai_reports.ps1            both studies
-#   powershell -ExecutionPolicy Bypass -File Tools/ai_reports.ps1 -Only Balance   (or -Only Shuffled)
+#   powershell -ExecutionPolicy Bypass -File Tools/ai_reports.ps1 -Only Balance   (or -Only Shuffled, -Only Levels: the AI levels against each other)
 param(
-    [ValidateSet("Both", "Balance", "Shuffled")] [string]$Only = "Both",
+    [ValidateSet("Both", "Balance", "Shuffled", "Levels")] [string]$Only = "Both",
     [string]$UnityVersion = "6000.3.26f1"
 )
 $ErrorActionPreference = "Stop"
@@ -20,8 +20,9 @@ foreach ($folder in "Assets", "Packages", "ProjectSettings") {
 }
 
 $studies = @()
-if ($Only -ne "Shuffled") { $studies += @{ Method = "Zeitgeist.AITournamentMenu.RunBalance"; Files = @("Assets\Documentation\Balance Report.txt", "Assets\Resources\CardScores.json") } }
-if ($Only -ne "Balance") { $studies += @{ Method = "Zeitgeist.AITournamentMenu.RunShuffled"; Files = @("Assets\Documentation\Shuffled Tournament.txt", "Assets\Resources\ShuffledScores.json") } }
+if ($Only -eq "Both" -or $Only -eq "Balance") { $studies += @{ Method = "Zeitgeist.AITournamentMenu.RunBalance"; Files = @("Assets\Documentation\Balance Report.txt", "Assets\Resources\CardScores.json") } }
+if ($Only -eq "Both" -or $Only -eq "Shuffled") { $studies += @{ Method = "Zeitgeist.AITournamentMenu.RunShuffled"; Files = @("Assets\Documentation\Shuffled Tournament.txt", "Assets\Resources\ShuffledScores.json") } }
+if ($Only -eq "Levels") { $studies += @{ Method = "Zeitgeist.AITournamentMenu.RunLevelsHeadless"; Files = @("Assets\Documentation\AI Tournament.txt") } }
 foreach ($study in $studies) {
     $started = Get-Date
     Write-Host "Running $($study.Method) in $copy..."

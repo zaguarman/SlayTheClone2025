@@ -61,6 +61,9 @@ namespace Zeitgeist {
         public static void RunBalance() =>
             Run(BalanceReportPath, (decks, progress) => (new List<AITournament.Result>(), AITournament.RunBalance(decks, progress)));
 
+        /// <summary>The levels from the command line (Tools/ai_reports.ps1 -Only Levels): a method with nothing to return.</summary>
+        public static void RunLevelsHeadless() => RunLevels();
+
         /// <summary>The levels, 10 games per seat for each deck and pairing.</summary>
         public static List<AITournament.Result> RunLevels() =>
             Run(LevelsReportPath, (decks, progress) => (AITournament.RunLevels(decks, 10, out string report, progress), report));

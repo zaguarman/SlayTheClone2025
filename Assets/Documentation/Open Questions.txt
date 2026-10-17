@@ -5,6 +5,17 @@ Questions that came up while implementing the GDD mechanics. Each says what was 
 
 STILL OPEN
 
+46. Liminal Space and the creatures with 0 Attack (2026-10-17)
+    • What the shuffled tournament's audit saw: "Perpetual Motion Machine 4/0 is still alive on the board". Liminal Space trades
+      every creature's Attack and Health; Perpetual Motion Machine has 0 Attack, so after the trade it has 0 Health (4 Attack from
+      its 4 Health left). The trade queues a lethal check, but the trade itself runs among the Dusk effects, after the Day's
+      resolution, so the check waits for the next resolution: the creature stands at 0 Health for a Day. Any 0-Attack wall
+      (Pope, Satoshi Nakamoto, Golden Dome, Philosophy PhD...) dies the same way, and a 1-Attack one is left at 1 Health.
+    • Two things to decide: (1) should a Trend kill every 0-Attack creature on both sides for free? It's hidden board damage
+      the card text doesn't say. (2) the lethal check should run at once when a Dusk effect takes a creature to 0.
+    • Recommendation: the trade floors Health at 1 (a wall becomes a 1-Health cannon, which is the joke anyway), and the Dusk
+      effects run their lethal checks before the Day ends. Nothing built yet.
+
 45. The Kübler-Ross model as statuses (the user, 2026-10-15)
     • The ask: all five stages of grief as status effects. Proposed, nothing built yet; each lasts N Days unless it says so.
         - Denial: the damage it takes is held back, not felt; it all lands at once when Denial ends ("It's fine.").

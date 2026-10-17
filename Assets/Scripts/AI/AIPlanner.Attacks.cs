@@ -64,9 +64,9 @@ namespace Zeitgeist {
                 return ready.Where(c => !CanAttack(c)).ToList();
             }
 
-            bool defending = TheirPotentialDamage() >= view.MyHealth;
+            bool defending = TheirDamageNextDay() >= view.MyHealth; // Hard: with the creatures of theirs ready by then
             int ours = System.Math.Max(1, view.Mine.Where(c => c.Operative && CanAttack(c)).Sum(DamageOf));
-            int theirs = System.Math.Max(1, TheirPotentialDamage());
+            int theirs = System.Math.Max(1, TheirDamageNextDay());
             float daysToWin = (view.TheirHealth - plannedFace + ours - 1) / ours, daysToLose = (view.MyHealth + theirs - 1) / theirs;
             bool anyOpen = through.Count > 0;
             bool ahead = anyOpen && !defending && daysToWin < daysToLose * Style.Aggression;
@@ -148,9 +148,11 @@ namespace Zeitgeist {
         // All their creatures that can act could hit us for this much next Day, if nothing stopped them
         private int TheirPotentialDamage() => TheirAttackers().Sum(AttackOf);
 
-        // The biggest hit one of their creatures could land on this one of ours
+        // The biggest hit one of their creatures could land on this one of ours next Day. Hard: only from where its attackers reach
+        // this slot (the formation's reach), the ones ready by then included; Very Hard: the two biggest, as two can gang up on it
         private int ThreatOn(SeenCreature ours) {
-            int biggest = TheirAttackers().Select(AttackOf).DefaultIfEmpty(0).Max();
+            var hits = (Hard ? TheirAttackersOn(ours.Slot.Index) : TheirAttackers()).Select(AttackOf).OrderByDescending(d => d).ToList();
+            int biggest = VeryHard ? hits.Take(2).Sum() : hits.FirstOrDefault();
             return biggest > 0 && IsExposed(ours) ? biggest + 1 : biggest;
         }
 

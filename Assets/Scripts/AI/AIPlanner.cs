@@ -128,7 +128,7 @@ namespace Zeitgeist {
                 var free = view.MySlots.Where(s => s.IsFree).ToList();
                 var slot = Level == AILevel.Easy
                     ? free.Count > 0 ? free[random.Next(free.Count)] : null
-                    : free.OrderByDescending(ValueOfEntering).FirstOrDefault()
+                    : free.OrderByDescending(s => ValueOfEntering(s) + (Hard ? FormationValue(creature, s) : 0)).FirstOrDefault() // Hard: where it reaches, and survives deploying
                       ?? view.MySlots.Where(s => s.Creature != null && s.Incoming == null && !queue.HasActiveAction(s.Creature.Creature.TargetId)
                                                  && Abilities.CanBeReplaced(s.Creature.Creature)
                                                  && creature.Attack + creature.Health >= s.Creature.Worth + 4 / Style.Board)

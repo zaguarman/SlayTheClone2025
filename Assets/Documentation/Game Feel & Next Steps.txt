@@ -106,3 +106,12 @@ KNOWN BUGS (minor, couldn't reproduce yet: watch for them)
   and a queued spell glowing on the bottom side. Not reproduced in an AI-vs-AI game. Not a slot highlight (those draw
   corner brackets, and none is that brown); maybe a card left behind (a frame with its face faded), or a drag highlight
   that stayed. If it shows again: note what was just played or dragged, and which slots had creatures before.
+
+
+EASTER EGGS AND IDLE STORIES (the user, 2026-10-17)
+
+• Easter eggs scattered all over the place: little secrets in the menus, the cards, the board and the adventure for the
+  player to stumble on. [M]
+• Love for the menus: when the player idles on a menu, characters (the cards' people and creatures) wander into the
+  background and do things: small animated scenes that tell little stories, different ones to find on different screens
+  and after different waits. Nice little stories for the player to discover, never in the way of the menu. [L]

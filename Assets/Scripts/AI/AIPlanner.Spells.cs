@@ -70,6 +70,12 @@ namespace Zeitgeist {
                     spells.RemoveAt(0);
                     continue;
                 }
+                // Hard: a kill worth more on the creature of theirs that is ready next Day waits for it (the look ahead)
+                if (!full && BetterTomorrow(best.spell, best.aim, best.value)) {
+                    Log($"AI: {view.Me.Name} keeps {best.spell.Name} for tomorrow", LogTag.Turns);
+                    spells.Remove(best.spell);
+                    continue;
+                }
                 Play(best.spell, best.aim);
                 Expect(best.spell, best.aim);
                 spells.Remove(best.spell);
