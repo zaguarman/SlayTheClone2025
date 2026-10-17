@@ -1621,7 +1621,7 @@ Card Game Factions Overview
 			Honey Pot (like the reference card: give the opponent two Treasures, then take control of them). To move to Tech, as a cyber honeypot, with a new mechanic (2026-10-13)
 			NDA (Non-Disclosure Agreement): built in Corporate (2026-10-14), Discard 1 and Blackout 2
 			Memory Wipe / Mandela Effect (all your creatures become unknown again). Better in another faction (Mind?), with its mechanic changed (2026-10-13)
-			Spy-film gadgets (James Bond, 2026-10-13): built The Golden Gun, GoldenEye, Shaken Not Stirred, Licence to Kill, Die Another Day, Femme Fatale (Double-O Section deck, 2026-10-14). Still ideas: Exploding Pen, Ejector Seat, Tank Chase, Bungee Jump off the Dam, No Mr. Bond I Expect You to Die, Q Branch, Steel Teeth
+			Spy-film gadgets (James Bond, 2026-10-13): built The Golden Gun, GoldenEye, Shaken Not Stirred, Licence to Kill, Die Another Day, Femme Fatale (Double-O Section deck, 2026-10-14). Built since: Exploding Pen, Q Branch (2026-10-16). Still ideas: Ejector Seat, Tank Chase, Bungee Jump off the Dam, No Mr. Bond I Expect You to Die, Steel Teeth
 			Psyop (added 2026-10-16)
 			Secure Deletion
 			Self-Destruct Message
@@ -1640,7 +1640,6 @@ Card Game Factions Overview
 			EBITDA
 			Forced Upselling
 			Front-Running
-			High-Frequency Trading Scam
 			High-Pressure Sales Tactics
 			Intergenerational Short Squeeze
 			Layering
@@ -1652,6 +1651,7 @@ Card Game Factions Overview
 			Perfect Competition
 			Perfect Information
 			Phoebus Cartel (the light bulb cartel: planned obsolescence)
+			Pinkwashing (added 2026-10-17: a brand, or a state, wearing the rainbow to cover what it does; Corporate, or Statecraft)
 			Pinto Memo (Ford's internal memo: fixing the fuel tank, $11 a car, cost more than paying for the burn deaths and injuries; it valued a human life at about $200,000 in 1970s dollars)
 			Plutocratic Amount of Wealth
 			Public Business
@@ -1669,7 +1669,6 @@ Card Game Factions Overview
 			Yen Carry Trade
 		Tech
 			Bounty Program
-			Ctrl + Y
 			Dialing Progress
 			Effect 2000 (the Y2K bug)
 			End User (art: as if the user were being terminated)
@@ -1698,7 +1697,6 @@ Card Game Factions Overview
 			After-Sex Cigarette
 			All Along the Watchtower (tagged Zeitgeist; it puts up a watchtower)
 			Banana Gun
-			Calm Your Tits
 			Choose Your Poison
 			Dangit
 			Deeply Concerned
@@ -1741,7 +1739,6 @@ Card Game Factions Overview
 			Epistemology (the study of how knowledge is gained: ontology, then epistemology, methodology, methods)
 			Freudian Slip
 			God Is Dead (as the philosopher said: Nietzsche) (added 2026-10-14)
-			Hyperbole
 			Liminal Space (a Weather: Attack and Health swap for X turns)
 			Ontology (the study of existence)
 			Phronetic (practical wisdom: knowledge in context)
