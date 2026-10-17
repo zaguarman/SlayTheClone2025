@@ -84,6 +84,21 @@ namespace Zeitgeist {
             ShowKeyword(listed[((at < 0 ? 0 : at + step) % listed.Count + listed.Count) % listed.Count]);
         }
 
+        /// <summary>The keywords on the four factions' starter decks' cards (their rules texts' links and their abilities): what a first run teaches.</summary>
+        public HashSet<string> StarterKeywords() {
+            var keys = new HashSet<string>();
+            if (Catalog == null) return keys;
+            foreach (var umbrella in Umbrellas.All) {
+                var starter = AdventureDecks.Starter(umbrella, Catalog.AllCards);
+                foreach (var card in starter.Cards.Distinct()) {
+                    foreach (var key in Keywords.LinksIn(CardTextFormatter.GetRulesText(card.ToCardData()))) keys.Add(key);
+                    if (card is CreatureCardScriptableObject { ability: not Enums.CreatureAbility.None } creature && Keywords.Exists(Abilities.NameOf(creature.ability))) keys.Add(Abilities.NameOf(creature.ability));
+                }
+                Destroy(starter);
+            }
+            return keys;
+        }
+
         /// <summary>Opens the section (closing the one open) and, unless told otherwise, scrolls its header to the top.</summary>
         public void Open(string section, bool scrollToIt = true) {
             if (!groups.ContainsKey(section)) return;
@@ -267,8 +282,11 @@ namespace Zeitgeist {
 
             // Each section is a header that opens and closes its keywords (the user, 2026-10-17: a glossary you can get about
             // in): one open at a time, its count beside its name, its keywords under it in a tighter list
+            // The keywords a new player meets first (the dossier, 2026-10-17): the ones on the four starter decks' cards, starred
+            // and listed first in their sections
+            var starters = StarterKeywords();
             foreach (var section in Keywords.Groups) {
-                var entries = Keywords.All.Where(e => e.Group == section).ToList();
+                var entries = Keywords.All.Where(e => e.Group == section).OrderBy(e => starters.Contains(e.Key) ? 0 : 1).ToList();
                 var header = AddButton(content.transform, SectionButton + section, section, -1, () => Toggle(section));
                 header.GetComponent<LayoutElement>().preferredHeight = 44;
                 var headerText = header.GetComponentInChildren<TextMeshProUGUI>();
@@ -286,7 +304,7 @@ namespace Zeitgeist {
                 groups[section] = group;
                 foreach (var entry in entries) {
                     string key = entry.Key;
-                    var button = AddButton(group.transform, KeywordButton + key, entry.Title, -1, () => ShowKeyword(key));
+                    var button = AddButton(group.transform, KeywordButton + key, starters.Contains(key) ? entry.Title + " <color=#B8B0A0>★</color>" : entry.Title, -1, () => ShowKeyword(key));
                     button.GetComponent<LayoutElement>().preferredHeight = 40;
                     var text = button.GetComponentInChildren<TextMeshProUGUI>();
                     text.fontSize = 21;

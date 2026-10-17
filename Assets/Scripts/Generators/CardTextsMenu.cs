@@ -14,6 +14,10 @@ namespace Zeitgeist {
     public static class CardTextsMenu {
         public const string Path = "Assets/Documentation/Card Texts.txt";
 
+        // An icon on the card reads as its word here ("+2 [Armor]")
+        private static string Words(string richText) =>
+            System.Text.RegularExpressions.Regex.Replace(richText ?? "", "<sprite[^>]*name=\"([^\"]+)\"[^>]*>", "[$1]");
+
         [MenuItem("Cards/Dump Card Texts")]
         public static void Dump() {
             var cards = AssetDatabase.FindAssets("t:CardDataScriptableObject", new[] { "Assets/Scriptables/Cards" })
@@ -29,7 +33,7 @@ namespace Zeitgeist {
                     var data = card.ToCardData();
                     string head = card is CreatureCardScriptableObject creature
                         ? $"{creature.attack}/{creature.health}/{creature.speed}, deploy {creature.turnsUntilOperative}" : "spell";
-                    string rules = Keywords.Plain(CardTextFormatter.GetRulesText(data)).Replace("\n", " | ");
+                    string rules = Keywords.Plain(Words(CardTextFormatter.GetRulesText(data))).Replace("\n", " | ");
                     text.AppendLine($"{card.cardName} [{head}]: {rules}");
                     if (!string.IsNullOrEmpty(card.description)) text.AppendLine($"    \"{card.description}\"");
                 }
