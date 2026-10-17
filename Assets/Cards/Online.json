@@ -27,7 +27,7 @@
     {
       "name": "Doomscrolling", "type": "spell", "target": "Player", "doom": 2,
       "flavor": "Just one more. Just one more. Just one more.",
-      "notes": "Digital Society's scouting: send for any card among the top 4 of your deck; it joins your next hand. Costs Doom 3: your weakest creature not yet Doomed is Doomed first (the feed eats someone).",
+      "notes": "Digital Society's scouting: send for any card among the top 5 of your deck; it joins your next hand. Costs Doom 2: your weakest creature not yet Doomed is Doomed first (the feed eats someone).",
       "picture": "The Living the Dream wojak, MS Paint style: bald, shirtless, baggy-eyed and expressionless at 3AM, holding up a phone (we see its black back) where the meme had a computer, its glow on his face, cards drifting up out of the feed.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
@@ -72,7 +72,7 @@
     {
       "name": "Rage Bait", "type": "spell", "target": "EnemyCreatures",
       "flavor": "You won't BELIEVE what they said about you.",
-      "notes": "Mechanics test: Status Timing. Burn does nothing at the Dusk of the Day it's applied, then ticks for 2 Days.",
+      "notes": "Mechanics test: Status Timing. Burn does nothing at the Dusk of the Day it's applied, then ticks for 3 Days.",
       "picture": "A phone screen with a glowing red notification, reflected in the furious eyes of the person holding it.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
@@ -83,7 +83,7 @@
     {
       "name": "Its A Trap", "type": "spell", "target": "EnemyCreatures",
       "flavor": "FREE PHONE! Just click here. And here. And give us your mother's maiden name.",
-      "notes": "Mechanics test: a hidden Barbed Snare (2 damage) on a slot. The first creature to leave it, on its own, pushed or swapped, takes the damage. Dying or being replaced isn't leaving.",
+      "notes": "Mechanics test: a hidden Barbed Snare (3 damage) on a slot. The first creature to leave it, on its own, pushed or swapped, takes the damage. Dying or being replaced isn't leaving.",
       "picture": "The free-boat sting: a bald, stubbled Homer Simpson strolls into a police station waving a letter, \"CONGRATULATIONS! YOU'VE WON A FREE BOAT!\", while the grinning police chief behind the counter slides him a pile of unpaid fines instead. A \"FREE BOAT PICKUP\" banner hangs over the open door of a holding cell.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
@@ -153,7 +153,7 @@
     {
       "name": "Social Panopticon", "type": "spell", "target": "EnemyCreatures",
       "flavor": "Nobody is watching you. Everybody is.",
-      "notes": "Every enemy creature is Revealed for 2 Days (its plans can be seen, Watchdogs can match them) and gets Heat Signature 1. Future: a Trend where nothing can be Concealed.",
+      "notes": "Every enemy creature is Revealed for 2 Days (its plans can be seen, Watchdogs can match them) and gets Heat Signature 2. Future: a Trend where nothing can be Concealed.",
       "picture": "A real panopticon seen from inside: a ring of barred cells on two floors around a central watchtower with a single recording eye, every inmate lit by their own phone.",
       "effects": [
         { "trigger": "OnPlay", "actions": [

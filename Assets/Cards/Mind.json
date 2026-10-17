@@ -71,7 +71,7 @@
     {
       "name": "Lucid Dreaming", "type": "spell", "target": "Player",
       "flavor": "You know it's a dream. You still can't find the bathroom.",
-      "notes": "Mind's scouting: send for any card among the top 3 of your deck; it joins your next hand.",
+      "notes": "Mind's scouting: send for any card among the top 4 of your deck; it joins your next hand.",
       "picture": "A sleeper floating above their bed in pyjamas, calmly picking cards out of a swirling dreamscape of melting clocks and staircases.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
@@ -82,7 +82,7 @@
     {
       "name": "Momentum", "type": "spell", "target": "FriendlyCreatures",
       "flavor": "Once you get going you can't stop. That was the plan. Stopping wasn't.",
-      "notes": "Tailwind (the user, 2026-10-15: cards like Pokemon's Tailwind): +1 Speed to all your creatures for 3 Days. Spells land before attacks, so today's attacks already go sooner.",
+      "notes": "Tailwind (the user, 2026-10-15: cards like Pokemon's Tailwind): +1 Speed to all your creatures for good. Spells land before attacks, so today's attacks already go sooner.",
       "picture": "A man in a business suit sprinting downhill, legs a cartoon blur, a gale of motivational posters (HUSTLE, NEVER STOP) blowing at his back, the edge of a cliff just ahead.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
@@ -267,7 +267,7 @@
     {
       "name": "Hold That Thought", "type": "spell", "target": "Player", "ripening": true,
       "flavor": "It'll be brilliant. Later. Much later.",
-      "notes": "Ripening: draw a card next Day, 1 more for each Dawn it's kept in your hand (up to 4). The marshmallow test as a card.",
+      "notes": "Ripening: draw 2 cards next Day, 1 more for each Dawn it's kept in your hand (up to 4). The marshmallow test as a card.",
       "picture": "A man frozen mid-sentence with a finger raised, a glowing lightbulb above his head stuck behind a pause icon, everyone at the dinner table waiting.",
       "effects": [
         { "trigger": "OnPlay", "actions": [

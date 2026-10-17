@@ -21,7 +21,7 @@
     {
       "name": "Web Scraping", "type": "spell", "target": "Player",
       "flavor": "We respect your robots.txt. We read it, anyway.",
-      "notes": "Tech's scouting: send for any card among the top 5 of your deck; it joins your next hand.",
+      "notes": "Tech's scouting: send for any card among the top 5 of your deck; it joins your next hand, and you draw a card now.",
       "picture": "A cat scratching at a laptop screen, claw marks tearing the web page open and spilling out cards and data.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
@@ -44,7 +44,7 @@
     {
       "name": "Antivirus", "type": "spell", "target": "Player",
       "flavor": "1 threat blocked. 37 offers to upgrade to Premium.",
-      "notes": "Mechanics test: a Watchdog (GDD 3.11). It's created when the spell resolves and, Monitored, nullifies the next enemy spell before it resolves, even one planned before it existed. 1 charge.",
+      "notes": "Mechanics test: a Watchdog (GDD 3.11). It's created when the spell resolves and, Monitored, nullifies the next enemy spell before it resolves, even one planned before it existed. 2 charges.",
       "picture": "A panda in shining knight's armor, an antivirus logo on its shield, blocking a glowing spell scroll at a castle gate, while the castle walls behind it are plastered with its own pop-ups: \"RENEW NOW - 60% OFF\".",
       "effects": [
         { "trigger": "OnPlay", "actions": [
@@ -114,7 +114,7 @@
     {
       "name": "Man-in-the-Middle", "type": "spell", "target": "Player",
       "flavor": "Hi, it's your bank. Also, it's not.",
-      "notes": "A Monitored Watchdog: the next enemy spell is redirected to a random creature. 1 charge.",
+      "notes": "A Monitored Watchdog: the next enemy spell is redirected to a random creature. 2 charges.",
       "picture": "A man squeezed on a park bench between two lovers, holding both of their phones and reading their texts.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
@@ -181,7 +181,7 @@
     {
       "name": "Pair Programming", "type": "spell", "target": "FriendlyCreatures",
       "flavor": "One types, one watches. Both bill the hours.",
-      "notes": "A swapper: target friendly creature trades places with its partner in the formation, then it and the creatures beside it where it lands get +1 Attack this Day. Lines up a pair on one lane, or pulls a hurt creature out of one.",
+      "notes": "A swapper: target friendly creature trades places with its partner in the formation, then it and the creatures beside it where it lands get +1 Attack and +1 Health for good. Lines up a pair on one lane, or pulls a hurt creature out of one.",
       "picture": "Two developers squeezed at one tiny desk sharing a single keyboard: one types with a coffee in his other hand, the other leans over his shoulder pointing at a bug on the screen, a timesheet pinned between them billing 16 hours.",
       "effects": [
         { "trigger": "OnPlay", "actions": [
