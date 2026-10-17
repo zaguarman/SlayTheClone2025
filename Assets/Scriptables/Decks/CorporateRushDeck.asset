@@ -42,6 +42,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f771ed04a3c573445a1fd4c07b976d70, type: 2}
   - {fileID: 11400000, guid: 497aad0006ec10142bec62c2289ce56d, type: 2}
   - {fileID: 11400000, guid: 497aad0006ec10142bec62c2289ce56d, type: 2}
-  lastUpdated: 2026-10-17T08:31:54.6751445Z
+  - {fileID: 11400000, guid: adfe9399b5901a84b93a4d3e894cf36d, type: 2}
+  - {fileID: 11400000, guid: adfe9399b5901a84b93a4d3e894cf36d, type: 2}
+  lastUpdated: 2026-10-17T10:57:26.3391528Z
   strategy: Aggro
   focus: 0

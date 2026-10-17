@@ -18,7 +18,7 @@ MonoBehaviour:
     convenience.
   cardType: 1
   faction: 4
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 1cc9b8081d6b0d3449671ff7873800e6, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

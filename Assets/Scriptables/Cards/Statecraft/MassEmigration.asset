@@ -17,7 +17,7 @@ MonoBehaviour:
   description: The best and brightest left. The rest are rearranging the furniture.
   cardType: 1
   faction: 2
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 0100a4529b5d4a045b86c823a3441d73, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

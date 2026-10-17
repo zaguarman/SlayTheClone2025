@@ -17,7 +17,7 @@ MonoBehaviour:
   description: One falls back, and everyone behind it finds out.
   cardType: 1
   faction: 8
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 2aed76dd4d0a21c49ad9a28e7c04e383, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

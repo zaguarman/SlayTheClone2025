@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Authentic local cuisine. Twenty-two euros a coffee.
   cardType: 1
   faction: 7
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 0be0829dfcc0a634d9379b8f9be22571, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Science saves lives. Ribs, less so.
   cardType: 1
   faction: 9
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 7902c056cc01d7c409b40ec237b8ca5b, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

@@ -39,7 +39,8 @@ CONTENTS
     • 5.7 Prophecy
 6. Design Philosophy & Balancing
     • 6.1 Tone
-    • 6.2 Balancing
+    • 6.2 Keyword Budget
+    • 6.3 Balancing
 
 
 1. KEY TERMS
@@ -1045,7 +1046,18 @@ Naming: when to avoid a name and when not
 • Fine: anything that isn't another game's mechanic. Plain words and phrases used for what they mean ("Meta" Group Chat is a chat that is meta, not the company's), real people and historical figures (Fat Tony, a real mobster, is as fine as Cleopatra), quotes, titles and memes.
 • Art: pictures stay as drawn unless a change is asked for; quirky is part of the game's look.
 
-6.2 Balancing
+6.2 Keyword Budget (the user, 2026-10-17)
+
+Easy to decide, hard to master; complexity arrives gradually, like Plants vs. Zombies adding a lane and a plant at a time,
+so some decks can be very deep. The budget can stretch a little, not much. Before any new keyword:
+    • Can it be one line on the card, and is the decision it asks for readable in a few seconds?
+    • Does it reuse a rule the player already knows? If it can fold into an existing keyword, it does.
+    • Exceptions to remember (Sucker Punch, Hormesis, Martyrdom) stay on one card each.
+    • Card text is plain sentences: a mechanic's name only as a label in front ("Watchdog: disable the next 2 enemy
+      attacks"), never "condition -> effect, charges (timing)".
+    • A mechanic that adds friction for its depth waits on a shelf (Gear, 2026-10-17) rather than going in half-made.
+
+6.3 Balancing
 
 Getting the balance right is extremely important. It will need ongoing playtesting, data, and adjustments.
 Numerical Balance

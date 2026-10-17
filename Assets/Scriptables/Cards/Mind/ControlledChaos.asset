@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Everything is going exactly to plan. Which plan, though.
   cardType: 1
   faction: 8
-  artwork: {fileID: 0}
+  artwork: {fileID: 3286163911610860551, guid: 8507629b7b9607c4c862863dd7e7418e, type: 3}
   discardCost: 0
   discardChosen: 0
   singleUse: 0

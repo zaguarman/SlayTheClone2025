@@ -9688,6 +9688,143 @@ for _theme, _cards in CHUNK_MISSING.items():
     CARDS.setdefault(_theme, {}).update(_cards)
 
 
+# ---------------------------------------------------------------- Maneuvers (2026-10-17)
+
+def domino_effect():
+    # A row of office workers falling like dominoes down a corridor, the first one tipped by a single pointing finger, the
+    # last one spilling coffee over the boss
+    defs, body = bg_mind()
+    body += rect(0, 170, W, 30, "#8a7aa8")
+    body += path("M0 120 C 30 110 40 60 18 20 L28 18 C 52 62 44 114 14 130 Z", SKIN[0], 'stroke="#b08a6a" stroke-width="1.5"')
+    body += rect(18, 14, 8, 10, SKIN[0], 'rx="3"')
+    for i, x in enumerate((70, 112, 154, 196)):
+        tilt = 62 - i * 12
+        worker = rect(-9, -64, 18, 64, ("#4a6a8a", "#8a4a4a", "#4a7a5a", "#6a5a8a")[i], 'rx="4"') + circle(0, -74, 10, SKIN[i % 4])
+        worker += circle(-3, -76, 1.4, "#222") + circle(3, -76, 1.4, "#222") + ellipse(0, -70, 2.5, 3, "#5a1a1a")
+        body += group(worker, f"translate({x} 170) rotate({tilt})")
+    body += speed_lines(66, 96, 3, 22, "#ffffff")
+    body += person(296, 200, 1.15, SKIN[0], "#1a1a2a", face="shout", hair=OLD_HAIR, tie="#c0392b", brows="angry")
+    body += group(rect(-8, -10, 16, 20, "#ffffff", 'rx="2" stroke="#555" stroke-width="1"'), "translate(246 96) rotate(70)")
+    body += path("M252 104 C 262 112 270 120 278 136 C 284 146 292 150 300 152", "none", 'stroke="#6a3a1a" stroke-width="6" stroke-linecap="round"')
+    for x, y in ((284, 140), (302, 146), (312, 158)):
+        body += circle(x, y, 3, "#6a3a1a")
+    return svg(defs, body)
+
+
+def controlled_chaos():
+    # A calm psychiatrist conducting an orchestra of patients who have all swapped instruments, the drummer on the violin,
+    # the sheet music flying through the air
+    defs, body = bg_mind()
+    body += rect(0, 172, W, 28, "#8a6a8a")
+    body += person(176, 200, 1.25, SKIN[0], "#2a2a32", face="closed", hair=OLD_HAIR, glasses="round", beard="#d8d8d8")
+    body += stroke("M206 152 L232 104", "#2a2a32", 8) + stroke("M232 104 L262 70", "#f4f4f4", 2.5)
+    for i, (x, kind) in enumerate(((40, "violin"), (92, "drum"), (262, "trumpet"), (314, "tuba"))):
+        body += person(x, 200, 0.7, SKIN[(i + 1) % 4], ("#4a7a5a", "#8a4a4a", "#4a6a8a", "#7a6a3a")[i], face=("wavy", "shout", "smirk", "flat")[i],
+                       hair=("#3a2a1a", None, "#c8a86a", "#1a1a1a")[i])
+        if kind == "violin":
+            body += group(ellipse(0, 0, 10, 6, "#a0522d") + stroke("M8 -2 L22 -10", "#5a2a1a", 2), f"translate({x + 10} 150) rotate(-20)")
+        elif kind == "drum":
+            body += ellipse(x, 166, 16, 6, "#d8d8d8", 'stroke="#c0392b" stroke-width="3"') + stroke(f"M{x - 18} 138 L{x - 8} 158 M{x + 18} 138 L{x + 8} 158", "#c8a070", 2.5)
+        elif kind == "trumpet":
+            body += poly([(x - 20, 152), (x + 6, 148), (x + 18, 140), (x + 18, 162), (x + 6, 154)], "#e8c040")
+        else:
+            body += circle(x - 2, 150, 12, "none", 'stroke="#e8c040" stroke-width="5"')
+    for i, (x, y, a) in enumerate(((60, 40, -20), (120, 22, 15), (230, 30, -10), (290, 50, 25), (180, 12, 5))):
+        page = rect(-11, -8, 22, 16, "#ffffff", 'stroke="#999" stroke-width="1"')
+        for k in range(3):
+            page += stroke(f"M-8 {-4 + k * 4} L8 {-4 + k * 4}", "#555", 0.8)
+        page += circle(-3, -2, 1.6, "#222") + circle(4, 2, 1.6, "#222")
+        body += group(page, f"translate({x} {y}) rotate({a})")
+    return svg(defs, body)
+
+
+def tourist_trap():
+    # A sunburnt tourist in socks and sandals lured off the street by a neon sign reading AUTHENTIC, into a restaurant where
+    # a waiter already holds out a bill a metre long
+    defs, body = bg_vapor()
+    body += rect(180, 30, 172, 142, "#3a1a3a") + rect(196, 70, 70, 102, "#ffd8a0", 'opacity="0.85"')
+    body += rect(186, 34, 156, 30, "#1a0a1a", 'rx="4" stroke="#ff4fd8" stroke-width="3"') + lettering("AUTHENTIC", 264, 41, 12, "#ff7ae0", width=2.2, outline="#5a0a4a")
+    body += path("M120 108 C 150 98 176 92 196 100", "none", 'stroke="#ff7ae0" stroke-width="2" stroke-dasharray="5 4"')
+    body += person(100, 200, 1.25, "#f08a6a", "#f4f0a0", face="grin", hat="cap", glasses="shades")
+    for x in (82, 118):
+        body += rect(x - 8, 186, 16, 14, "#f4f4f4") + rect(x - 10, 196, 20, 4, "#8a5a2a")
+    body += camera(130, 160, 1.2)
+    body += person(300, 200, 1.1, SKIN[2], "#1a1a1a", face="smirk", hair="#1a1a1a", tie="#c0392b")
+    body += stroke("M276 162 L246 150", "#1a1a1a", 8)
+    body += path("M244 150 L228 152 L224 196 L240 196 Z", "#ffffff", 'stroke="#999" stroke-width="1"')
+    for y in range(158, 194, 6):
+        body += stroke(f"M228 {y} L238 {y}", "#999", 1)
+    body += words("999", 233, 186, 5, "#c0392b", width=1.1)
+    return svg(defs, body)
+
+
+def mass_emigration():
+    # A crowd with suitcases running in every direction at once past a signpost pointing every way, while a minister at a
+    # podium announces that the economy has never been stronger
+    defs, body = bg_state()
+    body += stroke("M176 172 L176 40", "#6a4a2a", 5)
+    for i, (a, label) in enumerate(((-20, "OUT"), (200, "AWAY"), (15, "EXIT"), (165, "BYE"))):
+        y = 52 + i * 22
+        right = abs(a) < 90
+        x0 = 176 if right else 120
+        board = poly([(x0, y), (x0 + 50, y), (x0 + 58, y + 8), (x0 + 50, y + 16), (x0, y + 16)] if right else
+                     [(176, y), (126, y), (118, y + 8), (126, y + 16), (176, y + 16)], "#f4ecd8", 'stroke="#6a4a2a" stroke-width="1.5"')
+        body += board + lettering(label, (x0 + 25) if right else 150, y + 4, 7, "#5a3a1a", width=1.3)
+    for i, (x, f) in enumerate(((40, 1), (96, -1), (240, 1), (300, -1), (150, 1))):
+        body += person(x, 200, 0.6, SKIN[i % 4], ("#4a6a8a", "#8a4a4a", "#4a7a5a", "#6a5a8a", "#7a6a3a")[i], face="shout", hair=("#3a2a1a", "#1a1a1a", None, "#c8a86a", "#5a3a1a")[i])
+        body += suitcase(x + f * 26, 176, 0.55, ("#a0522d", "#5a6a7a", "#6a3a8a", "#8a5a2a", "#3a5a3a")[i])
+        body += speed_lines(x - f * 22 if f > 0 else x + 40, 150, 2, 16, "#ffffff")
+    body += rect(286, 64, 52, 54, "#5a3a2a", 'rx="3"') + person(312, 70, 0.6, SKIN[0], "#1a1a2a", face="grin", hair=OLD_HAIR, tie="#c0392b")
+    body += bubble(296, 24, 50, 16, tail=(306, 42)) + lettering("STRONGER", 296, 20, 6, "#333", width=1.2)
+    return svg(defs, body)
+
+
+def valet():
+    # A valet in a gold-trimmed uniform with a megacorp logo swapping two parked cars with a forklift, under a sign reading
+    # PREMIUM PARKING - SUBSCRIBERS ONLY
+    defs, body = bg_office()
+    body += rect(0, 150, W, 50, "#3a3a42") + stroke("M120 150 L120 200 M240 150 L240 200", "#f4f4f4", 3, 'stroke-dasharray="8 6"')
+    body += rect(70, 8, 212, 34, "#1a1a2a", 'rx="4" stroke="#d4af37" stroke-width="2"')
+    body += lettering("PREMIUM PARKING", 176, 13, 8, "#d4af37", width=1.6) + lettering("SUBSCRIBERS ONLY", 176, 27, 6, "#ffffff", width=1.2)
+    car = lambda color: (rect(-34, -14, 68, 18, color, 'rx="6" stroke="#222" stroke-width="1.5"') + path("M-20 -14 L-12 -26 L14 -26 L22 -14 Z", color, 'stroke="#222" stroke-width="1.5"')
+                         + rect(-16, -24, 12, 9, "#bfe0f0") + rect(-2, -24, 14, 9, "#bfe0f0") + circle(-20, 5, 7, "#1a1a1a") + circle(20, 5, 7, "#1a1a1a"))
+    body += group(car("#c0392b"), "translate(60 184)")
+    body += rect(196, 160, 60, 26, "#e8b830", 'rx="3" stroke="#8a6a1a" stroke-width="2"') + stroke("M196 160 L196 96", "#3a3a42", 5)
+    body += rect(176, 120, 24, 6, "#3a3a42") + group(car("#2a6ad0"), "translate(196 112)")
+    body += circle(214, 192, 8, "#1a1a1a") + circle(240, 192, 8, "#1a1a1a")
+    body += person(300, 200, 1.1, SKIN[1], "#5a1a3a", face="smile", hat="peaked", hair="#1a1a1a")
+    body += stroke("M278 158 L262 170", "#5a1a3a", 8) + circle(300, 160, 6, "#d4af37") + lettering("M", 300, 157, 6, "#5a1a3a", width=1.2)
+    body += stroke("M272 150 L272 196 M328 150 L328 196", "#d4af37", 2)
+    body += arrow(110, 130, 160, 108, "#ffd23a", 4) + arrow(176, 140, 116, 160, "#ffd23a", 4)
+    return svg(defs, body)
+
+
+def heimlich_maneuver():
+    # A scientist in a lab coat performing the Heimlich maneuver on a robot, a glowing chip flying out of its mouth across
+    # the lab while a colleague times it on a clipboard
+    defs, body = bg_utopia()
+    robot = rect(-26, -40, 52, 60, "#9aa4ae", 'rx="8" stroke="#5a6068" stroke-width="2"') + rect(-18, -78, 36, 32, "#b8c0c8", 'rx="6" stroke="#5a6068" stroke-width="2"')
+    robot += circle(-8, -64, 5, "#3a8ad0") + circle(8, -64, 5, "#3a8ad0") + ellipse(0, -52, 7, 4, "#1a1a1a") + stroke("M0 -78 L0 -88", "#5a6068", 2) + circle(0, -90, 3, "#ff3a3a")
+    body += group(robot, "translate(150 170)")
+    body += person(116, 200, 1.15, SKIN[0], "#ffffff", face="shout", hair="#8a6a4a", glasses="round", brows="angry")
+    body += stroke("M128 150 L156 146 M128 160 L156 152", "#ffffff", 8) + circle(158, 148, 6, SKIN[0])
+    body += speed_lines(168, 120, 2, 14, "#5a6068")
+    body += rect(236, 92, 16, 12, "#2a7a3a", 'rx="2"') + circle(244, 98, 14, "#7affb0", 'opacity="0.35"')
+    for k in range(3):
+        body += stroke(f"M{238 + k * 5} 92 l 0 -4 M{238 + k * 5} 104 l 0 4", "#d4af37", 1.5)
+    body += path("M166 116 C 190 100 212 96 234 98", "none", 'stroke="#7affb0" stroke-width="2" stroke-dasharray="5 4"')
+    body += person(304, 200, 1.0, SKIN[2], "#ffffff", face="flat", hat="bob", glasses="round")
+    body += rect(276, 140, 22, 30, "#c8a06a", 'stroke="#8a6a3a" stroke-width="1.5"') + paper(279, 145, 16, 20, 2)
+    body += circle(330, 40, 16, "#ffffff", 'stroke="#555" stroke-width="2"') + stroke("M330 40 L330 30 M330 40 L338 44", "#c0392b", 2)
+    return svg(defs, body)
+
+
+CHUNK_MANEUVERS = {"Mind": {"DominoEffect": domino_effect, "ControlledChaos": controlled_chaos}, "Zeitgeist": {"TouristTrap": tourist_trap},
+                   "Statecraft": {"MassEmigration": mass_emigration}, "Corporate": {"Valet": valet}, "Utopia": {"HeimlichManeuver": heimlich_maneuver}}
+for _theme, _cards in CHUNK_MANEUVERS.items():
+    CARDS[_theme].update(_cards)
+
+
 def main():
     count = archived = 0
     for theme, cards in CARDS.items():
