@@ -184,3 +184,21 @@ The latest runs: no problems in 2244 games.
 • Styles chosen per deck automatically (the report says which suits which).
 • A deck-against-deck table with one style on both sides, for balance.
 • The GDD 6 "script of intents" for enemies.
+
+
+HARD LOSES TO MEDIUM (2026-10-17, measured with Tools/ai_reports.ps1 -Only Levels: 1500 games, same seeds every run, 1.5 minutes each)
+The levels tournament after the four factions, every card in a deck and the 80-Day cap: Medium 68%, Hard 56%, Easy 25%;
+head to head Medium beats Hard 283 to 217 before the Day-ahead look (added that evening) and 290 to 210 with it: the look
+ahead is neutral, the gap is older. What each piece of Hard is worth, one switched off at a time (Medium - Hard games):
+  baseline (all of Hard on)                                  283 - 217
+  no spell holding, no racing face when ahead (E3)           291 - 209   neutral
+  Medium's greedy attacks instead of attacks by threat (E4)  266 - 234   the attack planner costs about 25 games
+  E4 + no moving out of harm, no forecast averaging (E5)     265 - 234   neutral
+  Medium's plain protection values (E7)                      292 - 207   neutral
+  E4 + no card reading in the values (E8)                    256 - 244   the card reading costs about 10 more
+So Hard's extras cost it against Medium in a meta where boards win (Midrange and Swarm beat Aggro 9 games in 10):
+"kill the biggest threat with the smallest attacker that does it" leaves the big hitters going face while Medium's
+"strongest first, where it kills the most" clears the board; and the card-reading values hold cards back. Not changed yet:
+the fix is a rebuilt Hard, measured one piece at a time with this run, not another heuristic. The order to try: Medium's
+greedy attacks as the base with the lethal check and the defending mode kept (E4 keeps those), then add back each reading
+branch only if the run says it pays. Very Hard isn't in the levels run; it inherits whatever Hard becomes.
